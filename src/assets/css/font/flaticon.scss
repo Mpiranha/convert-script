@@ -1,0 +1,153 @@
+$flaticon-font: "flaticon";
+
+@font-face {
+    font-family: $flaticon-font;
+    src: url("./flaticon.ttf?45ffbc3101393392a13e8990da7d2b11") format("truetype"),
+url("./flaticon.woff?45ffbc3101393392a13e8990da7d2b11") format("woff"),
+url("./flaticon.woff2?45ffbc3101393392a13e8990da7d2b11") format("woff2"),
+url("./flaticon.eot?45ffbc3101393392a13e8990da7d2b11#iefix") format("embedded-opentype"),
+url("./flaticon.svg?45ffbc3101393392a13e8990da7d2b11#flaticon") format("svg");
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+$flaticon-map: (
+    "dashboard": "\f101",
+    "briefcase": "\f102",
+    "broken-link": "\f103",
+    "man-user": "\f104",
+    "pop-up": "\f105",
+    "programming-code-signs": "\f106",
+    "setting": "\f107",
+    "settings": "\f108",
+    "group": "\f109",
+    "backward": "\f10a",
+    "customer-support": "\f10b",
+    "support": "\f10c",
+    "home": "\f10d",
+    "loupe": "\f10e",
+    "bell": "\f10f",
+    "profile-user": "\f110",
+    "menu": "\f111",
+    "up-arrow": "\f112",
+    "pencil": "\f113",
+    "facebook": "\f114",
+    "google-plus": "\f115",
+    "linkedin": "\f116",
+    "apple": "\f117",
+    "windows": "\f118",
+    "yahoo": "\f119",
+    "twitter": "\f11a",
+    "edit": "\f11b",
+    "trash": "\f11c",
+    "processor": "\f11d",
+    "user": "\f11e",
+    "email": "\f11f",
+    "logout": "\f120",
+);
+
+.flaticon-dashboard:before {
+    content: map-get($flaticon-map, "dashboard");
+}
+.flaticon-briefcase:before {
+    content: map-get($flaticon-map, "briefcase");
+}
+.flaticon-broken-link:before {
+    content: map-get($flaticon-map, "broken-link");
+}
+.flaticon-man-user:before {
+    content: map-get($flaticon-map, "man-user");
+}
+.flaticon-pop-up:before {
+    content: map-get($flaticon-map, "pop-up");
+}
+.flaticon-programming-code-signs:before {
+    content: map-get($flaticon-map, "programming-code-signs");
+}
+.flaticon-setting:before {
+    content: map-get($flaticon-map, "setting");
+}
+.flaticon-settings:before {
+    content: map-get($flaticon-map, "settings");
+}
+.flaticon-group:before {
+    content: map-get($flaticon-map, "group");
+}
+.flaticon-backward:before {
+    content: map-get($flaticon-map, "backward");
+}
+.flaticon-customer-support:before {
+    content: map-get($flaticon-map, "customer-support");
+}
+.flaticon-support:before {
+    content: map-get($flaticon-map, "support");
+}
+.flaticon-home:before {
+    content: map-get($flaticon-map, "home");
+}
+.flaticon-loupe:before {
+    content: map-get($flaticon-map, "loupe");
+}
+.flaticon-bell:before {
+    content: map-get($flaticon-map, "bell");
+}
+.flaticon-profile-user:before {
+    content: map-get($flaticon-map, "profile-user");
+}
+.flaticon-menu:before {
+    content: map-get($flaticon-map, "menu");
+}
+.flaticon-up-arrow:before {
+    content: map-get($flaticon-map, "up-arrow");
+}
+.flaticon-pencil:before {
+    content: map-get($flaticon-map, "pencil");
+}
+.flaticon-facebook:before {
+    content: map-get($flaticon-map, "facebook");
+}
+.flaticon-google-plus:before {
+    content: map-get($flaticon-map, "google-plus");
+}
+.flaticon-linkedin:before {
+    content: map-get($flaticon-map, "linkedin");
+}
+.flaticon-apple:before {
+    content: map-get($flaticon-map, "apple");
+}
+.flaticon-windows:before {
+    content: map-get($flaticon-map, "windows");
+}
+.flaticon-yahoo:before {
+    content: map-get($flaticon-map, "yahoo");
+}
+.flaticon-twitter:before {
+    content: map-get($flaticon-map, "twitter");
+}
+.flaticon-edit:before {
+    content: map-get($flaticon-map, "edit");
+}
+.flaticon-trash:before {
+    content: map-get($flaticon-map, "trash");
+}
+.flaticon-processor:before {
+    content: map-get($flaticon-map, "processor");
+}
+.flaticon-user:before {
+    content: map-get($flaticon-map, "user");
+}
+.flaticon-email:before {
+    content: map-get($flaticon-map, "email");
+}
+.flaticon-logout:before {
+    content: map-get($flaticon-map, "logout");
+}
