@@ -101,10 +101,12 @@ router.beforeEach((to, from, next) => {
   console.log(window.location.hash.split('#')[1])
   if (to.matched.some(record => record.meta.requiresAuth)) {
     const loginpath = window.location.hash.split('#')[1]
+
     if (store.getters.isAuthenticated) {
       next()
       return
     }
+    
     // next('/login')
     console.log(loginpath)
     next({

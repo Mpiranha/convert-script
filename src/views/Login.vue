@@ -69,6 +69,11 @@ export default {
       },
     };
   },
+  mounted: function () {
+    if (this.$store.getters.isAuthenticated) {
+      this.$router.push("/");
+    }
+  },
   validations: {
     email: {
       required,

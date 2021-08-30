@@ -5,4 +5,5 @@ export default {
   user: {},
   token: localStorage.getItem('user-token') || '',
   status: '',
+  loggedIn: false,
 }

@@ -7,7 +7,7 @@ export default {
     }, user) {
         return new Promise((resolve, reject) => {
             commit('auth_request')
-            axios.post('http://convertscriptbackend.herokuapp.com/api/v1/user/login', user, {})
+            axios.post('https://convertscriptbackend.herokuapp.com/api/v1/user/login', user, {})
                 .then(resp => {
                     const token = resp.data.token
                     // const data = resp.user
@@ -21,10 +21,12 @@ export default {
                         token: token,
                         // user: data
                     })
+                    commit('login_attempt', true)
                     resolve(resp)
                 })
                 .catch(err => {
-                    commit('auth_error')
+                    commit('auth_error', err)
+                    commit('login_attempt', false)
                     localStorage.removeItem('token')
                     reject(err)
                 })
@@ -35,7 +37,7 @@ export default {
     }, user) {
         return new Promise((resolve, reject) => {
             commit('auth_request')
-            axios.post('http://convertscriptbackend.herokuapp.com/api/v1/user/register', user, {}).then(resp => {
+            axios.post('https://convertscriptbackend.herokuapp.com/api/v1/user/register', user, {}).then(resp => {
                 const token = resp.token
                 // const data = resp.user
                 localStorage.setItem('token', token)
@@ -44,9 +46,11 @@ export default {
                     token: token,
                     // user: data
                 })
+                commit('login_attempt', true)
                 resolve(resp)
             }).catch(err => {
                 commit('auth_error', err)
+                commit('login_attempt', false)
                 localStorage.removeItem('token')
                 reject(err)
             })
@@ -57,6 +61,7 @@ export default {
     }) {
         return new Promise((resolve) => {
             commit('logout')
+            commit('login_attempt', false)
             localStorage.removeItem('token')
             delete axios.defaults.headers.common['Authorization']
             resolve()

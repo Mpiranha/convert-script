@@ -103,7 +103,7 @@ export default {
         .dispatch("register", user)
         .then((res) => {
           this.error = null;
-          this.$router.push("/dashboard");
+          this.$router.push("/");
           console.log(res.data.data);
         })
         .catch((error) => {
