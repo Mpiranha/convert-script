@@ -3,7 +3,7 @@ export default {
   // --------------------------------------------------
   // The current user
   user: {},
-  token: localStorage.getItem('user-token') || '',
+  token: localStorage.getItem('token') || '',
   status: '',
   loggedIn: false,
   passwordResetStatus: '',
