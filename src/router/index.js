@@ -14,6 +14,7 @@ import Billing from '@/views/Billing'
 import Bonus from '@/views/Bonus'
 import Agency from '@/views/Agency'
 import Reseller from '@/views/Reseller'
+import Verify from '@/views/Verify'
 
 Vue.use(VueRouter)
 
@@ -28,9 +29,17 @@ const routes = [{
     component: Signup
   },
   {
-    path: '/forgot-password',
+    path: '/reset-password',
     name: 'ForgotPassword',
     component: ForgotPassword
+  },
+  {
+    path: '/verify',
+    name: 'Verify',
+    component: Verify,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/',
@@ -106,7 +115,7 @@ router.beforeEach((to, from, next) => {
       next()
       return
     }
-    
+
     // next('/login')
     console.log(loginpath)
     next({

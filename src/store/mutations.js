@@ -2,8 +2,12 @@ export default {
   // updatePassword: function (state, payload) {
   //     state.password = payload
   // },
-
-
+  reset_password_success(state) {
+    state.passwordResetStatus = 'success'
+  },
+  reset_password_error(state, ) {
+    state.passwordResetStatus = 'failed'
+  },
   auth_request(state) {
     state.status = 'loading'
   },

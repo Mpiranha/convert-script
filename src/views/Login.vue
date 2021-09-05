@@ -12,6 +12,7 @@
           </div>
 
           <h1 class="title">Login</h1>
+          <div class="error">{{ error }}</div>
 
           <form action="#" method="post">
             <div class="form-group">
@@ -21,15 +22,35 @@
                 class="form-control input-signin"
                 type="email"
                 name=""
-                v-model="user.email"
+                v-model.trim="user.email"
+                :class="{ 'is-invalid': submitted && $v.user.email.$error }"
               />
+              <div
+                v-if="submitted && $v.user.email.$error"
+                class="invalid-feedback"
+              >
+                <span v-if="!$v.user.email.required">Email is required</span>
+                <span v-if="!$v.user.email.email">Email is invalid</span>
+              </div>
             </div>
             <password-input
               label="Password"
-              v-model="user.password"
+              v-model.trim="user.password"
+              :class="{ 'is-invalid': submitted && $v.user.password.$error }"
             ></password-input>
+            <div
+              v-if="submitted && $v.user.password.$error"
+              class="invalid-feedback"
+            >
+              <span v-if="!$v.user.password.required"
+                >Password is required</span
+              >
+              <span v-if="!$v.user.password.minLength"
+                >Password must be at least 6 characters</span
+              >
+            </div>
             <div class="login-info">
-              <a href="/forgot-pwd">Forget Password?</a>
+              <router-link to="/reset-password">Forgot Password?</router-link>
             </div>
 
             <button @click="login($event)" class="btn btn-block btn-login">
@@ -37,9 +58,9 @@
             </button>
 
             <div class="login-info text-center mt-2">
-              Don’t have an account? <router-link to="/register">Sign Up</router-link>
+              Don’t have an account?
+              <router-link to="/register">Sign Up</router-link>
             </div>
-            
           </form>
         </div>
       </div>
@@ -67,6 +88,8 @@ export default {
         email: "",
         password: "",
       },
+      error: null,
+      submitted: false,
     };
   },
   mounted: function () {
@@ -75,14 +98,15 @@ export default {
     }
   },
   validations: {
-    email: {
-      required,
-      minLength: minLength(1),
-      email,
-    },
-    password: {
-      required,
-      minLength: minLength(4),
+    user: {
+      email: {
+        required,
+        email,
+      },
+      password: {
+        required,
+        minLength: minLength(6),
+      },
     },
   },
   methods: {
@@ -94,19 +118,27 @@ export default {
     // },
     login: function (event) {
       event.preventDefault();
+      this.submitted = true;
+
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
+
       this.$store
         .dispatch("login", this.user)
         .then((res) => {
           this.error = null;
-          this.$router.push(this.$route.query.from || "/").catch((error) => {
-            console.log(error);
+          this.$router.push(this.$route.query.from || "/").catch(() => {
+            // console.log(error);
           });
-         
+
           console.log(res.data);
         })
         .catch((error) => {
-          console.log(error);
-          this.error = error;
+          // console.log(error);
+          this.error = error.response.data.errors.root;
+          // this.error = error;
         });
       // const ( username, password ) = this
       // this.$store.dispatch(AUTH_REQUEST, {username, password }).then(() => {

@@ -6,4 +6,5 @@ export default {
   token: localStorage.getItem('user-token') || '',
   status: '',
   loggedIn: false,
+  passwordResetStatus: '',
 }
