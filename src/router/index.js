@@ -15,6 +15,10 @@ import Bonus from '@/views/Bonus'
 import Agency from '@/views/Agency'
 import Reseller from '@/views/Reseller'
 import Verify from '@/views/Verify'
+import Campaign from '@/views/Campaign'
+import CampaignScript from '@/views/CampaignScript'
+import ScriptSelect from '@/views/ScriptSelect'
+import CreateScript from '@/views/CreateScript'
 
 Vue.use(VueRouter)
 
@@ -85,6 +89,38 @@ const routes = [{
     path: '/reseller',
     name: 'Reseller',
     component: Reseller,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/campaign',
+    name: 'Campaign',
+    component: Campaign,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/campaign/script',
+    name: 'CampaignScript',
+    component: CampaignScript,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/script/select',
+    name: 'ScriptSelect',
+    component: ScriptSelect,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/script/new',
+    name: 'CreateScript',
+    component: CreateScript,
     meta: {
       requiresAuth: true
     }

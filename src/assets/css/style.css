@@ -413,6 +413,14 @@
     padding: 0.1rem 0.5rem;
 }
 
+.text-right {
+    text-align: right !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
 .link-paper {
     height: 80px;
     width: 65px;
@@ -857,4 +865,133 @@ input:checked+.slider:before {
     font-size: 0.7rem;
     color: #79869d;
     margin-bottom: 0.1rem;
+}
+
+.section-head {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 0.7rem 0.8rem 0.8rem;
+}
+
+.section-head.bordered {
+    border-right: 2px solid #f6f8f9;
+}
+
+.section-head.bordered-left {
+    border-left: 2px solid #f6f8f9;
+}
+
+.section-head-left {
+    font-size: 0.7rem;
+
+
+}
+
+.control-overflow {
+    overflow-y: auto;
+    height: calc(100% - 120px);
+}
+
+
+.section-head-left .section-head-icon {
+    width: 0.8rem;
+    margin-right: 0.2rem;
+}
+
+.table.table-section {
+    border-top: 2px solid #f6f8f9 !important;
+    margin-bottom: 0;
+}
+
+.table-section tr td {
+    border: none;
+    border-bottom: 2px solid #f6f8f9;
+    vertical-align: middle;
+    font-size: 0.7rem;
+    padding: 0.7rem 0.5rem;
+}
+
+.table-section tr {
+    border-right: 2px solid #f6f8f9;
+}
+
+.section-head-right {
+    margin-left: auto;
+}
+
+.section-head-right select {
+    background-color: transparent;
+    border: 1px solid #a8aaad;
+    font-size: 0.7rem;
+    padding: 0.5rem 0.4rem;
+    border-radius: 0.3rem;
+}
+
+.control-order-tool {
+    display: flex;
+    flex-direction: column;
+    width: 1.5rem;
+}
+
+.control-order-tool .btn {
+    padding: 0;
+}
+
+.control-order-tool .btn:focus {
+    box-shadow: none;
+}
+
+.control-order-tool .btn .icon-order::before {
+    font-size: 0.6rem;
+    font-weight: bolder;
+}
+
+.control-order-tool .btn-down {
+    transform: rotateX(180deg);
+}
+
+.script-type {
+    background-color: #8338ec;
+    color: #fff;
+    display: inline-block;
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.7rem;
+    font-size: 0.6rem;
+}
+
+.content-display {
+    font-size: 0.8rem;
+    padding: 1.3rem 1.5rem 0 0;
+    text-align: justify;
+    line-height: 22px;
+}
+
+.section-footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    padding: 0 0.7rem 0.5rem 0;
+}
+
+.section-footer .foot-icons {
+    width: 1rem;
+    margin-right: 0.4rem;
+}
+
+.script-custom-height {
+    height: 481px;
+    overflow: hidden;
+}
+
+.btn-share .foot-icons {
+    width: 1.2rem;
+}
+
+.section-footer .btn-copy {
+    font-size: 0.8rem;
+    margin-left: auto;
+}
+
+.section-footer .btn {
+    padding: 0;
 }

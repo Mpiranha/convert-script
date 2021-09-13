@@ -1,5 +1,6 @@
 // import Vue from 'vue'
 import axios from 'axios'
+const baseUrl = 'https://convertscriptbackend.herokuapp.com';
 
 // import {
 //     resolve
@@ -11,7 +12,7 @@ export default {
     }, user) {
         return new Promise((resolve, reject) => {
             commit('auth_request')
-            axios.post('https://convertscriptbackend.herokuapp.com/api/v1/user/login', user, {})
+            axios.post(`${baseUrl}/api/v1/user/login`, user, {})
                 .then(resp => {
                     const token = resp.data.token
                     // const data = resp.user
@@ -26,6 +27,7 @@ export default {
                         // user: data
                     })
                     commit('login_attempt', true)
+                    // dispatch("getUser")
                     resolve(resp)
                 })
                 .catch(err => {
@@ -42,7 +44,7 @@ export default {
     }, user) {
         return new Promise((resolve, reject) => {
             commit('auth_request')
-            axios.post('https://convertscriptbackend.herokuapp.com/api/v1/user/register', user, {})
+            axios.post(`${baseUrl}/api/v1/user/register`, user, {})
                 .then(resp => {
                     const token = resp.data.token
                     // const data = resp.user
@@ -53,6 +55,7 @@ export default {
                         // user: data
                     })
                     commit('login_attempt', true)
+                    // dispatch("getUser")
                     resolve(resp)
                 }).catch(err => {
                     commit('auth_error', err)
@@ -66,7 +69,7 @@ export default {
     }, email) {
         return new Promise((resolve, reject) => {
 
-            axios.post('https://convertscriptbackend.herokuapp.com/api/v1/user/password/email', email, {})
+            axios.post(`${baseUrl}/api/v1/user/password/email`, email, {})
                 .then(resp => {
                     // const token = resp.data.token
                     // const data = resp.user
@@ -83,12 +86,34 @@ export default {
                 })
         })
     },
+    getUser({
+        commit,
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/user/profile`)
+                .then(resp => {
+                    localStorage.setItem('user', JSON.stringify(resp.data.data))
+                    commit("get_user_success", {
+                        user: resp.data.data
+                    })
+                    //console.log(resp.data)
+
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
     resendVerificationEmail({
         state
     }) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
-            axios.get('https://convertscriptbackend.herokuapp.com/api/v1/user/email/resend')
+            axios.get(`${baseUrl}/api/v1/user/email/resend`)
                 .then(resp => {
                     //commit()
 
@@ -110,5 +135,43 @@ export default {
             resolve()
         })
     },
+
+    getAllAgency({
+        commit,
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/agencies`)
+                .then(resp => {
+                    commit("get_all_agencies_success", {
+                        agencies: resp.data
+                    });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    addAgency({
+        state
+    },agency) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.post(`${baseUrl}/api/v1/agencies`, agency, {})
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    }
 
 }

@@ -8,10 +8,10 @@
     />
     <nav class="nav flex-column nav-wrap">
       <li class="nav-item">
-        <a
+        <router-link
           class="nav-link"
           :class="currentActive == 'dashboard' ? 'active' : ''"
-          href="/"
+          to="/"
         >
           <img
             class="main-icon"
@@ -24,14 +24,14 @@
             alt=""
           />
           <span class="nav-text"> Dashboard </span>
-        </a>
+        </router-link>
       </li>
 
       <li class="nav-item">
-        <a
+        <router-link
           class="nav-link"
           :class="currentActive == 'campaign' ? 'active' : ''"
-          href="pages/campaign.html"
+          to="/campaign"
         >
           <img
             class="main-icon"
@@ -44,13 +44,13 @@
             alt=""
           />
           <span class="nav-text"> Campaigns </span>
-        </a>
+        </router-link>
       </li>
       <li class="nav-item">
-        <a
+        <router-link
           class="nav-link"
           :class="currentActive == 'script' ? 'active' : ''"
-          href="pages/links.html"
+          to="/scripts"
         >
           <img
             class="main-icon"
@@ -63,13 +63,13 @@
             alt=""
           />
           <span class="nav-text"> All Scripts </span>
-        </a>
+        </router-link>
       </li>
       <li class="nav-item">
-        <a
+        <router-link
           class="nav-link"
           :class="currentActive == 'favourites' ? 'active' : ''"
-          href="pages/leads.html"
+          to="/favourites"
         >
           <img
             class="main-icon"
@@ -82,13 +82,13 @@
             alt=""
           />
           <span class="nav-text"> My Favourites </span>
-        </a>
+        </router-link>
       </li>
       <li class="nav-item">
-        <a
+        <router-link
           class="nav-link"
           :class="currentActive == 'presets' ? 'active' : ''"
-          href="pages/pop-up.html"
+          to="/preset"
         >
           <img
             class="main-icon"
@@ -101,14 +101,14 @@
             alt=""
           />
           <span class="nav-text"> Presets </span>
-        </a>
+        </router-link>
       </li>
 
       <li class="nav-item">
-        <a
+        <router-link
           class="nav-link"
           :class="currentActive == 'integration' ? 'active' : ''"
-          href="pages/settings.html"
+          to="/integration"
         >
           <img
             class="main-icon"
@@ -121,14 +121,14 @@
             alt=""
           />
           <span class="nav-text"> Integration </span>
-        </a>
+        </router-link>
       </li>
 
       <li class="nav-item">
-        <a
+        <router-link
           class="nav-link"
           :class="currentActive == 'settings' ? 'active' : ''"
-          href="pages/training.html"
+          to="/settings"
         >
           <img
             class="main-icon"
@@ -141,15 +141,15 @@
             alt=""
           />
           <span class="nav-text"> Settings </span>
-        </a>
+        </router-link>
       </li>
     </nav>
     <nav class="nav flex-column nav-wrap mt-auto">
       <li class="nav-item">
-        <a
+        <router-link
           class="nav-link"
           :class="currentActive == 'marketplace' ? 'active' : ''"
-          href="index.html"
+          to="/market"
         >
           <img
             class="main-icon"
@@ -162,14 +162,14 @@
             alt=""
           />
           <span class="nav-text"> Marketplace </span>
-        </a>
+        </router-link>
       </li>
 
       <li class="nav-item">
-        <a
+        <router-link
           class="nav-link"
           :class="currentActive == 'agency' ? 'active' : ''"
-          href="pages/campaign.html"
+          to="/agency"
         >
           <img
             class="main-icon"
@@ -182,13 +182,13 @@
             alt=""
           />
           <span class="nav-text"> Agency </span>
-        </a>
+        </router-link>
       </li>
       <li class="nav-item">
-        <a
+        <router-link
           class="nav-link"
           :class="currentActive == 'reseller' ? 'active' : ''"
-          href="pages/links.html"
+          to="/reseller"
         >
           <img
             class="main-icon"
@@ -201,13 +201,13 @@
             alt=""
           />
           <span class="nav-text"> Reseller </span>
-        </a>
+        </router-link>
       </li>
       <li class="nav-item">
         <div class="user-info">
           <div
             class="btn-drop"
-            href="#"
+            to="#"
             @click="toggleShow()"
             data-target=".user-drop"
           >
@@ -216,45 +216,49 @@
               src="@/assets/icons/profile-user.svg"
               alt=""
             />
-            <div class="name">Emma</div>
+            <div class="name">{{ userName }}</div>
             <div v-if="isShowing" class="user-drop">
               <div class="setup-drop-inner">
                 <ul class="nav flex-column">
                   <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <router-link class="nav-link" to="/account">
                       <img
                         src="@/assets/icons/convert-icon/account.svg"
                         alt="icon"
                       />
-                      Account</a
-                    >
+                      Account
+                    </router-link>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <router-link class="nav-link" to="/bonus">
                       <img
                         src="@/assets/icons/convert-icon/bonus.svg"
                         alt="icon"
                       />
-                      Bonuses</a
-                    >
+                      Bonuses
+                    </router-link>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <router-link class="nav-link" to="/billing">
                       <img
                         src="@/assets/icons/convert-icon/billiing.svg"
                         alt="icon"
                       />
-                      Billing</a
-                    >
+                      Billing
+                    </router-link>
                   </li>
                   <li class="nav-item">
-                    <a @click="logout($event)" class="nav-link" href="#">
+                    <router-link
+                      @click="logout($event)"
+                      class="nav-link"
+                      to="#"
+                    >
                       <img
                         src="@/assets/icons/convert-icon/logout.svg"
                         alt="icon"
                       />
-                      Logout</a
-                    >
+                      Logout
+                    </router-link>
                   </li>
                 </ul>
               </div>
@@ -272,6 +276,9 @@ export default {
   props: {
     // msg: String
     currentActive: String,
+    userName: {
+      type: String,
+    },
   },
   data() {
     return {
@@ -284,13 +291,9 @@ export default {
     },
     logout: function (event) {
       event.preventDefault();
-      this.$store
-        .dispatch("logout")
-        .then(() => {
-          this.$router.push("/login")
-        })
-
-
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push("/login");
+      });
     },
   },
 };

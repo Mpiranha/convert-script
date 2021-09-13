@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar current-active="dashboard"></sidebar>
+      <sidebar :user-name="this.$store.state.user.name" current-active="dashboard"></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="container scroll-content">
@@ -54,8 +54,8 @@
 
 <script>
 // @ is an alias to /src
-import Sidebar from "@/components/Sidebar.vue";
-import Navbar from "@/components/Nav.vue";
+import Sidebar from "@/components/TheSidebar.vue";
+import Navbar from "@/components/TheNav.vue";
 import DashboardBox from "@/components/DashboardBox";
 
 export default {

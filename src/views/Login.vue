@@ -129,6 +129,7 @@ export default {
         .dispatch("login", this.user)
         .then((res) => {
           this.error = null;
+          this.$store.dispatch("getUser")
           this.$router.push(this.$route.query.from || "/").catch(() => {
             // console.log(error);
           });

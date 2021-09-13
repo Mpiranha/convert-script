@@ -15,12 +15,19 @@ export default {
   //     state.status = 'loading'
   //   },
   auth_success(state, {
-    token,
-    user
+    token
   }) {
     state.status = 'success'
     state.token = token
+    // state.user = user
+  },
+  get_user_success(state, {
+    user
+  }) {
     state.user = user
+  },
+  get_all_agencies_success(state, { agencies }) {
+    state.allAgencies = agencies
   },
   auth_error(state) {
     state.status = 'error'
@@ -31,5 +38,6 @@ export default {
   logout(state) {
     state.status = ''
     state.token = ''
+    state.user = ''
   },
 }

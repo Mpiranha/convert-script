@@ -35,8 +35,8 @@
 
 <script>
 // @ is an alias to /src
-import Sidebar from "@/components/Sidebar.vue";
-import Navbar from "@/components/Nav.vue";
+import Sidebar from "@/components/TheSidebar.vue";
+import Navbar from "@/components/TheNav.vue";
 
 
 export default {

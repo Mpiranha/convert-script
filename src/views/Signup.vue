@@ -169,12 +169,13 @@ export default {
         password: this.userData.password,
       };
 
-      console.log(user);
+     // console.log(user);
       this.$store
         .dispatch("register", user)
         .then((res) => {
           this.error = null;
-          this.$router.push("/verify");
+          this.$store.dispatch("getUser")
+          this.$router.push("/");
           console.log(res.data.data);
         })
         .catch((error) => {
