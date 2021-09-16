@@ -31,6 +31,13 @@
     cursor: pointer;
 }
 
+.fav-star {
+    margin-right: 1rem;
+}
+.fav-star .fav-icon {
+    width: 1rem;
+}
+
 
 .scroll-content {
     height: calc(100% - 60.6px);
@@ -881,15 +888,36 @@ input:checked+.slider:before {
     border-left: 2px solid #f6f8f9;
 }
 
+.bordered-right {
+    border-right: 2px solid #f6f6f6;
+}
+
+.bordered-bottom {
+    border-bottom: 2px solid #f6f6f6;
+}
+
 .section-head-left {
     font-size: 0.7rem;
 
 
 }
 
+.no-gutter {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+.no-gutter-right {
+    padding-right: 0 !important;
+}
+
+.no-gutter-left {
+    padding-left: 0 !important;
+}
+
 .control-overflow {
     overflow-y: auto;
-    height: calc(100% - 120px);
+    height: 64vh;
 }
 
 
@@ -979,7 +1007,7 @@ input:checked+.slider:before {
 }
 
 .script-custom-height {
-    height: 481px;
+    height: 73vh;
     overflow: hidden;
 }
 

@@ -62,8 +62,8 @@ export default {};
 <style scoped>
 .script-content-wrap {
   color: #5f6f7f;
-  border-top: 2px solid #f6f8f9;
-  border-left: 2px solid #f6f8f9;
+  /* border-top: 2px solid #f6f8f9; */
+  /* border-left: 2px solid #f6f8f9; */
   border-bottom: 2px solid #f6f8f9;
   padding: 1rem 1rem 0.5rem 1rem;
 }

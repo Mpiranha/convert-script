@@ -88,7 +88,7 @@
         <router-link
           class="nav-link"
           :class="currentActive == 'presets' ? 'active' : ''"
-          to="/preset"
+          to="/presets"
         >
           <img
             class="main-icon"

@@ -19,6 +19,10 @@ import Campaign from '@/views/Campaign'
 import CampaignScript from '@/views/CampaignScript'
 import ScriptSelect from '@/views/ScriptSelect'
 import CreateScript from '@/views/CreateScript'
+import Script from '@/views/Script'
+import Favourites from '@/views/Favourites'
+import Presets from '@/views/Presets'
+import PresetAdd from '@/views/PresetAdd'
 
 Vue.use(VueRouter)
 
@@ -121,6 +125,38 @@ const routes = [{
     path: '/script/new',
     name: 'CreateScript',
     component: CreateScript,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/scripts',
+    name: 'Scripts',
+    component: Script,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/favourites',
+    name: 'Favourites',
+    component: Favourites,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/presets',
+    name: 'Preset',
+    component: Presets,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/presets/create',
+    name: 'CreatePreset',
+    component: PresetAdd,
     meta: {
       requiresAuth: true
     }

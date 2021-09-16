@@ -1,7 +1,10 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar></sidebar>
+      <sidebar
+        :user-name="this.$store.state.user.name"
+        current-active="preset"
+      ></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="container scroll-content">
