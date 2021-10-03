@@ -20,7 +20,7 @@
           />
           <img
             class="active-icon"
-            src="@/assets/icons/convert-icon/dashboard.svg"
+            src="@/assets/icons/convert-icon/active-icons/dashboard 1.svg"
             alt=""
           />
           <span class="nav-text"> Dashboard </span>
@@ -40,7 +40,7 @@
           />
           <img
             class="active-icon"
-            src="@/assets/icons/sidebar-white/Campaigns 1.svg"
+            src="@/assets/icons/convert-icon/active-icons/Campaigns.svg"
             alt=""
           />
           <span class="nav-text"> Campaigns </span>
@@ -59,7 +59,7 @@
           />
           <img
             class="active-icon"
-            src="@/assets/icons/sidebar-white/Link 1.svg"
+            src="@/assets/icons/convert-icon/active-icons/all script.svg"
             alt=""
           />
           <span class="nav-text"> All Scripts </span>
@@ -78,7 +78,7 @@
           />
           <img
             class="active-icon"
-            src="@/assets/icons/sidebar-white/leads 1.svg"
+            src="@/assets/icons/convert-icon/active-icons/My Favourites.svg"
             alt=""
           />
           <span class="nav-text"> My Favourites </span>
@@ -97,7 +97,7 @@
           />
           <img
             class="active-icon"
-            src="@/assets/icons/sidebar-white/Pop Ups 1.svg"
+            src="@/assets/icons/convert-icon/active-icons/Presets.svg"
             alt=""
           />
           <span class="nav-text"> Presets </span>
@@ -117,7 +117,7 @@
           />
           <img
             class="active-icon"
-            src="@/assets/icons/sidebar-white/setting 1.svg"
+            src="@/assets/icons/convert-icon/active-icons/Integration.svg"
             alt=""
           />
           <span class="nav-text"> Integration </span>
@@ -137,7 +137,7 @@
           />
           <img
             class="active-icon"
-            src="@/assets/icons/sidebar-white/Training & tutorials 1.svg"
+            src="@/assets/icons/convert-icon/active-icons/Settings.svg"
             alt=""
           />
           <span class="nav-text"> Settings </span>
@@ -158,7 +158,7 @@
           />
           <img
             class="active-icon"
-            src="@/assets/icons/convert-icon/dashboard.svg"
+            src="@/assets/icons/convert-icon/active-icons/Marketplace.svg"
             alt=""
           />
           <span class="nav-text"> Marketplace </span>
@@ -178,7 +178,7 @@
           />
           <img
             class="active-icon"
-            src="@/assets/icons/sidebar-white/Campaigns 1.svg"
+            src="@/assets/icons/convert-icon/active-icons/Agent.svg"
             alt=""
           />
           <span class="nav-text"> Agency </span>
@@ -197,7 +197,7 @@
           />
           <img
             class="active-icon"
-            src="@/assets/icons/sidebar-white/Link 1.svg"
+            src="@/assets/icons/convert-icon/active-icons/Reseller.svg"
             alt=""
           />
           <span class="nav-text"> Reseller </span>
@@ -248,17 +248,17 @@
                     </router-link>
                   </li>
                   <li class="nav-item">
-                    <router-link
+                    <a
                       @click="logout($event)"
-                      class="nav-link"
-                      to="#"
+                      class="btn nav-link"
+                      href="#"
                     >
                       <img
                         src="@/assets/icons/convert-icon/logout.svg"
                         alt="icon"
                       />
                       Logout
-                    </router-link>
+                    </a>
                   </li>
                 </ul>
               </div>

@@ -1,7 +1,10 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar :user-name="this.$store.state.user.name" current-active="dashboard"></sidebar>
+      <sidebar
+        :user-name="this.$store.state.user.name"
+        current-active="dashboard"
+      ></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="container scroll-content">
@@ -69,5 +72,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

@@ -19,13 +19,17 @@
           >
             <h6 class="title">All Campaign</h6>
 
-            <button class="btn btn-create" v-b-modal.modal-new-campaign>
+            <button
+              @click="clearField"
+              class="btn btn-create"
+              v-b-modal.modal-new-campaign
+            >
               <span>+</span>
               New Campaigns
             </button>
           </div>
 
-          <div class="content-wrap pt-4 pb-5">
+          <div class="content-wrap set-min-h pt-4 pb-5">
             <div class="search-form">
               <button class="btn search-btn">
                 <i class="flaticon-loupe icons"></i>
@@ -38,7 +42,7 @@
             </div>
 
             <div class="sort-wrap">
-              <div class="acct-desc">2 Campaign(s)</div>
+              <div class="acct-desc">{{ campaignLength }} Campaign(s)</div>
 
               <select class="sort-select" name="" id="">
                 <option value="none" selected>Sort</option>
@@ -47,19 +51,37 @@
                 <option value=""></option>
               </select>
             </div>
-            <table class="table table-custom">
-              <tbody>
-                <tr>
-                  <td scope="row">Campaign Name</td>
-                  <td>5</td>
-                  <td>05/072021</td>
-                  <td>
-                    <dropdown-tool></dropdown-tool>
-                  </td>
-                </tr>
-               
-              </tbody>
-            </table>
+            <div v-if="loading">
+              <div class="loader-modal">
+                <img
+                  class="loader-img"
+                  src="@/assets/image/loader.gif"
+                  alt=""
+                />
+              </div>
+            </div>
+            <div v-else>
+              <div v-if="campaigns.length === 0" class="no-data-info">
+                Created campaigns will display here.
+              </div>
+              <table v-else class="table table-custom">
+                <tbody>
+                  <tr v-for="campaign in orderedCampaign" :key="campaign.id">
+                    <td scope="row">{{ campaign.name }}</td>
+                    <td>5</td>
+                    <td>05/072021</td>
+                    <td>
+                      <dropdown-tool
+                        @edit-clicked="
+                          openEditModal(campaign.id, campaign.name)
+                        "
+                        @delete-proceed="deleteCampaign(campaign.id)"
+                      ></dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -95,7 +117,13 @@
           class="close-modal"
           >Close</b-button
         >
-        <b-button class="save-modal">Create</b-button>
+        <b-button
+          @click="
+            triggerEdit ? editCampaign(editId, campaignName) : addCampaign()
+          "
+          class="save-modal"
+          >{{ triggerEdit ? "Edit" : "Create" }}</b-button
+        >
       </div>
     </b-modal>
   </div>
@@ -108,7 +136,7 @@ import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
 
 export default {
-  name: "Dashboard",
+  name: "Campaign",
   components: {
     Sidebar,
     Navbar,
@@ -118,7 +146,113 @@ export default {
     return {
       campaignName: "",
       accessOptions: [{ value: null, text: "Select Plans" }],
+      campaigns: [],
+      error: "",
+      loading: true,
+      triggerEdit: false,
+      editId: null,
     };
+  },
+  methods: {
+    getCampaign() {
+      this.$store
+        .dispatch("getCampaigns")
+        .then((res) => {
+          this.campaigns = res.data.data;
+          console.log(res.data + "called now");
+          this.loading = false;
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          this.loading = false;
+        });
+    },
+    addCampaign() {
+      this.loading = true;
+      this.$bvModal.hide("modal-new-campaign");
+      this.$store
+        .dispatch("addCampaign", { name: this.campaignName })
+        .then((res) => {
+          this.error = null;
+          console.log(res.data);
+          // this.getCampaign();
+          this.getCampaign();
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          // this.error = error.response.data.errors.root;
+          // this.error = error;
+        });
+
+     // this.getCampaign();
+
+      // this.$vm.$forceUpdate();
+    },
+    editCampaign(id) {
+      this.loading = true;
+      this.$bvModal.hide("modal-new-campaign");
+      this.$store
+        .dispatch("editCampaign", { id: id, data: { name: this.campaignName } })
+        .then((res) => {
+          this.error = null;
+          console.log(res.data);
+          this.getCampaign();
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          // this.error = error.response.data.errors.root;
+          // this.error = error;
+        });
+    },
+    deleteCampaign(id) {
+      this.loading = true;
+      this.$store
+        .dispatch("deleteCampaign", id)
+        .then((res) => {
+          this.error = null;
+          this.getCampaign();
+          console.log(res.data);
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          // this.error = error.response.data.errors.root;
+          // this.error = error;
+        });
+
+     // this.getCampaign();
+    },
+
+    openEditModal(id, data) {
+      this.$bvModal.show("modal-new-campaign");
+      this.triggerEdit = true;
+      this.editId = id;
+      this.campaignName = data;
+    },
+    clearField() {
+      this.campaignName = "";
+      this.triggerEdit = false;
+    },
+    orderSort(arr) {
+      return arr.sort(function(a, b){return a.id - b.id});
+    }
+  },
+
+  mounted() {
+    this.getCampaign();
+  },
+  computed: {
+    campaignLength() {
+      return this.campaigns.length;
+    },
+    orderedCampaign() {
+      return this.orderSort(this.campaigns)
+    }
   },
 };
 </script>

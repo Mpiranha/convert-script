@@ -9,7 +9,10 @@
     <template #button-content>
       <i class="flaticon-menu icons"></i>
     </template>
-    <b-dropdown-item link-class="drop-link" href="#">
+    <!-- <router-link class="nav-link" :to="{ path: '/campaign', params: { id: 1 } }">
+      Account
+    </router-link> -->
+    <b-dropdown-item @click="editAction" link-class="drop-link" href="#">
       <i class="flaticon-pencil icons table-drop-icon"></i>
       Edit
     </b-dropdown-item>
@@ -29,18 +32,15 @@
     >
       <div class="modal-head text-center mb-4">
         <h3 class="title">Are You sure you want to delete this campaign?</h3>
-        
       </div>
 
-  
-
       <div class="d-flex justify-content-center">
-        <b-button
-          @click="$bvModal.hide('modal-delete')"
-          class="close-modal"
+        <b-button @click="$bvModal.hide('modal-delete')" class="close-modal"
           >No</b-button
         >
-        <b-button class="save-modal btn-danger">Yes</b-button>
+        <b-button @click="deleteAction" class="save-modal btn-danger"
+          >Yes</b-button
+        >
       </div>
     </b-modal>
   </b-dropdown>
@@ -49,6 +49,16 @@
 <script>
 export default {
   name: "DropdownTool",
+  props: [],
+  methods: {
+    editAction() {
+      this.$emit("edit-clicked");
+    },
+    deleteAction() {
+      this.$emit("delete-proceed");
+      this.$bvModal.hide("modal-delete");
+    },
+  },
 };
 </script>
 

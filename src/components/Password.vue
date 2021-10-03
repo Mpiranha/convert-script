@@ -1,6 +1,6 @@
 <template>
   <div class="form-group">
-    <label for="my-input">{{ label }}</label>
+    <label :class="classLabel" for="my-input">{{ label }}</label>
     <div class="custom-pwd-box">
       <input
         id="my-input"
@@ -13,7 +13,11 @@
       <a data-toggle="pwd" href="#">
         <img
           @click="toggleText()"
-          src="@/assets/icons/convert-icon/visibility.svg"
+          :src="
+            isText
+              ? require(`@/assets/icons/convert-icon/visibility.svg`)
+              : require(`@/assets/icons/convert-icon/visibility-visible.svg`)
+          "
           alt="visibitity"
         />
       </a>
@@ -25,16 +29,14 @@
 export default {
   name: "Password",
   props: {
-      label: String,
-      
+    label: String,
+    classLabel: String,
   },
-  computed: {
-   
-  },
+  computed: {},
   data() {
     return {
       isText: false,
-      password: ''
+      password: "",
     };
   },
 

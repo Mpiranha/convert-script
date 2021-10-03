@@ -1,4 +1,10 @@
 @import 'font/flaticon.css';
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+
+body {
+    font-family: Roboto !important;
+}
 
 .flex-main-wrap {
     display: flex;
@@ -34,6 +40,7 @@
 .fav-star {
     margin-right: 1rem;
 }
+
 .fav-star .fav-icon {
     width: 1rem;
 }
@@ -545,8 +552,8 @@ button.close {
 .switch {
     position: relative;
     display: inline-block;
-    width: 40px;
-    height: 20px;
+    width: 25px;
+    height: 13px;
 }
 
 /* Hide default HTML checkbox */
@@ -574,25 +581,25 @@ button.close {
     content: "";
     height: 14px;
     width: 14px;
-    left: 3px;
-    bottom: 3px;
+    left: 0px;
+    bottom: 0px;
     background-color: white;
-    -webkit-transition: .4s;
     transition: .4s;
+    box-shadow: 1px 1px 2px #868383;
 }
 
 input:checked+.slider {
-    background-color: #2196F3;
+    background-color: #21d77f;
 }
 
 input:focus+.slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px #21d77f;
 }
 
 input:checked+.slider:before {
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
-    transform: translateX(20px);
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
 }
 
 .switch-wrap {
@@ -1023,3 +1030,32 @@ input:checked+.slider:before {
 .section-footer .btn {
     padding: 0;
 }
+
+.loader-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+}
+
+.loader-modal .loader-img {
+    width: 7rem;
+}
+
+.no-data-info {
+    justify-content: center;
+    color: #4e5054;
+    display: flex;
+    align-items: center;
+    height: 40vh;
+}
+
+.set-min-h {
+    min-height: 70vh;
+}
+

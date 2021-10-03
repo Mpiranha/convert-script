@@ -23,6 +23,9 @@ import Script from '@/views/Script'
 import Favourites from '@/views/Favourites'
 import Presets from '@/views/Presets'
 import PresetAdd from '@/views/PresetAdd'
+import Integration from '@/views/Integration'
+import IntegrationNew from '@/views/IntegrationNew'
+import Settings from '@/views/Settings'
 
 Vue.use(VueRouter)
 
@@ -106,6 +109,14 @@ const routes = [{
     }
   },
   {
+    path: '/campaign/:id',
+    name: 'Campaign',
+    component: Campaign,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/campaign/script',
     name: 'CampaignScript',
     component: CampaignScript,
@@ -157,6 +168,30 @@ const routes = [{
     path: '/presets/create',
     name: 'CreatePreset',
     component: PresetAdd,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/integration',
+    name: 'Integration',
+    component: Integration,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/integration/new',
+    name: 'IntegrationNew',
+    component: IntegrationNew,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: Settings,
     meta: {
       requiresAuth: true
     }

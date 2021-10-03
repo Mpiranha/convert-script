@@ -3,7 +3,7 @@
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.name"
-        current-active="reseller"
+        current-active="integration"
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>
@@ -17,12 +17,12 @@
               mb-5
             "
           >
-            <h6 class="title">Reseller</h6>
+            <h6 class="title">Integration</h6>
 
-            <button class="btn btn-create" v-b-modal.modalPopover>
+            <router-link to="/integration/new" class="btn btn-create">
               <span>+</span>
-              New Account
-            </button>
+              New Integration
+            </router-link>
           </div>
 
           <div class="content-wrap pt-4 pb-5">
@@ -37,23 +37,21 @@
               />
             </div>
 
-            <div class="sort-wrap">
-              <div class="acct-desc">2/50 Account</div>
-
-              <select class="sort-select" name="" id="">
-                <option selected>Sort</option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-              </select>
-            </div>
             <table class="table table-custom">
               <tbody>
                 <tr>
-                  <td scope="row">John Doe</td>
-                  <td>Active</td>
-                  <td>john@gmail.com</td>
-                  <td>05/072021</td>
+                  <td scope="row">Integration 1</td>
+                  <td>Aweber</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      Status
+                      <label class="switch mb-0">
+                        <input type="checkbox" />
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </td>
+                  <td>05/07/2021</td>
                   <td>
                     <b-dropdown
                       offset="-30"
@@ -82,58 +80,6 @@
         </div>
       </div>
     </div>
-
-    <b-modal
-      :hide-header="true"
-      id="modalPopover"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
-      <b-form-group label="Name" label-for="name" label-class="form-label">
-        <b-form-input
-          id="name"
-          v-model="form.name"
-          type="text"
-          placeholder="Name"
-          class="input-table"
-        >
-        </b-form-input>
-      </b-form-group>
-
-      <b-form-group label="Email" label-for="email" label-class="form-label">
-        <b-form-input
-          id="email"
-          v-model="form.email"
-          type="text"
-          placeholder="user@domain.com"
-          class="input-table"
-        >
-        </b-form-input>
-      </b-form-group>
-      <b-form-group label="Password" label-for="pwd" label-class="form-label">
-        <b-form-input
-          id="password"
-          v-model="form.pwd"
-          type="password"
-          class="input-table"
-        >
-        </b-form-input>
-      </b-form-group>
-      <b-form-group label="Access" label-for="pwd" label-class="form-label">
-        <b-form-select
-          class="input-table"
-          v-model="form.access"
-          :options="accessOptions"
-        ></b-form-select>
-      </b-form-group>
-      <div class="d-flex justify-content-end">
-        <b-button  @click="$bvModal.hide('modalPopover')" class="close-modal">Close</b-button>
-        <b-button class="save-modal">Save</b-button>
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -163,6 +109,9 @@ export default {
 </script>
 
 <style>
+.switch {
+  margin-left: 0.5rem;
+}
 .save-btn {
   background-color: pink;
 }

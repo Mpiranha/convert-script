@@ -66,7 +66,9 @@
       </p>
 
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-suggest')" class="close-modal">Close</b-button>
+        <b-button @click="$bvModal.hide('modal-suggest')" class="close-modal"
+          >Close</b-button
+        >
         <b-button class="save-modal">Submit</b-button>
       </div>
     </b-modal>
@@ -82,9 +84,9 @@ export default {
   },
   data() {
     return {
-      campaignName: ''
-    }
-  }
+      campaignName: "",
+    };
+  },
 };
 </script>
 

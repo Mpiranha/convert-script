@@ -3,18 +3,21 @@
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.name"
-        current-active="presets"
+        current-active="settings"
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="container scroll-content">
-          <div class="dashboard-top">
-            <h6 class="title">Add Preset</h6>
-            <div class="desc">
-              Use presets to save recurring details<br />
-              and make your work a lot easier.
+          <div class="d-flex">
+            <div class="dashboard-top">
+              <h6 class="title">Account Details</h6>
+              <div class="desc">Edit your account information, here.</div>
+            </div>
+            <div class="ml-auto align-self-end mb-2">
+              <b-button class="save-modal px-3 py-2">Save</b-button>
             </div>
           </div>
+
           <div class="content-wrap extra-margin-left-wrap">
             <b-form-group
               label="Name"
@@ -31,64 +34,46 @@
             </b-form-group>
 
             <b-form-group
-              label="Company Name"
+              label="Email"
               label-for="company-name"
               label-class="form-label"
             >
               <b-form-input
                 id="company-name"
-                v-model="form.companyName"
-                type="text"
+                v-model="form.email"
+                type="email"
                 class="input-table"
               >
               </b-form-input>
             </b-form-group>
 
-            <b-form-group
-              label="Product Name"
-              label-for="prod-name"
-              label-class="form-label"
-            >
-              <b-form-input
-                id="prod-name"
-                v-model="form.productName"
-                type="text"
-                class="input-table"
-              >
-              </b-form-input>
-            </b-form-group>
+            <password-input
+              label="Password"
+              v-model.trim="form.password"
+              class-label="form-label"
+            ></password-input>
 
-            <b-form-group
-              label="What do you do?"
-              label-for="occupation"
-              label-class="form-label"
-            >
-              <b-form-input
-                id="occupation"
-                v-model="form.occupation"
-                type="text"
-                class="input-table"
-              >
-              </b-form-input>
-            </b-form-group>
+            <password-input
+              label="New Password"
+              v-model.trim="form.password"
+              class-label="form-label"
+            ></password-input>
 
-            <b-form-group
-              label="Tag line"
-              label-for="tag-line"
-              label-class="form-label"
-            >
-              <b-form-input
-                id="tag-line"
-                v-model="form.tagLine"
-                type="text"
-                class="input-table"
-              >
-              </b-form-input>
+            <b-form-group label="My Profile" label-class="form-label">
+              <div class="d-flex user-img-wrap-setting">
+                <img
+                  class="user-img-settings"
+                  src="@/assets/icons/profile-user.svg"
+                  alt=""
+                />
+                <div>
+                  <div class="desc">
+                    Recommended dimensions <b>100 x 100</b>
+                  </div>
+                  <button class="btn close-modal">Change Profile</button>
+                </div>
+              </div>
             </b-form-group>
-
-            <div class="d-flex justify-content-end mt-5">
-              <b-button class="save-modal px-3 py-2">Save</b-button>
-            </div>
           </div>
         </div>
       </div>
@@ -100,19 +85,21 @@
 // @ is an alias to /src
 import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
+import PasswordInput from "@/components/Password";
 
 export default {
   name: "Dashboard",
   components: {
     Sidebar,
     Navbar,
+    PasswordInput,
   },
   data() {
     return {
       form: {
         name: "",
-        companyName: "",
-        productName: "",
+        email: "",
+        password: "",
         occupation: "",
         tagLine: "",
       },
@@ -122,9 +109,24 @@ export default {
 </script>
 
 <style>
+.ml-auto {
+  margin-left: auto;
+}
+
 .extra-margin-left-wrap {
   margin-left: 14rem;
   padding: 2rem;
+}
+
+.user-img-settings {
+  width: 4rem;
+  margin-right: 1rem;
+}
+
+.user-img-wrap-setting .desc {
+  font-size: 0.8rem;
+  color: #444a50;
+  margin-bottom: 0.7rem;
 }
 
 .extra-margin-left-wrap .form-group {

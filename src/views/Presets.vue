@@ -3,7 +3,7 @@
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.name"
-        current-active="preset"
+        current-active="presets"
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>
