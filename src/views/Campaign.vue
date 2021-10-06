@@ -69,7 +69,9 @@
                   <tr v-for="campaign in orderedCampaign" :key="campaign.id">
                     <td scope="row">{{ campaign.name }}</td>
                     <td>5</td>
-                    <td>05/072021</td>
+                    <td>
+                      {{ formatDate(campaign.created_at) }}
+                    </td>
                     <td>
                       <dropdown-tool
                         @edit-clicked="
@@ -188,7 +190,7 @@ export default {
           // this.error = error;
         });
 
-     // this.getCampaign();
+      // this.getCampaign();
 
       // this.$vm.$forceUpdate();
     },
@@ -225,7 +227,7 @@ export default {
           // this.error = error;
         });
 
-     // this.getCampaign();
+      // this.getCampaign();
     },
 
     openEditModal(id, data) {
@@ -239,8 +241,15 @@ export default {
       this.triggerEdit = false;
     },
     orderSort(arr) {
-      return arr.sort(function(a, b){return a.id - b.id});
-    }
+      return arr.sort(function (a, b) {
+        return a.id - b.id;
+      });
+    },
+    formatDate(date) {
+      var formatedDate = new Date(date);
+
+      return formatedDate.toLocaleDateString();
+    },
   },
 
   mounted() {
@@ -251,8 +260,8 @@ export default {
       return this.campaigns.length;
     },
     orderedCampaign() {
-      return this.orderSort(this.campaigns)
-    }
+      return this.orderSort(this.campaigns);
+    },
   },
 };
 </script>

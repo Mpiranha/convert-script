@@ -13,6 +13,7 @@ import Tutorial from '@/views/Tutorial'
 import Billing from '@/views/Billing'
 import Bonus from '@/views/Bonus'
 import Agency from '@/views/Agency'
+import AgencySetup from '@/views/AgencySetup'
 import Reseller from '@/views/Reseller'
 import Verify from '@/views/Verify'
 import Campaign from '@/views/Campaign'
@@ -93,6 +94,14 @@ const routes = [{
     }
   },
   {
+    path: '/agency/setup',
+    name: 'AgencySetup',
+    component: AgencySetup,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/reseller',
     name: 'Reseller',
     component: Reseller,
@@ -110,14 +119,6 @@ const routes = [{
   },
   {
     path: '/campaign/:id',
-    name: 'Campaign',
-    component: Campaign,
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/campaign/script',
     name: 'CampaignScript',
     component: CampaignScript,
     meta: {

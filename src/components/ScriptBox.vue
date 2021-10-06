@@ -56,7 +56,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "ScriptBox"
+};
 </script>
 
 <style scoped>

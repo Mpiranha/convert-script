@@ -55,7 +55,7 @@
 
             <password-input
               label="New Password"
-              v-model.trim="form.password"
+              v-model.trim="form.newPassword"
               class-label="form-label"
             ></password-input>
 
@@ -88,7 +88,7 @@ import Navbar from "@/components/TheNav.vue";
 import PasswordInput from "@/components/Password";
 
 export default {
-  name: "Dashboard",
+  name: "Settings",
   components: {
     Sidebar,
     Navbar,
@@ -100,10 +100,23 @@ export default {
         name: "",
         email: "",
         password: "",
-        occupation: "",
-        tagLine: "",
+        newPassword: "",
       },
+      user: null,
     };
+  },
+  mounted() {
+    this.assignUser();
+    this.populateForm();
+  },
+  methods: {
+    assignUser() {
+      this.user = this.$store.state.user;
+    },
+    populateForm() {
+      this.form.name = this.user.name;
+      this.form.email = this.user.email;
+    },
   },
 };
 </script>
