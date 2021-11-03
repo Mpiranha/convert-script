@@ -94,13 +94,11 @@ export default {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.get(`${baseUrl}/api/v1/user/profile`)
                 .then(resp => {
-                    localStorage.setItem('user', JSON.stringify(resp.data.data))
+                    // localStorage.setItem('user', JSON.stringify(resp.data.data))
                     commit("get_user_success", {
                         user: resp.data.data
                     })
                     //console.log(resp.data)
-
-
                     resolve(resp)
                 })
                 .catch(err => {
@@ -138,16 +136,16 @@ export default {
     },
 
     getAllAgency({
-        commit,
+        // commit,
         state
     }) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.get(`${baseUrl}/api/v1/agencies`)
                 .then(resp => {
-                    commit("get_all_agencies_success", {
-                        agencies: resp.data
-                    });
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
 
                     resolve(resp)
                 })
@@ -158,10 +156,49 @@ export default {
     },
     addAgency({
         state
-    }, agency) {
+    }, data) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
-            axios.post(`${baseUrl}/api/v1/agencies`, agency, {})
+            axios.post(`${baseUrl}/api/v1/agencies`, data, {})
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    editAgency({
+        state
+    }, {
+        id,
+        data
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.put(`${baseUrl}/api/v1/agencies/${id}`, data)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    deleteAgency({
+        state
+    }, id) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.delete(`${baseUrl}/api/v1/agencies/${id}`)
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data

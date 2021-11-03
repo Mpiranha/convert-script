@@ -1,7 +1,7 @@
 <template>
-  <div class="content-head">
+  <div class="content-head" :class="removeContent ? 'fix-height' : ''">
     <div class="menu-section">
-      <ul class="nav">
+      <ul class="nav" :class="removeContent ? 'hide-content' : ''">
         <li class="nav-item">
           <a class="nav-link" v-b-modal.modal-suggest href="#">
             Suggest Feature
@@ -81,6 +81,7 @@ export default {
   props: {
     // msg: String
     currentActive: String,
+    removeContent: Boolean,
   },
   data() {
     return {
@@ -124,5 +125,13 @@ export default {
 .desc-message {
   color: #566677;
   font-size: 0.8rem;
+}
+
+.hide-content {
+  display: none !important;
+}
+
+.fix-height {
+  min-height: 60px;
 }
 </style>

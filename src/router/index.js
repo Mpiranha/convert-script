@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 // import {
 //   store
 // } from '../store/index.js'
-import store from '../store'
+// import store from '../store'
 
 import Dashboard from '../views/Dashboard.vue'
 import Login from '@/views/Login'
@@ -27,6 +27,13 @@ import PresetAdd from '@/views/PresetAdd'
 import Integration from '@/views/Integration'
 import IntegrationNew from '@/views/IntegrationNew'
 import Settings from '@/views/Settings'
+import Stat from '@/views/admin/Stat'
+import NotFound from '@/views/NotFound'
+import Users from '@/views/admin/Users'
+import Transaction from '@/views/admin/Transaction'
+import ScriptType from '@/views/admin/ScriptType'
+import ScriptInput from '@/views/admin/ScriptInput'
+import ScriptFlagged from '@/views/admin/ScriptFlagged'
 
 Vue.use(VueRouter)
 
@@ -50,7 +57,8 @@ const routes = [{
     name: 'Verify',
     component: Verify,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -58,7 +66,8 @@ const routes = [{
     name: 'Dashboard',
     component: Dashboard,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -66,7 +75,8 @@ const routes = [{
     name: 'Tutorial',
     component: Tutorial,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -74,7 +84,8 @@ const routes = [{
     name: 'Billing',
     component: Billing,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -82,7 +93,8 @@ const routes = [{
     name: 'Bonus',
     component: Bonus,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -90,7 +102,8 @@ const routes = [{
     name: 'Agency',
     component: Agency,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -98,7 +111,8 @@ const routes = [{
     name: 'AgencySetup',
     component: AgencySetup,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -106,7 +120,8 @@ const routes = [{
     name: 'Reseller',
     component: Reseller,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -114,7 +129,8 @@ const routes = [{
     name: 'Campaign',
     component: Campaign,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -122,7 +138,8 @@ const routes = [{
     name: 'CampaignScript',
     component: CampaignScript,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -130,7 +147,8 @@ const routes = [{
     name: 'ScriptSelect',
     component: ScriptSelect,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -138,7 +156,8 @@ const routes = [{
     name: 'CreateScript',
     component: CreateScript,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -146,7 +165,8 @@ const routes = [{
     name: 'Scripts',
     component: Script,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -154,7 +174,8 @@ const routes = [{
     name: 'Favourites',
     component: Favourites,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -162,7 +183,8 @@ const routes = [{
     name: 'Preset',
     component: Presets,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -170,7 +192,8 @@ const routes = [{
     name: 'CreatePreset',
     component: PresetAdd,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -178,7 +201,8 @@ const routes = [{
     name: 'Integration',
     component: Integration,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -186,7 +210,8 @@ const routes = [{
     name: 'IntegrationNew',
     component: IntegrationNew,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
   },
   {
@@ -194,9 +219,73 @@ const routes = [{
     name: 'Settings',
     component: Settings,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      adminAuth: false
     }
-  }
+  },
+  {
+    path: '/404',
+    name: 'NotFound',
+    component: NotFound,
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/admin',
+    name: 'Stat',
+    component: Stat,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/users',
+    name: 'Users',
+    component: Users,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/transactions',
+    name: 'Transactions',
+    component: Transaction,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/script/type',
+    name: 'ScriptTypes',
+    component: ScriptType,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/script/type/:id',
+    name: 'ScriptTypesInput',
+    component: ScriptInput,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/scripts/flagged',
+    name: 'FlaggedScript',
+    component: ScriptFlagged,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+
   // {
   //   path: '/about',
   //   name: 'About',
@@ -213,29 +302,76 @@ const router = new VueRouter({
   routes
 })
 
+// const parseJwt = (token) => {
+//   var base64Url = token.split('.')[1];
+//   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+//   var jsonPayload = decodeURIComponent(Buffer.from(base64, "base64").toString("ascii").split("").map(function (c) {
+//     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+//   }).join(''));
 
-router.beforeEach((to, from, next) => {
-  console.log(window.location.hash.split('#')[1])
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    const loginpath = window.location.hash.split('#')[1]
+//   return JSON.parse(jsonPayload);
+// };
 
-    if (store.getters.isAuthenticated) {
-      next()
-      return
-    }
 
-    // next('/login')
-    console.log(loginpath)
-    next({
-      name: 'Login',
-      query: {
-        from: loginpath
-      }
-    })
-  } else {
-    next()
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   let role = store.state.user.role;
+//   console.log(window.location.hash.split('#')[1])
+//   if (to.matched.some(record => record.meta.requiresAuth)) {
+//     const loginpath = window.location.hash.split('#')[1]
+
+
+//     if (to.matched.some(record => record.meta.adminAuth)) {
+//       alert("Admin Only")
+//       alert("User role: " + role)
+//       if (role === "Admin") {
+//         alert("You're an Admin")
+//         next()
+//       } else {
+//         next({
+//           name: 'NotFound',
+//           query: {
+//             from: loginpath
+//           }
+//         })
+//         return
+//       }
+//     }
+
+//     // if (store.getters.isAuthenticated) {
+//     //   if (localStorage.token) {
+//     //     const jwtPayload = parseJwt(localStorage.token);
+//     //     if (jwtPayload.exp < Date.now() / 1000) {
+//     //       // token expired
+//     //       store.dispatch("logout");
+//     //       next("/login");
+//     //     }
+//     //     next();
+//     //   } else {
+//     //     next("/");
+//     //   }
+
+//     //   store.dispatch("getUser")
+//     //   next()
+
+//     //   return
+//     // }
+
+
+
+//     // next('/login')
+//     console.log(loginpath)
+//     next({
+//       name: 'Login',
+//       query: {
+//         from: loginpath
+//       }
+//     })
+//   } else {
+//     next()
+//   }
+
+
+// })
 
 
 

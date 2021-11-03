@@ -26,9 +26,9 @@
           </div>
 
           <div class="content-wrap script-custom-height">
-            <div class="row">
-              <div class="col-6">
-                <div class="section-head bordered">
+            <div class="row h-100">
+              <div class="col-6 bordered-right pr-0">
+                <div class="section-head ">
                   <div class="section-head-left">
                     <img
                       class="section-head-icon"
@@ -38,12 +38,13 @@
                     5
                   </div>
                   <div class="section-head-right">
-                    <select class="sort-select" name="" id="">
+                    <!-- <select class="sort-select" name="" id="">
                       <option value="none" selected>Export All</option>
                       <option value=""></option>
                       <option value=""></option>
                       <option value=""></option>
-                    </select>
+                    </select> -->
+                    <button class="btn btn-export-all">Export All</button>
                   </div>
                 </div>
                 <table class="table table-section">
@@ -220,68 +221,23 @@ export default {
 </script>
 
 <style>
-.save-btn {
-  background-color: pink;
-}
 
-.modal-main {
-  border-radius: 0.5rem !important;
-}
 
-.drop-main-wrap {
-  min-width: 6rem !important;
-  font-size: 0.8rem !important;
-  box-shadow: -3px 3px 6px #eee;
-}
 
-.form-label {
-  font-size: 0.9rem;
-}
 
-.input-table {
-  border: 1px solid #c2c8d1 !important;
-  font-size: 0.9rem !important;
-  border-radius: 0.5rem !important;
-  width: 100%;
-  padding: 0.55rem 0.75rem;
-}
 
-.control-width {
-  max-width: 420px !important;
-}
 
-.form-group {
-  margin-bottom: 0.7rem;
-}
 
-.close-modal,
-.save-modal {
-  font-size: 0.8rem !important;
-  padding: 0.45rem 1.5rem !important;
-  border: none !important;
-  border-radius: 0.5rem !important;
-}
 
-.close-modal {
-  margin-right: 0.8rem;
-  color: #8338ec !important;
-  background-color: #fff !important;
-  border: 1px solid #8338ec !important;
-}
 
-.save-modal {
-  background-color: #8338ec !important;
-  color: #fff !important;
-}
 
-.modal-head .title {
-  font-size: 0.9rem;
-  font-weight: bold;
-  margin-bottom: 0;
-}
 
-.modal-head .desc {
-  font-size: 0.7rem;
-  color: #848688;
-}
+
+
+
+
+
+
+
+
 </style>

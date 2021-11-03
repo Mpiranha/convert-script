@@ -248,11 +248,7 @@
                     </router-link>
                   </li>
                   <li class="nav-item">
-                    <a
-                      @click="logout($event)"
-                      class="btn nav-link"
-                      href="#"
-                    >
+                    <a @click="logout($event)" class="btn nav-link" href="#">
                       <img
                         src="@/assets/icons/convert-icon/logout.svg"
                         alt="icon"
@@ -427,5 +423,25 @@ export default {
   font-size: 0.8rem;
   color: #000;
   margin-right: 0.5rem;
+}
+
+@media screen and (min-width: 1300px) {
+  .nav-wrap .nav-link {
+    font-size: 1rem;
+  }
+
+  .main-icon,
+  .active-icon {
+    width: 1.3rem;
+  }
+
+  .btn-drop .name {
+    font-size: 1rem;
+  }
+
+  .user-info .user-img {
+    width: 2rem;
+    height: 2rem;
+  }
 }
 </style>

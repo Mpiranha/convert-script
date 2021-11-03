@@ -29,7 +29,7 @@
               <button
                 @click="clearField"
                 class="btn btn-create"
-                v-b-modal.modal-new-campaign
+                v-b-modal.modal-new-client
               >
                 <span>+</span>
                 New Client
@@ -43,6 +43,7 @@
                 <i class="flaticon-loupe icons"></i>
               </button>
               <input
+                @change="makeToast('primary', 'try me')"
                 class="form-control no-shadow search-input"
                 type="text"
                 placeholder="Search"
@@ -50,7 +51,7 @@
             </div>
 
             <div class="sort-wrap">
-              <div class="acct-desc">{{ campaignLength }} Client(s)</div>
+              <div class="acct-desc">{{ agencyLength }} Client(s)</div>
 
               <select class="sort-select" name="" id="">
                 <option value="none" selected>Sort</option>
@@ -59,40 +60,47 @@
                 <option value=""></option>
               </select>
             </div>
-            <div v-if="loading">
-              <div class="loader-modal">
-                <img
-                  class="loader-img"
-                  src="@/assets/image/loader.gif"
-                  alt=""
-                />
-              </div>
+            <loader-modal :loading-state="loading"></loader-modal>
+            <div v-if="agency.length === 0" class="no-data-info">
+              Created agency will display here.
             </div>
-            <div v-else>
-              <div v-if="campaigns.length === 0" class="no-data-info">
-                Created campaigns will display here.
-              </div>
-              <table v-else class="table table-custom">
-                <tbody>
-                  <tr v-for="campaign in orderedCampaign" :key="campaign.id">
-                    <td scope="row">{{ campaign.name }}</td>
-                    <td>5</td>
-                    <td>Covertscript.com/clientlink</td>
-                    <td>
-                      {{ formatDate(campaign.created_at) }}
-                    </td>
-                    <td>
-                      <dropdown-tool
-                        @edit-clicked="
-                          openEditModal(campaign.id, campaign.name)
-                        "
-                        @delete-proceed="deleteCampaign(campaign.id)"
-                      ></dropdown-tool>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <table v-else class="table table-custom">
+              <tbody>
+                <tr v-for="agency in orderedAgency" :key="agency.id">
+                  <td scope="row">{{ agency.name }}</td>
+                  <td>5</td>
+                  <td>Covertscript.com/clientlink</td>
+                  <td>
+                    {{ formatDate(agency.created_at) }}
+                  </td>
+                  <td>
+                    <dropdown-tool
+                      @edit-clicked="
+                        openEditModal(agency.id, {
+                          name: agency.name,
+                          email: agency.email,
+                        })
+                      "
+                      @delete-proceed="deleteAgency(agency.id)"
+                    >
+                      <template v-slot:secondary>
+                        <b-dropdown-item
+                          v-b-modal.modal-campaign
+                          @click="getCurrent(agency.name)"
+                          link-class="drop-link"
+                          href="#"
+                        >
+                          <i
+                            class="flaticon-briefcase icons table-drop-icon"
+                          ></i>
+                          Campaign
+                        </b-dropdown-item>
+                      </template>
+                    </dropdown-tool>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -100,7 +108,7 @@
 
     <b-modal
       :hide-header="true"
-      id="modal-new-campaign"
+      id="modal-new-client"
       centered
       size="md"
       :hide-footer="true"
@@ -115,17 +123,17 @@
       <b-form-group label="Name">
         <b-form-input
           id="name"
-          v-model="campaignName"
+          v-model="client.name"
           type="text"
           class="input-table"
         >
         </b-form-input>
       </b-form-group>
 
-        <b-form-group label="Email">
+      <b-form-group label="Email">
         <b-form-input
           id="name"
-          v-model="campaignName"
+          v-model="client.email"
           type="text"
           class="input-table"
         >
@@ -133,17 +141,47 @@
       </b-form-group>
 
       <div class="d-flex justify-content-end">
-        <b-button
-          @click="$bvModal.hide('modal-new-campaign')"
-          class="close-modal"
+        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
           >Close</b-button
         >
         <b-button
-          @click="
-            triggerEdit ? editCampaign(editId, campaignName) : addCampaign()
-          "
+          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
           class="save-modal"
           >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
+        >
+      </div>
+    </b-modal>
+    <b-modal
+      :hide-header="true"
+      id="modal-campaign"
+      centered
+      size="md"
+      :hide-footer="true"
+      dialog-class="control-width"
+      content-class="modal-main"
+    >
+      <div class="modal-head mb-3">
+        <h3 class="title">{{ this.client.name }}</h3>
+      </div>
+
+      <b-form-group v-slot="{ ariaDescribedby }">
+        <b-form-checkbox-group
+          id="checkbox-group-1"
+          v-model="selected"
+          :options="options"
+          :aria-describedby="ariaDescribedby"
+          name="flavour-1"
+        ></b-form-checkbox-group>
+      </b-form-group>
+
+      <div class="d-flex justify-content-end mt-4">
+        <b-button @click="$bvModal.hide('modal-campaign')" class="close-modal"
+          >Close</b-button
+        >
+        <b-button
+          @click="triggerEdit ? editAgency(editId) : addAgency()"
+          class="save-modal"
+          >Save</b-button
         >
       </div>
     </b-modal>
@@ -155,9 +193,11 @@
 import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
+import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Campaign",
+  name: "Agency",
+  mixins: [alertMixin],
   components: {
     Sidebar,
     Navbar,
@@ -165,22 +205,32 @@ export default {
   },
   data() {
     return {
-      campaignName: "",
+      client: {
+        name: "",
+        email: "",
+      },
       accessOptions: [{ value: null, text: "Select Plans" }],
-      campaigns: [],
+      agency: [],
       error: "",
       loading: true,
       triggerEdit: false,
       editId: null,
+      selected: [], // Must be an array reference!
+      options: [
+        { text: "Orange", value: "orange" },
+        { text: "Apple", value: "apple" },
+        { text: "Pineapple", value: "pineapple" },
+        { text: "Grape", value: "grape" },
+      ],
     };
   },
   methods: {
-    getCampaign() {
+    getAgency() {
       this.$store
-        .dispatch("getCampaigns")
+        .dispatch("getAllAgency")
         .then((res) => {
-          this.campaigns = res.data.data;
-          console.log(res.data + "called now");
+          this.agency = res.data.data;
+          // console.log(res.data + "called now");
           this.loading = false;
         })
         .catch((error) => {
@@ -191,20 +241,22 @@ export default {
           this.loading = false;
         });
     },
-    addCampaign() {
+    addAgency() {
       this.loading = true;
-      this.$bvModal.hide("modal-new-campaign");
+      this.$bvModal.hide("modal-new-client");
+
       this.$store
-        .dispatch("addCampaign", { name: this.campaignName })
+        .dispatch("addAgency", this.client)
         .then((res) => {
           this.error = null;
           console.log(res.data);
           // this.getCampaign();
-          this.getCampaign();
+          this.getAgency();
           this.loading = false;
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.message);
+          this.loading = false;
           // this.error = error.response.data.errors.root;
           // this.error = error;
         });
@@ -213,35 +265,37 @@ export default {
 
       // this.$vm.$forceUpdate();
     },
-    editCampaign(id) {
+    editAgency(id) {
       this.loading = true;
-      this.$bvModal.hide("modal-new-campaign");
+      this.$bvModal.hide("modal-new-client");
       this.$store
-        .dispatch("editCampaign", { id: id, data: { name: this.campaignName } })
+        .dispatch("editAgency", { id: id, data: this.client })
         .then((res) => {
           this.error = null;
           console.log(res.data);
-          this.getCampaign();
+          this.getAgency();
           this.loading = false;
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.message);
+          this.loading = false;
           // this.error = error.response.data.errors.root;
           // this.error = error;
         });
     },
-    deleteCampaign(id) {
+    deleteAgency(id) {
       this.loading = true;
       this.$store
-        .dispatch("deleteCampaign", id)
+        .dispatch("deleteAgency", id)
         .then((res) => {
           this.error = null;
-          this.getCampaign();
+          this.getAgency();
           console.log(res.data);
           this.loading = false;
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.message);
+          this.loading = false;
           // this.error = error.response.data.errors.root;
           // this.error = error;
         });
@@ -250,14 +304,21 @@ export default {
     },
 
     openEditModal(id, data) {
-      this.$bvModal.show("modal-new-campaign");
+      this.$bvModal.show("modal-new-client");
       this.triggerEdit = true;
       this.editId = id;
-      this.campaignName = data;
+      this.client.name = data.name;
+      this.client.email = data.email;
     },
     clearField() {
-      this.campaignName = "";
+      this.client = {
+        name: "",
+        email: "",
+      };
       this.triggerEdit = false;
+    },
+    getCurrent(data) {
+      this.client.name = data;
     },
     orderSort(arr) {
       return arr.sort(function (a, b) {
@@ -272,82 +333,95 @@ export default {
   },
 
   mounted() {
-    this.getCampaign();
+    this.getAgency();
   },
   computed: {
-    campaignLength() {
-      return this.campaigns.length;
+    agencyLength() {
+      return this.agency.length;
     },
-    orderedCampaign() {
-      return this.orderSort(this.campaigns);
+    orderedAgency() {
+      return this.orderSort(this.agency);
     },
   },
 };
 </script>
 
 <style>
-.save-btn {
-  background-color: pink;
+.custom-control {
+  position: relative;
+  z-index: 1;
+  display: block;
+  min-height: 1.5rem;
+  padding-left: 1.5rem;
+  -webkit-print-color-adjust: exact;
+  color-adjust: exact;
 }
 
-.modal-main {
-  border-radius: 0.5rem !important;
+.custom-control-inline {
+  display: flex;
+  margin-right: 1rem;
 }
 
-.drop-main-wrap {
-  min-width: 6rem !important;
-  font-size: 0.8rem !important;
-  box-shadow: -3px 3px 6px #eee;
+.custom-control-input {
+  position: absolute;
+  left: 0;
+  z-index: -1;
+  width: 1rem;
+  height: 1.25rem;
+  opacity: 0;
 }
 
-.form-label {
-  font-size: 0.9rem;
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
 }
 
-.input-table {
-  border: 1px solid #c2c8d1 !important;
-  font-size: 0.9rem !important;
-  border-radius: 0.5rem !important;
-  width: 100%;
-  padding: 0.55rem 0.75rem;
+.custom-control-label::after,
+.custom-control-label::before {
+  position: absolute;
+  top: 0.25rem;
+  left: -1.5rem;
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  content: "";
 }
 
-.control-width {
-  max-width: 420px !important;
-}
-
-.form-group {
-  margin-bottom: 0.7rem;
-}
-
-.close-modal,
-.save-modal {
-  font-size: 0.8rem !important;
-  padding: 0.45rem 1.5rem !important;
-  border: none !important;
-  border-radius: 0.5rem !important;
-}
-
-.close-modal {
-  margin-right: 0.8rem;
-  color: #8338ec !important;
-  background-color: #fff !important;
-  border: 1px solid #8338ec !important;
-}
-
-.save-modal {
-  background-color: #8338ec !important;
-  color: #fff !important;
-}
-
-.modal-head .title {
-  font-size: 0.9rem;
-  font-weight: bold;
+.custom-control-label {
+  position: relative;
   margin-bottom: 0;
+  vertical-align: top;
 }
 
-.modal-head .desc {
-  font-size: 0.7rem;
-  color: #848688;
+.custom-control-label::before {
+  pointer-events: none;
+  background-color: #fff;
+  border: 1px solid #adb5bd;
+}
+
+.custom-control-label::before,
+.custom-file-label,
+.custom-select {
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+.custom-checkbox .custom-control-label::before {
+  border-radius: 0.25rem;
+}
+
+.custom-control-label::after {
+  background: no-repeat 50%/50% 50%;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  color: #fff;
+  border-color: #007bff;
+  background-color: #007bff;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/%3E%3C/svg%3E");
 }
 </style>

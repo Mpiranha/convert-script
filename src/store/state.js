@@ -2,10 +2,13 @@ export default {
   // State
   // --------------------------------------------------
   // The current user
-  user: JSON.parse(localStorage.getItem('user')) || {},
+  user: {},
   token: localStorage.getItem('token') || '',
   status: '',
   loggedIn: false,
+  loading: true,
   passwordResetStatus: '',
-  allAgencies: {}
+  allAgencies: {},
+  triggerEdit: false,
+  editId: null,
 }

@@ -20,6 +20,7 @@
       <i class="flaticon-trash icons table-drop-icon"></i>
       Delete
     </b-dropdown-item>
+    <slot name="secondary"></slot>
 
     <b-modal
       :hide-header="true"

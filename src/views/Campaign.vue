@@ -51,39 +51,36 @@
                 <option value=""></option>
               </select>
             </div>
-            <div v-if="loading">
-              <div class="loader-modal">
-                <img
-                  class="loader-img"
-                  src="@/assets/image/loader.gif"
-                  alt=""
-                />
-              </div>
+            <loader-modal :loading-state="loading"></loader-modal>
+            <div v-if="campaigns.length === 0" class="no-data-info">
+              Created campaigns will display here.
             </div>
-            <div v-else>
-              <div v-if="campaigns.length === 0" class="no-data-info">
-                Created campaigns will display here.
-              </div>
-              <table v-else class="table table-custom">
-                <tbody>
-                  <tr v-for="campaign in orderedCampaign" :key="campaign.id">
-                    <td scope="row">{{ campaign.name }}</td>
-                    <td>5</td>
-                    <td>
-                      {{ formatDate(campaign.created_at) }}
-                    </td>
-                    <td>
-                      <dropdown-tool
-                        @edit-clicked="
-                          openEditModal(campaign.id, campaign.name)
-                        "
-                        @delete-proceed="deleteCampaign(campaign.id)"
-                      ></dropdown-tool>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <table v-else class="table table-custom">
+              <tbody>
+                <tr v-for="campaign in orderedCampaign" :key="campaign.id">
+                  <td scope="row">
+                    <router-link
+                      :to="{
+                        name: 'CampaignScript',
+                        params: { id: campaign.id },
+                      }"
+                    >
+                      {{ campaign.name }}
+                    </router-link>
+                  </td>
+                  <td>5</td>
+                  <td>
+                    {{ formatDate(campaign.created_at) }}
+                  </td>
+                  <td>
+                    <dropdown-tool
+                      @edit-clicked="openEditModal(campaign.id, campaign.name)"
+                      @delete-proceed="deleteCampaign(campaign.id)"
+                    ></dropdown-tool>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -267,68 +264,23 @@ export default {
 </script>
 
 <style>
-.save-btn {
-  background-color: pink;
-}
 
-.modal-main {
-  border-radius: 0.5rem !important;
-}
 
-.drop-main-wrap {
-  min-width: 6rem !important;
-  font-size: 0.8rem !important;
-  box-shadow: -3px 3px 6px #eee;
-}
 
-.form-label {
-  font-size: 0.9rem;
-}
 
-.input-table {
-  border: 1px solid #c2c8d1 !important;
-  font-size: 0.9rem !important;
-  border-radius: 0.5rem !important;
-  width: 100%;
-  padding: 0.55rem 0.75rem;
-}
 
-.control-width {
-  max-width: 420px !important;
-}
 
-.form-group {
-  margin-bottom: 0.7rem;
-}
 
-.close-modal,
-.save-modal {
-  font-size: 0.8rem !important;
-  padding: 0.45rem 1.5rem !important;
-  border: none !important;
-  border-radius: 0.5rem !important;
-}
 
-.close-modal {
-  margin-right: 0.8rem;
-  color: #8338ec !important;
-  background-color: #fff !important;
-  border: 1px solid #8338ec !important;
-}
 
-.save-modal {
-  background-color: #8338ec !important;
-  color: #fff !important;
-}
 
-.modal-head .title {
-  font-size: 0.9rem;
-  font-weight: bold;
-  margin-bottom: 0;
-}
 
-.modal-head .desc {
-  font-size: 0.7rem;
-  color: #848688;
-}
+
+
+
+
+
+
+
+
 </style>

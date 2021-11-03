@@ -86,6 +86,7 @@
 import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import PasswordInput from "@/components/Password";
+import { mapState } from "vuex";
 
 export default {
   name: "Settings",
@@ -102,20 +103,35 @@ export default {
         password: "",
         newPassword: "",
       },
-      user: null,
+      userData: null,
     };
   },
+  computed: mapState(["user"]),
   mounted() {
-    this.assignUser();
-    this.populateForm();
+    // this.$store.dispatch("getUser");
   },
   methods: {
-    assignUser() {
-      this.user = this.$store.state.user;
+    assignUser(user) {
+      this.userData = user;
     },
     populateForm() {
-      this.form.name = this.user.name;
-      this.form.email = this.user.email;
+      this.form.name = this.userData.name;
+      this.form.email = this.userData.email;
+    },
+  },
+  watch: {
+    user(newValue, oldValue) {
+      console.log(`Updating from ${oldValue.name} to ${newValue}`);
+
+      // Do whatever makes sense now
+      // if (newValue === "success") {
+      //   this.complex = {
+      //     deep: "some deep object",
+      //   };
+      // }
+
+      this.assignUser(newValue);
+      this.populateForm();
     },
   },
 };

@@ -19,16 +19,16 @@
           >
             <h6 class="title">All Script</h6>
 
-            <button class="btn btn-create" v-b-modal.modal-new-script>
+            <button class="btn btn-create">
               <span>+</span>
               Add Scripts
             </button>
           </div>
 
           <div class="content-wrap script-custom-height">
-            <div class="row">
-              <div class="col-6">
-                <div class="section-head bordered">
+            <div class="row h-100">
+              <div class="col-6 bordered-right pr-0">
+                <div class="section-head">
                   <div class="section-head-left">
                     <img
                       class="section-head-icon"
@@ -64,7 +64,11 @@
                         <div class="script-type">Video Script</div>
                       </td>
                       <td class="text-right">
-                        <dropdown-tool> </dropdown-tool>
+                        <dropdown-tool
+                          @edit-clicked="openEditModal('', '')"
+                          @delete-proceed="deleteCampaign('')"
+                        >
+                        </dropdown-tool>
                       </td>
                     </tr>
                     <tr>
@@ -151,11 +155,11 @@
                   <div class="section-head">
                     <div class="section-head-right d-flex align-items-center">
                       <div class="fav-star">
-                          <img
-                        class="fav-icon"
-                        src="@/assets/icons/convert-icon/my Favourites.svg"
-                        alt=""
-                      />
+                        <img
+                          class="fav-icon"
+                          src="@/assets/icons/convert-icon/my Favourites.svg"
+                          alt=""
+                        />
                       </div>
                       <select class="sort-select" name="" id="">
                         <option value="none" selected>Export Script</option>
@@ -204,7 +208,7 @@
 
     <b-modal
       :hide-header="true"
-      id="modal-new-script"
+      id="modal-edit-script"
       centered
       size="md"
       :hide-footer="true"
@@ -222,7 +226,9 @@
       />
 
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-script')" class="close-modal"
+        <b-button
+          @click="$bvModal.hide('modal-edit-script')"
+          class="close-modal"
           >Go back</b-button
         >
         <b-button class="save-modal">Save to</b-button>
@@ -290,6 +296,16 @@ export default {
       console.log("editor change!", quill, html, text);
       this.content = html;
     },
+    openEditModal(id) {
+      this.$bvModal.show("modal-edit-script");
+      // this.triggerEdit = true;
+      this.$store.commit("triggerEdit", {
+        editStatus: true,
+        id: id,
+      });
+      // this.editId = id;
+      // this.campaignName = data;
+    },
   },
   computed: {
     editor() {
@@ -303,68 +319,26 @@ export default {
 .ql-container {
   height: 300px;
 }
-.save-btn {
-  background-color: pink;
-}
 
-.modal-main {
-  border-radius: 0.5rem !important;
-}
 
-.drop-main-wrap {
-  min-width: 6rem !important;
-  font-size: 0.8rem !important;
-  box-shadow: -3px 3px 6px #eee;
-}
 
-.form-label {
-  font-size: 0.9rem;
-}
 
-.input-table {
-  border: 1px solid #c2c8d1 !important;
-  font-size: 0.9rem !important;
-  border-radius: 0.5rem !important;
-  width: 100%;
-  padding: 0.55rem 0.75rem;
-}
+
+
+
+
+
 
 .control-modal-width {
-    max-width: 598px !important;
+  max-width: 598px !important;
 }
 
-.form-group {
-  margin-bottom: 0.7rem;
-}
 
-.close-modal,
-.save-modal {
-  font-size: 0.8rem !important;
-  padding: 0.45rem 1.5rem !important;
-  border: none !important;
-  border-radius: 0.5rem !important;
-}
 
-.close-modal {
-  margin-right: 0.8rem;
-  color: #8338ec !important;
-  background-color: #fff !important;
-  border: 1px solid #8338ec !important;
-}
 
-.save-modal {
-  background-color: #8338ec !important;
-  color: #fff !important;
-}
 
-.modal-head .title {
-  font-size: 0.9rem;
-  font-weight: bold;
-  margin-bottom: 0;
-}
 
-.modal-head .desc {
-  font-size: 0.7rem;
-  color: #848688;
-}
+
+
+
 </style>
