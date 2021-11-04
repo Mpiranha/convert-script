@@ -34,6 +34,16 @@ import Transaction from '@/views/admin/Transaction'
 import ScriptType from '@/views/admin/ScriptType'
 import ScriptInput from '@/views/admin/ScriptInput'
 import ScriptFlagged from '@/views/admin/ScriptFlagged'
+import RolesPermissions from '@/views/admin/RolesPermissions'
+import SetPermission from '@/views/admin/SetPermission'
+import IntegrationAdmin from '@/views/admin/IntegrationAdmin'
+import Suggestions from '@/views/admin/Suggestions'
+import Configuration from '@/views/admin/Configuration'
+import Bonuses from '@/views/admin/Bonuses'
+import Tutorials from '@/views/admin/Tutorials'
+import AgencyFile from '@/views/admin/AgencyFile'
+
+
 
 Vue.use(VueRouter)
 
@@ -285,6 +295,79 @@ const routes = [{
       adminAuth: true
     }
   },
+  {
+    path: '/admin/roles',
+    name: 'RolesPermissions',
+    component: RolesPermissions,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/setpermission',
+    name: 'SetPermission',
+    component: SetPermission,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/integrationadmin',
+    name: 'IntegrationAdmin',
+    component: IntegrationAdmin,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/suggestions',
+    name: 'Suggestions',
+    component: Suggestions,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/config',
+    name: 'Configuration',
+    component: Configuration,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/bonuses',
+    name: 'Bonuses',
+    component: Bonuses,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/tutorials',
+    name: 'Tutorials',
+    component: Tutorials,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/agency/files',
+    name: 'AgencyFile',
+    component: AgencyFile,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  
 
   // {
   //   path: '/about',

@@ -8,7 +8,8 @@
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
         <div class="container scroll-content">
-          <div
+          <div class="sec-padding">
+            <div
             class="
               dashboard-top
               d-flex
@@ -17,15 +18,15 @@
               mb-5
             "
           >
-            <h6 class="title">All Script Type (5)</h6>
+            <h6 class="title mb-0">Set Permissions for RoleName</h6>
             <div class="d-flex align-items-center">
               <button
                 @click="clearField"
-                class="btn btn-create"
+                class="btn btn-create py-2"
                 v-b-modal.modal-new-client
               >
-                <span>+</span>
-                New Script Type
+               
+                Save
               </button>
             </div>
           </div>
@@ -51,17 +52,16 @@
             <table v-else class="table table-custom">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Script Type</th>
-                  <th>Usage</th>
-                  <th>Status</th>
-                  <th class="text-right">Action</th>
+                  <td>Name</td>
+                  <td>ID</td>
+                  <td>Status</td>
+                  
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="user in orderedUser" :key="user.id">
-                  <td scope="row">{{ user.email }}</td>
-                  <td class="text-left">{{ user.firstName }}</td>
+                  
+                  <td class="">{{ user.firstName }}</td>
                   <td>{{ user.lastName }}</td>
                   <td>
                     <label class="switch mb-0">
@@ -69,33 +69,7 @@
                       <span class="slider round"></span>
                     </label>
                   </td>
-                  <td>
-                    <dropdown-tool
-                      @edit-clicked="
-                        openEditModal(user.id, {
-                          name: user.name,
-                          email: user.email,
-                        })
-                      "
-                      @delete-proceed="deleteAgency(user.id)"
-                    >
-                      <template v-slot:secondary>
-                        <b-dropdown-item
-                          v-b-modal.modal-campaign
-                          @click="getCurrent(user.name)"
-                          link-class="drop-link"
-                          href="#"
-                        >
-                          <img
-                            class="drop-img-icon"
-                            src="@/assets/icons/admin/sidebar-icon/Input.svg"
-                            alt=""
-                          />
-                          Input
-                        </b-dropdown-item>
-                      </template>
-                    </dropdown-tool>
-                  </td>
+                 
                 </tr>
               </tbody>
             </table>
@@ -113,6 +87,7 @@
             ></b-pagination>
           </div>
         </div>
+          </div>
       </div>
     </div>
 
@@ -179,7 +154,7 @@
 // @ is an alias to /src
 import Sidebar from "@/components/admin/TheSidebarAdmin.vue";
 import Navbar from "@/components/TheNav.vue";
-import DropdownTool from "@/components/DropdownTool";
+
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
@@ -188,7 +163,7 @@ export default {
   components: {
     Sidebar,
     Navbar,
-    DropdownTool,
+  
   },
   data() {
     return {

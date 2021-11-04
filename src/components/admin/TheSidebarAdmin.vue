@@ -107,8 +107,9 @@
       <li class="nav-item">
         <router-link
           class="nav-link"
-          :class="currentActive == 'role' ? 'active' : ''"
+          :class="currentActive == 'roles' ? 'active' : ''"
           to="/admin/roles"
+          
         >
           <img
             class="main-icon"
@@ -127,8 +128,8 @@
       <li class="nav-item">
         <router-link
           class="nav-link"
-          :class="currentActive == 'integration' ? 'active' : ''"
-          to="/admin/integrations"
+          :class="currentActive == 'integrationadmin' ? 'active' : ''"
+          to="/admin/integrationadmin"
         >
           <img
             class="main-icon"

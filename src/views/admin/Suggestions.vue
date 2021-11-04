@@ -3,7 +3,7 @@
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.name"
-        current-active="script-type"
+        current-active="suggestion"
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
@@ -17,17 +17,7 @@
               mb-5
             "
           >
-            <h6 class="title">All Script Type (5)</h6>
-            <div class="d-flex align-items-center">
-              <button
-                @click="clearField"
-                class="btn btn-create"
-                v-b-modal.modal-new-client
-              >
-                <span>+</span>
-                New Script Type
-              </button>
-            </div>
+            <h6 class="title">Suggestions</h6>
           </div>
 
           <div class="content-wrap set-min-h pt-4 pb-5">
@@ -51,55 +41,68 @@
             <table v-else class="table table-custom">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Script Type</th>
-                  <th>Usage</th>
-                  <th>Status</th>
-                  <th class="text-right">Action</th>
+                  <td>Message</td>
+                  <td class="text-left">Email</td>
+                  <td>Date</td>
+                  <td class="text-left">Action</td>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="user in orderedUser" :key="user.id">
-                  <td scope="row">{{ user.email }}</td>
-                  <td class="text-left">{{ user.firstName }}</td>
-                  <td>{{ user.lastName }}</td>
-                  <td>
-                    <label class="switch mb-0">
-                      <input type="checkbox" />
-                      <span class="slider round"></span>
-                    </label>
-                  </td>
-                  <td>
-                    <dropdown-tool
-                      @edit-clicked="
-                        openEditModal(user.id, {
-                          name: user.name,
-                          email: user.email,
-                        })
-                      "
-                      @delete-proceed="deleteAgency(user.id)"
-                    >
-                      <template v-slot:secondary>
-                        <b-dropdown-item
-                          v-b-modal.modal-campaign
-                          @click="getCurrent(user.name)"
-                          link-class="drop-link"
-                          href="#"
-                        >
-                          <img
-                            class="drop-img-icon"
-                            src="@/assets/icons/admin/sidebar-icon/Input.svg"
-                            alt=""
-                          />
-                          Input
-                        </b-dropdown-item>
-                      </template>
-                    </dropdown-tool>
+                  <td class="text-left">{{ formatDate(user.created_at) }}</td>
+                  <td class="text-left">{{ user.email }}</td>
+                  <td>27/08/2011</td>
+                  <td class="text-left">
+                    <nav class="nav flex-column action-view">
+                      <a 
+                      class="nav-link" 
+                      href="#" 
+                      v-b-modal.modal-new-client
+                      >
+                      View
+                      </a>
+                      <a class="nav-link" href="#">Mark as Read</a>
+                    </nav>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
+          <b-modal
+      :hide-header="true"
+      id="modal-new-client"
+      centered
+      size="md"
+      :hide-footer="true"
+      dialog-class="control-width"
+      content-class="modal-main"
+    >
+    <div class="py-4">
+      Lorem Ipsum is simply dummy text of the printing and typesetting
+      industry. Lorem Ipsum has been the industry s standard dummy
+      text ever since the 1500s, when an unknown printer took a galley of
+      type and scrambled it to make a type specimen book. It has
+      survived not only five centuries, but also the leap into electronic
+      typesetting, remaining essentially unchanged.
+      <br><br>
+      <span class="mt-3">
+        User email: emma@gmail.com
+      </span>
+        
+    </div>
+      
+      <div class="d-flex justify-content-end">
+        <p class="mr-auto">27/08/2011</p>
+        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
+          >Close</b-button
+        >
+        <b-button
+          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
+          class="save-modal"
+          >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
+        >
+      </div>
+    </b-modal>
           <div class="d-flex justify-content-center">
             <b-pagination
               v-model="currentPage"
@@ -115,63 +118,6 @@
         </div>
       </div>
     </div>
-
-    <b-modal
-      :hide-header="true"
-      id="modal-new-client"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
-      <!-- <div class="modal-head">
-        <h3 class="title">Give your campaign a name</h3>
-        <p class="desc">Only you can see this</p>
-      </div> -->
-
-      <b-form-group label="Name">
-        <b-form-input
-          id="name"
-          v-model="userData.name"
-          type="text"
-          class="input-table"
-        >
-        </b-form-input>
-      </b-form-group>
-
-      <b-form-group label="Description">
-        <b-form-textarea
-          id="name"
-          v-model="userData.email"
-          type="text"
-          class="input-table"
-          rows="4"
-        >
-        </b-form-textarea>
-      </b-form-group>
-
-      <b-form-group label="Upload">
-        <b-form-file
-          v-model="file"
-          :state="Boolean(file)"
-          placeholder="Choose a file or drop it here..."
-          drop-placeholder="Drop file here..."
-        >
-        </b-form-file>
-      </b-form-group>
-
-      <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
-          >Close</b-button
-        >
-        <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
-          class="save-modal"
-          >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
-        >
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -179,7 +125,6 @@
 // @ is an alias to /src
 import Sidebar from "@/components/admin/TheSidebarAdmin.vue";
 import Navbar from "@/components/TheNav.vue";
-import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
@@ -188,13 +133,11 @@ export default {
   components: {
     Sidebar,
     Navbar,
-    DropdownTool,
   },
   data() {
     return {
       perPage: 5,
       currentPage: 1,
-      file: null,
       users: [
         {
           email: "test@gmail.com",
@@ -350,6 +293,7 @@ export default {
       return formatedDate.toLocaleDateString();
     },
   },
+
   mounted() {
     this.getAgency();
   },
@@ -365,15 +309,4 @@ export default {
 </script>
 
 <style>
-.control-width {
-  max-width: 500px !important;
-}
-.plan-types {
-  padding-right: 0.4rem;
-  display: inline-flex;
-}
-
-.plan-types::after {
-  content: ",";
-}
 </style>

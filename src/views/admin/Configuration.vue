@@ -3,12 +3,13 @@
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.name"
-        current-active="script-type"
+        current-active="configuration"
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
         <div class="container scroll-content">
-          <div
+          <div class="sec-padding">
+            <div
             class="
               dashboard-top
               d-flex
@@ -17,161 +18,85 @@
               mb-5
             "
           >
-            <h6 class="title">All Script Type (5)</h6>
+            <h6 class="title mb-0">Configuration</h6>
             <div class="d-flex align-items-center">
               <button
                 @click="clearField"
-                class="btn btn-create"
+                class="btn btn-create py-2"
                 v-b-modal.modal-new-client
               >
-                <span>+</span>
-                New Script Type
+               
+                Save
               </button>
             </div>
           </div>
 
-          <div class="content-wrap set-min-h pt-4 pb-5">
-            <div class="search-form mb-2">
-              <button class="btn search-btn">
-                <i class="flaticon-loupe icons"></i>
-              </button>
-              <input
-                @change="makeToast('primary', 'try me')"
-                class="form-control no-shadow search-input"
-                type="text"
-                placeholder="Search"
-              />
-            </div>
+          <div class="content-wrap set-min-h pt-4 pb-5 px-5">
+            
             <loader-modal
               :loading-state="this.$store.state.loading"
             ></loader-modal>
             <div v-if="users.length === 0" class="no-data-info">
               Created agency will display here.
             </div>
-            <table v-else class="table table-custom">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Script Type</th>
-                  <th>Usage</th>
-                  <th>Status</th>
-                  <th class="text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="user in orderedUser" :key="user.id">
-                  <td scope="row">{{ user.email }}</td>
-                  <td class="text-left">{{ user.firstName }}</td>
-                  <td>{{ user.lastName }}</td>
-                  <td>
-                    <label class="switch mb-0">
-                      <input type="checkbox" />
-                      <span class="slider round"></span>
-                    </label>
-                  </td>
-                  <td>
-                    <dropdown-tool
-                      @edit-clicked="
-                        openEditModal(user.id, {
-                          name: user.name,
-                          email: user.email,
-                        })
-                      "
-                      @delete-proceed="deleteAgency(user.id)"
-                    >
-                      <template v-slot:secondary>
-                        <b-dropdown-item
-                          v-b-modal.modal-campaign
-                          @click="getCurrent(user.name)"
-                          link-class="drop-link"
-                          href="#"
-                        >
-                          <img
-                            class="drop-img-icon"
-                            src="@/assets/icons/admin/sidebar-icon/Input.svg"
-                            alt=""
-                          />
-                          Input
-                        </b-dropdown-item>
-                      </template>
-                    </dropdown-tool>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <b-form-group label="API">
+              <b-form-input
+                id="name"
+                v-model="userData.name"
+                type="text"
+                class="input-table"
+              >
+              </b-form-input>
+           </b-form-group>
+           <b-form-group label="IP Address">
+              <b-form-input
+                id="name"
+                v-model="userData.name"
+                type="text"
+                class="input-table"
+              >
+              </b-form-input>
+           </b-form-group>
+           <b-form-group label="JVZoo IPN">
+              <b-form-input
+                id="name"
+                v-model="userData.name"
+                type="text"
+                class="input-table"
+              >
+              </b-form-input>
+           </b-form-group>
+           <b-form-group label="API Secret">
+              <b-form-input
+                id="name"
+                v-model="userData.name"
+                type="text"
+                class="input-table"
+              >
+              </b-form-input>
+           </b-form-group>
           </div>
-          <div class="d-flex justify-content-center">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="userLength"
-              :per-page="perPage"
-              aria-controls="my-table"
-              size="sm"
-              :hide-goto-end-buttons="true"
-              prev-text="<"
-              next-text=">"
-            ></b-pagination>
-          </div>
+         
         </div>
+          </div>
       </div>
     </div>
 
-    <b-modal
-      :hide-header="true"
-      id="modal-new-client"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
+   
+    
       <!-- <div class="modal-head">
         <h3 class="title">Give your campaign a name</h3>
         <p class="desc">Only you can see this</p>
       </div> -->
 
-      <b-form-group label="Name">
-        <b-form-input
-          id="name"
-          v-model="userData.name"
-          type="text"
-          class="input-table"
-        >
-        </b-form-input>
-      </b-form-group>
+      
 
-      <b-form-group label="Description">
-        <b-form-textarea
-          id="name"
-          v-model="userData.email"
-          type="text"
-          class="input-table"
-          rows="4"
-        >
-        </b-form-textarea>
-      </b-form-group>
+      
 
-      <b-form-group label="Upload">
-        <b-form-file
-          v-model="file"
-          :state="Boolean(file)"
-          placeholder="Choose a file or drop it here..."
-          drop-placeholder="Drop file here..."
-        >
-        </b-form-file>
-      </b-form-group>
+      
 
-      <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
-          >Close</b-button
-        >
-        <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
-          class="save-modal"
-          >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
-        >
-      </div>
-    </b-modal>
+      
+   
   </div>
 </template>
 
@@ -179,7 +104,6 @@
 // @ is an alias to /src
 import Sidebar from "@/components/admin/TheSidebarAdmin.vue";
 import Navbar from "@/components/TheNav.vue";
-import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
@@ -188,7 +112,6 @@ export default {
   components: {
     Sidebar,
     Navbar,
-    DropdownTool,
   },
   data() {
     return {

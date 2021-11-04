@@ -17,15 +17,15 @@
               mb-5
             "
           >
-            <h6 class="title">All Script Type (5)</h6>
+            <h6 class="title">Integration</h6>
             <div class="d-flex align-items-center">
               <button
                 @click="clearField"
                 class="btn btn-create"
                 v-b-modal.modal-new-client
               >
-                <span>+</span>
-                New Script Type
+                
+                Save
               </button>
             </div>
           </div>
@@ -51,51 +51,24 @@
             <table v-else class="table table-custom">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Script Type</th>
-                  <th>Usage</th>
-                  <th>Status</th>
-                  <th class="text-right">Action</th>
+                  <td>Name</td>
+                  
+                  <td>Status</td>
+                  
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="user in orderedUser" :key="user.id">
-                  <td scope="row">{{ user.email }}</td>
-                  <td class="text-left">{{ user.firstName }}</td>
-                  <td>{{ user.lastName }}</td>
+                  
+                  <td class="">{{ user.firstName }}</td>
+                  
                   <td>
                     <label class="switch mb-0">
                       <input type="checkbox" />
                       <span class="slider round"></span>
                     </label>
                   </td>
-                  <td>
-                    <dropdown-tool
-                      @edit-clicked="
-                        openEditModal(user.id, {
-                          name: user.name,
-                          email: user.email,
-                        })
-                      "
-                      @delete-proceed="deleteAgency(user.id)"
-                    >
-                      <template v-slot:secondary>
-                        <b-dropdown-item
-                          v-b-modal.modal-campaign
-                          @click="getCurrent(user.name)"
-                          link-class="drop-link"
-                          href="#"
-                        >
-                          <img
-                            class="drop-img-icon"
-                            src="@/assets/icons/admin/sidebar-icon/Input.svg"
-                            alt=""
-                          />
-                          Input
-                        </b-dropdown-item>
-                      </template>
-                    </dropdown-tool>
-                  </td>
+                 
                 </tr>
               </tbody>
             </table>

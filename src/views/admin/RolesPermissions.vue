@@ -3,12 +3,13 @@
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.name"
-        current-active="script-type"
+        current-active="roles"
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
         <div class="container scroll-content">
-          <div
+          <div class="sec-padding">
+            <div
             class="
               dashboard-top
               d-flex
@@ -17,7 +18,7 @@
               mb-5
             "
           >
-            <h6 class="title">All Script Type (5)</h6>
+            <h6 class="title">Roles & Permissions</h6>
             <div class="d-flex align-items-center">
               <button
                 @click="clearField"
@@ -25,7 +26,7 @@
                 v-b-modal.modal-new-client
               >
                 <span>+</span>
-                New Script Type
+                New Role
               </button>
             </div>
           </div>
@@ -51,24 +52,17 @@
             <table v-else class="table table-custom">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Script Type</th>
-                  <th>Usage</th>
-                  <th>Status</th>
+                  <th>Name</th>
                   <th class="text-right">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="user in orderedUser" :key="user.id">
-                  <td scope="row">{{ user.email }}</td>
-                  <td class="text-left">{{ user.firstName }}</td>
-                  <td>{{ user.lastName }}</td>
-                  <td>
-                    <label class="switch mb-0">
-                      <input type="checkbox" />
-                      <span class="slider round"></span>
-                    </label>
-                  </td>
+                  <!-- <td scope="row">{{ user.email }}</td> -->
+                  <td scope='row'>Admin</td>
+                  
+                  
+                  
                   <td>
                     <dropdown-tool
                       @edit-clicked="
@@ -97,6 +91,7 @@
                     </dropdown-tool>
                   </td>
                 </tr>
+                
               </tbody>
             </table>
           </div>
@@ -111,6 +106,7 @@
               prev-text="<"
               next-text=">"
             ></b-pagination>
+          </div>
           </div>
         </div>
       </div>
@@ -139,28 +135,15 @@
         >
         </b-form-input>
       </b-form-group>
-
-      <b-form-group label="Description">
-        <b-form-textarea
-          id="name"
-          v-model="userData.email"
-          type="text"
-          class="input-table"
-          rows="4"
-        >
-        </b-form-textarea>
+      <b-form-group label="" v-slot="{ ariaDescribedby }">
+        <b-form-checkbox-group
+          id="checkbox-group-1"
+          
+          :options="userPlan"
+          :aria-describedby="ariaDescribedby"
+          name="flavour-1"
+        ></b-form-checkbox-group>
       </b-form-group>
-
-      <b-form-group label="Upload">
-        <b-form-file
-          v-model="file"
-          :state="Boolean(file)"
-          placeholder="Choose a file or drop it here..."
-          drop-placeholder="Drop file here..."
-        >
-        </b-form-file>
-      </b-form-group>
-
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
           >Close</b-button
@@ -168,7 +151,7 @@
         <b-button
           @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
           class="save-modal"
-          >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
+          >Save</b-button
         >
       </div>
     </b-modal>
@@ -227,13 +210,17 @@ export default {
         { value: "User", text: "User" },
         { value: "Admin", text: "Admin" },
       ],
-      optionsPlan: [
-        { text: "FE", value: "FE" },
-        { text: "0T01", value: "0T01" },
-        { text: "0T02", value: "0T02" },
-        { text: "0T03", value: "0T03" },
-        { text: "0T04", value: "0T04" },
+      userPlan: [
+        { text: "Make role a User Plan", value: "FE" },
+        
       ],
+      // optionsPlan: [
+      //   { text: "FE", value: "FE" },
+      //   { text: "0T01", value: "0T01" },
+      //   { text: "0T02", value: "0T02" },
+      //   { text: "0T03", value: "0T03" },
+      //   { text: "0T04", value: "0T04" },
+      // ],
     };
   },
   methods: {
@@ -350,6 +337,7 @@ export default {
       return formatedDate.toLocaleDateString();
     },
   },
+
   mounted() {
     this.getAgency();
   },
