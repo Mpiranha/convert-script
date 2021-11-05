@@ -62,9 +62,9 @@ body {
     align-items: center !important;
 }
 
-.pb-2,
 .py-2 {
     padding-bottom: 0.5rem !important;
+    padding-top: 0.5rem !important;
 }
 
 .btn-create span {
