@@ -305,7 +305,7 @@ const routes = [{
     }
   },
   {
-    path: '/admin/setpermission',
+    path: '/admin/:name/permission',
     name: 'SetPermission',
     component: SetPermission,
     meta: {
@@ -314,7 +314,7 @@ const routes = [{
     }
   },
   {
-    path: '/admin/integrationadmin',
+    path: '/admin/integration',
     name: 'IntegrationAdmin',
     component: IntegrationAdmin,
     meta: {

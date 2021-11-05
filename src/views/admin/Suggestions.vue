@@ -41,10 +41,10 @@
             <table v-else class="table table-custom">
               <thead>
                 <tr>
-                  <td>Message</td>
-                  <td class="text-left">Email</td>
-                  <td>Date</td>
-                  <td class="text-left">Action</td>
+                  <th>Message</th>
+                  <th class="text-left">Email</th>
+                  <th>Date</th>
+                  <th class="text-left">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -54,12 +54,8 @@
                   <td>27/08/2011</td>
                   <td class="text-left">
                     <nav class="nav flex-column action-view">
-                      <a 
-                      class="nav-link" 
-                      href="#" 
-                      v-b-modal.modal-new-client
-                      >
-                      View
+                      <a class="nav-link" href="#" v-b-modal.modal-view-script>
+                        View
                       </a>
                       <a class="nav-link" href="#">Mark as Read</a>
                     </nav>
@@ -69,40 +65,42 @@
             </table>
           </div>
           <b-modal
-      :hide-header="true"
-      id="modal-new-client"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
-    <div class="py-4">
-      Lorem Ipsum is simply dummy text of the printing and typesetting
-      industry. Lorem Ipsum has been the industry s standard dummy
-      text ever since the 1500s, when an unknown printer took a galley of
-      type and scrambled it to make a type specimen book. It has
-      survived not only five centuries, but also the leap into electronic
-      typesetting, remaining essentially unchanged.
-      <br><br>
-      <span class="mt-3">
-        User email: emma@gmail.com
-      </span>
-        
-    </div>
-      
-      <div class="d-flex justify-content-end">
-        <p class="mr-auto">27/08/2011</p>
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
-          >Close</b-button
-        >
-        <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
-          class="save-modal"
-          >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
-        >
-      </div>
-    </b-modal>
+            :hide-header="true"
+            id="modal-view-script"
+            centered
+            size="md"
+            :hide-footer="true"
+            dialog-class="control-width"
+            content-class="modal-main"
+          >
+            <div class="py-4">
+              <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry s standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries, but also the leap into
+                electronic typesetting, remaining essentially unchanged.
+              </p>
+              <p> User email: emma@gmail.com </p>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <p class="mr-auto">27/08/2011</p>
+              <b-button
+                @click="$bvModal.hide('modal-view-script')"
+                class="close-modal"
+                >Close</b-button
+              >
+              <b-button
+                @click="
+                  triggerEdit ? editAgency(editId, campaignName) : addAgency()
+                "
+                class="save-modal"
+                >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
+              >
+            </div>
+          </b-modal>
           <div class="d-flex justify-content-center">
             <b-pagination
               v-model="currentPage"

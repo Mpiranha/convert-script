@@ -1060,6 +1060,7 @@ input:checked+.slider:before {
     align-items: center;
     justify-content: center;
     background-color: #fff;
+    z-index: 99999;
 }
 
 .loader-modal .loader-img {
@@ -1106,6 +1107,10 @@ input:checked+.slider:before {
 
 .control-width {
     max-width: 420px;
+}
+
+.sm-control-width {
+    max-width: 430px !important;
 }
 
 .close-modal,
@@ -1190,6 +1195,30 @@ input:checked+.slider:before {
 .action-view .nav-link {
     color: #995cef;
     padding: 0rem 0.7rem;
+}
+
+.foot-script-type {
+    display: flex;
+    align-items: center;
+    color: #5f6e84;
+    font-size: 0.9rem;
+}
+
+.foot-script-type img {
+    width: 1.1rem;
+    margin-right: 0.4rem;
+}
+
+.script-date-text {
+    font-size: 0.9rem;
+    color: #5f6e84;
+}
+
+#modal-view-script p {
+    font-size: 0.9rem;
+    color: #5f6e84;
+    line-height: 1.5rem;
+    text-align: justify;
 }
 
 

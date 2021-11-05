@@ -31,7 +31,7 @@
             </div>
           </div>
 
-          <div class="content-wrap set-min-h pt-4 pb-5 px-5">
+          <div class="content-wrap pt-4 pb-5 px-5">
             
             <loader-modal
               :loading-state="this.$store.state.loading"

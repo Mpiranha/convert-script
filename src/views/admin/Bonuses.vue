@@ -62,8 +62,8 @@
                   
                   <td class="text-right">
                     <nav class="nav flex-column action-view">
-                      <a class="nav-link" href="#">View</a>
-                      <a class="nav-link" href="#">Mark as Read</a>
+                      <a class="nav-link" href="#">Edit</a>
+                      <a class="nav-link" href="#">Delete</a>
                     </nav>
                   </td>
                 </tr>

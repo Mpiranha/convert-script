@@ -56,7 +56,9 @@
                   <td>27/08/2011</td>
                   <td class="text-left">
                     <nav class="nav flex-column action-view">
-                      <a class="nav-link" href="#">View</a>
+                      <a class="nav-link" href="#" v-b-modal.modal-view-script
+                        >View</a
+                      >
                       <a class="nav-link" href="#">Mark as Read</a>
                     </nav>
                   </td>
@@ -79,6 +81,57 @@
         </div>
       </div>
     </div>
+    <b-modal
+      :hide-header="true"
+      id="modal-view-script"
+      centered
+      size="md"
+      :hide-footer="true"
+      dialog-class="control-width"
+      content-class="modal-main"
+    >
+      <p>
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+        industry. Lorem Ipsum has been the industry s standard dummy text ever
+        since the 1500s, when an unknown printer took a galley of type and
+        scrambled it to make a type specimen book. It has survived not only five
+        centuries, but also the leap into electronic typesetting, remaining
+        essentially unchanged.
+      </p>
+      <p>
+        <b>Product name: </b>LoremAppname <br />
+        <b>Description: </b>Lorem Ipsum is simply dummy te x t of the printing
+        and typesetting industry.
+      </p>
+      <p class="mb-5"><b>User email: </b> emma@gmail.com</p>
+
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <div class="foot-script-type">
+            <img
+              src="@/assets/icons/admin/sidebar-icon/scripts-type.svg"
+              alt=""
+            />
+            <span>Script Type</span>
+          </div>
+          <div class="script-date-text">27/08/2011</div>
+        </div>
+        <div>
+          <b-button
+            @click="$bvModal.hide('modal-view-script')"
+            class="close-modal"
+            >Close</b-button
+          >
+          <b-button
+            @click="
+              triggerEdit ? editAgency(editId, campaignName) : addAgency()
+            "
+            class="save-modal"
+            >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
+          >
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 

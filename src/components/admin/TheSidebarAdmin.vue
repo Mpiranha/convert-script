@@ -129,7 +129,7 @@
         <router-link
           class="nav-link"
           :class="currentActive == 'integrationadmin' ? 'active' : ''"
-          to="/admin/integrationadmin"
+          to="/admin/integration"
         >
           <img
             class="main-icon"

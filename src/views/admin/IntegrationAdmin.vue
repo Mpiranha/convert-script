@@ -25,7 +25,6 @@
                 class="btn btn-create py-2"
                 v-b-modal.modal-new-client
               >
-                
                 Save
               </button>
             </div>
@@ -52,10 +51,8 @@
             <table v-else class="table table-custom">
               <thead>
                 <tr>
-                  <td>Name</td>
-                  
-                  <td>Status</td>
-                  
+                  <th>Name</th>
+                  <th class="text-right">Status</th>
                 </tr>
               </thead>
               <tbody>
