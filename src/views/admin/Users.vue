@@ -70,7 +70,7 @@
               <tbody>
                 <tr v-for="user in orderedUser" :key="user.id">
                   <td scope="row">{{ user.email }}</td>
-                  <td>{{ user.firstName }}</td>
+                  <td>{{ user.name }}</td>
                   <td>{{ user.lastName }}</td>
                   <td>
                     <label class="switch mb-0">
@@ -236,24 +236,7 @@ export default {
     return {
       perPage: 5,
       currentPage: 1,
-      users: [
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-      ],
+      users: [],
       userData: {
         name: "",
         email: "",
@@ -278,9 +261,9 @@ export default {
     };
   },
   methods: {
-    getAgency() {
+    getAllUsers() {
       this.$store
-        .dispatch("getAllAgency")
+        .dispatch("getAllUsers")
         .then((res) => {
           this.users = res.data.data;
           // console.log(res.data + "called now");
@@ -393,7 +376,7 @@ export default {
   },
 
   mounted() {
-    this.getAgency();
+    this.getAllUsers();
   },
   computed: {
     userLength() {
@@ -401,7 +384,7 @@ export default {
     },
     orderedUser() {
       return this.orderSort(this.users);
-    },
+    }
   },
 };
 </script>

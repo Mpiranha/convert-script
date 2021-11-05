@@ -10,86 +10,85 @@
         <div class="container scroll-content">
           <div class="sec-padding">
             <div
-            class="
-              dashboard-top
-              d-flex
-              justify-content-between
-              align-items-center
-              mb-5
-            "
-          >
-            <h6 class="title mb-0">Tutorials</h6>
-            <div class="d-flex align-items-center">
-              <button
-                @click="clearField"
-                class="btn btn-create"
-                v-b-modal.modal-new-client
-              >
-                <span>+</span>
-                New Video
-              </button>
+              class="
+                dashboard-top
+                d-flex
+                justify-content-between
+                align-items-center
+                mb-5
+              "
+            >
+              <h6 class="title mb-0">Tutorials</h6>
+              <div class="d-flex align-items-center">
+                <button
+                  @click="clearField"
+                  class="btn btn-create"
+                  v-b-modal.modal-new-video
+                >
+                  <span>+</span>
+                  New Video
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div class="content-wrap set-min-h pt-4 pb-5">
-            <div class="search-form mb-2">
-              <button class="btn search-btn">
-                <i class="flaticon-loupe icons"></i>
-              </button>
-              <input
-                @change="makeToast('primary', 'try me')"
-                class="form-control no-shadow search-input"
-                type="text"
-                placeholder="Search"
-              />
+            <div class="content-wrap set-min-h pt-4 pb-5">
+              <div class="search-form mb-2">
+                <button class="btn search-btn">
+                  <i class="flaticon-loupe icons"></i>
+                </button>
+                <input
+                  @change="makeToast('primary', 'try me')"
+                  class="form-control no-shadow search-input"
+                  type="text"
+                  placeholder="Search"
+                />
+              </div>
+              <loader-modal
+                :loading-state="this.$store.state.loading"
+              ></loader-modal>
+              <div v-if="videos.length === 0" class="no-data-info">
+                Created agency will display here.
+              </div>
+              <table v-else class="table table-custom">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th class="text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="video in orderedVideo" :key="video.id">
+                    <td scope="row">{{ video.title }}</td>
+
+                    <td class="text-right">
+                      <nav class="nav flex-column action-view">
+                        <a class="nav-link" href="#">Edit</a>
+                        <a class="nav-link" href="#">Delete</a>
+                      </nav>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <loader-modal
-              :loading-state="this.$store.state.loading"
-            ></loader-modal>
-            <div v-if="users.length === 0" class="no-data-info">
-              Created agency will display here.
+            <div class="d-flex justify-content-center">
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="videoLength"
+                :per-page="perPage"
+                aria-controls="my-table"
+                size="sm"
+                :hide-goto-end-buttons="true"
+                prev-text="<"
+                next-text=">"
+              ></b-pagination>
             </div>
-            <table v-else class="table table-custom">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th class="text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="user in orderedUser" :key="user.id" >
-                  <td scope="row">{{ user.email }}</td>
-                  
-                  <td class="text-right">
-                    <nav class="nav flex-column action-view">
-                      <a class="nav-link" href="#">Edit</a>
-                      <a class="nav-link" href="#">Delete</a>
-                    </nav>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
           </div>
-          <div class="d-flex justify-content-center">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="userLength"
-              :per-page="perPage"
-              aria-controls="my-table"
-              size="sm"
-              :hide-goto-end-buttons="true"
-              prev-text="<"
-              next-text=">"
-            ></b-pagination>
-          </div>
-          </div>
-          
         </div>
       </div>
     </div>
-     <b-modal
+    <b-modal
       :hide-header="true"
-      id="modal-new-client"
+      id="modal-new-video"
       centered
       size="md"
       :hide-footer="true"
@@ -104,17 +103,17 @@
       <b-form-group label="Name">
         <b-form-input
           id="name"
-          v-model="userData.name"
+          v-model="videoData.title"
           type="text"
           class="input-table"
         >
         </b-form-input>
       </b-form-group>
-      
+
       <b-form-group label="Youtube URL">
         <b-form-input
           id="name"
-          v-model="userData.name"
+          v-model="videoData.url"
           type="text"
           class="input-table"
         >
@@ -123,14 +122,13 @@
       <b-form-group label="" v-slot="{ ariaDescribedby }">
         <b-form-checkbox-group
           id="checkbox-group-1"
-          
           :options="userPlan"
           :aria-describedby="ariaDescribedby"
           name="flavour-1"
         ></b-form-checkbox-group>
       </b-form-group>
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
+        <b-button @click="$bvModal.hide('modal-new-video')" class="close-modal"
           >Close</b-button
         >
         <b-button
@@ -148,10 +146,11 @@
 import Sidebar from "@/components/admin/TheSidebarAdmin.vue";
 import Navbar from "@/components/TheNav.vue";
 import alertMixin from "@/mixins/alertMixin";
+import orderSort from "@/mixins/orderSort";
 
 export default {
-  name: "Users",
-  mixins: [alertMixin],
+  name: "Tutorials",
+  mixins: [alertMixin, orderSort],
   components: {
     Sidebar,
     Navbar,
@@ -160,69 +159,34 @@ export default {
     return {
       perPage: 5,
       currentPage: 1,
-      users: [
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-      ],
-      userData: {
-        name: "",
-        email: "",
+      videos: [],
+      videoData: {
+        title: "",
+        url: "",
       },
       error: "",
       triggerEdit: false,
       editId: null,
-      selectedPlan: [], // Must be an array reference!
-      selectedRole: null,
-      optionsRole: [
-        { value: null, text: "Select a Role" },
-        { value: "User", text: "User" },
-        { value: "Admin", text: "Admin" },
-      ],
-      optionsPlan: [
-        { text: "FE", value: "FE" },
-        { text: "0T01", value: "0T01" },
-        { text: "0T02", value: "0T02" },
-        { text: "0T03", value: "0T03" },
-        { text: "0T04", value: "0T04" },
-      ],
     };
   },
   methods: {
-    getAgency() {
+    getAllVideos() {
+       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllAgency")
+        .dispatch("getAllVideos")
         .then((res) => {
-          this.users = res.data.data;
-          // console.log(res.data + "called now");
-          //this.loading = false;
+          this.videos = res.data.data;
+         
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          // // console.log(error);
-          // this.error = error.response.data.errors.root;
-          // // this.error = error;
           console.log(error);
-          //this.loading = false;
           this.$store.commit("updateLoadState", false);
         });
     },
-    addAgency() {
+    addVideo() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
+      this.$bvModal.hide("modal-new-video");
 
       this.$store
         .dispatch("addAgency", this.client)
@@ -246,7 +210,7 @@ export default {
     },
     editAgency(id) {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
+      this.$bvModal.hide("modal-new-video");
       this.$store
         .dispatch("editAgency", { id: id, data: this.client })
         .then((res) => {
@@ -288,7 +252,7 @@ export default {
     },
 
     openEditModal(id, data) {
-      this.$bvModal.show("modal-new-client");
+      this.$bvModal.show("modal-new-video");
       this.triggerEdit = true;
       this.editId = id;
       this.client.name = data.name;
@@ -304,34 +268,24 @@ export default {
     getCurrent(data) {
       this.client.name = data;
     },
-    orderSort(arr) {
-      return arr.sort(function (a, b) {
-        return a.id - b.id;
-      });
-    },
-    formatDate(date) {
-      var formatedDate = new Date(date);
-
-      return formatedDate.toLocaleDateString();
-    },
   },
 
   mounted() {
-    this.getAgency();
+    this.getAllVideos();
   },
   computed: {
-    userLength() {
-      return this.users.length;
+    videoLength() {
+      return this.videos.length;
     },
-    orderedUser() {
-      return this.orderSort(this.users);
+    orderedVideo() {
+      return this.orderSort(this.videos);
     },
   },
 };
 </script>
 
 <style>
-.sec-padding{
+.sec-padding {
   padding-left: 200px;
   padding-right: 200px;
 }
