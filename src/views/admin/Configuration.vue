@@ -36,9 +36,7 @@
             <loader-modal
               :loading-state="this.$store.state.loading"
             ></loader-modal>
-            <div v-if="users.length === 0" class="no-data-info">
-              Created agency will display here.
-            </div>
+           
             <b-form-group label="API">
               <b-form-input
                 id="name"

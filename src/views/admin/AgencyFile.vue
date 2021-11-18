@@ -7,7 +7,7 @@
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
-        <div class="container scroll-content">
+        <div class="container-fluid scroll-content">
           <div class="sec-padding">
             <div
             class="
@@ -21,9 +21,9 @@
             <h6 class="title mb-0">Agency File</h6>
             <div class="d-flex align-items-center">
               <button
-                @click="clearField"
+              @click="clearField"
                 class="btn btn-create"
-                v-b-modal.modal-new-client
+                v-b-modal.modal-new-agency
               >
                 <span>+</span>
                 New File
@@ -46,7 +46,7 @@
             <loader-modal
               :loading-state="this.$store.state.loading"
             ></loader-modal>
-            <div v-if="users.length === 0" class="no-data-info">
+            <div v-if="agencyFiles.length === 0" class="no-data-info">
               Created agency will display here.
             </div>
             <table v-else class="table table-custom">
@@ -57,13 +57,19 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="user in orderedUser" :key="user.id" >
-                  <td scope="row">{{ user.email }}</td>
+                <tr v-for="agency in agencyFiles" :key="agency.id" >
+                  <td scope="row">{{ agency.name }}</td>
                   
                   <td class="text-right">
                     <nav class="nav flex-column action-view">
-                      <a class="nav-link" href="#">Edit</a>
-                      <a class="nav-link" href="#">Delete</a>
+                      <a 
+                      class="nav-link" 
+                      href="#"
+                      @click="openEditModal(agency.id, agency)">Edit</a>
+                      <a 
+                      class="nav-link" 
+                      href="#"
+                      @click="deleteAgency(agency.id)">Delete</a>
                     </nav>
                   </td>
                 </tr>
@@ -73,13 +79,14 @@
           <div class="d-flex justify-content-center">
             <b-pagination
               v-model="currentPage"
-              :total-rows="userLength"
+              :total-rows="agencyFileLength"
               :per-page="perPage"
               aria-controls="my-table"
               size="sm"
               :hide-goto-end-buttons="true"
               prev-text="<"
               next-text=">"
+              @change="handlePageChange"
             ></b-pagination>
           </div>
           </div>
@@ -89,7 +96,7 @@
     </div>
      <b-modal
       :hide-header="true"
-      id="modal-new-client"
+      id="modal-new-agency"
       centered
       size="md"
       :hide-footer="true"
@@ -104,48 +111,50 @@
       <b-form-group label="Name">
         <b-form-input
           id="name"
-          v-model="userData.name"
+          v-model="agencyFileData.name"
           type="text"
           class="input-table"
         >
         </b-form-input>
       </b-form-group>
-      <b-form-group label="Description">
+      <b-form-group label="Email">
+        <b-form-input
+          id="name"
+          v-model="agencyFileData.email"
+          type="email"
+          class="input-table"
+        >
+        </b-form-input>
+      </b-form-group>
+      <!-- <b-form-group label="Description">
         <b-form-textarea
           id="name"
-          v-model="userData.email"
+          v-model="agencyFileData.desc"
           type="text"
           class="input-table"
           rows="4"
         >
         </b-form-textarea>
-      </b-form-group>
-      <b-form-group label="Access URL">
+      </b-form-group> -->
+      <!-- <b-form-group label="Access URL">
         <b-form-input
           id="name"
-          v-model="userData.name"
+          v-model="agencyFileData.url"
           type="text"
           class="input-table"
         >
         </b-form-input>
-      </b-form-group>
-      <b-form-group label="" v-slot="{ ariaDescribedby }">
-        <b-form-checkbox-group
-          id="checkbox-group-1"
-          
-          :options="userPlan"
-          :aria-describedby="ariaDescribedby"
-          name="flavour-1"
-        ></b-form-checkbox-group>
-      </b-form-group>
+      </b-form-group> -->
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
+        <b-button @click="$bvModal.hide('modal-new-agency')" class="close-modal"
           >Close</b-button
         >
         <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
+          @click="triggerEdit ? editAgency(editId, agencyFileData) : addAgency()"
           class="save-modal"
-          >Save</b-button
+          >
+          {{ triggerEdit ? "Edit" : "Save" }}
+          </b-button
         >
       </div>
     </b-modal>
@@ -169,154 +178,143 @@ export default {
     return {
       perPage: 5,
       currentPage: 1,
-      users: [
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-      ],
-      userData: {
+      agencyFiles: [],
+      agencyFileLength: 0,
+      agencyFileData: {
         name: "",
-        email: "",
+        email: ""
+        
       },
       error: "",
       triggerEdit: false,
       editId: null,
-      selectedPlan: [], // Must be an array reference!
-      selectedRole: null,
-      optionsRole: [
-        { value: null, text: "Select a Role" },
-        { value: "User", text: "User" },
-        { value: "Admin", text: "Admin" },
-      ],
-      optionsPlan: [
-        { text: "FE", value: "FE" },
-        { text: "0T01", value: "0T01" },
-        { text: "0T02", value: "0T02" },
-        { text: "0T03", value: "0T03" },
-        { text: "0T04", value: "0T04" },
-      ],
     };
   },
   methods: {
     getAgency() {
+      this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllAgency")
+        .dispatch("getAllAgencyFiles", {
+          number: this.currentPage,
+          perPage: this.perPage,
+        })
         .then((res) => {
-          this.users = res.data.data;
-          // console.log(res.data + "called now");
-          //this.loading = false;
+          this.agencyFiles = res.data.data;
+          this.agencyFileLength = res.data.meta.total;
+          console.log(res.data);
+          console.log("Current Page: " + this.currentPage);
+          console.log("Per Page: " + this.perPage);
+
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          // // console.log(error);
-          // this.error = error.response.data.errors.root;
-          // // this.error = error;
           console.log(error);
-          //this.loading = false;
           this.$store.commit("updateLoadState", false);
         });
+      // this.$store
+      //   .dispatch("getAllAgency")
+      //   .then((res) => {
+      //     this.users = res.data.data;
+      //     // console.log(res.data + "called now");
+      //     //this.loading = false;
+      //     this.$store.commit("updateLoadState", false);
+      //   })
+      //   .catch((error) => {
+      //     // // console.log(error);
+      //     // this.error = error.response.data.errors.root;
+      //     // // this.error = error;
+      //     console.log(error);
+      //     //this.loading = false;
+      //     this.$store.commit("updateLoadState", false);
+      //   });
     },
     addAgency() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-
+      this.$bvModal.hide("modal-new-agency");
       this.$store
-        .dispatch("addAgency", this.client)
+        .dispatch("addAgencyFile", this.agencyFileData)
         .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          // this.getCampaign();
+          console.log(res);
           this.getAgency();
+          this.agencyFileData = {
+            name: "",
+            email: ""
+          };
+          this.makeToast("success", "AgencyFile added successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log(error);
+          this.error = error.response.data.error;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
-
-      // this.getCampaign();
-
-      // this.$vm.$forceUpdate();
     },
     editAgency(id) {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
+      this.$bvModal.hide("modal-new-agency");
       this.$store
-        .dispatch("editAgency", { id: id, data: this.client })
+        .dispatch("editAgencyFile", {
+          id: id,
+          data: this.agencyFileData,
+        })
         .then((res) => {
-          this.error = null;
-          console.log(res.data);
+          console.log(res);
           this.getAgency();
-          //   this.loading = false;
+          this.agencyFileData = {
+            name: "",
+            email: ""
+          };
+          this.makeToast("success", "Agency File edited successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
+          console.log("error: " + error.response.data.message);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
     },
     deleteAgency(id) {
-      //   this.loading = true;
-      this.$store.commit("updateLoadState", true);
+     this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deleteAgency", id)
+        .dispatch("deleteAgencyFile", id)
         .then((res) => {
-          this.error = null;
+          console.log(res);
           this.getAgency();
-          console.log(res.data);
-          //   this.loading = false;
+          this.makeToast("success", "Agency File deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
+          console.log(error);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
+    },
 
-      // this.getCampaign();
+     handlePageChange(value) {
+      this.currentPage = value;
+      this.getAgency();
+      console.log("Value: " + value);
     },
 
     openEditModal(id, data) {
-      this.$bvModal.show("modal-new-client");
+      this.$bvModal.show("modal-new-agency");
       this.triggerEdit = true;
       this.editId = id;
-      this.client.name = data.name;
-      this.client.email = data.email;
+      this.agencyFileData.name = data.name;
+      this.agencyFileData.email = data.email;
     },
-    clearField() {
-      this.client = {
+      clearField() {
+      this.agencyFileData = {
         name: "",
-        email: "",
+        email: ""
       };
       this.triggerEdit = false;
     },
     getCurrent(data) {
       this.client.name = data;
-    },
-    orderSort(arr) {
-      return arr.sort(function (a, b) {
-        return a.id - b.id;
-      });
     },
     formatDate(date) {
       var formatedDate = new Date(date);
@@ -329,12 +327,7 @@ export default {
     this.getAgency();
   },
   computed: {
-    userLength() {
-      return this.users.length;
-    },
-    orderedUser() {
-      return this.orderSort(this.users);
-    },
+  
   },
 };
 </script>

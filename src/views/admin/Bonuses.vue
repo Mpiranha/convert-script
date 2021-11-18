@@ -191,29 +191,12 @@ export default {
         name: "",
         email: "",
       },
-      error: "",
-      triggerEdit: false,
-      editId: null,
-      selectedPlan: [], // Must be an array reference!
-      selectedRole: null,
-      optionsRole: [
-        { value: null, text: "Select a Role" },
-        { value: "User", text: "User" },
-        { value: "Admin", text: "Admin" },
-      ],
-      optionsPlan: [
-        { text: "FE", value: "FE" },
-        { text: "0T01", value: "0T01" },
-        { text: "0T02", value: "0T02" },
-        { text: "0T03", value: "0T03" },
-        { text: "0T04", value: "0T04" },
-      ],
     };
   },
   methods: {
-    getAgency() {
+    getBonus() {
       this.$store
-        .dispatch("getAllAgency")
+        .dispatch("getAllBonuses")
         .then((res) => {
           this.users = res.data.data;
           // console.log(res.data + "called now");
@@ -229,17 +212,17 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    addAgency() {
+    addBonus() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
+      this.$bvModal.hide("modal-new-bonus");
 
       this.$store
-        .dispatch("addAgency", this.client)
+        .dispatch("addbonus", this.client)
         .then((res) => {
           this.error = null;
           console.log(res.data);
           // this.getCampaign();
-          this.getAgency();
+          this.getBonuses();
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -253,15 +236,15 @@ export default {
 
       // this.$vm.$forceUpdate();
     },
-    editAgency(id) {
+    editBonus(id) {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-client");
       this.$store
-        .dispatch("editAgency", { id: id, data: this.client })
+        .dispatch("editBonus", { id: id, data: this.client })
         .then((res) => {
           this.error = null;
           console.log(res.data);
-          this.getAgency();
+          this.getBonus();
           //   this.loading = false;
           this.$store.commit("updateLoadState", false);
         })
