@@ -314,10 +314,10 @@ export default {
     getAllVideos({
         // commit,
         state
-    }) {
+    }, page) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
-            axios.get(`${baseUrl}/api/v1/admin/tutorials`)
+            axios.get(`${baseUrl}/api/v1/admin/tutorials?page=${page.number}&per_page=${page.perPage}`)
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data
@@ -336,6 +336,45 @@ export default {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.post(`${baseUrl}/api/v1/admin/tutorials`, data, {})
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    editVideo({
+        state
+    }, {
+        id,
+        data
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.put(`${baseUrl}/api/v1/admin/tutorials/${id}`, data)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    deleteVideo({
+        state
+    }, id) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.delete(`${baseUrl}/api/v1/admin/tutorials/${id}`)
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data

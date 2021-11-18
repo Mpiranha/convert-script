@@ -62,8 +62,13 @@
 
                     <td class="text-right">
                       <nav class="nav flex-column action-view">
-                        <a class="nav-link" href="#">Edit</a>
-                        <a class="nav-link" href="#">Delete</a>
+                        <a
+                          @click="openEditModal(video.id, video)"
+                          class="nav-link"
+                          href="#"
+                          >Edit</a
+                        >
+                        <a @click="deleteVideo(video.id)" class="nav-link" href="#">Delete</a>
                       </nav>
                     </td>
                   </tr>
@@ -80,6 +85,7 @@
                 :hide-goto-end-buttons="true"
                 prev-text="<"
                 next-text=">"
+                @change="handlePageChange"
               ></b-pagination>
             </div>
           </div>
@@ -110,31 +116,35 @@
         </b-form-input>
       </b-form-group>
 
+      <b-form-group label="Description">
+        <b-form-textarea
+          id="name"
+          v-model="videoData.description"
+          type="text"
+          class="input-table"
+          rows="3"
+        >
+        </b-form-textarea>
+      </b-form-group>
+
       <b-form-group label="Youtube URL">
         <b-form-input
           id="name"
-          v-model="videoData.url"
+          v-model="videoData.link"
           type="text"
           class="input-table"
         >
         </b-form-input>
       </b-form-group>
-      <b-form-group label="" v-slot="{ ariaDescribedby }">
-        <b-form-checkbox-group
-          id="checkbox-group-1"
-          :options="userPlan"
-          :aria-describedby="ariaDescribedby"
-          name="flavour-1"
-        ></b-form-checkbox-group>
-      </b-form-group>
+
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-video')" class="close-modal"
           >Close</b-button
         >
         <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
+          @click="triggerEdit ? editVideo(editId) : addVideo()"
           class="save-modal"
-          >Save</b-button
+          >{{ triggerEdit ? "Edit" : "Save" }}</b-button
         >
       </div>
     </b-modal>
@@ -160,9 +170,11 @@ export default {
       perPage: 5,
       currentPage: 1,
       videos: [],
+      videoLength: 0,
       videoData: {
         title: "",
-        url: "",
+        description: "",
+        link: "",
       },
       error: "",
       triggerEdit: false,
@@ -171,12 +183,19 @@ export default {
   },
   methods: {
     getAllVideos() {
-       this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllVideos")
+        .dispatch("getAllVideos", {
+          number: this.currentPage,
+          perPage: this.perPage,
+        })
         .then((res) => {
           this.videos = res.data.data;
-         
+          this.videoLength = res.data.meta.total;
+          console.log(res.data);
+          console.log("Current Page: " + this.currentPage);
+          console.log("Per Page: " + this.perPage);
+
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -187,66 +206,84 @@ export default {
     addVideo() {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-video");
-
       this.$store
-        .dispatch("addAgency", this.client)
+        .dispatch("addVideo", this.videoData)
         .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          // this.getCampaign();
-          this.getAgency();
+          console.log(res);
+          this.getAllVideos();
+          this.videoData = {
+            title: "",
+            description: "",
+            link: "",
+          };
+          this.makeToast("success", "Video added successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log(error);
+          this.error = error.response.data.error;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
-
-      // this.getCampaign();
-
-      // this.$vm.$forceUpdate();
     },
-    editAgency(id) {
+    editVideo(id) {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-video");
       this.$store
-        .dispatch("editAgency", { id: id, data: this.client })
+        .dispatch("editVideo", {
+          id: id,
+          data: this.videoData,
+        })
         .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          this.getAgency();
-          //   this.loading = false;
+          console.log(res);
+          this.getAllVideos();
+          this.videoData = {
+            title: "",
+            description: "",
+            link: "",
+          };
+          this.makeToast("success", "Video edited successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
+          console.log("error: " + error.response.data.message);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
     },
-    deleteAgency(id) {
-      //   this.loading = true;
+    deleteVideo(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deleteAgency", id)
+        .dispatch("deleteVideo", id)
         .then((res) => {
-          this.error = null;
-          this.getAgency();
-          console.log(res.data);
-          //   this.loading = false;
+          console.log(res);
+          this.getAllVideos();
+          this.makeToast("success", "Video deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
+          console.log(error);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
+      // this.$store
+      //   .dispatch("deleteAgency", id)
+      //   .then((res) => {
+      //     this.error = null;
+      //     this.getAgency();
+      //     console.log(res.data);
+      //     //   this.loading = false;
+      //     this.$store.commit("updateLoadState", false);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error.message);
+      //     //   this.loading = false;
+      //     this.$store.commit("updateLoadState", false);
+      //     // this.error = error.response.data.errors.root;
+      //     // this.error = error;
+      //   });
 
       // this.getCampaign();
     },
@@ -255,18 +292,25 @@ export default {
       this.$bvModal.show("modal-new-video");
       this.triggerEdit = true;
       this.editId = id;
-      this.client.name = data.name;
-      this.client.email = data.email;
+      this.videoData.title = data.title;
+      this.videoData.description = data.description;
+      this.videoData.link = data.link;
     },
     clearField() {
-      this.client = {
-        name: "",
-        email: "",
+      this.videoData = {
+        title: "",
+        description: "",
+        link: "",
       };
       this.triggerEdit = false;
     },
     getCurrent(data) {
       this.client.name = data;
+    },
+    handlePageChange(value) {
+      this.currentPage = value;
+      this.getAllVideos();
+      console.log("Value: " + value);
     },
   },
 
@@ -274,9 +318,6 @@ export default {
     this.getAllVideos();
   },
   computed: {
-    videoLength() {
-      return this.videos.length;
-    },
     orderedVideo() {
       return this.orderSort(this.videos);
     },
