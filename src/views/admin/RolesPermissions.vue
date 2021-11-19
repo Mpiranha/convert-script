@@ -23,14 +23,13 @@
                 <button
                   @click="clearField"
                   class="btn btn-create"
-                  v-b-modal.modal-new-client
+                  v-b-modal.modal-new-role
                 >
                   <span>+</span>
                   New Role
                 </button>
               </div>
             </div>
-
             <div class="content-wrap set-min-h pt-4 pb-5">
               <div class="search-form mb-2">
                 <button class="btn search-btn">
@@ -46,7 +45,7 @@
               <loader-modal
                 :loading-state="this.$store.state.loading"
               ></loader-modal>
-              <div v-if="users.length === 0" class="no-data-info">
+              <div v-if="roles.length === 0" class="no-data-info">
                 Created agency will display here.
               </div>
               <table v-else class="table table-custom">
@@ -57,23 +56,22 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="user in orderedUser" :key="user.id">
-                    <!-- <td scope="row">{{ user.email }}</td> -->
-                    <td scope="row">Admin</td>
+                  <tr v-for="role in roles" :key="role.id">
+                   <td scope="row">{{ role.name }}</td>
+                    <!-- <td scope="row">Admin</td> -->
                     <td>
                       <dropdown-tool
                         @edit-clicked="
-                          openEditModal(user.id, {
-                            name: user.name,
-                            email: user.email,
+                          openEditModal(role.id, {
+                            name: role.name,
                           })
                         "
-                        @delete-proceed="deleteAgency(user.id)"
+                        @delete-proceed="deleteRole(role.id)"
                       >
                         <template v-slot:secondary>
                           <b-dropdown-item
                             v-b-modal.modal-campaign
-                            @click="getCurrent(user.name)"
+                            @click="getCurrent(role.name)"
                             link-class="drop-link"
                             href="#"
                           >
@@ -94,7 +92,7 @@
             <div class="d-flex justify-content-center">
               <b-pagination
                 v-model="currentPage"
-                :total-rows="userLength"
+                :total-rows="rolesLength"
                 :per-page="perPage"
                 aria-controls="my-table"
                 size="sm"
@@ -110,7 +108,7 @@
 
     <b-modal
       :hide-header="true"
-      id="modal-new-client"
+      id="modal-new-role"
       centered
       size="md"
       :hide-footer="true"
@@ -125,7 +123,7 @@
       <b-form-group label="Name">
         <b-form-input
           id="name"
-          v-model="userData.name"
+          v-model="rolesData.name"
           type="text"
           class="input-table"
         >
@@ -140,11 +138,11 @@
         ></b-form-checkbox-group>
       </b-form-group>
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
+        <b-button @click="$bvModal.hide('modal-new-role')" class="close-modal"
           >Close</b-button
         >
         <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
+          @click="triggerEdit ? editRoles(editId, rolesData) : addRoles()"
           class="save-modal"
           >Save</b-button
         >
@@ -172,28 +170,28 @@ export default {
     return {
       perPage: 5,
       currentPage: 1,
-      file: null,
-      users: [
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-      ],
-      userData: {
+      // users: [
+      //   {
+      //     email: "test@gmail.com",
+      //     firstName: "Test",
+      //     lastName: "Test",
+      //     status: false,
+      //     plan: ["FE", "0T1"],
+      //     created_at: "04/09/2021",
+      //   },
+      //   {
+      //     email: "test@gmail.com",
+      //     firstName: "Test",
+      //     lastName: "Test",
+      //     status: false,
+      //     plan: ["FE", "0T1"],
+      //     created_at: "04/09/2021",
+      //   },
+      // ],
+      rolesLength: 0,
+      roles: [],
+      rolesData: {
         name: "",
-        email: "",
       },
       error: "",
       triggerEdit: false,
@@ -216,102 +214,100 @@ export default {
     };
   },
   methods: {
-    getAgency() {
+    getRoles() {
+      this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllAgency")
+        .dispatch("getAllRoles", {
+          number: this.currentPage,
+          perPage: this.perPage,
+        })
         .then((res) => {
-          this.users = res.data.data;
-          // console.log(res.data + "called now");
-          //this.loading = false;
+          this.roles = res.data.data;
+          this.rolesLength = res.data.meta.total;
+          console.log(res.data);
+          console.log("Current Page: " + this.currentPage);
+          console.log("Per Page: " + this.perPage);
+
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          // // console.log(error);
-          // this.error = error.response.data.errors.root;
-          // // this.error = error;
           console.log(error);
-          //this.loading = false;
           this.$store.commit("updateLoadState", false);
         });
     },
-    addAgency() {
+    addRoles() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-
+      this.$bvModal.hide("modal-new-role");
       this.$store
-        .dispatch("addAgency", this.client)
+        .dispatch("addRoles", this.rolesData)
         .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          // this.getCampaign();
-          this.getAgency();
+          console.log(res);
+          this.getRoles();
+          this.rolesData = {
+            name: ""
+          };
+          this.makeToast("success", "Role added successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log(error);
+          this.error = error.response.data.error;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
-
-      // this.getCampaign();
-
-      // this.$vm.$forceUpdate();
     },
-    editAgency(id) {
-      this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
+    editRoles(id) {
+     this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modal-new-role");
       this.$store
-        .dispatch("editAgency", { id: id, data: this.client })
+        .dispatch("editRoles", {
+          id: id,
+          data: this.rolesData,
+        })
         .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          this.getAgency();
-          //   this.loading = false;
+          console.log(res);
+          this.getRoles();
+          this.rolesData = {
+            name: "",
+          };
+          this.makeToast("success", "Role edited successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
+          console.log("error: " + error.response.data.message);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
     },
     deleteAgency(id) {
-      //   this.loading = true;
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deleteAgency", id)
+        .dispatch("deleteRoles", id)
         .then((res) => {
-          this.error = null;
+          console.log(res);
           this.getAgency();
-          console.log(res.data);
-          //   this.loading = false;
+          this.makeToast("success", "Role deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
+          console.log(error);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
-
-      // this.getCampaign();
     },
 
     openEditModal(id, data) {
-      this.$bvModal.show("modal-new-client");
+      this.$bvModal.show("modal-new-role");
       this.triggerEdit = true;
       this.editId = id;
       this.client.name = data.name;
       this.client.email = data.email;
     },
     clearField() {
-      this.client = {
+      this.rolesData = {
         name: "",
-        email: "",
       };
       this.triggerEdit = false;
     },
@@ -331,16 +327,16 @@ export default {
   },
 
   mounted() {
-    this.getAgency();
+    this.getRoles();
   },
-  computed: {
-    userLength() {
-      return this.users.length;
-    },
-    orderedUser() {
-      return this.orderSort(this.users);
-    },
-  },
+  // computed: {
+  //   userLength() {
+  //     return this.roles.length;
+  //   },
+  //   orderedUser() {
+  //     return this.orderSort(this.roles);
+  //   },
+  // },
 };
 </script>
 

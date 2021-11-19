@@ -30,7 +30,6 @@
               </button>
             </div>
           </div>
-
           <div class="content-wrap set-min-h pt-4 pb-5">
             <div class="search-form mb-2">
               <button class="btn search-btn">
