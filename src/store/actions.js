@@ -547,10 +547,10 @@ export default {
     getAllRoles({
         // commit,
         state
-    }, page) {
+    }) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
-            axios.get(`${baseUrl}/api/v1/admin/roles?page=${page.number}&per_page=${page.perPage}`)
+            axios.get(`${baseUrl}/api/v1/admin/roles`)
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data
@@ -563,7 +563,7 @@ export default {
                 })
         })
     },
-    addRoles({
+    addRole({
         state
     }, data) {
         return new Promise((resolve, reject) => {
@@ -620,5 +620,44 @@ export default {
                 })
         })
     },
+
+    // Suggestions
+    getAllSuggestions({
+        state
+    }, page) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/admin/suggestions?page=${page.number}&per_page=${page.perPage}`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    addSuggestion({
+        state
+    }, data) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.post(`${baseUrl}/api/v1/admin/agencies`, data, {})
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
 
 }

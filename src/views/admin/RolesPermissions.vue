@@ -142,7 +142,7 @@
           >Close</b-button
         >
         <b-button
-          @click="triggerEdit ? editRoles(editId, rolesData) : addRoles()"
+          @click="triggerEdit ? editRoles(editId, rolesData) : addRole()"
           class="save-modal"
           >Save</b-button
         >
@@ -170,24 +170,6 @@ export default {
     return {
       perPage: 5,
       currentPage: 1,
-      // users: [
-      //   {
-      //     email: "test@gmail.com",
-      //     firstName: "Test",
-      //     lastName: "Test",
-      //     status: false,
-      //     plan: ["FE", "0T1"],
-      //     created_at: "04/09/2021",
-      //   },
-      //   {
-      //     email: "test@gmail.com",
-      //     firstName: "Test",
-      //     lastName: "Test",
-      //     status: false,
-      //     plan: ["FE", "0T1"],
-      //     created_at: "04/09/2021",
-      //   },
-      // ],
       rolesLength: 0,
       roles: [],
       rolesData: {
@@ -196,7 +178,6 @@ export default {
       error: "",
       triggerEdit: false,
       editId: null,
-      selectedPlan: [], // Must be an array reference!
       selectedRole: null,
       optionsRole: [
         { value: null, text: "Select a Role" },
@@ -204,26 +185,17 @@ export default {
         { value: "Admin", text: "Admin" },
       ],
       userPlan: [{ text: "Make role a User Plan", value: "FE" }],
-      // optionsPlan: [
-      //   { text: "FE", value: "FE" },
-      //   { text: "0T01", value: "0T01" },
-      //   { text: "0T02", value: "0T02" },
-      //   { text: "0T03", value: "0T03" },
-      //   { text: "0T04", value: "0T04" },
-      // ],
+     
     };
   },
   methods: {
-    getRoles() {
+    getAllRoles() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllRoles", {
-          number: this.currentPage,
-          perPage: this.perPage,
-        })
+        .dispatch("getAllRoles")
         .then((res) => {
           this.roles = res.data.data;
-          this.rolesLength = res.data.meta.total;
+          // this.rolesLength = res.data.meta.total;
           console.log(res.data);
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);
@@ -235,14 +207,14 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    addRoles() {
+    addRole() {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-role");
       this.$store
-        .dispatch("addRoles", this.rolesData)
+        .dispatch("addRole", this.rolesData)
         .then((res) => {
           console.log(res);
-          this.getRoles();
+          this.getAllRoles();
           this.rolesData = {
             name: ""
           };
@@ -250,23 +222,23 @@ export default {
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.response);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
         });
     },
-    editRoles(id) {
+    editRole(id) {
      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-role");
       this.$store
-        .dispatch("editRoles", {
+        .dispatch("editRole", {
           id: id,
           data: this.rolesData,
         })
         .then((res) => {
           console.log(res);
-          this.getRoles();
+          this.getAllRoles();
           this.rolesData = {
             name: "",
           };
@@ -302,8 +274,7 @@ export default {
       this.$bvModal.show("modal-new-role");
       this.triggerEdit = true;
       this.editId = id;
-      this.client.name = data.name;
-      this.client.email = data.email;
+      this.rolesData.name = data.name;
     },
     clearField() {
       this.rolesData = {
@@ -312,31 +283,13 @@ export default {
       this.triggerEdit = false;
     },
     getCurrent(data) {
-      this.client.name = data;
-    },
-    orderSort(arr) {
-      return arr.sort(function (a, b) {
-        return a.id - b.id;
-      });
-    },
-    formatDate(date) {
-      var formatedDate = new Date(date);
-
-      return formatedDate.toLocaleDateString();
+      this.rolesData.name = data;
     },
   },
 
   mounted() {
-    this.getRoles();
+    this.getAllRoles();
   },
-  // computed: {
-  //   userLength() {
-  //     return this.roles.length;
-  //   },
-  //   orderedUser() {
-  //     return this.orderSort(this.roles);
-  //   },
-  // },
 };
 </script>
 

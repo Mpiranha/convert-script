@@ -35,8 +35,8 @@
             <loader-modal
               :loading-state="this.$store.state.loading"
             ></loader-modal>
-            <div v-if="users.length === 0" class="no-data-info">
-              Created agency will display here.
+            <div v-if="suggestionsLength === 0" class="no-data-info">
+              Created Suggestion will display here.
             </div>
             <table v-else class="table table-custom">
               <thead>
@@ -48,13 +48,26 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="user in orderedUser" :key="user.id">
-                  <td class="text-left">{{ formatDate(user.created_at) }}</td>
-                  <td class="text-left">{{ user.email }}</td>
-                  <td>27/08/2011</td>
+                <tr v-for="suggestion in suggestions" :key="suggestion.id">
+                  <td>
+                    {{ suggestion.message }}
+                  </td>
+                  <td class="text-left">{{ suggestion.user.email }}</td>
+                  <td>{{ formatDate(suggestion.created_at) }}</td>
                   <td class="text-left">
                     <nav class="nav flex-column action-view">
-                      <a class="nav-link" href="#" v-b-modal.modal-view-script>
+                      <a
+                        class="nav-link"
+                        href="#"
+                        v-b-modal.modal-view-script
+                        @click="
+                          getCurrent({
+                            message: suggestion.message,
+                            email: suggestion.user.email,
+                            date: formatDate(suggestion.created_at)
+                          })
+                        "
+                      >
                         View
                       </a>
                       <a class="nav-link" href="#">Mark as Read</a>
@@ -75,18 +88,13 @@
           >
             <div class="py-4">
               <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry s standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged.
+                {{ suggestionData.message }}
               </p>
-              <p> User email: emma@gmail.com </p>
+              <p>user email: {{ suggestionData.email }}</p>
             </div>
 
             <div class="d-flex justify-content-end">
-              <p class="mr-auto">27/08/2011</p>
+              <p class="mr-auto">{{this.suggestionData.date}}</p>
               <b-button
                 @click="$bvModal.hide('modal-view-script')"
                 class="close-modal"
@@ -97,14 +105,14 @@
                   triggerEdit ? editAgency(editId, campaignName) : addAgency()
                 "
                 class="save-modal"
-                >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
+                >Mark as Read</b-button
               >
             </div>
           </b-modal>
           <div class="d-flex justify-content-center">
             <b-pagination
               v-model="currentPage"
-              :total-rows="userLength"
+              :total-rows="suggestionsLength"
               :per-page="perPage"
               aria-controls="my-table"
               size="sm"
@@ -126,7 +134,7 @@ import Navbar from "@/components/TheNav.vue";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Users",
+  name: "Suggestions",
   mixins: [alertMixin],
   components: {
     Sidebar,
@@ -136,133 +144,59 @@ export default {
     return {
       perPage: 5,
       currentPage: 1,
-      users: [
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-      ],
-      userData: {
-        name: "",
+      suggestionsLength: 0,
+      suggestions: [],
+      suggestionData: {
+        message: "",
         email: "",
+        date: "",
       },
       error: "",
       triggerEdit: false,
       editId: null,
-      selectedPlan: [], // Must be an array reference!
-      selectedRole: null,
-      optionsRole: [
-        { value: null, text: "Select a Role" },
-        { value: "User", text: "User" },
-        { value: "Admin", text: "Admin" },
-      ],
-      optionsPlan: [
-        { text: "FE", value: "FE" },
-        { text: "0T01", value: "0T01" },
-        { text: "0T02", value: "0T02" },
-        { text: "0T03", value: "0T03" },
-        { text: "0T04", value: "0T04" },
-      ],
     };
   },
   methods: {
-    getAgency() {
+    getAllSuggestions() {
       this.$store
-        .dispatch("getAllAgency")
+        .dispatch("getAllSuggestions", {
+          number: this.currentPage,
+          perPage: this.perPage,
+        })
         .then((res) => {
-          this.users = res.data.data;
-          // console.log(res.data + "called now");
-          //this.loading = false;
+          this.suggestions = res.data.data;
+          this.suggestionsLength = res.data.meta.total;
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          // // console.log(error);
-          // this.error = error.response.data.errors.root;
-          // // this.error = error;
           console.log(error);
           //this.loading = false;
           this.$store.commit("updateLoadState", false);
         });
     },
-    addAgency() {
+    addSuggestion() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-
+      this.$bvModal.hide("modal-new-video");
       this.$store
-        .dispatch("addAgency", this.client)
+        .dispatch("addSuggestion", this.suggestionData)
         .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          // this.getCampaign();
-          this.getAgency();
+          console.log(res);
+          this.getAllSuggestions();
+          this.suggestionData = {
+            title: "",
+            description: "",
+            link: "",
+          };
+          this.makeToast("success", "Video added successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log(error);
+          this.error = error.response.data.error;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
-        });
-
-      // this.getCampaign();
-
-      // this.$vm.$forceUpdate();
-    },
-    editAgency(id) {
-      this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-      this.$store
-        .dispatch("editAgency", { id: id, data: this.client })
-        .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          this.getAgency();
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
     },
-    deleteAgency(id) {
-      //   this.loading = true;
-      this.$store.commit("updateLoadState", true);
-      this.$store
-        .dispatch("deleteAgency", id)
-        .then((res) => {
-          this.error = null;
-          this.getAgency();
-          console.log(res.data);
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
-        });
-
-      // this.getCampaign();
-    },
-
     openEditModal(id, data) {
       this.$bvModal.show("modal-new-client");
       this.triggerEdit = true;
@@ -278,7 +212,9 @@ export default {
       this.triggerEdit = false;
     },
     getCurrent(data) {
-      this.client.name = data;
+      this.suggestionData.message = data.message;
+      this.suggestionData.email = data.email;
+      this.suggestionData.date = data.date;
     },
     orderSort(arr) {
       return arr.sort(function (a, b) {
@@ -293,16 +229,9 @@ export default {
   },
 
   mounted() {
-    this.getAgency();
+    this.getAllSuggestions();
   },
-  computed: {
-    userLength() {
-      return this.users.length;
-    },
-    orderedUser() {
-      return this.orderSort(this.users);
-    },
-  },
+  computed: {},
 };
 </script>
 

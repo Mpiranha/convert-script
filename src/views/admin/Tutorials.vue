@@ -68,7 +68,12 @@
                           href="#"
                           >Edit</a
                         >
-                        <a @click="deleteVideo(video.id)" class="nav-link" href="#">Delete</a>
+                        <a
+                          @click="deleteVideo(video.id)"
+                          class="nav-link"
+                          href="#"
+                          >Delete</a
+                        >
                       </nav>
                     </td>
                   </tr>
@@ -195,7 +200,6 @@ export default {
           console.log(res.data);
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);
-
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
