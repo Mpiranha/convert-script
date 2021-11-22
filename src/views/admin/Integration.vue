@@ -3,11 +3,12 @@
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.name"
-        current-active="script-type"
+        current-active="integrationadmin"
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
         <div class="container scroll-content">
+          <div class="sec-padding">
           <div
             class="
               dashboard-top
@@ -21,10 +22,9 @@
             <div class="d-flex align-items-center">
               <button
                 @click="clearField"
-                class="btn btn-create"
+                class="btn btn-create py-2"
                 v-b-modal.modal-new-client
               >
-                
                 Save
               </button>
             </div>
@@ -45,30 +45,27 @@
             <loader-modal
               :loading-state="this.$store.state.loading"
             ></loader-modal>
-            <div v-if="users.length === 0" class="no-data-info">
+            <div v-if="platformsLength === 0" class="no-data-info">
               Created agency will display here.
             </div>
             <table v-else class="table table-custom">
               <thead>
                 <tr>
-                  <td>Name</td>
-                  
-                  <td>Status</td>
-                  
+                  <th>Name</th>
+
+                  <th class="text-right">Status</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="user in orderedUser" :key="user.id">
-                  
-                  <td class="">{{ user.firstName }}</td>
-                  
+                <tr v-for="platform in platforms" :key="platform.id">
+                  <td class="">{{ platform.name }}</td>
+
                   <td>
                     <label class="switch mb-0">
-                      <input type="checkbox" />
+                      <input :checked="platform.activate" type="checkbox" />
                       <span class="slider round"></span>
                     </label>
                   </td>
-                 
                 </tr>
               </tbody>
             </table>
@@ -76,7 +73,7 @@
           <div class="d-flex justify-content-center">
             <b-pagination
               v-model="currentPage"
-              :total-rows="userLength"
+              :total-rows="platformsLength"
               :per-page="perPage"
               aria-controls="my-table"
               size="sm"
@@ -85,66 +82,10 @@
               next-text=">"
             ></b-pagination>
           </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <b-modal
-      :hide-header="true"
-      id="modal-new-client"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
-      <!-- <div class="modal-head">
-        <h3 class="title">Give your campaign a name</h3>
-        <p class="desc">Only you can see this</p>
-      </div> -->
-
-      <b-form-group label="Name">
-        <b-form-input
-          id="name"
-          v-model="userData.name"
-          type="text"
-          class="input-table"
-        >
-        </b-form-input>
-      </b-form-group>
-
-      <b-form-group label="Description">
-        <b-form-textarea
-          id="name"
-          v-model="userData.email"
-          type="text"
-          class="input-table"
-          rows="4"
-        >
-        </b-form-textarea>
-      </b-form-group>
-
-      <b-form-group label="Upload">
-        <b-form-file
-          v-model="file"
-          :state="Boolean(file)"
-          placeholder="Choose a file or drop it here..."
-          drop-placeholder="Drop file here..."
-        >
-        </b-form-file>
-      </b-form-group>
-
-      <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
-          >Close</b-button
-        >
-        <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
-          class="save-modal"
-          >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
-        >
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -152,79 +93,46 @@
 // @ is an alias to /src
 import Sidebar from "@/components/admin/TheSidebarAdmin.vue";
 import Navbar from "@/components/TheNav.vue";
-import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Users",
+  name: "Platform Integration",
   mixins: [alertMixin],
   components: {
     Sidebar,
     Navbar,
-    DropdownTool,
   },
   data() {
     return {
       perPage: 5,
       currentPage: 1,
       file: null,
-      users: [
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-      ],
-      userData: {
-        name: "",
-        email: "",
-      },
+      platforms: [],
+      platformsLength: 0,
+      // userData: {
+      //   name: "",
+      //   email: "",
+      // },
       error: "",
       triggerEdit: false,
       editId: null,
-      selectedPlan: [], // Must be an array reference!
-      selectedRole: null,
-      optionsRole: [
-        { value: null, text: "Select a Role" },
-        { value: "User", text: "User" },
-        { value: "Admin", text: "Admin" },
-      ],
-      optionsPlan: [
-        { text: "FE", value: "FE" },
-        { text: "0T01", value: "0T01" },
-        { text: "0T02", value: "0T02" },
-        { text: "0T03", value: "0T03" },
-        { text: "0T04", value: "0T04" },
-      ],
     };
   },
   methods: {
-    getAgency() {
+    getAllIntegrations() {
+      this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllAgency")
+        .dispatch("getAllPlatformIntegration")
         .then((res) => {
-          this.users = res.data.data;
-          // console.log(res.data + "called now");
-          //this.loading = false;
+          this.platforms = res.data.data;
+          this.platformsLength = this.platforms.length;
+          // console.log(res.data);
+          // console.log("Current Page: " + this.currentPage);
+          // console.log("Per Page: " + this.perPage);
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          // // console.log(error);
-          // this.error = error.response.data.errors.root;
-          // // this.error = error;
           console.log(error);
-          //this.loading = false;
           this.$store.commit("updateLoadState", false);
         });
     },
@@ -324,16 +232,9 @@ export default {
     },
   },
   mounted() {
-    this.getAgency();
+    this.getAllIntegrations();
   },
-  computed: {
-    userLength() {
-      return this.users.length;
-    },
-    orderedUser() {
-      return this.orderSort(this.users);
-    },
-  },
+  computed: {},
 };
 </script>
 
