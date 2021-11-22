@@ -45,7 +45,7 @@
             <loader-modal
               :loading-state="this.$store.state.loading"
             ></loader-modal>
-            <div v-if="users.length === 0" class="no-data-info">
+            <div v-if="scriptTypeLength === 0" class="no-data-info">
               Created agency will display here.
             </div>
             <table v-else class="table table-custom">
@@ -59,13 +59,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="user in orderedUser" :key="user.id">
-                  <td scope="row">{{ user.email }}</td>
-                  <td class="text-left">{{ user.firstName }}</td>
-                  <td>{{ user.lastName }}</td>
+                <tr v-for="scriptType in scriptTypes" :key="scriptType.id">
+                  <td scope="row">{{ scriptType.id }}</td>
+                  <td class="text-left">{{ scriptType.name }}</td>
+                  <td>{{ scriptType.usage }}</td>
                   <td>
                     <label class="switch mb-0">
-                      <input type="checkbox" />
+                      <input :checked="scriptType.activate" type="checkbox" />
                       <span class="slider round"></span>
                     </label>
                   </td>
@@ -103,13 +103,14 @@
           <div class="d-flex justify-content-center">
             <b-pagination
               v-model="currentPage"
-              :total-rows="userLength"
+              :total-rows="scriptTypeLength"
               :per-page="perPage"
               aria-controls="my-table"
               size="sm"
               :hide-goto-end-buttons="true"
               prev-text="<"
               next-text=">"
+               @change="handlePageChange"
             ></b-pagination>
           </div>
         </div>
@@ -133,7 +134,7 @@
       <b-form-group label="Name">
         <b-form-input
           id="name"
-          v-model="userData.name"
+          v-model="scriptTypeData.name"
           type="text"
           class="input-table"
         >
@@ -143,7 +144,7 @@
       <b-form-group label="Description">
         <b-form-textarea
           id="name"
-          v-model="userData.email"
+          v-model="scriptTypeData.desc"
           type="text"
           class="input-table"
           rows="4"
@@ -153,8 +154,8 @@
 
       <b-form-group label="Upload">
         <b-form-file
-          v-model="file"
-          :state="Boolean(file)"
+          v-model="scriptTypeData.icon"
+          :state="Boolean(scriptTypeData.icon)"
           placeholder="Choose a file or drop it here..."
           drop-placeholder="Drop file here..."
         >
@@ -183,7 +184,7 @@ import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Users",
+  name: "ScriptType",
   mixins: [alertMixin],
   components: {
     Sidebar,
@@ -194,132 +195,104 @@ export default {
     return {
       perPage: 5,
       currentPage: 1,
-      file: null,
-      users: [
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-      ],
-      userData: {
+      scriptTypes: [],
+      scriptTypeLength: 0,
+      scriptTypeData: {
         name: "",
-        email: "",
+        desc: "",
+        icon: null,
       },
       error: "",
       triggerEdit: false,
       editId: null,
-      selectedPlan: [], // Must be an array reference!
-      selectedRole: null,
-      optionsRole: [
-        { value: null, text: "Select a Role" },
-        { value: "User", text: "User" },
-        { value: "Admin", text: "Admin" },
-      ],
-      optionsPlan: [
-        { text: "FE", value: "FE" },
-        { text: "0T01", value: "0T01" },
-        { text: "0T02", value: "0T02" },
-        { text: "0T03", value: "0T03" },
-        { text: "0T04", value: "0T04" },
-      ],
     };
   },
   methods: {
-    getAgency() {
+    getAllScriptType() {
+      this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllAgency")
+        .dispatch("getAllScriptType", {
+          number: this.currentPage,
+          perPage: this.perPage,
+        })
         .then((res) => {
-          this.users = res.data.data;
-          // console.log(res.data + "called now");
-          //this.loading = false;
+          this.scriptTypes = res.data.data;
+          this.scriptTypeLength = res.data.meta.total;
+          console.log(res.data);
+          console.log("Current Page: " + this.currentPage);
+          console.log("Per Page: " + this.perPage);
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          // // console.log(error);
-          // this.error = error.response.data.errors.root;
-          // // this.error = error;
           console.log(error);
-          //this.loading = false;
           this.$store.commit("updateLoadState", false);
         });
     },
-    addAgency() {
+    addScriptType() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-
+      this.$bvModal.hide("modal-new-video");
       this.$store
-        .dispatch("addAgency", this.client)
+        .dispatch("addScriptType", this.videoData)
         .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          // this.getCampaign();
-          this.getAgency();
+          console.log(res);
+          this.getAllScriptType();
+          this.scriptTypeData = {
+            name: "",
+            desc: "",
+            icon: null,
+          };
+          this.makeToast("success", "ScriptType added successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log(error);
+          this.error = error.response.data.error;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
-        });
-
-      // this.getCampaign();
-
-      // this.$vm.$forceUpdate();
-    },
-    editAgency(id) {
-      this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-      this.$store
-        .dispatch("editAgency", { id: id, data: this.client })
-        .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          this.getAgency();
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
     },
-    deleteAgency(id) {
-      //   this.loading = true;
+    editScriptType(id) {
       this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modal-new-video");
       this.$store
-        .dispatch("deleteAgency", id)
+        .dispatch("editScriptType", {
+          id: id,
+          data: this.scriptTypeData,
+        })
         .then((res) => {
-          this.error = null;
-          this.getAgency();
-          console.log(res.data);
-          //   this.loading = false;
+          console.log(res);
+          this.getAllScriptType();
+          this.scriptTypeData = {
+            name: "",
+            desc: "",
+            icon: "",
+          };
+          this.makeToast("success", "Script Type edited successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
+          console.log("error: " + error.response.data.message);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
-
-      // this.getCampaign();
+    },
+    deleteScriptType(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("deleteScriptType", id)
+        .then((res) => {
+          console.log(res);
+          this.getAllScriptType();
+          this.makeToast("success", "Script Type deleted successfully");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
+        });
     },
 
     openEditModal(id, data) {
@@ -349,18 +322,17 @@ export default {
 
       return formatedDate.toLocaleDateString();
     },
+
+    handlePageChange(value) {
+      this.currentPage = value;
+      this.getAllScriptType();
+      console.log("Value: " + value);
+    },
   },
   mounted() {
-    this.getAgency();
+    this.getAllScriptType();
   },
-  computed: {
-    userLength() {
-      return this.users.length;
-    },
-    orderedUser() {
-      return this.orderSort(this.users);
-    },
-  },
+  computed: {},
 };
 </script>
 

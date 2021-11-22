@@ -17,19 +17,19 @@
               text="Users"
               box-type="leads"
               image-url="Campaigns boxes.svg"
-              box-value="5"
+              :box-value="stat.user"
             ></dashboard-box>
             <dashboard-box
               text="Transactions"
               box-type="links"
               image-url="script boxes.svg"
-              box-value="9"
+              :box-value="stat.transactions"
             ></dashboard-box>
             <dashboard-box
               text="Scripts"
               box-type="campaign"
               image-url="Published boxes.svg"
-              box-value="3"
+              :box-value="stat.published"
             ></dashboard-box>
           </div>
 
@@ -70,6 +70,7 @@ export default {
   },
   data() {
     return {
+      stat: [],
       series: [
         {
           name: "This Month",
@@ -137,6 +138,26 @@ export default {
       },
     };
   },
+  methods: {
+    getStatInfo() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getStatInfo")
+        .then((res) => {
+          this.stat = res.data.data.message;
+        
+          console.log(res.data);
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+  },
+  mounted() {
+    this.getStatInfo();
+  }
 };
 </script>
 

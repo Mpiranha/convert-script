@@ -18,7 +18,6 @@
             "
           >
             <h6 class="title">Transactions (5)</h6>
-          
           </div>
 
           <div class="content-wrap set-min-h pt-4 pb-5">
@@ -36,7 +35,7 @@
             <loader-modal
               :loading-state="this.$store.state.loading"
             ></loader-modal>
-            <div v-if="users.length === 0" class="no-data-info">
+            <div v-if="transactionsLength === 0" class="no-data-info">
               Created agency will display here.
             </div>
             <table v-else class="table table-custom">
@@ -50,16 +49,15 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="user in orderedUser" :key="user.id">
-                  <td scope="row">{{ user.email }}</td>
-                  <td class="text-left">{{ formatDate(user.created_at) }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>
-
-                  </td>
+                <tr v-for="transaction in transactions" :key="transaction.id">
+                  <td scope="row">{{ transaction.transaction_id }}</td>
+                  <td class="text-left">{{ formatDate(transaction.created_at) }}</td>
+                   <td> {{ transaction.user_id }} </td>
+                  <td>{{ transaction.plan_id }}</td>
+                 
                   <td class="text-left">
                     <label class="switch mb-0">
-                      <input type="checkbox" />
+                      <input :checked="transaction.activate" type="checkbox" />
                       <span class="slider round"></span>
                     </label>
                   </td>
@@ -70,13 +68,14 @@
           <div class="d-flex justify-content-center">
             <b-pagination
               v-model="currentPage"
-              :total-rows="userLength"
+              :total-rows="transactionsLength"
               :per-page="perPage"
               aria-controls="my-table"
               size="sm"
               :hide-goto-end-buttons="true"
               prev-text="<"
               next-text=">"
+              @change="handlePageChange"
             ></b-pagination>
           </div>
         </div>
@@ -92,7 +91,7 @@ import Navbar from "@/components/TheNav.vue";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Users",
+  name: "Transactions",
   mixins: [alertMixin],
   components: {
     Sidebar,
@@ -102,149 +101,30 @@ export default {
     return {
       perPage: 5,
       currentPage: 1,
-      users: [
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-        {
-          email: "test@gmail.com",
-          firstName: "Test",
-          lastName: "Test",
-          status: false,
-          plan: ["FE", "0T1"],
-          created_at: "04/09/2021",
-        },
-      ],
-      userData: {
-        name: "",
-        email: "",
-      },
+      transactions: [],
+      transactionsLength: 1,
       error: "",
       triggerEdit: false,
       editId: null,
-      selectedPlan: [], // Must be an array reference!
-      selectedRole: null,
-      optionsRole: [
-        { value: null, text: "Select a Role" },
-        { value: "User", text: "User" },
-        { value: "Admin", text: "Admin" },
-      ],
-      optionsPlan: [
-        { text: "FE", value: "FE" },
-        { text: "0T01", value: "0T01" },
-        { text: "0T02", value: "0T02" },
-        { text: "0T03", value: "0T03" },
-        { text: "0T04", value: "0T04" },
-      ],
     };
   },
   methods: {
-    getAgency() {
+    getAllTransactions() {
+      this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllAgency")
+        .dispatch("getAllTransactions")
         .then((res) => {
-          this.users = res.data.data;
-          // console.log(res.data + "called now");
-          //this.loading = false;
+          this.transactions = res.data.data;
+          // this.transactionsLength = res.data.meta.total;
+          console.log(res.data);
+          console.log("Current Page: " + this.currentPage);
+          console.log("Per Page: " + this.perPage);
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          // // console.log(error);
-          // this.error = error.response.data.errors.root;
-          // // this.error = error;
           console.log(error);
-          //this.loading = false;
           this.$store.commit("updateLoadState", false);
         });
-    },
-    addAgency() {
-      this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-
-      this.$store
-        .dispatch("addAgency", this.client)
-        .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          // this.getCampaign();
-          this.getAgency();
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error.message);
-          this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
-        });
-
-      // this.getCampaign();
-
-      // this.$vm.$forceUpdate();
-    },
-    editAgency(id) {
-      this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-      this.$store
-        .dispatch("editAgency", { id: id, data: this.client })
-        .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          this.getAgency();
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
-        });
-    },
-    deleteAgency(id) {
-      //   this.loading = true;
-      this.$store.commit("updateLoadState", true);
-      this.$store
-        .dispatch("deleteAgency", id)
-        .then((res) => {
-          this.error = null;
-          this.getAgency();
-          console.log(res.data);
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
-        });
-
-      // this.getCampaign();
-    },
-
-    openEditModal(id, data) {
-      this.$bvModal.show("modal-new-client");
-      this.triggerEdit = true;
-      this.editId = id;
-      this.client.name = data.name;
-      this.client.email = data.email;
-    },
-    clearField() {
-      this.client = {
-        name: "",
-        email: "",
-      };
-      this.triggerEdit = false;
-    },
-    getCurrent(data) {
-      this.client.name = data;
     },
     orderSort(arr) {
       return arr.sort(function (a, b) {
@@ -253,22 +133,19 @@ export default {
     },
     formatDate(date) {
       var formatedDate = new Date(date);
-
       return formatedDate.toLocaleDateString();
+    },
+    handlePageChange(value) {
+      this.currentPage = value;
+      this.getAllVideos();
+      console.log("Value: " + value);
     },
   },
 
   mounted() {
-    this.getAgency();
+    this.getAllTransactions();
   },
-  computed: {
-    userLength() {
-      return this.users.length;
-    },
-    orderedUser() {
-      return this.orderSort(this.users);
-    },
-  },
+  computed: {},
 };
 </script>
 

@@ -138,7 +138,8 @@ export default {
         })
         .catch((error) => {
           // console.log(error);
-          this.error = error.response.data.errors.root;
+          this.error = error;
+          console.log(error)
           // this.error = error;
         });
       // const ( username, password ) = this

@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 // import {
 //   store
 // } from '../store/index.js'
-// import store from '../store'
+import store from '../store'
 
 import Dashboard from '../views/Dashboard.vue'
 import Login from '@/views/Login'
@@ -241,6 +241,7 @@ const routes = [{
       requiresAuth: false
     }
   },
+  // Admin End points
   {
     path: '/admin',
     name: 'Stat',
@@ -385,76 +386,76 @@ const router = new VueRouter({
   routes
 })
 
-// const parseJwt = (token) => {
-//   var base64Url = token.split('.')[1];
-//   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-//   var jsonPayload = decodeURIComponent(Buffer.from(base64, "base64").toString("ascii").split("").map(function (c) {
-//     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-//   }).join(''));
+const parseJwt = (token) => {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(Buffer.from(base64, "base64").toString("ascii").split("").map(function (c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
 
-//   return JSON.parse(jsonPayload);
-// };
-
-
-// router.beforeEach((to, from, next) => {
-//   let role = store.state.user.role;
-//   console.log(window.location.hash.split('#')[1])
-//   if (to.matched.some(record => record.meta.requiresAuth)) {
-//     const loginpath = window.location.hash.split('#')[1]
+  return JSON.parse(jsonPayload);
+};
 
 
-//     if (to.matched.some(record => record.meta.adminAuth)) {
-//       alert("Admin Only")
-//       alert("User role: " + role)
-//       if (role === "Admin") {
-//         alert("You're an Admin")
-//         next()
-//       } else {
-//         next({
-//           name: 'NotFound',
-//           query: {
-//             from: loginpath
-//           }
-//         })
-//         return
-//       }
-//     }
-
-//     // if (store.getters.isAuthenticated) {
-//     //   if (localStorage.token) {
-//     //     const jwtPayload = parseJwt(localStorage.token);
-//     //     if (jwtPayload.exp < Date.now() / 1000) {
-//     //       // token expired
-//     //       store.dispatch("logout");
-//     //       next("/login");
-//     //     }
-//     //     next();
-//     //   } else {
-//     //     next("/");
-//     //   }
-
-//     //   store.dispatch("getUser")
-//     //   next()
-
-//     //   return
-//     // }
+router.beforeEach((to, from, next) => {
+  let role = store.state.user.role;
+  console.log(window.location.hash.split('#')[1])
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    const loginpath = window.location.hash.split('#')[1]
 
 
+    if (to.matched.some(record => record.meta.adminAuth)) {
+      // alert("Admin Only")
+      // alert("User role: " + role)
+      if (role === "Admin") {
+        // alert("You're an Admin")
+        next()
+      } else {
+        next({
+          name: 'NotFound',
+          query: {
+            from: loginpath
+          }
+        })
+        return
+      }
+    }
 
-//     // next('/login')
-//     console.log(loginpath)
-//     next({
-//       name: 'Login',
-//       query: {
-//         from: loginpath
-//       }
-//     })
-//   } else {
-//     next()
-//   }
+    if (store.getters.isAuthenticated) {
+      if (localStorage.token) {
+        const jwtPayload = parseJwt(localStorage.token);
+        if (jwtPayload.exp < Date.now() / 1000) {
+          // token expired
+          store.dispatch("logout");
+          next("/login");
+        }
+        next();
+      } else {
+        next("/");
+      }
+
+      store.dispatch("getUser")
+      next()
+
+      return
+    }
 
 
-// })
+
+    // next('/login')
+    console.log(loginpath)
+    next({
+      name: 'Login',
+      query: {
+        from: loginpath
+      }
+    })
+  } else {
+    next()
+  }
+
+
+})
 
 
 

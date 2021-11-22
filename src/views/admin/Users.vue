@@ -122,14 +122,12 @@
           </div>
           <div class="d-flex justify-content-center">
             <b-pagination
-            
               v-model="currentPage"
               :total-rows="userLength"
               :per-page="perPage"
               aria-controls="my-table"
               size="sm"
               :hide-goto-end-buttons="true"
-             
               prev-text="<"
               next-text=">"
             ></b-pagination>
@@ -251,16 +249,43 @@ export default {
         { value: "User", text: "User" },
         { value: "Admin", text: "Admin" },
       ],
+
       optionsPlan: [
-        { text: "FE", value: "FE" },
-        { text: "0T01", value: "0T01" },
-        { text: "0T02", value: "0T02" },
-        { text: "0T03", value: "0T03" },
-        { text: "0T04", value: "0T04" },
-      ],
+        { text: "",
+          value: "" 
+       }
+       ],
+      plans: [],
     };
   },
   methods: {
+    getSharedPlans() {
+      this.$store
+        .dispatch("getSharedPlan")
+        .then((res) => {
+          this.plans = res.data.data;
+          this.filterPlans(this.plans);
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    filterPlans(plans) {
+      plans.forEach((plan, index) => {
+        this.optionsPlan[index] = {
+          text: plan.name,
+          value: plan.name
+        }
+      });  
+    },
     getAllUsers() {
       this.$store
         .dispatch("getAllUsers")
@@ -377,6 +402,7 @@ export default {
 
   mounted() {
     this.getAllUsers();
+    this.getSharedPlans();
   },
   computed: {
     userLength() {
@@ -384,7 +410,7 @@ export default {
     },
     orderedUser() {
       return this.orderSort(this.users);
-    }
+    },
   },
 };
 </script>
@@ -400,5 +426,9 @@ export default {
 
 .plan-types::after {
   content: ",";
+}
+
+.custom-control-inline {
+  margin-bottom: 1rem;
 }
 </style>

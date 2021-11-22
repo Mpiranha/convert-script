@@ -17,7 +17,7 @@ export default {
     props: {
         imageUrl: String,
         text: String,
-        boxValue: String,
+        boxValue: Number,
         boxType: String
     }
 };

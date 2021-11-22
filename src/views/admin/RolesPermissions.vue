@@ -258,7 +258,7 @@ export default {
         .dispatch("deleteRoles", id)
         .then((res) => {
           console.log(res);
-          this.getAgency();
+          this.getAllRoles();
           this.makeToast("success", "Role deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
