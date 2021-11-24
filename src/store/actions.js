@@ -93,7 +93,7 @@ export default {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.get(`${baseUrl}/api/v1/user/profile`)
                 .then(resp => {
-                    // localStorage.setItem('user', JSON.stringify(resp.data.data))
+                    localStorage.setItem('user', JSON.stringify(resp.data.data))
                     commit("get_user_success", {
                         user: resp.data.data
                     })

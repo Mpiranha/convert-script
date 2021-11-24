@@ -368,7 +368,7 @@ const routes = [{
       adminAuth: true
     }
   },
-  
+
 
   // {
   //   path: '/about',
@@ -398,61 +398,113 @@ const parseJwt = (token) => {
 
 
 router.beforeEach((to, from, next) => {
-  let role = store.state.user.role;
   console.log(window.location.hash.split('#')[1])
+  const loginpath = window.location.hash.split('#')[1];
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    const loginpath = window.location.hash.split('#')[1]
-
-
-    if (to.matched.some(record => record.meta.adminAuth)) {
-      // alert("Admin Only")
-      // alert("User role: " + role)
-      if (role === "Admin") {
-        // alert("You're an Admin")
-        next()
-      } else {
-        next({
-          name: 'NotFound',
-          query: {
-            from: loginpath
-          }
-        })
-        return
-      }
-    }
 
     if (store.getters.isAuthenticated) {
+      console.log('authenticated');
       if (localStorage.token) {
         const jwtPayload = parseJwt(localStorage.token);
         if (jwtPayload.exp < Date.now() / 1000) {
           // token expired
           store.dispatch("logout");
           next("/login");
+
+          return;
         }
-        next();
-      } else {
-        next("/");
       }
 
-      store.dispatch("getUser")
-      next()
 
-      return
+
+      // store.dispatch("getUser");
+      let role = store.state.user.role;
+      console.log("Role " + role);
+
+
+
+
+      if (to.matched.some(record => record.meta.adminAuth)) {
+
+        if (role === "Admin") {
+          next();
+          return;
+        } else {
+
+          next({
+            name: "NotFound",
+            query: {
+              from: window.location.hash.split('#')[1]
+            }
+          });
+        }
+      }
+
+      next();
+    } else {
+      console.log("Not Authenticated");
+      next({
+        name: 'Login',
+        query: {
+          from: loginpath
+        }
+      })
     }
-
-
-
-    // next('/login')
-    console.log(loginpath)
-    next({
-      name: 'Login',
-      query: {
-        from: loginpath
-      }
-    })
   } else {
-    next()
+    next();
   }
+  // if (to.matched.some(record => record.meta.requiresAuth)) {
+  //   const loginpath = window.location.hash.split('#')[1]
+
+  //   if (to.matched.some(record => record.meta.adminAuth)) {
+  //     // alert("Admin Only")
+  //     // alert("User role: " + role)
+  //     if (role === "Admin") {
+  //       // alert("You're an Admin")
+  //       next()
+  //     } else {
+  //       next({
+  //         name: 'NotFound',
+  //         query: {
+  //           from: loginpath
+  //         }
+  //       })
+  //       return
+  //     }
+  //   }
+
+  //   if (store.getters.isAuthenticated) {
+  //     if (localStorage.token) {
+  //       const jwtPayload = parseJwt(localStorage.token);
+  //       if (jwtPayload.exp < Date.now() / 1000) {
+  //         // token expired
+  //         store.dispatch("logout");
+  //         next("/login");
+  //       }
+  //       next();
+  //     } else {
+  //       next("/");
+  //     }
+
+  //     store.dispatch("getUser")
+  //     next()
+
+  //     return
+  //   }
+
+
+
+  //   // next('/login')
+  //   console.log(loginpath)
+  //   next({
+  //     name: 'Login',
+  //     query: {
+  //       from: loginpath
+  //     }
+  //   })
+  // } else {
+  //   next()
+  // }
 
 
 })

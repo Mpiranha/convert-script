@@ -50,10 +50,10 @@
               </thead>
               <tbody>
                 <tr v-for="transaction in transactions" :key="transaction.id">
-                  <td scope="row">{{ transaction.transaction_id }}</td>
+                  <td scope="row">{{ transaction.transactionId }}</td>
                   <td class="text-left">{{ formatDate(transaction.created_at) }}</td>
-                   <td> {{ transaction.user_id }} </td>
-                  <td>{{ transaction.plan_id }}</td>
+                   <td> {{ transaction.user.email }} </td>
+                  <td>{{ transaction.plan }}</td>
                  
                   <td class="text-left">
                     <label class="switch mb-0">
