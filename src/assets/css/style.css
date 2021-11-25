@@ -153,6 +153,20 @@ body {
     border: none;
 } */
 
+.drop-link {
+    text-decoration: none !important;
+    color: #22262a;
+}
+
+.drop-link img {
+    width: 1rem;
+    margin-right: 0.3rem;
+}
+
+.drop-link:hover {
+    color: #22262a;
+}
+
 .table-custom td,
 .table-custom th {
     padding: 1.55rem 1.6rem !important;

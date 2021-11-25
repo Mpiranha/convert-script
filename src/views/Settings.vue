@@ -20,13 +20,27 @@
 
           <div class="content-wrap extra-margin-left-wrap">
             <b-form-group
-              label="Name"
+              label="First Name"
               label-for="name"
               label-class="form-label"
             >
               <b-form-input
                 id="name"
-                v-model="form.name"
+                v-model="firstname"
+                type="text"
+                class="input-table"
+              >
+              </b-form-input>
+            </b-form-group>
+
+             <b-form-group
+              label="Last Name"
+              label-for="name"
+              label-class="form-label"
+            >
+              <b-form-input
+                id="name"
+                v-model="lastname"
                 type="text"
                 class="input-table"
               >
@@ -97,6 +111,8 @@ export default {
   },
   data() {
     return {
+      firstname: "",
+      lastname: "",
       form: {
         name: "",
         email: "",
@@ -133,6 +149,11 @@ export default {
       this.assignUser(newValue);
       this.populateForm();
     },
+    computed: {
+      username() {
+        return `${this.lastname} ${this.firstname}`;
+      }
+    }
   },
 };
 </script>

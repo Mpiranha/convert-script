@@ -23,7 +23,7 @@
                 <button
                   @click="clearField"
                   class="btn btn-create"
-                  v-b-modal.modal-new-client
+                  v-b-modal.modal-new-bonus
                 >
                   <span>+</span>
                   New Bonus
@@ -62,8 +62,8 @@
 
                     <td class="text-right">
                       <nav class="nav flex-column action-view">
-                        <a class="nav-link" href="#">Edit</a>
-                        <a class="nav-link" href="#">Delete</a>
+                        <a @click="openEditModal(bonus.id, bonus)" class="nav-link" href="#">Edit</a>
+                        <a @click="deleteBonus(bonus.id)" class="nav-link" href="#">Delete</a>
                       </nav>
                     </td>
                   </tr>
@@ -88,18 +88,13 @@
     </div>
     <b-modal
       :hide-header="true"
-      id="modal-new-client"
+      id="modal-new-bonus"
       centered
       size="md"
       :hide-footer="true"
       dialog-class="control-width"
       content-class="modal-main"
     >
-      <!-- <div class="modal-head">
-        <h3 class="title">Give your campaign a name</h3>
-        <p class="desc">Only you can see this</p>
-      </div> -->
-
       <b-form-group label="Name">
         <b-form-input
           id="name"
@@ -112,7 +107,7 @@
       <b-form-group label="Description">
         <b-form-textarea
           id="name"
-          v-model="bonusData.desc"
+          v-model="bonusData.description"
           type="text"
           class="input-table"
           rows="4"
@@ -128,22 +123,14 @@
         >
         </b-form-input>
       </b-form-group>
-      <b-form-group label="" v-slot="{ ariaDescribedby }">
-        <b-form-checkbox-group
-          id="checkbox-group-1"
-          :options="userPlan"
-          :aria-describedby="ariaDescribedby"
-          name="flavour-1"
-        ></b-form-checkbox-group>
-      </b-form-group>
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
+        <b-button @click="$bvModal.hide('modal-new-bonus')" class="close-modal"
           >Close</b-button
         >
         <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
+          @click="triggerEdit ? editBonus(editId, bonusData) : addBonus()"
           class="save-modal"
-          >Save</b-button
+          >{{triggerEdit ? "Edit" : "Save"}}</b-button
         >
       </div>
     </b-modal>
@@ -169,10 +156,11 @@ export default {
       currentPage: 1,
       bonuses: [],
       bonusesLength: 0,
+      triggerEdit: false,
       bonusData: {
         name: "",
-        desc: "",
-        url: ""
+        description: "",
+        url: "",
       },
     };
   },
@@ -194,20 +182,20 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    addVideo() {
+    addBonus() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-video");
+      this.$bvModal.hide("modal-new-bonus");
       this.$store
-        .dispatch("addVideo", this.videoData)
+        .dispatch("addBonuses", this.bonusData)
         .then((res) => {
           console.log(res);
-          this.getAllVideos();
-          this.videoData = {
-            title: "",
+          this.getAllBonuses();
+          this.bonusData = {
+            name: "",
             description: "",
-            link: "",
+            url: "",
           };
-          this.makeToast("success", "Video added successfully");
+          this.makeToast("success", "Bonus added successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -217,23 +205,23 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    editVideo(id) {
+    editBonus(id) {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-video");
+      this.$bvModal.hide("modal-new-bonus");
       this.$store
-        .dispatch("editVideo", {
+        .dispatch("editBonuses", {
           id: id,
-          data: this.videoData,
+          data: this.bonusData,
         })
         .then((res) => {
           console.log(res);
-          this.getAllVideos();
-          this.videoData = {
-            title: "",
+          this.getAllBonuses();
+          this.bonusData = {
+            name: "",
             description: "",
-            link: "",
+            url: "",
           };
-          this.makeToast("success", "Video edited successfully");
+          this.makeToast("success", "Bonus edited successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -243,14 +231,14 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    deleteVideo(id) {
+    deleteBonus(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deleteVideo", id)
+        .dispatch("deleteBonuses", id)
         .then((res) => {
           console.log(res);
-          this.getAllVideos();
-          this.makeToast("success", "Video deleted successfully");
+          this.getAllBonuses();
+          this.makeToast("success", "Bonus deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -259,36 +247,20 @@ export default {
           this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
         });
-      // this.$store
-      //   .dispatch("deleteAgency", id)
-      //   .then((res) => {
-      //     this.error = null;
-      //     this.getAgency();
-      //     console.log(res.data);
-      //     //   this.loading = false;
-      //     this.$store.commit("updateLoadState", false);
-      //   })
-      //   .catch((error) => {
-      //     console.log(error.message);
-      //     //   this.loading = false;
-      //     this.$store.commit("updateLoadState", false);
-      //     // this.error = error.response.data.errors.root;
-      //     // this.error = error;
-      //   });
-
-      // this.getCampaign();
     },
     openEditModal(id, data) {
-      this.$bvModal.show("modal-new-client");
+      this.$bvModal.show("modal-new-bonus");
       this.triggerEdit = true;
       this.editId = id;
-      this.client.name = data.name;
-      this.client.email = data.email;
+      this.bonusData.name = data.name;
+      this.bonusData.description = data.description;
+      this.bonusData.url = data.url;
     },
     clearField() {
-      this.client = {
+      this.bonusData = {
         name: "",
-        email: "",
+        description: "",
+        url: ""
       };
       this.triggerEdit = false;
     },
@@ -302,7 +274,6 @@ export default {
     },
     formatDate(date) {
       var formatedDate = new Date(date);
-
       return formatedDate.toLocaleDateString();
     },
   },
@@ -310,9 +281,7 @@ export default {
   mounted() {
     this.getAllBonuses();
   },
-  computed: {
-    
-  },
+  computed: {},
 };
 </script>
 

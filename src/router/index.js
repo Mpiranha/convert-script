@@ -306,7 +306,7 @@ const routes = [{
     }
   },
   {
-    path: '/admin/:name/permission',
+    path: '/admin/:id/permission',
     name: 'SetPermission',
     component: SetPermission,
     meta: {
@@ -418,7 +418,7 @@ router.beforeEach((to, from, next) => {
 
 
       // store.dispatch("getUser");
-      let role = store.state.user.role;
+      let role = store.state.user.role || JSON.parse(localStorage.getItem('user'));
       console.log("Role " + role);
 
 

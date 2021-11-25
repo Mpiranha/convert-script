@@ -17,7 +17,7 @@
               mb-5
             "
           >
-            <h6 class="title">Users (5)</h6>
+            <h6 class="title">Users ({{ userLength }})</h6>
             <div class="d-flex align-items-center">
               <button
                 @click="clearField"
@@ -68,10 +68,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="user in orderedUser" :key="user.id">
+                <tr v-for="user in users" :key="user.id">
                   <td scope="row">{{ user.email }}</td>
-                  <td>{{ user.name }}</td>
-                  <td>{{ user.lastName }}</td>
+                  <td class="text-left">{{ getSeperateName(user.name) }}</td>
+                  <td>{{ getSeperateName(user.name, "lastname") }}</td>
                   <td>
                     <label class="switch mb-0">
                       <input type="checkbox" />
@@ -154,9 +154,10 @@
           <b-form-group label="Last Name">
             <b-form-input
               id="name"
-              v-model="userData.name"
+              v-model="lastname"
               type="text"
               class="input-table"
+              @input="updateName"
             >
             </b-form-input>
           </b-form-group>
@@ -165,9 +166,10 @@
           <b-form-group label="First Name">
             <b-form-input
               id="name"
-              v-model="userData.name"
+              v-model="firstname"
               type="text"
               class="input-table"
+              @input="updateName"
             >
             </b-form-input>
           </b-form-group>
@@ -186,7 +188,7 @@
 
       <b-form-group label="Role">
         <b-form-select
-          v-model="selectedRole"
+          v-model="userData.role"
           :options="optionsRole"
         ></b-form-select>
       </b-form-group>
@@ -194,7 +196,7 @@
       <b-form-group label="Select Plan" v-slot="{ ariaDescribedby }">
         <b-form-checkbox-group
           id="checkbox-group-1"
-          v-model="selectedPlan"
+          v-model="userData.plans"
           :options="optionsPlan"
           :aria-describedby="ariaDescribedby"
           name="flavour-1"
@@ -235,9 +237,15 @@ export default {
       perPage: 5,
       currentPage: 1,
       users: [],
+      userLength: 0,
+      firstname: "",
+      lastname: "",
       userData: {
         name: "",
+        role: null,
         email: "",
+        plans: []
+        
       },
       error: "",
       triggerEdit: false,
@@ -250,15 +258,14 @@ export default {
         { value: "Admin", text: "Admin" },
       ],
 
-      optionsPlan: [
-        { text: "",
-          value: "" 
-       }
-       ],
+      optionsPlan: [{ text: "", value: "" }],
       plans: [],
     };
   },
   methods: {
+    updateName() {
+      this.userData.name = this.lastname + " " + this.firstname;
+    },
     getSharedPlans() {
       this.$store
         .dispatch("getSharedPlan")
@@ -282,101 +289,107 @@ export default {
       plans.forEach((plan, index) => {
         this.optionsPlan[index] = {
           text: plan.name,
-          value: plan.name
-        }
-      });  
+          value: plan.id,
+        };
+      });
     },
     getAllUsers() {
+      this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllUsers")
+        .dispatch("getAllUsers", {
+          number: this.currentPage,
+          perPage: this.perPage,
+        })
         .then((res) => {
           this.users = res.data.data;
-          // console.log(res.data + "called now");
-          //this.loading = false;
+          this.userLength = res.data.meta.total;
+
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          // // console.log(error);
-          // this.error = error.response.data.errors.root;
-          // // this.error = error;
           console.log(error);
-          //this.loading = false;
           this.$store.commit("updateLoadState", false);
         });
     },
-    addAgency() {
+    addUser() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-
+      this.$bvModal.hide("modal-new-video");
       this.$store
-        .dispatch("addAgency", this.client)
+        .dispatch("addUser", this.userData)
         .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          // this.getCampaign();
-          this.getAgency();
+          console.log(res);
+          this.getAllVideos();
+          this.userData = {
+            name: "",
+            role: "",
+            email: "",
+            plans: []
+          };
+          this.makeToast("success", "Video added successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log(error);
+          this.error = error.response.data.error;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
-        });
-
-      // this.getCampaign();
-
-      // this.$vm.$forceUpdate();
-    },
-    editAgency(id) {
-      this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-      this.$store
-        .dispatch("editAgency", { id: id, data: this.client })
-        .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          this.getAgency();
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
     },
-    deleteAgency(id) {
-      //   this.loading = true;
+    editUser(id) {
       this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modal-new-video");
       this.$store
-        .dispatch("deleteAgency", id)
+        .dispatch("editUser", {
+          id: id,
+          data: this.userData,
+        })
         .then((res) => {
-          this.error = null;
-          this.getAgency();
-          console.log(res.data);
-          //   this.loading = false;
+          console.log(res);
+          this.getAllVideos();
+          this.userData = {
+            name: "",
+            role: "",
+            email: "",
+            plans: []
+          };
+          this.makeToast("success", "User edited successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
+          console.log("error: " + error.response.data.message);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
-
-      // this.getCampaign();
+    },
+    deleteUser(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("deleteVideo", id)
+        .then((res) => {
+          console.log(res);
+          this.getAllVideos();
+          this.makeToast("success", "Video deleted successfully");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
+        });
     },
 
     openEditModal(id, data) {
       this.$bvModal.show("modal-new-client");
       this.triggerEdit = true;
       this.editId = id;
-      this.client.name = data.name;
-      this.client.email = data.email;
+      this.lastname = this.getSeperateName(data.name, "lastname");
+      this.firstname = this.getSeperateName(data.name);
+      this.userData.role = data.role;
+      console.log(data);
+      this.userData.email = data.email;
+      this.userData.plans = data.plans;
     },
     clearField() {
       this.client = {
@@ -398,20 +411,20 @@ export default {
 
       return formatedDate.toLocaleDateString();
     },
+    getSeperateName(name, type) {
+      if (type == "lastname") {
+        return name.split(" ")[0];
+      } else {
+        return name.split(" ")[1];
+      }
+    },
   },
 
   mounted() {
     this.getAllUsers();
     this.getSharedPlans();
   },
-  computed: {
-    userLength() {
-      return this.users.length;
-    },
-    orderedUser() {
-      return this.orderSort(this.users);
-    },
-  },
+  computed: {},
 };
 </script>
 
