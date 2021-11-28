@@ -42,6 +42,7 @@ import Configuration from '@/views/admin/Configuration'
 import Bonuses from '@/views/admin/Bonuses'
 import Tutorials from '@/views/admin/Tutorials'
 import AgencyFile from '@/views/admin/AgencyFile'
+import Plans from '@/views/admin/Plans'
 
 
 
@@ -279,7 +280,7 @@ const routes = [{
     }
   },
   {
-    path: '/admin/script/type/:id',
+    path: '/admin/script/type/:id/input',
     name: 'ScriptTypesInput',
     component: ScriptInput,
     meta: {
@@ -306,7 +307,7 @@ const routes = [{
     }
   },
   {
-    path: '/admin/:id/permission',
+    path: '/admin/roles/:id/permissions',
     name: 'SetPermission',
     component: SetPermission,
     meta: {
@@ -314,6 +315,16 @@ const routes = [{
       adminAuth: true
     }
   },
+  {
+    path: '/admin/plans',
+    name: 'Plans',
+    component: Plans,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+
   {
     path: '/admin/integration',
     name: 'IntegrationAdmin',

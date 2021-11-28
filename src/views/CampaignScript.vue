@@ -28,7 +28,7 @@
           <div class="content-wrap script-custom-height">
             <div class="row h-100">
               <div class="col-6 bordered-right pr-0">
-                <div class="section-head ">
+                <div class="section-head">
                   <div class="section-head-left">
                     <img
                       class="section-head-icon"
@@ -47,105 +47,107 @@
                     <button class="btn btn-export-all">Export All</button>
                   </div>
                 </div>
-                <table class="table table-section">
-                  <tbody>
-                    <tr>
-                      <td scope="row">
-                        <div class="control-order-tool">
-                          <button class="btn mb-2">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                          <button class="btn btn-down">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td>Script Summary 1</td>
-                      <td>
-                        <div class="script-type">Video Script</div>
-                      </td>
-                      <td class="text-right">
-                        <dropdown-tool> </dropdown-tool>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row">
-                        <div class="control-order-tool">
-                          <button class="btn mb-2">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                          <button class="btn btn-down">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td>Script Summary 1</td>
-                      <td>
-                        <div class="script-type">Video Script</div>
-                      </td>
-                      <td class="text-right">
-                        <dropdown-tool> </dropdown-tool>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row">
-                        <div class="control-order-tool">
-                          <button class="btn mb-2">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                          <button class="btn btn-down">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td>Script Summary 1</td>
-                      <td>
-                        <div class="script-type">Video Script</div>
-                      </td>
-                      <td class="text-right">
-                        <dropdown-tool> </dropdown-tool>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row">
-                        <div class="control-order-tool">
-                          <button class="btn mb-2">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                          <button class="btn btn-down">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td>Script Summary 1</td>
-                      <td>
-                        <div class="script-type">Video Script</div>
-                      </td>
-                      <td class="text-right">
-                        <dropdown-tool> </dropdown-tool>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row">
-                        <div class="control-order-tool">
-                          <button class="btn mb-2">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                          <button class="btn btn-down">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td>Script Summary 1</td>
-                      <td>
-                        <div class="script-type">Video Script</div>
-                      </td>
-                      <td class="text-right">
-                        <dropdown-tool> </dropdown-tool>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div class="control-height">
+                  <table class="table table-section">
+                    <tbody>
+                      <tr>
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>Script Summary 1</td>
+                        <td>
+                          <div class="script-type">Video Script</div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool> </dropdown-tool>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>Script Summary 1</td>
+                        <td>
+                          <div class="script-type">Video Script</div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool> </dropdown-tool>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>Script Summary 1</td>
+                        <td>
+                          <div class="script-type">Video Script</div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool> </dropdown-tool>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>Script Summary 1</td>
+                        <td>
+                          <div class="script-type">Video Script</div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool> </dropdown-tool>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>Script Summary 1</td>
+                        <td>
+                          <div class="script-type">Video Script</div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool> </dropdown-tool>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <div class="col-6">
                 <div class="d-flex flex-column h-100">
@@ -221,23 +223,4 @@ export default {
 </script>
 
 <style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </style>

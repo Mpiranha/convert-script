@@ -67,6 +67,7 @@
                           })
                         "
                         @delete-proceed="deleteRole(role.id)"
+                        delete-what="Role"
                       >
                         <template v-slot:secondary>
                           <b-dropdown-item link-class="drop-link" href="#">
@@ -153,9 +154,9 @@
           >Close</b-button
         >
         <b-button
-          @click="triggerEdit ? editRoles(editId, rolesData) : addRole()"
+          @click="triggerEdit ? editRole(editId, rolesData) : addRole()"
           class="save-modal"
-          >Save</b-button
+          >{{ triggerEdit ? "Edit" : "Save" }}</b-button
         >
       </div>
     </b-modal>
@@ -170,7 +171,7 @@ import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Users",
+  name: "RolesPermission",
   mixins: [alertMixin],
   components: {
     Sidebar,
@@ -195,7 +196,7 @@ export default {
         { value: "User", text: "User" },
         { value: "Admin", text: "Admin" },
       ],
-      userPlan: [{ text: "Make role a User Plan", value: "FE" }],
+      userPlan: [{ text: "Make role a User Plan", value: "false" }],
     };
   },
   methods: {
@@ -262,10 +263,10 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    deleteAgency(id) {
+    deleteRole(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deleteRoles", id)
+        .dispatch("deleteRole", id)
         .then((res) => {
           console.log(res);
           this.getAllRoles();

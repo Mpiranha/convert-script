@@ -46,109 +46,134 @@
                     </select>
                   </div>
                 </div>
-                <table class="table table-section">
-                  <tbody>
-                    <tr>
-                      <td scope="row">
-                        <div class="control-order-tool">
-                          <button class="btn mb-2">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                          <button class="btn btn-down">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td>Script Summary 1</td>
-                      <td>
-                        <div class="script-type">Video Script</div>
-                      </td>
-                      <td class="text-right">
-                        <dropdown-tool
-                          @edit-clicked="openEditModal('', '')"
-                          @delete-proceed="deleteCampaign('')"
-                        >
-                        </dropdown-tool>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row">
-                        <div class="control-order-tool">
-                          <button class="btn mb-2">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                          <button class="btn btn-down">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td>Script Summary 1</td>
-                      <td>
-                        <div class="script-type">Video Script</div>
-                      </td>
-                      <td class="text-right">
-                        <dropdown-tool> </dropdown-tool>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row">
-                        <div class="control-order-tool">
-                          <button class="btn mb-2">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                          <button class="btn btn-down">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td>Script Summary 1</td>
-                      <td>
-                        <div class="script-type">Video Script</div>
-                      </td>
-                      <td class="text-right">
-                        <dropdown-tool> </dropdown-tool>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row">
-                        <div class="control-order-tool">
-                          <button class="btn mb-2">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                          <button class="btn btn-down">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td>Script Summary 1</td>
-                      <td>
-                        <div class="script-type">Video Script</div>
-                      </td>
-                      <td class="text-right">
-                        <dropdown-tool> </dropdown-tool>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row">
-                        <div class="control-order-tool">
-                          <button class="btn mb-2">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                          <button class="btn btn-down">
-                            <i class="flaticon-up-arrow icons icon-order"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td>Script Summary 1</td>
-                      <td>
-                        <div class="script-type">Video Script</div>
-                      </td>
-                      <td class="text-right">
-                        <dropdown-tool> </dropdown-tool>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div class="control-height">
+                  <table class="table table-section">
+                    <tbody>
+                      <tr>
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>Script Summary 1</td>
+                        <td>
+                          <div class="script-type">Video Script</div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool
+                            @edit-clicked="openEditModal('', '')"
+                            @delete-proceed="deleteCampaign('')"
+                          >
+                          </dropdown-tool>
+                        </td>
+                      </tr>
+                       <tr>
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>Script Summary 1</td>
+                        <td>
+                          <div class="script-type">Video Script</div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool
+                            @edit-clicked="openEditModal('', '')"
+                            @delete-proceed="deleteCampaign('')"
+                          >
+                          </dropdown-tool>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>Script Summary 1</td>
+                        <td>
+                          <div class="script-type">Video Script</div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool> </dropdown-tool>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>Script Summary 1</td>
+                        <td>
+                          <div class="script-type">Video Script</div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool> </dropdown-tool>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>Script Summary 1</td>
+                        <td>
+                          <div class="script-type">Video Script</div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool> </dropdown-tool>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>Script Summary 1</td>
+                        <td>
+                          <div class="script-type">Video Script</div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool> </dropdown-tool>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <div class="col-6">
                 <div class="d-flex flex-column h-100">
@@ -320,25 +345,7 @@ export default {
   height: 300px;
 }
 
-
-
-
-
-
-
-
-
-
 .control-modal-width {
   max-width: 598px !important;
 }
-
-
-
-
-
-
-
-
-
 </style>

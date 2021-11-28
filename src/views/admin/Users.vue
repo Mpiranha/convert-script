@@ -53,7 +53,7 @@
               :loading-state="this.$store.state.loading"
             ></loader-modal>
             <div v-if="users.length === 0" class="no-data-info">
-              Created agency will display here.
+              Created users will display here.
             </div>
             <table v-else class="table table-custom">
               <thead>
@@ -100,6 +100,7 @@
                         })
                       "
                       @delete-proceed="deleteAgency(user.id)"
+                       delete-what="User"
                     >
                       <!-- <template v-slot:secondary>
                         <b-dropdown-item

@@ -82,16 +82,23 @@
                       <template v-slot:secondary>
                         <b-dropdown-item
                           v-b-modal.modal-campaign
-                          @click="getCurrent(user.name)"
                           link-class="drop-link"
                           href="#"
                         >
-                          <img
-                            class="drop-img-icon"
-                            src="@/assets/icons/admin/sidebar-icon/Input.svg"
-                            alt=""
-                          />
-                          Input
+                          <router-link
+                            class="drop-link"
+                            :to="{
+                              name: 'ScriptTypesInput',
+                              params: { id: scriptType.id },
+                            }"
+                          >
+                            <img
+                              class="drop-img-icon"
+                              src="@/assets/icons/admin/sidebar-icon/Input.svg"
+                              alt=""
+                            />
+                            Input
+                          </router-link>
                         </b-dropdown-item>
                       </template>
                     </dropdown-tool>
@@ -110,7 +117,7 @@
               :hide-goto-end-buttons="true"
               prev-text="<"
               next-text=">"
-               @change="handlePageChange"
+              @change="handlePageChange"
             ></b-pagination>
           </div>
         </div>

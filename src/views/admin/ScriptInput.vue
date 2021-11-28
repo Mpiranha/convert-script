@@ -135,7 +135,12 @@
                     </b-form-input>
                   </b-form-group>
                   <div class="d-flex justify-content-end">
-                    <button class="btn btn-delete no-shadow">Delete</button>
+                    <button
+                      @click="deleteInput(index)"
+                      class="btn btn-delete no-shadow"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
                 <div class="d-flex justify-content-center">
@@ -218,6 +223,13 @@ export default {
           fieldType: "",
           placeholderText: "",
         },
+      });
+    },
+    deleteInput(index) {
+      alert(index);
+
+      this.inputs = this.inputs.filter(function (value, indx) {
+        return indx != index;
       });
     },
   },

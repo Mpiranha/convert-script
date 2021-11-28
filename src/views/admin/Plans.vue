@@ -3,7 +3,7 @@
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.name"
-        current-active="roles"
+        current-active="plans"
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
@@ -18,24 +18,25 @@
                 mb-5
               "
             >
-              <h6 class="title mb-0">Set Permissions for {{ role.name }}</h6>
+              <h6 class="title">Plans</h6>
               <div class="d-flex align-items-center">
                 <button
                   @click="clearField"
-                  class="btn btn-create py-2"
-                  v-b-modal.modal-new-client
+                  class="btn btn-create"
+                  v-b-modal.modal-new-plan
                 >
-                  Save
+                  <span>+</span>
+                  New Plan
                 </button>
               </div>
             </div>
-
             <div class="content-wrap set-min-h pt-4 pb-5">
               <div class="search-form mb-2">
                 <button class="btn search-btn">
                   <i class="flaticon-loupe icons"></i>
                 </button>
                 <input
+                  @change="makeToast('primary', 'try me')"
                   class="form-control no-shadow search-input"
                   type="text"
                   placeholder="Search"
@@ -44,32 +45,32 @@
               <loader-modal
                 :loading-state="this.$store.state.loading"
               ></loader-modal>
-              <div v-if="permissions.length === 0" class="no-data-info">
-                Permissions will display here.
+              <div v-if="plans.length === 0" class="no-data-info">
+                Created Plans will display here.
               </div>
               <table v-else class="table table-custom">
                 <thead>
                   <tr>
-                    <td>Name</td>
-                    <td>ID</td>
-                    <td>Status</td>
+                    <th>Name</th>
+                    <th class="text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    v-for="permission in permissions"
-                    :key="permission.id"
-                  >
-                    <td class="">{{ permission.name }}</td>
-                    <td>{{ permission.id }}</td>
+                  <tr v-for="plan in plans" :key="plan.id">
+                    <td scope="row">{{ plan.name }}</td>
+                    <!-- <td scope="row">Admin</td> -->
                     <td>
-                      <label class="switch mb-0">
-                        <input
-                          
-                          type="checkbox"
-                        />
-                        <span class="slider round"></span>
-                      </label>
+                      <dropdown-tool
+                        @edit-clicked="
+                          openEditModal(plan.id, {
+                            name: plan.name,
+                            type: plan.type,
+                          })
+                        "
+                        @delete-proceed="deletePlan(plan.id)"
+                        delete-what="Plan"
+                      >
+                      </dropdown-tool>
                     </td>
                   </tr>
                 </tbody>
@@ -78,7 +79,7 @@
             <div class="d-flex justify-content-center">
               <b-pagination
                 v-model="currentPage"
-                :total-rows="1"
+                :total-rows="plansLength"
                 :per-page="perPage"
                 aria-controls="my-table"
                 size="sm"
@@ -91,59 +92,51 @@
         </div>
       </div>
     </div>
-    <!-- <b-modal
+
+    <b-modal
       :hide-header="true"
-      id="modal-new-client"
+      id="modal-new-plan"
       centered
       size="md"
       :hide-footer="true"
       dialog-class="control-width"
       content-class="modal-main"
     >
+      <!-- <div class="modal-head">
+        <h3 class="title">Give your campaign a name</h3>
+        <p class="desc">Only you can see this</p>
+      </div> -->
 
-
+      <b-form-group label="Type">
+        <b-form-input
+          id="type"
+          v-model="plansData.type"
+          type="text"
+          class="input-table"
+        >
+        </b-form-input>
+      </b-form-group>
       <b-form-group label="Name">
         <b-form-input
           id="name"
-          v-model="userData.name"
+          v-model="plansData.name"
           type="text"
           class="input-table"
         >
         </b-form-input>
       </b-form-group>
 
-      <b-form-group label="Description">
-        <b-form-textarea
-          id="name"
-          v-model="userData.email"
-          type="text"
-          class="input-table"
-          rows="4"
-        >
-        </b-form-textarea>
-      </b-form-group>
-
-      <b-form-group label="Upload">
-        <b-form-file
-          v-model="file"
-          :state="Boolean(file)"
-          placeholder="Choose a file or drop it here..."
-          drop-placeholder="Drop file here..."
-        >
-        </b-form-file>
-      </b-form-group>
-
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
+        <b-button @click="$bvModal.hide('modal-new-plan')" class="close-modal"
           >Close</b-button
         >
         <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
+          @click="triggerEdit ? editPlan(editId, plansData) : addPlan()"
           class="save-modal"
-          >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
+          >{{ triggerEdit ? "Edit" : "Save" }}</b-button
         >
       </div>
-    </b-modal> -->
+    </b-modal>
   </div>
 </template>
 
@@ -151,48 +144,39 @@
 // @ is an alias to /src
 import Sidebar from "@/components/admin/TheSidebarAdmin.vue";
 import Navbar from "@/components/TheNav.vue";
+import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Permission",
+  name: "Plans",
   mixins: [alertMixin],
   components: {
     Sidebar,
     Navbar,
+    DropdownTool,
   },
   data() {
     return {
       perPage: 5,
       currentPage: 1,
-      file: null,
-      permissions: [],
-      role: [],
+      plansLength: 0,
+      plans: [],
+      plansData: {
+        type: "",
+        name: "",
+      },
       error: "",
       triggerEdit: false,
       editId: null,
     };
   },
   methods: {
-    getRole(id) {
-      this.$store
-        .dispatch("getOneRole", id)
-        .then((res) => {
-          this.role = res.data.data;
-
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error);
-          //this.loading = false;
-          this.$store.commit("updateLoadState", false);
-        });
-    },
-    getAllPermissions() {
+    getAllplans() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllPermissions")
+        .dispatch("getAllPlans")
         .then((res) => {
-          this.permissions = res.data.data;
+          this.plans = res.data.data;
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -200,106 +184,93 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    addAgency() {
+    addPlan() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-
+      this.$bvModal.hide("modal-new-plan");
       this.$store
-        .dispatch("addAgency", this.client)
+        .dispatch("addPlan", {
+          name: this.plansData.name,
+          type: this.plansData.type,
+        })
         .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          // this.getCampaign();
-          this.getAgency();
+          console.log(res);
+          this.getAllplans();
+          this.plansData = {
+            type: "",
+            name: "",
+          };
+          this.makeToast("success", "Role added successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log(error.response);
+          this.error = error.response.data.error;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
-        });
-
-      // this.getCampaign();
-
-      // this.$vm.$forceUpdate();
-    },
-    editAgency(id) {
-      this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-      this.$store
-        .dispatch("editAgency", { id: id, data: this.client })
-        .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          this.getAgency();
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
     },
-    deleteAgency(id) {
-      //   this.loading = true;
+    editPlan(id) {
       this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modal-new-plan");
       this.$store
-        .dispatch("deleteAgency", id)
+        .dispatch("editPlan", {
+          id: id,
+          data: this.plansData,
+        })
         .then((res) => {
-          this.error = null;
-          this.getAgency();
-          console.log(res.data);
-          //   this.loading = false;
+          console.log(res);
+          this.getAllplans();
+          this.plansData = {
+            type: "",
+            name: "",
+          };
+          this.makeToast("success", "Plans edited successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
+          console.log("error: " + error.response.data.message);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
         });
-
-      // this.getCampaign();
+    },
+    deletePlan(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("deletePlan", id)
+        .then((res) => {
+          console.log(res);
+          this.getAllplans();
+          this.makeToast("success", "Plan deleted successfully");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
+        });
     },
 
     openEditModal(id, data) {
-      this.$bvModal.show("modal-new-client");
+      this.$bvModal.show("modal-new-plan");
       this.triggerEdit = true;
       this.editId = id;
-      this.client.name = data.name;
-      this.client.email = data.email;
+      this.plansData.name = data.name;
+      this.plansData.type = data.type;
     },
     clearField() {
-      this.client = {
+      this.plansData = {
+        type: "",
         name: "",
-        email: "",
       };
       this.triggerEdit = false;
     },
-    getCurrent(data) {
-      this.client.name = data;
-    },
-    orderSort(arr) {
-      return arr.sort(function (a, b) {
-        return a.id - b.id;
-      });
-    },
-    formatDate(date) {
-      var formatedDate = new Date(date);
+  },
 
-      return formatedDate.toLocaleDateString();
-    },
-  },
   mounted() {
-    this.getRole(this.$route.params.id);
-    this.getAllPermissions();
+    this.getAllplans();
   },
-  computed: {},
 };
 </script>
 

@@ -124,6 +124,26 @@
           <span class="nav-text"> Roles and Permissions </span>
         </router-link>
       </li>
+        <li class="nav-item">
+        <router-link
+          class="nav-link"
+          :class="currentActive == 'plans' ? 'active' : ''"
+          to="/admin/plans"
+          
+        >
+          <img
+            class="main-icon"
+            src="@/assets/icons/admin/sidebar-icon/roles-permissions.svg"
+            alt=""
+          />
+          <img
+            class="active-icon"
+            src="@/assets/icons/admin/sidebar-active/roles-permissions.svg"
+            alt=""
+          />
+          <span class="nav-text"> Plans </span>
+        </router-link>
+      </li>
 
       <li class="nav-item">
         <router-link

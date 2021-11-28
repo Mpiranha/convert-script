@@ -1242,6 +1242,11 @@ input:checked+.slider:before {
     text-align: justify;
 }
 
+.control-height {
+    height: calc(100% - 66px);
+    overflow-y: auto;
+}
+
 
 
 

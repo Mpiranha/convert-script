@@ -17,7 +17,7 @@
               mb-5
             "
           >
-            <h6 class="title">Transactions (5)</h6>
+            <h6 class="title">Transactions ({{transactionsLength}})</h6>
           </div>
 
           <div class="content-wrap set-min-h pt-4 pb-5">
@@ -35,8 +35,8 @@
             <loader-modal
               :loading-state="this.$store.state.loading"
             ></loader-modal>
-            <div v-if="transactionsLength === 0" class="no-data-info">
-              Created agency will display here.
+            <div v-if="this.transactionsLength == 0" class="no-data-info">
+              No Transaction Yet
             </div>
             <table v-else class="table table-custom">
               <thead>
@@ -102,7 +102,7 @@ export default {
       perPage: 5,
       currentPage: 1,
       transactions: [],
-      transactionsLength: 1,
+      transactionsLength: 0,
       error: "",
       triggerEdit: false,
       editId: null,
@@ -112,10 +112,13 @@ export default {
     getAllTransactions() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllTransactions")
+        .dispatch("getAllTransactions",{
+          number: this.currentPage,
+          perPage: this.perPage,
+        })
         .then((res) => {
           this.transactions = res.data.data;
-          // this.transactionsLength = res.data.meta.total;
+          this.transactionsLength = res.data.meta.total;
           console.log(res.data);
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);

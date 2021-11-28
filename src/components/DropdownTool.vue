@@ -32,7 +32,9 @@
       content-class="modal-main py-3"
     >
       <div class="modal-head text-center mb-4">
-        <h3 class="title">Are You sure you want to delete this campaign?</h3>
+        <h3 class="title">
+          Are You sure you want to delete this {{ deleteWhat }}?
+        </h3>
       </div>
 
       <div class="d-flex justify-content-center">
@@ -50,7 +52,7 @@
 <script>
 export default {
   name: "DropdownTool",
-  props: [],
+  props: ["deleteWhat"],
   methods: {
     editAction() {
       this.$emit("edit-clicked");
