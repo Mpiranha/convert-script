@@ -22,7 +22,7 @@
               <button
                 @click="clearField"
                 class="btn btn-create"
-                v-b-modal.modal-new-client
+                v-b-modal.modal-new-script
               >
                 <span>+</span>
                 New Script Type
@@ -72,9 +72,10 @@
                   <td>
                     <dropdown-tool
                       @edit-clicked="
-                        openEditModal(user.id, {
-                          name: user.name,
-                          email: user.email,
+                        openEditModal(scriptType.id, {
+                          name: scriptType.name,
+                          desc: scriptType.desc,
+                          icon: scriptType.icon,
                         })
                       "
                       @delete-proceed="deleteAgency(user.id)"
@@ -126,7 +127,7 @@
 
     <b-modal
       :hide-header="true"
-      id="modal-new-client"
+      id="modal-new-script"
       centered
       size="md"
       :hide-footer="true"
@@ -170,7 +171,7 @@
       </b-form-group>
 
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
+        <b-button @click="$bvModal.hide('modal-new-script')" class="close-modal"
           >Close</b-button
         >
         <b-button
@@ -272,7 +273,7 @@ export default {
           this.scriptTypeData = {
             name: "",
             desc: "",
-            icon: "",
+            icon: null,
           };
           this.makeToast("success", "Script Type edited successfully");
           this.$store.commit("updateLoadState", false);
@@ -303,16 +304,18 @@ export default {
     },
 
     openEditModal(id, data) {
-      this.$bvModal.show("modal-new-client");
+      this.$bvModal.show("modal-new-script");
       this.triggerEdit = true;
       this.editId = id;
-      this.client.name = data.name;
-      this.client.email = data.email;
+      this.scriptTypeData.name = data.name;
+      this.scriptTypeData.desc = data.desc;
+      this.scriptTypeData.icon = data.icon;
     },
     clearField() {
-      this.client = {
+      this.scriptTypeData = {
         name: "",
-        email: "",
+        desc: "",
+        icon: null,
       };
       this.triggerEdit = false;
     },

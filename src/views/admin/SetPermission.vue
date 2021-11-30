@@ -56,18 +56,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    v-for="permission in permissions"
-                    :key="permission.id"
-                  >
+                  <tr v-for="permission in permissions" :key="permission.id">
                     <td class="">{{ permission.name }}</td>
                     <td>{{ permission.id }}</td>
                     <td>
                       <label class="switch mb-0">
-                        <input
-                          
-                          type="checkbox"
-                        />
+                        <input type="checkbox" />
                         <span class="slider round"></span>
                       </label>
                     </td>
@@ -281,25 +275,16 @@ export default {
       };
       this.triggerEdit = false;
     },
-    getCurrent(data) {
-      this.client.name = data;
-    },
-    orderSort(arr) {
-      return arr.sort(function (a, b) {
-        return a.id - b.id;
-      });
-    },
-    formatDate(date) {
-      var formatedDate = new Date(date);
 
-      return formatedDate.toLocaleDateString();
-    },
+    
   },
   mounted() {
     this.getRole(this.$route.params.id);
     this.getAllPermissions();
   },
-  computed: {},
+  computed: {
+   
+  },
 };
 </script>
 
