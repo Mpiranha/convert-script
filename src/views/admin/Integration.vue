@@ -2,7 +2,7 @@
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
       <sidebar
-        :user-name="this.$store.state.user.name"
+        :user-name="this.$store.state.user.first_name"
         current-active="integrationadmin"
       ></sidebar>
       <div class="content-section">

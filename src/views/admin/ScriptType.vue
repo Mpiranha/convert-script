@@ -2,7 +2,7 @@
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
       <sidebar
-        :user-name="this.$store.state.user.name"
+        :user-name="this.$store.state.user.first_name"
         current-active="script-type"
       ></sidebar>
       <div class="content-section">
@@ -303,13 +303,15 @@ export default {
         });
     },
 
-    openEditModal(id, data) {
-      this.$bvModal.show("modal-new-script");
-      this.triggerEdit = true;
-      this.editId = id;
-      this.scriptTypeData.name = data.name;
-      this.scriptTypeData.desc = data.desc;
-      this.scriptTypeData.icon = data.icon;
+    openEditModal(id) {
+      // this.$bvModal.show("modal-new-script");
+      // this.triggerEdit = true;
+      // this.editId = id;
+      // this.scriptTypeData.name = data.name;
+      // this.scriptTypeData.desc = data.desc;
+      // this.scriptTypeData.icon = data.icon;
+
+      this.$router.push({ name: 'ScriptTypesInput', params: { id: id } })
     },
     clearField() {
       this.scriptTypeData = {

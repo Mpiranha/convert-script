@@ -2,7 +2,7 @@
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
       <sidebar
-        :user-name="this.$store.state.user.name"
+        :user-name="this.$store.state.user.first_name"
         current-active="roles"
       ></sidebar>
       <div class="content-section">
@@ -61,7 +61,10 @@
                     <td>{{ permission.id }}</td>
                     <td>
                       <label class="switch mb-0">
-                        <input type="checkbox" />
+                        <input
+                          :checked="isPermissionAvailable(permission.name)"
+                          type="checkbox"
+                        />
                         <span class="slider round"></span>
                       </label>
                     </td>
@@ -275,16 +278,26 @@ export default {
       };
       this.triggerEdit = false;
     },
+    isPermissionAvailable(elem) {
+  
+      let found;
 
-    
+      if (this.role.permissions) {
+        found = this.role.permissions.find((element) => element.name == elem);
+      }
+
+      if (found) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   mounted() {
     this.getRole(this.$route.params.id);
     this.getAllPermissions();
   },
-  computed: {
-   
-  },
+  computed: {},
 };
 </script>
 

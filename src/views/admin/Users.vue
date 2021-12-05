@@ -2,7 +2,7 @@
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
       <sidebar
-        :user-name="this.$store.state.user.name"
+        :user-name="this.$store.state.user.first_name"
         current-active="users"
       ></sidebar>
       <div class="content-section">
@@ -70,16 +70,16 @@
               <tbody>
                 <tr v-for="user in users" :key="user.id">
                   <td scope="row">{{ user.email }}</td>
-                  <td class="text-left">{{ getSeperateName(user.name) }}</td>
-                  <td>{{ getSeperateName(user.name, "lastname") }}</td>
+                  <td class="text-left">{{ user.first_name }}</td>
+                  <td>{{ user.last_name }}</td>
                   <td>
                     <label class="switch mb-0">
-                      <input type="checkbox" />
+                      <input :checked="user.active" type="checkbox" />
                       <span class="slider round"></span>
                     </label>
                   </td>
                   <td>
-                    <div class="d-dlex">
+                    <div class="d-flex">
                       <span
                         class="plan-types"
                         v-for="(plan, index) in user.plan"
@@ -100,7 +100,7 @@
                         })
                       "
                       @delete-proceed="deleteAgency(user.id)"
-                       delete-what="User"
+                      delete-what="User"
                     >
                       <!-- <template v-slot:secondary>
                         <b-dropdown-item
@@ -245,8 +245,7 @@ export default {
         name: "",
         role: null,
         email: "",
-        plans: []
-        
+        plans: [],
       },
       error: "",
       triggerEdit: false,
@@ -324,7 +323,7 @@ export default {
             name: "",
             role: "",
             email: "",
-            plans: []
+            plans: [],
           };
           this.makeToast("success", "Video added successfully");
           this.$store.commit("updateLoadState", false);
@@ -351,7 +350,7 @@ export default {
             name: "",
             role: "",
             email: "",
-            plans: []
+            plans: [],
           };
           this.makeToast("success", "User edited successfully");
           this.$store.commit("updateLoadState", false);

@@ -2,7 +2,7 @@
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
       <sidebar
-        :user-name="this.$store.state.user.name"
+        :user-name="this.$store.state.user.first_name"
         current-active="dashboard"
       ></sidebar>
       <div class="content-section">
@@ -17,19 +17,19 @@
               text="Campaign"
               box-type="leads"
               image-url="Campaigns boxes.svg"
-              box-value="5"
+              :box-value="5"
             ></dashboard-box>
             <dashboard-box
               text="Script"
               box-type="links"
               image-url="script boxes.svg"
-              box-value="9"
+              :box-value="9"
             ></dashboard-box>
             <dashboard-box
               text="Published"
               box-type="campaign"
               image-url="Published boxes.svg"
-              box-value="3"
+              :box-value="3"
             ></dashboard-box>
           </div>
 
