@@ -29,7 +29,7 @@
               <button
                 @click="clearField"
                 class="btn btn-create"
-                v-b-modal.modal-new-client
+                v-b-modal.modal-new-user
               >
                 <span>+</span>
                 New User
@@ -95,11 +95,13 @@
                     <dropdown-tool
                       @edit-clicked="
                         openEditModal(user.id, {
-                          name: user.name,
+                          first_name: user.first_name,
+                          last_name: user.last_name,
+                          role: user.role,
                           email: user.email,
                         })
                       "
-                      @delete-proceed="deleteAgency(user.id)"
+                      @delete-proceed="deleteUser(user.id)"
                       delete-what="User"
                     >
                       <!-- <template v-slot:secondary>
@@ -139,7 +141,7 @@
 
     <b-modal
       :hide-header="true"
-      id="modal-new-client"
+      id="modal-new-user"
       centered
       size="md"
       :hide-footer="true"
@@ -155,10 +157,9 @@
           <b-form-group label="Last Name">
             <b-form-input
               id="name"
-              v-model="lastname"
+              v-model="userData.last_name"
               type="text"
               class="input-table"
-              @input="updateName"
             >
             </b-form-input>
           </b-form-group>
@@ -167,10 +168,9 @@
           <b-form-group label="First Name">
             <b-form-input
               id="name"
-              v-model="firstname"
+              v-model="userData.first_name"
               type="text"
               class="input-table"
-              @input="updateName"
             >
             </b-form-input>
           </b-form-group>
@@ -205,11 +205,11 @@
       </b-form-group>
 
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
+        <b-button @click="$bvModal.hide('modal-new-user')" class="close-modal"
           >Close</b-button
         >
         <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
+          @click="triggerEdit ? editUser(editId) : addUser()"
           class="save-modal"
           >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
         >
@@ -242,7 +242,8 @@ export default {
       firstname: "",
       lastname: "",
       userData: {
-        name: "",
+        first_name: "",
+        last_name: "",
         role: null,
         email: "",
         plans: [],
@@ -263,9 +264,6 @@ export default {
     };
   },
   methods: {
-    updateName() {
-      this.userData.name = this.lastname + " " + this.firstname;
-    },
     getSharedPlans() {
       this.$store
         .dispatch("getSharedPlan")
@@ -289,7 +287,7 @@ export default {
       plans.forEach((plan, index) => {
         this.optionsPlan[index] = {
           text: plan.name,
-          value: plan.id,
+          value: { plan_id: plan.id },
         };
       });
     },
@@ -313,19 +311,19 @@ export default {
     },
     addUser() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-video");
+      this.$bvModal.hide("modal-new-user");
       this.$store
         .dispatch("addUser", this.userData)
         .then((res) => {
           console.log(res);
-          this.getAllVideos();
+          this.getAllUsers();
           this.userData = {
             name: "",
-            role: "",
+            role: null,
             email: "",
             plans: [],
           };
-          this.makeToast("success", "Video added successfully");
+          this.makeToast("success", "User added successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -337,7 +335,7 @@ export default {
     },
     editUser(id) {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-video");
+      this.$bvModal.hide("modal-new-user");
       this.$store
         .dispatch("editUser", {
           id: id,
@@ -345,10 +343,10 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          this.getAllVideos();
+          this.getAllUsers();
           this.userData = {
             name: "",
-            role: "",
+            role: null,
             email: "",
             plans: [],
           };
@@ -356,8 +354,8 @@ export default {
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log("error: " + error.response.data.message);
-          this.error = error.response.data.message;
+          console.log("error: " + error);
+          this.error = error;
           this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
         });
@@ -365,11 +363,11 @@ export default {
     deleteUser(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deleteVideo", id)
+        .dispatch("deleteUser", id)
         .then((res) => {
           console.log(res);
-          this.getAllVideos();
-          this.makeToast("success", "Video deleted successfully");
+          this.getAllUsers();
+          this.makeToast("success", "User deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -381,20 +379,23 @@ export default {
     },
 
     openEditModal(id, data) {
-      this.$bvModal.show("modal-new-client");
+      console.log("User data " + data);
+      this.$bvModal.show("modal-new-user");
       this.triggerEdit = true;
       this.editId = id;
-      this.lastname = this.getSeperateName(data.name, "lastname");
-      this.firstname = this.getSeperateName(data.name);
+      this.userData.last_name = data.last_name;
+      this.userData.first_name = data.first_name;
       this.userData.role = data.role;
-      console.log(data);
+      // console.log(data);
       this.userData.email = data.email;
       this.userData.plans = data.plans;
     },
     clearField() {
-      this.client = {
+      this.userData = {
         name: "",
+        role: null,
         email: "",
+        plans: [],
       };
       this.triggerEdit = false;
     },

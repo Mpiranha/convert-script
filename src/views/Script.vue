@@ -19,15 +19,15 @@
           >
             <h6 class="title">All Script</h6>
 
-            <button class="btn btn-create">
+            <router-link class="btn btn-create" to="/script/select">
               <span>+</span>
               Add Scripts
-            </button>
+            </router-link>
           </div>
 
           <div class="content-wrap script-custom-height">
             <div class="row h-100">
-              <div class="col-6 bordered-right pr-0">
+              <div class="col-6 h-100 bordered-right pr-0">
                 <div class="section-head">
                   <div class="section-head-left">
                     <img
@@ -38,12 +38,7 @@
                     5
                   </div>
                   <div class="section-head-right">
-                    <select class="sort-select" name="" id="">
-                      <option value="none" selected>Export All</option>
-                      <option value=""></option>
-                      <option value=""></option>
-                      <option value=""></option>
-                    </select>
+                    <button class="btn btn-export-all">Export All</button>
                   </div>
                 </div>
                 <div class="control-height">
@@ -72,7 +67,7 @@
                           </dropdown-tool>
                         </td>
                       </tr>
-                       <tr>
+                      <tr>
                         <td scope="row">
                           <div class="control-order-tool">
                             <button class="btn mb-2">

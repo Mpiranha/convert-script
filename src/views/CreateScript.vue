@@ -145,7 +145,8 @@ export default {
   padding: 2.5rem 2rem 1rem 1rem;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(100% - 24px);
+  overflow-y: auto;
 }
 
 .script-form-wrap label {

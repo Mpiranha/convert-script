@@ -96,7 +96,7 @@ import Navbar from "@/components/TheNav.vue";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Platform Integration",
+  name: "PlatformIntegration",
   mixins: [alertMixin],
   components: {
     Sidebar,

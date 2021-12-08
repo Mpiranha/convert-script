@@ -427,7 +427,7 @@ export default {
 
 @media screen and (min-width: 1300px) {
   .nav-wrap .nav-link {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .main-icon,

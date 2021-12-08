@@ -404,6 +404,7 @@ export default {
     },
     editScript() {
       this.$store.commit("updateLoadState", true);
+
       this.$store
         .dispatch("editScriptType", {
           id: this.$route.params.id,
@@ -411,7 +412,7 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          this.getScript();
+          this.getScript(this.$route.params.id);
 
           this.makeToast("success", "Script Type edited successfully");
           this.$store.commit("updateLoadState", false);

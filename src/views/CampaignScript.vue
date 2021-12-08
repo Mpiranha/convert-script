@@ -19,15 +19,15 @@
           >
             <h6 class="title">All Campaigns</h6>
 
-            <button class="btn btn-create" v-b-modal.modal-new-campaign>
+            <router-link class="btn btn-create" to="/script/select">
               <span>+</span>
               Add Scripts
-            </button>
+            </router-link>
           </div>
 
           <div class="content-wrap script-custom-height">
             <div class="row h-100">
-              <div class="col-6 bordered-right pr-0">
+              <div class="col-6 h-100 bordered-right pr-0">
                 <div class="section-head">
                   <div class="section-head-left">
                     <img
@@ -89,6 +89,25 @@
                         </td>
                       </tr>
                       <tr>
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>Script Summary 1</td>
+                        <td>
+                          <div class="script-type">Video Script</div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool> </dropdown-tool>
+                        </td>
+                      </tr>
+                        <tr>
                         <td scope="row">
                           <div class="control-order-tool">
                             <button class="btn mb-2">

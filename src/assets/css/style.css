@@ -1,9 +1,25 @@
 @import 'font/flaticon.css';
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
+@font-face {
+    font-family: "Circular Std Medium";
+    src: url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.eot");
+    /* IE9*/
+    src: url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.eot?#iefix") format("embedded-opentype"),
+        /* IE6-IE8 */
+        url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.woff2") format("woff2"),
+        /* chrome、firefox */
+        url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.woff") format("woff"),
+        /* chrome、firefox */
+        url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.ttf") format("truetype"),
+        /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+        url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.svg#Circular Std Medium") format("svg");
+    /* iOS 4.1- */
+}
+
 
 body {
-    font-family: Roboto !important;
+    font-family: "Circular Std Medium" !important;
 }
 
 .flex-main-wrap {
@@ -1243,7 +1259,7 @@ input:checked+.slider:before {
 }
 
 .control-height {
-    height: calc(100% - 66px);
+    height: calc(100% - 59px);
     overflow-y: auto;
 }
 
