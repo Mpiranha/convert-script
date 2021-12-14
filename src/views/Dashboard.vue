@@ -17,22 +17,24 @@
               text="Campaign"
               box-type="leads"
               image-url="Campaigns boxes.svg"
-              :box-value="5"
+              :box-value="stat.campaigns"
             ></dashboard-box>
             <dashboard-box
               text="Script"
               box-type="links"
               image-url="script boxes.svg"
-              :box-value="9"
+              :box-value="stat.scripts"
             ></dashboard-box>
             <dashboard-box
               text="Published"
               box-type="campaign"
               image-url="Published boxes.svg"
-              :box-value="3"
+              :box-value="stat.published"
             ></dashboard-box>
           </div>
-
+          <loader-modal
+            :loading-state="this.$store.state.loading"
+          ></loader-modal>
           <div class="dashboard-top">
             <h6 class="title">Welcome Video</h6>
           </div>
@@ -41,7 +43,7 @@
             <div class="col-12">
               <div class="vid-box">
                 <iframe
-                  src="https://www.youtube.com/embed/RpXS1iYz6-M"
+                  :src="stat.video.link"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen=""
                   frameborder="0"
@@ -68,8 +70,36 @@ export default {
     Navbar,
     DashboardBox,
   },
+  data() {
+    return {
+      stat: [],
+    };
+  },
+
+  methods: {
+    getStatInfo() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getDashboardInfo")
+        .then((res) => {
+          this.stat = res.data.data.message;
+
+          console.log(res.data);
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+  },
+  mounted() {
+    this.getStatInfo();
+  },
 };
 </script>
+
+
 
 <style scoped>
 </style>

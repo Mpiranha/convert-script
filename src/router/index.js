@@ -163,7 +163,7 @@ const routes = [{
     }
   },
   {
-    path: '/script/new',
+    path: '/create-script/:id',
     name: 'CreateScript',
     component: CreateScript,
     meta: {

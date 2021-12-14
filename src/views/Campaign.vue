@@ -51,7 +51,9 @@
                 <option value=""></option>
               </select>
             </div>
-            <loader-modal :loading-state="loading"></loader-modal>
+            <loader-modal
+              :loading-state="this.$store.state.loading"
+            ></loader-modal>
             <div v-if="campaigns.length === 0" class="no-data-info">
               Created campaigns will display here.
             </div>
@@ -68,7 +70,7 @@
                       {{ campaign.name }}
                     </router-link>
                   </td>
-                  <td>5</td>
+                  <td>{{ campaign.scripts_count }}</td>
                   <td>
                     {{ formatDate(campaign.created_at) }}
                   </td>
@@ -154,23 +156,25 @@ export default {
   },
   methods: {
     getCampaign() {
+       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getCampaigns")
         .then((res) => {
           this.campaigns = res.data.data;
           console.log(res.data + "called now");
-          this.loading = false;
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
           // this.error = error.response.data.errors.root;
           // // this.error = error;
           console.log(error);
-          this.loading = false;
+          this.$store.commit("updateLoadState", false);
         });
     },
     addCampaign() {
-      this.loading = true;
+       this.$store.commit("updateLoadState", true);
+    
       this.$bvModal.hide("modal-new-campaign");
       this.$store
         .dispatch("addCampaign", { name: this.campaignName })
@@ -179,7 +183,7 @@ export default {
           console.log(res.data);
           // this.getCampaign();
           this.getCampaign();
-          this.loading = false;
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
@@ -192,7 +196,8 @@ export default {
       // this.$vm.$forceUpdate();
     },
     editCampaign(id) {
-      this.loading = true;
+    
+       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-campaign");
       this.$store
         .dispatch("editCampaign", { id: id, data: { name: this.campaignName } })
@@ -200,7 +205,7 @@ export default {
           this.error = null;
           console.log(res.data);
           this.getCampaign();
-          this.loading = false;
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
@@ -209,14 +214,15 @@ export default {
         });
     },
     deleteCampaign(id) {
-      this.loading = true;
+    
+       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteCampaign", id)
         .then((res) => {
           this.error = null;
           this.getCampaign();
           console.log(res.data);
-          this.loading = false;
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
@@ -264,23 +270,4 @@ export default {
 </script>
 
 <style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </style>

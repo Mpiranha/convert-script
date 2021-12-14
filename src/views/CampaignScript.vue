@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid px-0">
+    <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"
@@ -17,7 +18,7 @@
               mb-5
             "
           >
-            <h6 class="title">All Campaigns</h6>
+            <h6 class="title">{{ campaign.name }}</h6>
 
             <router-link class="btn btn-create" to="/script/select">
               <span>+</span>
@@ -35,7 +36,7 @@
                       src="@/assets/icons/convert-icon/All script.svg"
                       alt=""
                     />
-                    5
+                    {{ campaign.scripts_count }}
                   </div>
                   <div class="section-head-right">
                     <!-- <select class="sort-select" name="" id="">
@@ -48,9 +49,13 @@
                   </div>
                 </div>
                 <div class="control-height">
-                  <table class="table table-section">
+                  <table class="table table-section script-table">
                     <tbody>
-                      <tr>
+                      <tr
+                        @click="setActiveScript(script.responses)"
+                        v-for="script in campaign.scripts"
+                        :key="script.id"
+                      >
                         <td scope="row">
                           <div class="control-order-tool">
                             <button class="btn mb-2">
@@ -61,102 +66,9 @@
                             </button>
                           </div>
                         </td>
-                        <td>Script Summary 1</td>
                         <td>
-                          <div class="script-type">Video Script</div>
+                          {{ script.content ? script.content : "Dummy Text" }}
                         </td>
-                        <td class="text-right">
-                          <dropdown-tool> </dropdown-tool>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">
-                          <div class="control-order-tool">
-                            <button class="btn mb-2">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                            <button class="btn btn-down">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                          </div>
-                        </td>
-                        <td>Script Summary 1</td>
-                        <td>
-                          <div class="script-type">Video Script</div>
-                        </td>
-                        <td class="text-right">
-                          <dropdown-tool> </dropdown-tool>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">
-                          <div class="control-order-tool">
-                            <button class="btn mb-2">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                            <button class="btn btn-down">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                          </div>
-                        </td>
-                        <td>Script Summary 1</td>
-                        <td>
-                          <div class="script-type">Video Script</div>
-                        </td>
-                        <td class="text-right">
-                          <dropdown-tool> </dropdown-tool>
-                        </td>
-                      </tr>
-                        <tr>
-                        <td scope="row">
-                          <div class="control-order-tool">
-                            <button class="btn mb-2">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                            <button class="btn btn-down">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                          </div>
-                        </td>
-                        <td>Script Summary 1</td>
-                        <td>
-                          <div class="script-type">Video Script</div>
-                        </td>
-                        <td class="text-right">
-                          <dropdown-tool> </dropdown-tool>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">
-                          <div class="control-order-tool">
-                            <button class="btn mb-2">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                            <button class="btn btn-down">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                          </div>
-                        </td>
-                        <td>Script Summary 1</td>
-                        <td>
-                          <div class="script-type">Video Script</div>
-                        </td>
-                        <td class="text-right">
-                          <dropdown-tool> </dropdown-tool>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">
-                          <div class="control-order-tool">
-                            <button class="btn mb-2">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                            <button class="btn btn-down">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                          </div>
-                        </td>
-                        <td>Script Summary 1</td>
                         <td>
                           <div class="script-type">Video Script</div>
                         </td>
@@ -172,25 +84,21 @@
                 <div class="d-flex flex-column h-100">
                   <div class="section-head">
                     <div class="section-head-right">
-                      <select class="sort-select" name="" id="">
+                      <!-- <select class="sort-select" name="" id="">
                         <option value="none" selected>Export Script</option>
                         <option value=""></option>
                         <option value=""></option>
                         <option value=""></option>
-                      </select>
+                      </select> -->
+                      <button class="btn btn-export-all">Export Script</button>
                     </div>
                   </div>
-                  <div class="content-display">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book. It has survived not only five centuries,
-                    but also the leap into electronic typesetting, remaining
-                    essentially unchanged. It was popularised in the 1960s with
-                    the release of Letraset sheets containing Lorem Ipsum
-                    passages, and more recently with desktop publishing software
-                    like Aldus PageMaker including versions of Lorem Ipsum.
+                  <div class="content-display" v-if="activeScript">
+                    {{ activeScript[0].text }}
+
+                  </div>
+                  <div v-else class="no-select">
+                    Select a Script to Preview
                   </div>
                   <div class="section-footer">
                     <button class="btn no-shadow btn-share">
@@ -226,7 +134,7 @@ import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
 
 export default {
-  name: "Dashboard",
+  name: "CampaignScript",
   components: {
     Sidebar,
     Navbar,
@@ -234,9 +142,33 @@ export default {
   },
   data() {
     return {
-      campaignName: "",
       accessOptions: [{ value: null, text: "Select Plans" }],
+      campaign: [],
+      activeScript: null,
     };
+  },
+  methods: {
+    getCampaignData(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getOneCampaign", id)
+        .then((res) => {
+          this.campaign = res.data.data;
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    setActiveScript(data) {
+      this.activeScript = data;
+    },
+  },
+  mounted() {
+    this.getCampaignData(this.$route.params.id);
   },
 };
 </script>

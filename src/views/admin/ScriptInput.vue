@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid px-0">
+     <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"

@@ -1055,6 +1055,14 @@ input:checked+.slider:before {
     line-height: 22px;
 }
 
+.no-select {
+    color: #b3abab;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
 .section-footer {
     margin-top: auto;
     display: flex;
@@ -1263,6 +1271,9 @@ input:checked+.slider:before {
     overflow-y: auto;
 }
 
+.script-table tr{
+    cursor: pointer;
+ }
 
 
 

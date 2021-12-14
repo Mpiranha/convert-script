@@ -1,7 +1,10 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar :user-name="this.$store.state.user.first_name" current-active="script"></sidebar>
+      <sidebar
+        :user-name="this.$store.state.user.first_name"
+        current-active="script"
+      ></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="container scroll-content">
@@ -15,28 +18,15 @@
 
           <div class="row">
             <script-select-type-box
+              v-for="scriptType in scriptTypes"
+              :key="scriptType.id"
               img-url="icons/convert-icon/Aweber.svg"
-              link-url="#"
-              type-title="Email Subject Line"
-              desc="Write a high-converting subject line for your email"
-            ></script-select-type-box>
-             <script-select-type-box
-              img-url="icons/convert-icon/Aweber.svg"
-              link-url="#"
-              type-title="Email Subject Line"
-              desc="Write a high-converting subject line for your email"
-            ></script-select-type-box>
-             <script-select-type-box
-              img-url="icons/convert-icon/Aweber.svg"
-              link-url="#"
-              type-title="Email Subject Line"
-              desc="Write a high-converting subject line for your email"
-            ></script-select-type-box>
-             <script-select-type-box
-              img-url="icons/convert-icon/Aweber.svg"
-              link-url="#"
-              type-title="Email Subject Line"
-              desc="Write a high-converting subject line for your email"
+              :link-url="{
+                name: 'CreateScript',
+                params: { id: scriptType.id },
+              }"
+              :type-title="scriptType.name"
+              :desc="scriptType.description"
             ></script-select-type-box>
           </div>
         </div>
@@ -52,11 +42,36 @@ import Navbar from "@/components/TheNav.vue";
 import ScriptSelectTypeBox from "@/components/ScriptSelectTypeBox";
 
 export default {
-  name: "Dashboard",
+  name: "SelectScript",
   components: {
     Sidebar,
     Navbar,
     ScriptSelectTypeBox,
+  },
+  data() {
+    return {
+      scriptTypes: [],
+    };
+  },
+  methods: {
+    getScriptType() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getScriptTypes")
+        .then((res) => {
+          this.scriptTypes = res.data.data;
+
+          console.log(res.data);
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+  },
+  mounted() {
+    this.getScriptType();
   },
 };
 </script>

@@ -158,6 +158,7 @@ export default {
   },
   methods: {
     getAllSuggestions() {
+       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllSuggestions", {
           number: this.currentPage,

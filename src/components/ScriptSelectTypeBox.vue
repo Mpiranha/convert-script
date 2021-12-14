@@ -4,7 +4,7 @@
       <img class="img-icon" :src="require(`@/assets/${imgUrl}`)" />
       <h6 class="title">{{ typeTitle }}</h6>
       <p class="desc">{{ desc }}</p>
-      <a :href="linkUrl">
+      <router-link :to="linkUrl">
         Get Started
         <span>
           <img
@@ -13,7 +13,7 @@
             alt=""
           />
         </span>
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
   props: {
     typeTitle: String,
     desc: String,
-    linkUrl: String,
+    linkUrl: Object,
     imgUrl: String,
   },
 };
