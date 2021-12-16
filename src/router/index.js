@@ -154,6 +154,24 @@ const routes = [{
     }
   },
   {
+    path: '/campaign/:id/script/select',
+    name: 'CampaignScriptSelect',
+    component: ScriptSelect,
+    meta: {
+      requiresAuth: true,
+      adminAuth: false
+    }
+  },
+  {
+    path: '/campaign/:campaignId/script/new/:id',
+    name: 'CampaignCreateScript',
+    component: CreateScript,
+    meta: {
+      requiresAuth: true,
+      adminAuth: false
+    }
+  },
+  {
     path: '/script/select',
     name: 'ScriptSelect',
     component: ScriptSelect,
@@ -163,7 +181,7 @@ const routes = [{
     }
   },
   {
-    path: '/create-script/:id',
+    path: '/script/new/:id',
     name: 'CreateScript',
     component: CreateScript,
     meta: {

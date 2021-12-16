@@ -55,6 +55,7 @@ body {
 
 .fav-star {
     margin-right: 1rem;
+    cursor: pointer;
 }
 
 .fav-star .fav-icon {
@@ -1275,6 +1276,10 @@ input:checked+.slider:before {
     cursor: pointer;
  }
 
+ #text--copy {
+     opacity: 0;
+     position: absolute;
+ }
 
 
 

@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid px-0">
+    <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"
@@ -30,65 +31,52 @@
               <div class="col-6 no-gutter-right">
                 <div class="bordered-right h-100">
                   <div class="script-form-wrap">
-                    <div class="script-form">
-                      <div class="form-group">
-                        <label for="">Question 1</label>
+                    <form action="#" method="GET" @submit.prevent="onSubmit">
+                      <div class="script-form">
+                        <div
+                          v-for="(scriptInfo, index) in scriptData"
+                          :key="scriptInfo.id"
+                          class="form-group"
+                        >
+                          <label for="">{{
+                            scriptInfo.question.question
+                          }}</label>
+                          <input
+                            type="text"
+                            name=""
+                            :class="{
+                              'is-invalid':
+                                $v.scriptAnswers.$each[index].answer.$error,
+                            }"
+                            id=""
+                            v-model="scriptAnswers[index].answer"
+                            class="form-control"
+                            placeholder=""
+                          />
+                          <div class="invalid-feedback">
+                            <div
+                              v-if="
+                                !$v.scriptAnswers.$each[index].answer.required
+                              "
+                            >
+                              Answer is required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="script-form-footer">
+                        <div class="desc">Variation</div>
                         <input
                           type="text"
-                          name=""
-                          id=""
-                          class="form-control"
-                          placeholder=""
+                          size="1"
+                          v-model="variation"
+                          class="btn btn-variation"
                         />
+                        <button class="btn btn-create btn-script">
+                          Generate Script
+                        </button>
                       </div>
-                      <div class="form-group">
-                        <label for="">Question 2</label>
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          class="form-control"
-                          placeholder=""
-                        />
-                      </div>
-                      <div class="form-group">
-                        <label for="">Question 3</label>
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          class="form-control"
-                          placeholder=""
-                        />
-                      </div>
-                      <div class="form-group">
-                        <label for="">Question 4</label>
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          class="form-control"
-                          placeholder=""
-                        />
-                      </div>
-                      <div class="form-group">
-                        <label for="">Question 5</label>
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          class="form-control"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    <div class="script-form-footer">
-                      <div class="desc">Variation</div>
-                      <button class="btn btn-variation">2</button>
-                      <button class="btn btn-create btn-script">
-                        Generate Script
-                      </button>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -96,17 +84,27 @@
                 <div class="d-flex flex-column h-100">
                   <div class="section-head bordered-bottom">
                     <div class="section-head-right">
-                      <select class="sort-select" name="" id="">
+                      <!-- <select class="sort-select" name="" id="">
                         <option value="none" selected>Export All</option>
                         <option value=""></option>
                         <option value=""></option>
                         <option value=""></option>
-                      </select>
+                      </select> -->
+                      <button class="btn btn-export-all">Export All</button>
                     </div>
                   </div>
                   <div class="control-overflow">
-                    <script-box> </script-box>
-                    <script-box> </script-box>
+                    <div v-if="generatedScript.length > 0">
+                      <script-box
+                        v-for="script in generatedScript"
+                        :key="script.id"
+                        :script-content="script.text"
+                      >
+                      </script-box>
+                    </div>
+                    <div v-else class="empty-script">
+                      Generated Script will display here.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -123,9 +121,10 @@
 import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import ScriptBox from "@/components/ScriptBox";
+import { required } from "vuelidate/lib/validators";
 
 export default {
-  name: "Dashboard",
+  name: "ScriptGenerate",
   components: {
     Sidebar,
     Navbar,
@@ -133,9 +132,85 @@ export default {
   },
   data() {
     return {
-      campaignName: "",
-      accessOptions: [{ value: null, text: "Select Plans" }],
+      scriptData: [],
+      scriptAnswers: [],
+      variation: 2,
+      generatedScript: [],
     };
+  },
+  validations: {
+    scriptAnswers: {
+      $each: {
+        answer: { required },
+      },
+    },
+  },
+  methods: {
+    getScriptData(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getOneScriptTypeSelect", id)
+        .then((res) => {
+          this.scriptData = res.data.data;
+
+          // this.scriptData.forEach(function (data, index) {
+          //   console.log(data + " and " + index)
+          //   this.scriptAnswers.push(data.answer);
+          // });
+          for (let i = 0; i < this.scriptData.length; i++) {
+            this.scriptAnswers.push({ answer: this.scriptData[i].answer });
+          }
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    generateScript() {
+      this.$store.commit("updateLoadState", true);
+
+      this.$store
+        .dispatch("generateScript", {
+          content: "Info Limited",
+          script_type_id: this.$route.params.id,
+          campaign_id: this.$route.params.campaignId
+            ? this.$route.params.campaignId
+            : "",
+        })
+        .then((res) => {
+          console.log(res);
+          //this.getAllVideos();
+          // this.videoData = {
+          //   title: "",
+          //   description: "",
+          //   link: "",
+          // };
+          this.generatedScript = res.data.data.responses;
+          // this.makeToast("success", "Video added successfully");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error.response.data.error;
+          this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    onSubmit() {
+      // set all fields to touched
+      this.$v.$touch();
+
+      // stop here if form is invalid
+      if (this.$v.$invalid) return;
+
+      this.generateScript();
+    },
+  },
+  mounted() {
+    this.getScriptData(this.$route.params.id);
   },
 };
 </script>
@@ -152,6 +227,12 @@ export default {
 .script-form-wrap label {
   font-size: 0.7rem;
   color: #848688;
+}
+
+.script-form-wrap form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .script-form-wrap .form-control {
@@ -187,5 +268,13 @@ export default {
 .btn-variation,
 .btn-script {
   padding: 0.375rem 0.65rem !important;
+}
+
+.empty-script {
+  color: #848688;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -20,7 +20,13 @@
           >
             <h6 class="title">{{ campaign.name }}</h6>
 
-            <router-link class="btn btn-create" to="/script/select">
+            <router-link
+              class="btn btn-create"
+              :to="{
+                name: 'CampaignScriptSelect',
+                params: { id: campaign.id },
+              }"
+            >
               <span>+</span>
               Add Scripts
             </router-link>
@@ -95,11 +101,8 @@
                   </div>
                   <div class="content-display" v-if="activeScript">
                     {{ activeScript[0].text }}
-
                   </div>
-                  <div v-else class="no-select">
-                    Select a Script to Preview
-                  </div>
+                  <div v-else class="no-select">Select a Script to Preview</div>
                   <div class="section-footer">
                     <button class="btn no-shadow btn-share">
                       <img

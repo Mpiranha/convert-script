@@ -233,6 +233,9 @@ export default {
                 })
         })
     },
+
+    // Campaigns
+
     getCampaigns({
         // commit,
         state
@@ -329,6 +332,28 @@ export default {
         })
     },
 
+    // Scripts
+
+    getGeneratedScripts({
+        // commit,
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/scripts`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
     getScriptTypes({
         // commit,
         state
@@ -348,7 +373,47 @@ export default {
                 })
         })
     },
-    
+
+    getOneScriptTypeSelect({
+        // commit,
+        state
+    }, id) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/user-select-script-type/${id}`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
+    generateScript({
+        state
+    }, data) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.post(`${baseUrl}/api/v1/scripts`, data, {})
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
+
     // Admin Api's
 
     // 
@@ -886,7 +951,7 @@ export default {
                 })
         })
     },
-    
+
     // Permissions
     getAllPermissions({
         // commit,
@@ -1152,7 +1217,7 @@ export default {
                 })
         })
     },
-    
+
 
     // Third Party Platform Integration
 

@@ -62,8 +62,18 @@
 
                     <td class="text-right">
                       <nav class="nav flex-column action-view">
-                        <a @click="openEditModal(bonus.id, bonus)" class="nav-link" href="#">Edit</a>
-                        <a @click="deleteBonus(bonus.id)" class="nav-link" href="#">Delete</a>
+                        <a
+                          @click="openEditModal(bonus.id, bonus)"
+                          class="nav-link"
+                          href="#"
+                          >Edit</a
+                        >
+                        <a
+                          @click="deleteBonus(bonus.id)"
+                          class="nav-link"
+                          href="#"
+                          >Delete</a
+                        >
                       </nav>
                     </td>
                   </tr>
@@ -130,7 +140,7 @@
         <b-button
           @click="triggerEdit ? editBonus(editId, bonusData) : addBonus()"
           class="save-modal"
-          >{{triggerEdit ? "Edit" : "Save"}}</b-button
+          >{{ triggerEdit ? "Edit" : "Save" }}</b-button
         >
       </div>
     </b-modal>
@@ -260,7 +270,7 @@ export default {
       this.bonusData = {
         name: "",
         description: "",
-        url: ""
+        url: "",
       };
       this.triggerEdit = false;
     },

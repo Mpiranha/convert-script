@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid px-0">
+    <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"
@@ -21,10 +22,20 @@
               v-for="scriptType in scriptTypes"
               :key="scriptType.id"
               img-url="icons/convert-icon/Aweber.svg"
-              :link-url="{
-                name: 'CreateScript',
-                params: { id: scriptType.id },
-              }"
+              :link-url="
+                $route.params.id
+                  ? {
+                      name: 'CampaignCreateScript',
+                      params: {
+                        campaignId: $route.params.id,
+                        id: scriptType.id,
+                      },
+                    }
+                  : {
+                      name: 'CreateScript',
+                      params: { id: scriptType.id },
+                    }
+              "
               :type-title="scriptType.name"
               :desc="scriptType.description"
             ></script-select-type-box>

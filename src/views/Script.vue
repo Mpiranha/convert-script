@@ -35,16 +35,20 @@
                       src="@/assets/icons/convert-icon/All script.svg"
                       alt=""
                     />
-                    5
+                    {{ scripts.length }}
                   </div>
                   <div class="section-head-right">
                     <button class="btn btn-export-all">Export All</button>
                   </div>
                 </div>
                 <div class="control-height">
-                  <table class="table table-section">
+                  <table class="table table-section script-table">
                     <tbody>
-                      <tr>
+                      <tr
+                        @click="setActiveScript(script.responses)"
+                        v-for="script in scripts"
+                        :key="script.id"
+                      >
                         <td scope="row">
                           <div class="control-order-tool">
                             <button class="btn mb-2">
@@ -55,115 +59,20 @@
                             </button>
                           </div>
                         </td>
-                        <td>Script Summary 1</td>
+                        <td>
+                          {{ script.content ? script.content : "Dummy Text" }}
+                        </td>
                         <td>
                           <div class="script-type">Video Script</div>
                         </td>
                         <td class="text-right">
                           <dropdown-tool
-                            @edit-clicked="openEditModal('', '')"
+                            @edit-clicked="
+                              openEditModal(script.id, script.responses[0].text)
+                            "
                             @delete-proceed="deleteCampaign('')"
                           >
                           </dropdown-tool>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">
-                          <div class="control-order-tool">
-                            <button class="btn mb-2">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                            <button class="btn btn-down">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                          </div>
-                        </td>
-                        <td>Script Summary 1</td>
-                        <td>
-                          <div class="script-type">Video Script</div>
-                        </td>
-                        <td class="text-right">
-                          <dropdown-tool
-                            @edit-clicked="openEditModal('', '')"
-                            @delete-proceed="deleteCampaign('')"
-                          >
-                          </dropdown-tool>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">
-                          <div class="control-order-tool">
-                            <button class="btn mb-2">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                            <button class="btn btn-down">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                          </div>
-                        </td>
-                        <td>Script Summary 1</td>
-                        <td>
-                          <div class="script-type">Video Script</div>
-                        </td>
-                        <td class="text-right">
-                          <dropdown-tool> </dropdown-tool>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">
-                          <div class="control-order-tool">
-                            <button class="btn mb-2">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                            <button class="btn btn-down">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                          </div>
-                        </td>
-                        <td>Script Summary 1</td>
-                        <td>
-                          <div class="script-type">Video Script</div>
-                        </td>
-                        <td class="text-right">
-                          <dropdown-tool> </dropdown-tool>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">
-                          <div class="control-order-tool">
-                            <button class="btn mb-2">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                            <button class="btn btn-down">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                          </div>
-                        </td>
-                        <td>Script Summary 1</td>
-                        <td>
-                          <div class="script-type">Video Script</div>
-                        </td>
-                        <td class="text-right">
-                          <dropdown-tool> </dropdown-tool>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">
-                          <div class="control-order-tool">
-                            <button class="btn mb-2">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                            <button class="btn btn-down">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                          </div>
-                        </td>
-                        <td>Script Summary 1</td>
-                        <td>
-                          <div class="script-type">Video Script</div>
-                        </td>
-                        <td class="text-right">
-                          <dropdown-tool> </dropdown-tool>
                         </td>
                       </tr>
                     </tbody>
@@ -174,33 +83,33 @@
                 <div class="d-flex flex-column h-100">
                   <div class="section-head">
                     <div class="section-head-right d-flex align-items-center">
-                      <div class="fav-star">
+                      <div class="fav-star" @click="toggleFavourite">
                         <img
+                          v-if="isFavourite"
+                          class="fav-icon"
+                          src="@/assets/icons/convert-icon/star.png"
+                          alt=""
+                        />
+                        <img
+                          v-else
                           class="fav-icon"
                           src="@/assets/icons/convert-icon/my Favourites.svg"
                           alt=""
                         />
                       </div>
-                      <select class="sort-select" name="" id="">
+                      <!-- <select class="sort-select" name="" id="">
                         <option value="none" selected>Export Script</option>
                         <option value=""></option>
                         <option value=""></option>
                         <option value=""></option>
-                      </select>
+                      </select> -->
+                      <button class="btn btn-export-all">Export Script</button>
                     </div>
                   </div>
-                  <div class="content-display">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book. It has survived not only five centuries,
-                    but also the leap into electronic typesetting, remaining
-                    essentially unchanged. It was popularised in the 1960s with
-                    the release of Letraset sheets containing Lorem Ipsum
-                    passages, and more recently with desktop publishing software
-                    like Aldus PageMaker including versions of Lorem Ipsum.
+                  <div class="content-display" v-if="activeScript">
+                    {{ activeScript[0].text }}
                   </div>
+                  <div v-else class="no-select">Select a Script to Preview</div>
                   <div class="section-footer">
                     <button class="btn no-shadow btn-share">
                       <img
@@ -209,7 +118,7 @@
                         alt=""
                       />
                     </button>
-                    <button class="btn no-shadow btn-copy">
+                    <button @click="copyText" class="btn no-shadow btn-copy">
                       <img
                         class="foot-icons"
                         src="@/assets/icons/convert-icon/copy.svg"
@@ -217,6 +126,11 @@
                       />
                       Copy to clipboard
                     </button>
+                    <input
+                      type="hidden"
+                      id="text--copy"
+                      :value="activeScript ? activeScript[0].text : ''"
+                    />
                   </div>
                 </div>
               </div>
@@ -262,6 +176,7 @@
 import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
+import alertMixin from "@/mixins/alertMixin";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
@@ -269,7 +184,8 @@ import "quill/dist/quill.bubble.css";
 import { quillEditor } from "vue-quill-editor";
 
 export default {
-  name: "Dashboard",
+  name: "Scripts",
+  mixins: [alertMixin],
   components: {
     Sidebar,
     Navbar,
@@ -278,9 +194,10 @@ export default {
   },
   data() {
     return {
-      campaignName: "",
-      accessOptions: [{ value: null, text: "Select Plans" }],
+      isFavourite: false,
+      scripts: [],
       content: "",
+      activeScript: null,
       editorOption: {
         // Some Quill options...
         theme: "snow",
@@ -303,6 +220,21 @@ export default {
   },
 
   methods: {
+    getScripts() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getGeneratedScripts")
+        .then((res) => {
+          this.scripts = res.data.data;
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     onEditorBlur(quill) {
       console.log("editor blur!", quill);
     },
@@ -316,21 +248,49 @@ export default {
       console.log("editor change!", quill, html, text);
       this.content = html;
     },
-    openEditModal(id) {
+    openEditModal(id, data) {
       this.$bvModal.show("modal-edit-script");
       // this.triggerEdit = true;
       this.$store.commit("triggerEdit", {
         editStatus: true,
         id: id,
       });
+      this.content = data;
       // this.editId = id;
       // this.campaignName = data;
+    },
+    toggleFavourite() {
+      this.isFavourite = !this.isFavourite;
+    },
+    setActiveScript(data) {
+      this.activeScript = data;
+    },
+    copyText() {
+      let testingCodeToCopy = document.querySelector("#text--copy");
+      testingCodeToCopy.setAttribute("type", "text"); // 不是 hidden 才能複製
+      testingCodeToCopy.select();
+
+      try {
+        var successful = document.execCommand("copy");
+        var msg = successful ? "successful" : "unsuccessful";
+        this.makeToast("success", "Script was copied " + msg);
+      } catch (err) {
+        alert("Oops, unable to copy");
+         this.makeToast("danger", "Oops, unable to copy");
+      }
+
+      /* unselect the range */
+      testingCodeToCopy.setAttribute("type", "hidden");
+      window.getSelection().removeAllRanges();
     },
   },
   computed: {
     editor() {
       return this.$refs.myQuillEditor.quill;
     },
+  },
+  mounted() {
+    this.getScripts();
   },
 };
 </script>
