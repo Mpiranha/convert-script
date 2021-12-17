@@ -16,13 +16,18 @@
       <i class="flaticon-pencil icons table-drop-icon"></i>
       Edit
     </b-dropdown-item>
-    <b-dropdown-item v-b-modal.modal-delete link-class="drop-link" href="#">
+    <b-dropdown-item
+      @click="modalShow = !modalShow"
+      link-class="drop-link"
+      href="#"
+    >
       <i class="flaticon-trash icons table-drop-icon"></i>
       Delete
     </b-dropdown-item>
     <slot name="secondary"></slot>
 
     <b-modal
+      v-model="modalShow"
       :hide-header="true"
       id="modal-delete"
       centered
@@ -53,6 +58,11 @@
 export default {
   name: "DropdownTool",
   props: ["deleteWhat"],
+  data() {
+    return {
+      modalShow: false,
+    };
+  },
   methods: {
     editAction() {
       this.$emit("edit-clicked");

@@ -72,6 +72,7 @@
                           v-model="variation"
                           class="btn btn-variation"
                         />
+                        
                         <button class="btn btn-create btn-script">
                           Generate Script
                         </button>
