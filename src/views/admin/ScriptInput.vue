@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid px-0">
-     <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
+    <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"
@@ -61,6 +61,23 @@
                 </b-form-group>
                 <hr class="my-4" />
                 <div class="title">Backend Input</div>
+
+                <b-form-group label-class="input-label" label="'Prompt 1">
+                  <b-form-input
+                    
+                    type="text"
+                    class="input-table"
+                  >
+                  </b-form-input>
+                </b-form-group>
+
+                <b-form-group label-class="input-label" label="'Prompt 2">
+                  <b-form-input
+                    type="text"
+                    class="input-table"
+                  >
+                  </b-form-input>
+                </b-form-group>
 
                 <b-form-group
                   label="Engine"
@@ -125,7 +142,7 @@
                   >
                   </b-form-input>
                 </b-form-group>
-                 <b-form-group
+                <b-form-group
                   label-class="input-label"
                   label="Presence Penalty (0.00 - 1.00)"
                 >

@@ -46,7 +46,7 @@
               :loading-state="this.$store.state.loading"
             ></loader-modal>
             <div v-if="scriptTypeLength === 0" class="no-data-info">
-              Created agency will display here.
+              Created Script Type will display here.
             </div>
             <table v-else class="table table-custom">
               <thead>
@@ -78,7 +78,7 @@
                           icon: scriptType.icon,
                         })
                       "
-                      @delete-proceed="deleteAgency(user.id)"
+                      @delete-proceed="deleteScriptType(scriptType.id)"
                     >
                       <template v-slot:secondary>
                         <b-dropdown-item

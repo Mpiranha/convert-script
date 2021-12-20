@@ -76,6 +76,7 @@
                   </td>
                   <td>
                     <dropdown-tool
+                      delete-what="Campaign"
                       @edit-clicked="openEditModal(campaign.id, campaign.name)"
                       @delete-proceed="deleteCampaign(campaign.id)"
                     ></dropdown-tool>
@@ -135,9 +136,11 @@
 import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
+import alertMixin from "@/mixins/alertMixin";
 
 export default {
   name: "Campaign",
+  mixins: [alertMixin],
   components: {
     Sidebar,
     Navbar,
@@ -156,7 +159,7 @@ export default {
   },
   methods: {
     getCampaign() {
-       this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getCampaigns")
         .then((res) => {
@@ -173,8 +176,8 @@ export default {
         });
     },
     addCampaign() {
-       this.$store.commit("updateLoadState", true);
-    
+      this.$store.commit("updateLoadState", true);
+
       this.$bvModal.hide("modal-new-campaign");
       this.$store
         .dispatch("addCampaign", { name: this.campaignName })
@@ -183,10 +186,14 @@ export default {
           console.log(res.data);
           // this.getCampaign();
           this.getCampaign();
+          this.makeToast("success", "Campaign added successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
+          this.error = error;
+          this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
           // this.error = error.response.data.errors.root;
           // this.error = error;
         });
@@ -196,8 +203,7 @@ export default {
       // this.$vm.$forceUpdate();
     },
     editCampaign(id) {
-    
-       this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-campaign");
       this.$store
         .dispatch("editCampaign", { id: id, data: { name: this.campaignName } })
@@ -205,28 +211,33 @@ export default {
           this.error = null;
           console.log(res.data);
           this.getCampaign();
+          this.makeToast("success", "Campaign editted successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          // this.error = error.response.data.errors.root;
+          this.error = error;
+          this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
           // this.error = error;
         });
     },
     deleteCampaign(id) {
-    
-       this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteCampaign", id)
         .then((res) => {
           this.error = null;
           this.getCampaign();
           console.log(res.data);
+          this.makeToast("success", "Campaign deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          // this.error = error.response.data.errors.root;
+          this.error = error;
+          this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
           // this.error = error;
         });
 

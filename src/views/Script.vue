@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid px-0">
-     <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
+    <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"
@@ -68,10 +68,11 @@
                         </td>
                         <td class="text-right">
                           <dropdown-tool
+                            delete-what="Script"
                             @edit-clicked="
                               openEditModal(script.id, script.responses[0].text)
                             "
-                            @delete-proceed="deleteCampaign('')"
+                            @delete-proceed="deleteScript(script.id)"
                           >
                           </dropdown-tool>
                         </td>
@@ -236,6 +237,27 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+     deleteScript(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("deleteScript", id)
+        .then((res) => {
+          this.error = null;
+          this.getScripts();
+          console.log(res.data);
+           this.makeToast("success", "Script deleted successfully");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+           this.makeToast("danger", this.error);
+           this.$store.commit("updateLoadState", false);
+          // this.error = error;
+        });
+
+      // this.getCampaign();
+    },
     onEditorBlur(quill) {
       console.log("editor blur!", quill);
     },
@@ -277,7 +299,7 @@ export default {
         this.makeToast("success", "Script was copied " + msg);
       } catch (err) {
         alert("Oops, unable to copy");
-         this.makeToast("danger", "Oops, unable to copy");
+        this.makeToast("danger", "Oops, unable to copy");
       }
 
       /* unselect the range */
