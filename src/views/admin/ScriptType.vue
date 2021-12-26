@@ -175,9 +175,9 @@
           >Close</b-button
         >
         <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
+          @click="triggerEdit ? editScriptType(editId) : addScriptType()"
           class="save-modal"
-          >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
+          >{{ triggerEdit ? "Edit" : "Add Script" }}</b-button
         >
       </div>
     </b-modal>
@@ -311,7 +311,7 @@ export default {
       // this.scriptTypeData.desc = data.desc;
       // this.scriptTypeData.icon = data.icon;
 
-      this.$router.push({ name: 'ScriptTypesInput', params: { id: id } })
+      this.$router.push({ name: "ScriptTypesInput", params: { id: id } });
     },
     clearField() {
       this.scriptTypeData = {

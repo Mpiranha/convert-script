@@ -21,6 +21,7 @@ import CampaignScript from '@/views/CampaignScript'
 import ScriptSelect from '@/views/ScriptSelect'
 import CreateScript from '@/views/CreateScript'
 import Script from '@/views/Script'
+import Market from '@/views/Market'
 import Favourites from '@/views/Favourites'
 import Presets from '@/views/Presets'
 import PresetAdd from '@/views/PresetAdd'
@@ -103,6 +104,15 @@ const routes = [{
     path: '/bonus',
     name: 'Bonus',
     component: Bonus,
+    meta: {
+      requiresAuth: true,
+      adminAuth: false
+    }
+  },
+  {
+    path: '/market',
+    name: 'Market',
+    component: Market,
     meta: {
       requiresAuth: true,
       adminAuth: false

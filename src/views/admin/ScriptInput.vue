@@ -62,17 +62,18 @@
                 <hr class="my-4" />
                 <div class="title">Backend Input</div>
 
-                <b-form-group label-class="input-label" label="'Prompt 1">
+                <b-form-group label-class="input-label" label="Prompt 1">
                   <b-form-input
-                    
+                    v-model="scriptTypeData.prompt_1"
                     type="text"
                     class="input-table"
                   >
                   </b-form-input>
                 </b-form-group>
 
-                <b-form-group label-class="input-label" label="'Prompt 2">
+                <b-form-group label-class="input-label" label="Prompt 2">
                   <b-form-input
+                    v-model="scriptTypeData.prompt_2"
                     type="text"
                     class="input-table"
                   >
@@ -202,7 +203,7 @@
                 >
                   <div class="row">
                     <div class="col-12">
-                      <b-form-group label-class="input-label" label="'Prompt">
+                      <b-form-group label-class="input-label" label="Question">
                         <b-form-input
                           v-model="script_type_preset.question"
                           type="text"
@@ -295,6 +296,8 @@ export default {
           // },
         ],
         name: "",
+        prompt_1: "",
+        prompt_2: "",
         icon: null,
         description: "",
         presence_penalty: "",
@@ -384,6 +387,8 @@ export default {
       // console.log(data.presets.length);
 
       this.scriptTypeData.name = data.name;
+      this.scriptTypeData.prompt_1 = data.prompt_1;
+      this.scriptTypeData.prompt_2 = data.prompt_2;
       // this.scriptTypeData.icon = data.icon;
       this.scriptTypeData.description = data.description;
       this.scriptTypeData.presence_penalty = data.presence_penalty;
