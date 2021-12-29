@@ -113,7 +113,7 @@
                   </div>
                   <div v-else class="no-select">Select a Script to Preview</div>
                   <div class="section-footer">
-                    <button class="btn no-shadow btn-share">
+                    <button class="btn no-shadow btn-share" v-b-modal.modal-send-script>
                       <img
                         class="foot-icons"
                         src="@/assets/icons/convert-icon/send.svg"
@@ -168,6 +168,33 @@
           >Go back</b-button
         >
         <b-button class="save-modal">Save to</b-button>
+      </div>
+    </b-modal>
+
+    <b-modal
+      :hide-header="true"
+      id="modal-send-script"
+      centered
+      size="md"
+      :hide-footer="true"
+      dialog-class="control-width"
+      content-class="modal-main"
+    >
+      <b-form-group label="Send to" label-for="pwd" label-class="form-label">
+        <b-form-select
+          class="input-table"
+          v-model="data"
+          :options="sendOptions"
+        ></b-form-select>
+      </b-form-group>
+
+      <div class="d-flex justify-content-end">
+        <b-button
+          @click="$bvModal.hide('modal-send-script')"
+          class="close-modal"
+          >Close</b-button
+        >
+        <b-button class="save-modal">Send</b-button>
       </div>
     </b-modal>
   </div>
@@ -237,7 +264,7 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-     deleteScript(id) {
+    deleteScript(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteScript", id)
@@ -245,14 +272,14 @@ export default {
           this.error = null;
           this.getScripts();
           console.log(res.data);
-           this.makeToast("success", "Script deleted successfully");
+          this.makeToast("success", "Script deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
-           this.makeToast("danger", this.error);
-           this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
           // this.error = error;
         });
 

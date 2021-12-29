@@ -26,21 +26,21 @@
             >
               <b-form-input
                 id="name"
-                v-model="firstname"
+                v-model="userDetails.first_name"
                 type="text"
                 class="input-table"
               >
               </b-form-input>
             </b-form-group>
 
-             <b-form-group
+            <b-form-group
               label="Last Name"
               label-for="name"
               label-class="form-label"
             >
               <b-form-input
                 id="name"
-                v-model="lastname"
+                v-model="userDetails.last_name"
                 type="text"
                 class="input-table"
               >
@@ -49,29 +49,17 @@
 
             <b-form-group
               label="Email"
-              label-for="company-name"
+              label-for="email"
               label-class="form-label"
             >
               <b-form-input
-                id="company-name"
-                v-model="form.email"
+                id="email"
+                v-model="email"
                 type="email"
                 class="input-table"
               >
               </b-form-input>
             </b-form-group>
-
-            <password-input
-              label="Password"
-              v-model.trim="form.password"
-              class-label="form-label"
-            ></password-input>
-
-            <password-input
-              label="New Password"
-              v-model.trim="form.newPassword"
-              class-label="form-label"
-            ></password-input>
 
             <b-form-group label="My Profile" label-class="form-label">
               <div class="d-flex user-img-wrap-setting">
@@ -88,6 +76,23 @@
                 </div>
               </div>
             </b-form-group>
+          </div>
+
+          <div class="d-flex justify-content-end align-self-end mb-2">
+            <b-button class="save-modal px-3 py-2">Save</b-button>
+          </div>
+          <div class="content-wrap extra-margin-left-wrap">
+            <password-input
+              label="Password"
+              v-model.trim="pwd.password"
+              class-label="form-label"
+            ></password-input>
+
+            <password-input
+              label="New Password"
+              v-model.trim="pwd.newPassword"
+              class-label="form-label"
+            ></password-input>
           </div>
         </div>
       </div>
@@ -111,11 +116,12 @@ export default {
   },
   data() {
     return {
-      firstname: "",
-      lastname: "",
-      form: {
-        name: "",
-        email: "",
+      userDetails: {
+        first_name: "",
+        last_name: "",
+      },
+      email: "",
+      pwd: {
         password: "",
         newPassword: "",
       },
@@ -131,8 +137,8 @@ export default {
       this.userData = user;
     },
     populateForm() {
-      this.form.name = this.userData.name;
-      this.form.email = this.userData.email;
+      this.userDetails.first_name = this.userData.first_name;
+      this.userDetails.last_name = this.userData.last_name;
     },
   },
   watch: {
@@ -149,11 +155,7 @@ export default {
       this.assignUser(newValue);
       this.populateForm();
     },
-    computed: {
-      username() {
-        return `${this.lastname} ${this.firstname}`;
-      }
-    }
+   
   },
 };
 </script>

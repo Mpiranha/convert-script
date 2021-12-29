@@ -218,7 +218,7 @@
 
       <div class="d-flex justify-content-end">
         <b-button
-          @click="$bvModal.hide('modal-new-campaign')"
+          @click="$bvModal.hide('modal-send-script')"
           class="close-modal"
           >Close</b-button
         >
