@@ -51,7 +51,7 @@
                             id=""
                             v-model="scriptAnswers[index].answer"
                             class="form-control"
-                            placeholder=""
+                            :placeholder="scriptInfo.question.placeholder"
                           />
                           <div class="invalid-feedback">
                             <div

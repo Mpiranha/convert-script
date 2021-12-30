@@ -72,7 +72,9 @@ export default {
   },
   data() {
     return {
-      stat: [],
+      stat: {
+        video: {}
+      },
     };
   },
 

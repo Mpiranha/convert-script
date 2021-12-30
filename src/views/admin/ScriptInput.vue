@@ -442,8 +442,16 @@ export default {
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
-          this.error = error.response.data.message;
-          this.makeToast("danger", this.error);
+          this.error = error.response.data.errors;
+          for (const key in this.error) {
+            if (Object.hasOwnProperty.call(this.error, key)) {
+              //const element = [key];
+              if (this.error[key] !== "undefined") {
+                this.makeToast("danger", this.error[key]);
+              }
+            }
+          }
+          // this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
         });
     },
