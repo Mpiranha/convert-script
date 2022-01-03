@@ -1,7 +1,7 @@
 <template>
   <div class="col-4">
     <div class="box-wrap">
-      <img class="img-icon" :src="require(`@/assets/${imgUrl}`)" />
+      <img class="img-icon" :src="imgUrl" />
       <h6 class="title">{{ typeTitle }}</h6>
       <p class="desc">{{ desc }}</p>
       <router-link :to="linkUrl">

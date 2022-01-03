@@ -238,9 +238,22 @@ export default {
     },
     addScriptType() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-video");
+      this.$bvModal.hide("modal-new-script");
+
+      const formData = new FormData();
+
+      for (const property in this.scriptTypeData) {
+
+        if (property == "icon") {
+          console.log();
+          formData.append(`${property}`, this.scriptTypeData.icon);
+          continue;
+        }
+        formData.append(`${property}`, `${this.scriptTypeData[property]}`);
+      }
+
       this.$store
-        .dispatch("addScriptType", this.videoData)
+        .dispatch("addScriptType", formData)
         .then((res) => {
           console.log(res);
           this.getAllScriptType();

@@ -21,7 +21,11 @@
             <script-select-type-box
               v-for="scriptType in scriptTypes"
               :key="scriptType.id"
-              img-url="icons/convert-icon/Aweber.svg"
+              :img-url="
+                scriptType.icon
+                  ? scriptType.icon
+                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
+              "
               :link-url="
                 $route.params.id
                   ? {
