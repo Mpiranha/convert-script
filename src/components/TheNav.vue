@@ -134,4 +134,10 @@ export default {
 .fix-height {
   min-height: 60px;
 }
+
+@media  (min-width: 1367px) {
+  .menu-section .nav-link {
+    font-size: 0.9rem;
+  }
+}
 </style>

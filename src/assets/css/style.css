@@ -1272,23 +1272,47 @@ input:checked+.slider:before {
     overflow-y: auto;
 }
 
-.script-table tr{
+.script-table tr {
     cursor: pointer;
- }
+}
 
- #text--copy {
-     opacity: 0;
-     position: absolute;
- }
+#text--copy {
+    opacity: 0;
+    position: absolute;
+}
 
- .table-market td {
-     color: #909bae;
- }
-
-
- .table-market .action-view .nav-link {
-     color:  #909bae;
- }
+.table-market td {
+    color: #909bae;
+}
 
 
-@media screen and (min-width: 1330px) {}
+.table-market .action-view .nav-link {
+    color: #909bae;
+}
+
+
+@media screen and (min-width: 1367px) {
+    .section-head-left {
+        font-size: 0.9rem;
+    }
+
+    .btn-create {
+        font-size: 0.9rem !important;
+    }
+
+    .btn-create span {
+        font-size: 1.6rem;
+    }
+
+    .btn-export-all {
+        font-size: 0.9rem !important;
+    }
+
+    .section-head-left .section-head-icon {
+        width: 1rem;
+    }
+
+    .table-section tr td {
+        font-size: 0.9rem;
+    }
+}

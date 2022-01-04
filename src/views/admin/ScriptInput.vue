@@ -454,23 +454,53 @@ export default {
       const formData = new FormData();
 
       for (const property in this.scriptTypeData) {
-
-         if (property == "icon") {
-          console.log();
-          formData.append(`${property}`, this.scriptTypeData.icon);
+        if (property == "script_type_presets") {
+          // this.scriptTypeData.script_type_presets.forEach(function (elem) {
+          //   console.log(elem);
+          //   formData.append(
+          //     `${property}[]`,
+          //     elem
+          //   );
+          // });
+          formData.append(
+            `${property}[]`,
+            this.scriptTypeData.script_type_presets
+          );
           continue;
         }
-        formData.append(`${property}`, `${this.scriptTypeData[property]}`);
+
+        if (property == "icon") {
+          console.log();
+          formData.append(
+            `${property}`,
+            JSON.stringify(this.scriptTypeData.icon)
+          );
+          continue;
+        }
+
+        formData.append(`${property}`, this.scriptTypeData[property]);
       }
 
-      //console.log(formData.get("prompt_1"));
+      console.log("Form Data");
+      for (var pair of formData.entries()) {
+        console.log(pair[0] + ", " + pair[1]);
+      }
 
-      //if (formData) return;
+      // console.log(this.scriptTypeData.script_type_presets);
+      // console.log(formData.get("script_type_presets"));
+
+      console.log("URLSearchParams");
+      var test = new URLSearchParams(formData);
+      test.forEach(function (value, key) {
+        console.log(key, value);
+      });
+
+      // if (formData) return;
 
       this.$store
         .dispatch("editScriptType", {
           id: this.$route.params.id,
-          data: formData,
+          data: new URLSearchParams(formData),
         })
         .then((res) => {
           console.log(res);
@@ -493,6 +523,18 @@ export default {
           // this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
         });
+    },
+    urlencodeFormData(fd) {
+      var s = "";
+      function encode(s) {
+        return encodeURIComponent(s).replace(/%20/g, "+");
+      }
+      for (var pair of fd.entries()) {
+        if (typeof pair[1] == "string") {
+          s += (s ? "&" : "") + encode(pair[0]) + "=" + encode(pair[1]);
+        }
+      }
+      return s;
     },
   },
 
