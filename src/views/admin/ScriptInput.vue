@@ -58,10 +58,11 @@
 
                   <b-form-group label="Upload" label-class="input-label">
                     <b-form-file
-                      v-model="scriptTypeData.icon"
-                      :state="Boolean(scriptTypeData.icon)"
+                      v-model="icon"
+                      :state="Boolean(icon)"
                       placeholder="Choose a file or drop it here..."
                       drop-placeholder="Drop file here..."
+                      @change="onIconChange($event)"
                     >
                     </b-form-file>
                   </b-form-group>
@@ -313,7 +314,7 @@ export default {
         name: "",
         prompt_1: "",
         prompt_2: "",
-        icon: null,
+        icon: [],
         description: "",
         presence_penalty: "",
         frequency_penalty: "",
@@ -335,6 +336,8 @@ export default {
         { value: null, text: "None" },
         { value: "text", text: "text" },
       ],
+      icon: null,
+      iconRes: null,
       script: [],
     };
   },
@@ -383,8 +386,9 @@ export default {
         // label: "",
         // placeholder: "",
         this.addInput();
-        this.scriptTypeData.script_type_presets[i].script_type_id =
-          data.presets[i].id;
+        // this.scriptTypeData.script_type_presets[i].script_type_id =
+        //   data.presets[i].id;
+        this.scriptTypeData.script_type_presets[i].script_type_id = data.id;
         this.scriptTypeData.script_type_presets[i].question =
           data.presets[i].question;
         this.scriptTypeData.script_type_presets[i].field_type =
@@ -446,61 +450,43 @@ export default {
       //   engine: null,
       // };
     },
-    editScript() {
-      this.$store.commit("updateLoadState", true);
-
-      // console.log("Icon " + this.scriptTypeData.icon.name);
-
+    onIconChange(e) {
+      // console.log(e.target.files[0]);
       const formData = new FormData();
 
-      for (const property in this.scriptTypeData) {
-        if (property == "script_type_presets") {
-          // this.scriptTypeData.script_type_presets.forEach(function (elem) {
-          //   console.log(elem);
-          //   formData.append(
-          //     `${property}[]`,
-          //     elem
-          //   );
-          // });
-          formData.append(
-            `${property}[]`,
-            this.scriptTypeData.script_type_presets
-          );
-          continue;
-        }
+      formData.append("file", e.target.files[0]);
+      formData.append("path", "script_type");
 
-        if (property == "icon") {
-          console.log();
-          formData.append(
-            `${property}`,
-            JSON.stringify(this.scriptTypeData.icon)
-          );
-          continue;
-        }
+      console.log(formData.get("path"));
 
-        formData.append(`${property}`, this.scriptTypeData[property]);
-      }
+      //this.scriptTypeData.icon = e.target.files[0];
+      // console.log(this.icon);
+      this.$store
+        .dispatch("uploadIcon", formData)
+        .then((res) => {
+          console.log(res.data.data);
+          this.iconRes = res.data.data;
+          this.scriptTypeData.icon = [];
+          this.scriptTypeData.icon.push(res.data.data.id);
 
-      console.log("Form Data");
-      for (var pair of formData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
+          this.makeToast("success", "File Uploaded successfully");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log("error: " + error);
+          this.error = error;
 
-      // console.log(this.scriptTypeData.script_type_presets);
-      // console.log(formData.get("script_type_presets"));
-
-      console.log("URLSearchParams");
-      var test = new URLSearchParams(formData);
-      test.forEach(function (value, key) {
-        console.log(key, value);
-      });
-
-      // if (formData) return;
+          this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    editScript() {
+      this.$store.commit("updateLoadState", true);
 
       this.$store
         .dispatch("editScriptType", {
           id: this.$route.params.id,
-          data: new URLSearchParams(formData),
+          data: this.scriptTypeData,
         })
         .then((res) => {
           console.log(res);
@@ -524,24 +510,18 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    urlencodeFormData(fd) {
-      var s = "";
-      function encode(s) {
-        return encodeURIComponent(s).replace(/%20/g, "+");
-      }
-      for (var pair of fd.entries()) {
-        if (typeof pair[1] == "string") {
-          s += (s ? "&" : "") + encode(pair[0]) + "=" + encode(pair[1]);
-        }
-      }
-      return s;
-    },
   },
 
   mounted() {
     this.getScript(this.$route.params.id);
   },
   computed: {},
+  watch: {
+    icon: function () {
+      // this.onIconChange(this.$event);
+      // console.log(this.icon);
+    },
+  },
 };
 </script>
 
