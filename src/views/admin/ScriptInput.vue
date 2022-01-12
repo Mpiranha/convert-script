@@ -66,6 +66,15 @@
                     >
                     </b-form-file>
                   </b-form-group>
+                  <img
+                    class="icon-prev"
+                    :src="
+                      scriptTypeData.icon
+                        ? scriptTypeData.icon
+                        : '@/assets/icons/convert-icon/Aweber.svg'
+                    "
+                    alt=""
+                  />
                   <hr class="my-4" />
                   <div class="title">Backend Input</div>
 
@@ -451,7 +460,7 @@ export default {
       // };
     },
     onIconChange(e) {
-      // console.log(e.target.files[0]);
+      console.log(e.target.files[0]);
       const formData = new FormData();
 
       formData.append("file", e.target.files[0]);
@@ -466,8 +475,8 @@ export default {
         .then((res) => {
           console.log(res.data.data);
           this.iconRes = res.data.data;
-          this.scriptTypeData.icon = [];
-          this.scriptTypeData.icon.push(res.data.data.id);
+
+          this.scriptTypeData.icon = res.data.data.file_url;
 
           this.makeToast("success", "File Uploaded successfully");
           this.$store.commit("updateLoadState", false);
@@ -482,6 +491,11 @@ export default {
     },
     editScript() {
       this.$store.commit("updateLoadState", true);
+
+      if (this.iconRes) {
+        this.scriptTypeData.icon = [];
+        this.scriptTypeData.icon.push(this.iconRes.id);
+      }
 
       this.$store
         .dispatch("editScriptType", {
@@ -548,6 +562,11 @@ export default {
 .input-box .btn-delete {
   font-size: 0.9rem;
   color: blue;
+}
+
+.icon-prev {
+  width: 40px;
+  height: 40px;
 }
 
 .btn-add-input {
