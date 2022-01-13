@@ -57,6 +57,7 @@
                             <div
                               v-if="
                                 !$v.scriptAnswers.$each[index].answer.required
+                                && isSubmitted
                               "
                             >
                               Answer is required
@@ -137,6 +138,7 @@ export default {
       scriptAnswers: [],
       variation: 2,
       generatedScript: [],
+      isSubmitted: false,
     };
   },
   validations: {
@@ -204,6 +206,8 @@ export default {
       // set all fields to touched
       this.$v.$touch();
 
+      // set isSubmite to true
+      this.isSubmitted = true;
       // stop here if form is invalid
       if (this.$v.$invalid) return;
 
