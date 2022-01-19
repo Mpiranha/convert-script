@@ -387,6 +387,9 @@ export default {
         });
     },
     updateData(data) {
+      console.log(data);
+      this.scriptTypeData.script_type_presets = [];
+      console.log("presset length " + data.presets.length);
       for (let i = 0; i < data.presets.length; i++) {
         // console.log(data.presets[i]);
         // this.scriptTypeData.script_type_presets[i].script_type_id = data.id;
@@ -394,6 +397,7 @@ export default {
         // field_type: null,
         // label: "",
         // placeholder: "",
+        console.log(data.presets[i]);
         this.addInput();
         // this.scriptTypeData.script_type_presets[i].script_type_id =
         //   data.presets[i].id;

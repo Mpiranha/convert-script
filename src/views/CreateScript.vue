@@ -39,10 +39,10 @@
                           class="form-group"
                         >
                           <label for="">{{
-                            scriptInfo.question.question
+                            scriptInfo.question.label
                           }}</label>
                           <input
-                            type="text"
+                            :type="scriptInfo.question.field_type"
                             name=""
                             :class="{
                               'is-invalid':
