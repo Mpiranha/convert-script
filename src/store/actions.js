@@ -394,6 +394,43 @@ export default {
         })
     },
 
+postScriptTypePresets({
+        state
+    }, data) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.post(`${baseUrl}/api/v1/user-script-type-presets`, data, {})
+                .then(resp => {
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
+    editScriptTypePresets({
+        state
+    }, {
+        id,
+        data
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.put(`${baseUrl}/api/v1/user-script-type-presets/${id}`, data)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
     generateScript({
         state
     }, data) {
@@ -454,7 +491,9 @@ export default {
         })
     },
 
-
+    // Script type preset
+    
+    
 
     // Admin Api's
 

@@ -69,8 +69,8 @@
                   <img
                     class="icon-prev"
                     :src="
-                      scriptTypeData.icon
-                        ? scriptTypeData.icon
+                      currentIcon
+                        ? currentIcon
                         : '@/assets/icons/convert-icon/Aweber.svg'
                     "
                     alt=""
@@ -347,6 +347,7 @@ export default {
       ],
       icon: null,
       iconRes: null,
+      currentIcon: null,
       script: [],
     };
   },
@@ -427,7 +428,8 @@ export default {
       this.scriptTypeData.prompt_2 = data.prompt_2;
       this.scriptTypeData.engine = data.engine;
       this.scriptTypeData.temperature = data.temperature;
-      this.scriptTypeData.icon = data.icon;
+      // this.scriptTypeData.icon = data.icon;
+      this.currentIcon = data.icon;
       this.scriptTypeData.description = data.description;
       this.scriptTypeData.presence_penalty = data.presence_penalty;
       this.scriptTypeData.frequency_penalty = data.frequency_penalty;
@@ -480,7 +482,8 @@ export default {
           console.log(res.data.data);
           this.iconRes = res.data.data;
 
-          this.scriptTypeData.icon = res.data.data.file_url;
+          // this.scriptTypeData.icon = res.data.data.file_url;
+          this.currentIcon = res.data.data.file_url;
 
           this.makeToast("success", "File Uploaded successfully");
           this.$store.commit("updateLoadState", false);

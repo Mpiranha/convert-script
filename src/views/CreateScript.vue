@@ -38,9 +38,7 @@
                           :key="scriptInfo.id"
                           class="form-group"
                         >
-                          <label for="">{{
-                            scriptInfo.question.label
-                          }}</label>
+                          <label for="">{{ scriptInfo.question.label }}</label>
                           <input
                             :type="scriptInfo.question.field_type"
                             name=""
@@ -56,8 +54,8 @@
                           <div class="invalid-feedback">
                             <div
                               v-if="
-                                !$v.scriptAnswers.$each[index].answer.required
-                                && isSubmitted
+                                !$v.scriptAnswers.$each[index].answer
+                                  .required && isSubmitted
                               "
                             >
                               Answer is required
@@ -73,7 +71,7 @@
                           v-model="variation"
                           class="btn btn-variation"
                         />
-                        
+
                         <button class="btn btn-create btn-script">
                           Generate Script
                         </button>
@@ -100,7 +98,7 @@
                       <script-box
                         v-for="script in generatedScript"
                         :key="script.id"
-                        :script-content="script.text"
+                        :script-content="formatScript(script.text)"
                       >
                       </script-box>
                     </div>
@@ -149,6 +147,9 @@ export default {
     },
   },
   methods: {
+    formatScript(text) {
+      return text.replace(/\n/g, "<br />");
+    },
     getScriptData(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
@@ -161,7 +162,7 @@ export default {
           //   this.scriptAnswers.push(data.answer);
           // });
           for (let i = 0; i < this.scriptData.length; i++) {
-            this.scriptAnswers.push({ answer: this.scriptData[i].answer });
+            this.scriptAnswers.push({ answer: "" });
           }
 
           this.$store.commit("updateLoadState", false);
@@ -185,12 +186,7 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          //this.getAllVideos();
-          // this.videoData = {
-          //   title: "",
-          //   description: "",
-          //   link: "",
-          // };
+
           this.generatedScript = res.data.data.responses;
           // this.makeToast("success", "Video added successfully");
           this.$store.commit("updateLoadState", false);
@@ -199,6 +195,33 @@ export default {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    postPresetAnswer() {
+      this.$store.commit("updateLoadState", true);
+
+      this.$store
+        .dispatch("editScriptTypePresets", {
+          id: this.scriptData[0].id,
+          data: {
+            answer: this.scriptAnswers[0].answer,
+            script_type_preset_id: this.scriptData[0].question.id,
+            script_type_id: this.$route.params.id,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          console.log("Update was successfull");
+          this.generateScript();
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log("error: " + error);
+          this.error = error.response.data.errors;
+
+          // this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
         });
     },
@@ -211,7 +234,8 @@ export default {
       // stop here if form is invalid
       if (this.$v.$invalid) return;
 
-      this.generateScript();
+      // this.generateScript();
+      this.postPresetAnswer();
     },
   },
   mounted() {

@@ -33,7 +33,9 @@
         </div>
       </div>
     </div>
-    <div class="script-content">{{ scriptContent }}</div>
+    <div class="script-content" v-nl2br>
+      {{ scriptContent }}
+    </div>
 
     <div class="script-footer">
       <button class="btn no-shadow btn-share">
@@ -61,6 +63,15 @@ export default {
     scriptContent: {
       type: String,
       required: true,
+    },
+  },
+  directives: {
+    nl2br: {
+      inserted(el) {
+        // simplified example,
+        // works only for nodes without any child elements
+        el.innerHTML = el.textContent.replace(/\n/g, "<br />");
+      },
     },
   },
   data() {
