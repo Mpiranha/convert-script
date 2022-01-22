@@ -137,6 +137,7 @@ export default {
       variation: 2,
       generatedScript: [],
       isSubmitted: false,
+      preset: [],
     };
   },
   validations: {
@@ -205,9 +206,10 @@ export default {
         .dispatch("editScriptTypePresets", {
           id: this.scriptData[0].id,
           data: {
-            answer: this.scriptAnswers[0].answer,
-            script_type_preset_id: this.scriptData[0].question.id,
-            script_type_id: this.$route.params.id,
+            // answer: this.scriptAnswers[0].answer,
+            // script_type_preset_id: this.scriptData[0].question.id,
+            // script_type_id: this.$route.params.id,
+            presets: this.preset,
           },
         })
         .then((res) => {
@@ -233,6 +235,15 @@ export default {
       this.isSubmitted = true;
       // stop here if form is invalid
       if (this.$v.$invalid) return;
+
+      for (let i = 0; i < this.scriptData.length; i++) {
+        this.preset.push({
+          answer: this.scriptAnswers[i].answer,
+          script_type_preset_id: this.scriptData[i].question.id,
+          script_type_id: this.$route.params.id,
+          user_script_type_preset_id: this.scriptData[i].id,
+        });
+      }
 
       // this.generateScript();
       this.postPresetAnswer();
