@@ -46,7 +46,7 @@
                   <table class="table table-section script-table">
                     <tbody>
                       <tr
-                        @click="setActiveScript(script.responses)"
+                        @click="setActiveScript(script)"
                         v-for="script in scripts"
                         :key="script.id"
                       >
@@ -109,11 +109,16 @@
                     </div>
                   </div>
                   <div class="content-display" v-if="activeScript">
-                    {{ activeScript[0].text }}
+                    <div
+                      v-html="formatScript(activeScript.responses[0].text)"
+                    ></div>
                   </div>
                   <div v-else class="no-select">Select a Script to Preview</div>
                   <div class="section-footer">
-                    <button class="btn no-shadow btn-share" v-b-modal.modal-send-script>
+                    <button
+                      class="btn no-shadow btn-share"
+                      v-b-modal.modal-send-script
+                    >
                       <img
                         class="foot-icons"
                         src="@/assets/icons/convert-icon/send.svg"
@@ -131,7 +136,9 @@
                     <input
                       type="hidden"
                       id="text--copy"
-                      :value="activeScript ? activeScript[0].text : ''"
+                      :value="
+                        activeScript ? activeScript.responses[0].text : ''
+                      "
                     />
                   </div>
                 </div>
@@ -183,7 +190,7 @@
       <b-form-group label="Send to" label-for="pwd" label-class="form-label">
         <b-form-select
           class="input-table"
-          v-model="data"
+          v-model="sendValue"
           :options="sendOptions"
         ></b-form-select>
       </b-form-group>
@@ -221,12 +228,23 @@ export default {
     DropdownTool,
     quillEditor,
   },
+  directives: {
+    nl2br: {
+      componentUpdated(el) {
+        // simplified example,
+        // works only for nodes without any child elements
+        el.innerHTML = el.textContent.replace(/\n/g, "<br />");
+      },
+    },
+  },
   data() {
     return {
       isFavourite: false,
       scripts: [],
       content: "",
       activeScript: null,
+      sendValue: null,
+      sendOptions: [],
       editorOption: {
         // Some Quill options...
         theme: "snow",
@@ -285,6 +303,23 @@ export default {
 
       // this.getCampaign();
     },
+    addRemoveScriptFavorite() {
+      this.$store
+        .dispatch("addRemoveFavorite", {
+          script_response_id: this.activeScript.responses[0].id,
+        })
+        .then((res) => {
+          console.log(res.data.data.message);
+
+          this.getScripts();
+          this.makeToast("success", res.data.data.message);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error.response.data.error;
+          this.makeToast("danger", this.error);
+        });
+    },
     onEditorBlur(quill) {
       console.log("editor blur!", quill);
     },
@@ -309,11 +344,16 @@ export default {
       // this.editId = id;
       // this.campaignName = data;
     },
+
     toggleFavourite() {
-      this.isFavourite = !this.isFavourite;
+      if (this.activeScript) {
+        this.isFavourite = !this.isFavourite;
+        this.addRemoveScriptFavorite();
+      }
     },
     setActiveScript(data) {
       this.activeScript = data;
+      this.isFavourite = data.favorite;
     },
     copyText() {
       let testingCodeToCopy = document.querySelector("#text--copy");
@@ -332,6 +372,10 @@ export default {
       /* unselect the range */
       testingCodeToCopy.setAttribute("type", "hidden");
       window.getSelection().removeAllRanges();
+    },
+    formatScript(text) {
+      console.log(text);
+      return text.replace(/\n/g, "<br />");
     },
   },
   computed: {

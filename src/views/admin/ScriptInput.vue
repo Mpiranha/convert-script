@@ -273,7 +273,7 @@
                     </b-form-group>
                     <div class="d-flex justify-content-end">
                       <button
-                        @click="deleteInput(index)"
+                        @click="deleteInput($event, index)"
                         class="btn btn-delete no-shadow"
                       >
                         Delete
@@ -381,7 +381,8 @@ export default {
         placeholder: "",
       });
     },
-    deleteInput(index) {
+    deleteInput(event, index) {
+      event.preventDefault();
       this.scriptTypeData.script_type_presets =
         this.scriptTypeData.script_type_presets.filter(function (value, indx) {
           return indx != index;

@@ -394,7 +394,7 @@ export default {
         })
     },
 
-postScriptTypePresets({
+    postScriptTypePresets({
         state
     }, data) {
         return new Promise((resolve, reject) => {
@@ -423,6 +423,20 @@ postScriptTypePresets({
                     //     agencies: resp.data
                     // });
 
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    addRemoveFavorite({
+        state
+    }, data) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.post(`${baseUrl}/api/v1/favorite-script-responses`, data, {})
+                .then(resp => {
                     resolve(resp)
                 })
                 .catch(err => {
@@ -492,8 +506,8 @@ postScriptTypePresets({
     },
 
     // Script type preset
-    
-    
+
+
 
     // Admin Api's
 
