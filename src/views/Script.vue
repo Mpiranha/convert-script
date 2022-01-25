@@ -61,7 +61,7 @@
                           </div>
                         </td>
                         <td>
-                          {{ script.content ? script.content : "Dummy Text" }}
+                          {{ abbrScript(script.responses[0].text) }}
                         </td>
                         <td>
                           <div class="script-type">Video Script</div>
@@ -267,6 +267,9 @@ export default {
   },
 
   methods: {
+    abbrScript(text) {
+      return text.slice(0, 15) + "...";
+    },
     getScripts() {
       this.$store.commit("updateLoadState", true);
       this.$store
