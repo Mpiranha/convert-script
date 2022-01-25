@@ -64,7 +64,7 @@
                           {{ abbrScript(script.responses[0].text) }}
                         </td>
                         <td>
-                          <div class="script-type">Video Script</div>
+                          <div class="script-type">{{script.responses[0].script_type}}</div>
                         </td>
                         <td class="text-right">
                           <dropdown-tool
@@ -356,7 +356,7 @@ export default {
     },
     setActiveScript(data) {
       this.activeScript = data;
-      this.isFavourite = data.favorite;
+      this.isFavourite = data.responses[0].favorite;
     },
     copyText() {
       let testingCodeToCopy = document.querySelector("#text--copy");
@@ -377,7 +377,6 @@ export default {
       window.getSelection().removeAllRanges();
     },
     formatScript(text) {
-      console.log(text);
       return text.replace(/\n/g, "<br />");
     },
   },
