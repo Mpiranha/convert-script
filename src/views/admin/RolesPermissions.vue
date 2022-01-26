@@ -201,7 +201,7 @@ export default {
   },
   methods: {
     getAllRoles() {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllRoles")
         .then((res) => {
@@ -211,15 +211,15 @@ export default {
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);
 
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     addRole() {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-role");
       this.$store
         .dispatch("addRole", this.rolesData)
@@ -230,17 +230,17 @@ export default {
             name: "",
           };
           this.makeToast("success", "Role added successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error.response);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     editRole(id) {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-role");
       this.$store
         .dispatch("editRole", {
@@ -254,30 +254,30 @@ export default {
             name: "",
           };
           this.makeToast("success", "Role edited successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     deleteRole(id) {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteRole", id)
         .then((res) => {
           console.log(res);
           this.getAllRoles();
           this.makeToast("success", "Role deleted successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
 

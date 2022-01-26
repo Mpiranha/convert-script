@@ -360,12 +360,12 @@ export default {
 
           this.updateData(res.data.data);
 
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     addInput(event) {
@@ -487,18 +487,18 @@ export default {
           this.currentIcon = res.data.data.file_url;
 
           this.makeToast("success", "File Uploaded successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error);
           this.error = error;
 
           this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     editScript() {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
 
       if (this.iconRes) {
         this.scriptTypeData.icon = [];
@@ -515,7 +515,7 @@ export default {
           this.getScript(this.$route.params.id);
 
           this.makeToast("success", "Script Type edited successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
@@ -529,7 +529,7 @@ export default {
             }
           }
           // this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
   },

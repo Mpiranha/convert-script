@@ -278,7 +278,7 @@ export default {
   },
   methods: {
     getMarketData() {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getMarket", {
           number: this.currentPage,
@@ -288,12 +288,12 @@ export default {
           this.market = res.data.result;
           console.log(res);
           this.marketLength = res.data.result.total_count;
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     getProjectTime(time) {

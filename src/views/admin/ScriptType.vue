@@ -217,7 +217,7 @@ export default {
   },
   methods: {
     getAllScriptType() {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllScriptType", {
           number: this.currentPage,
@@ -229,15 +229,15 @@ export default {
           console.log(res.data);
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     addScriptType() {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-script");
 
       const formData = new FormData();
@@ -263,17 +263,17 @@ export default {
             icon: null,
           };
           this.makeToast("success", "ScriptType added successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     editScriptType(id) {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-video");
       this.$store
         .dispatch("editScriptType", {
@@ -289,30 +289,30 @@ export default {
             icon: null,
           };
           this.makeToast("success", "Script Type edited successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     deleteScriptType(id) {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteScriptType", id)
         .then((res) => {
           console.log(res);
           this.getAllScriptType();
           this.makeToast("success", "Script Type deleted successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
 

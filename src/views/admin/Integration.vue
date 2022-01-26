@@ -120,7 +120,7 @@ export default {
   },
   methods: {
     getAllIntegrations() {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllPlatformIntegration")
         .then((res) => {
@@ -129,15 +129,15 @@ export default {
           // console.log(res.data);
           // console.log("Current Page: " + this.currentPage);
           // console.log("Per Page: " + this.perPage);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     addAgency() {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-client");
 
       this.$store
@@ -147,11 +147,11 @@ export default {
           console.log(res.data);
           // this.getCampaign();
           this.getAgency();
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error.message);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
           // this.error = error.response.data.errors.root;
           // this.error = error;
         });
@@ -161,7 +161,7 @@ export default {
       // this.$vm.$forceUpdate();
     },
     editAgency(id) {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-client");
       this.$store
         .dispatch("editAgency", { id: id, data: this.client })
@@ -170,19 +170,19 @@ export default {
           console.log(res.data);
           this.getAgency();
           //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error.message);
           //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
           // this.error = error.response.data.errors.root;
           // this.error = error;
         });
     },
     deleteAgency(id) {
       //   this.loading = true;
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteAgency", id)
         .then((res) => {
@@ -190,12 +190,12 @@ export default {
           this.getAgency();
           console.log(res.data);
           //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error.message);
           //   this.loading = false;
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
           // this.error = error.response.data.errors.root;
           // this.error = error;
         });

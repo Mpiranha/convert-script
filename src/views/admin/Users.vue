@@ -272,7 +272,7 @@ export default {
           this.filterPlans(this.plans);
           // console.log(res.data + "called now");
           //this.loading = false;
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
@@ -280,7 +280,7 @@ export default {
           // // this.error = error;
           console.log(error);
           //this.loading = false;
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     filterPlans(plans) {
@@ -292,7 +292,7 @@ export default {
       });
     },
     getAllUsers() {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllUsers", {
           number: this.currentPage,
@@ -302,15 +302,15 @@ export default {
           this.users = res.data.data;
           this.userLength = res.data.meta.total;
 
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     addUser() {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-user");
       this.$store
         .dispatch("addUser", this.userData)
@@ -324,17 +324,17 @@ export default {
             plans: [],
           };
           this.makeToast("success", "User added successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     editUser(id) {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-user");
       this.$store
         .dispatch("editUser", {
@@ -351,30 +351,30 @@ export default {
             plans: [],
           };
           this.makeToast("success", "User edited successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error);
           this.error = error;
           this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     deleteUser(id) {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteUser", id)
         .then((res) => {
           console.log(res);
           this.getAllUsers();
           this.makeToast("success", "User deleted successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
 

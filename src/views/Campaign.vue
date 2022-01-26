@@ -159,24 +159,24 @@ export default {
   },
   methods: {
     getCampaign() {
-      this.$store.commit("updateLoadState", true);
+      //  // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getCampaigns")
         .then((res) => {
           this.campaigns = res.data.data;
           console.log(res.data + "called now");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
           // this.error = error.response.data.errors.root;
           // // this.error = error;
           console.log(error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         });
     },
     addCampaign() {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
 
       this.$bvModal.hide("modal-new-campaign");
       this.$store
@@ -187,12 +187,12 @@ export default {
           // this.getCampaign();
           this.getCampaign();
           this.makeToast("success", "Campaign added successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error.response.data.errors.root;
           // this.error = error;
@@ -203,7 +203,7 @@ export default {
       // this.$vm.$forceUpdate();
     },
     editCampaign(id) {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-campaign");
       this.$store
         .dispatch("editCampaign", { id: id, data: { name: this.campaignName } })
@@ -212,18 +212,18 @@ export default {
           console.log(res.data);
           this.getCampaign();
           this.makeToast("success", "Campaign editted successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error;
         });
     },
     deleteCampaign(id) {
-      this.$store.commit("updateLoadState", true);
+       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteCampaign", id)
         .then((res) => {
@@ -231,13 +231,13 @@ export default {
           this.getCampaign();
           console.log(res.data);
           this.makeToast("success", "Campaign deleted successfully");
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
           this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+           // this.$store.commit("updateLoadState", false);
           // this.error = error;
         });
 
