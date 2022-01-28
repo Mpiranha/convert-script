@@ -53,6 +53,7 @@
               label-class="form-label"
             >
               <b-form-input
+              readonly
                 id="email"
                 v-model="email"
                 type="email"
@@ -131,32 +132,44 @@ export default {
   computed: mapState(["user"]),
   mounted() {
     // this.$store.dispatch("getUser");
+    this.getUser();
   },
   methods: {
-    assignUser(user) {
-      this.userData = user;
+    getUser() {
+      this.$store
+        .dispatch("getUser")
+        .then((res) => {
+          this.userData = res.data.data;
+          this.populateForm()
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        });
     },
     populateForm() {
       this.userDetails.first_name = this.userData.first_name;
       this.userDetails.last_name = this.userData.last_name;
+      this.email = this.userData.email;
     },
   },
-  watch: {
-    user(newValue, oldValue) {
-      console.log(`Updating from ${oldValue.name} to ${newValue}`);
+  // watch: {
+  //   user(newValue, oldValue) {
+  //     console.log(`Updating from ${oldValue.name} to ${newValue}`);
 
-      // Do whatever makes sense now
-      // if (newValue === "success") {
-      //   this.complex = {
-      //     deep: "some deep object",
-      //   };
-      // }
+  //     // Do whatever makes sense now
+  //     // if (newValue === "success") {
+  //     //   this.complex = {
+  //     //     deep: "some deep object",
+  //     //   };
+  //     // }
 
-      this.assignUser(newValue);
-      this.populateForm();
-    },
-   
-  },
+  //     this.assignUser(newValue);
+  //     this.populateForm();
+  //   },
+  // },
 };
 </script>
 

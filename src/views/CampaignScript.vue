@@ -58,7 +58,7 @@
                   <table class="table table-section script-table">
                     <tbody>
                       <tr
-                        @click="setActiveScript(script.responses)"
+                        @click="setActiveScript(script)"
                         v-for="script in campaign.scripts"
                         :key="script.id"
                       >
@@ -73,10 +73,12 @@
                           </div>
                         </td>
                         <td>
-                          {{ script.content ? script.content : "Dummy Text" }}
+                          {{ abbrScript(script.responses[0].text) }}
                         </td>
                         <td>
-                          <div class="script-type">Video Script</div>
+                          <div class="script-type">
+                            {{ script.responses[0].script_type }}
+                          </div>
                         </td>
                         <td class="text-right">
                           <dropdown-tool
@@ -107,7 +109,9 @@
                     </div>
                   </div>
                   <div class="content-display" v-if="activeScript">
-                    {{ activeScript[0].text }}
+                    <div
+                      v-html="formatScript(activeScript.responses[0].text)"
+                    ></div>
                   </div>
                   <div v-else class="no-select">Select a Script to Preview</div>
                   <div class="section-footer">
@@ -132,7 +136,7 @@
                     <input
                       type="hidden"
                       id="text--copy"
-                      :value="activeScript ? activeScript[0].text : ''"
+                      :value="activeScript ? activeScript.responses[0].text : ''"
                     />
                   </div>
                 </div>
@@ -249,23 +253,26 @@ export default {
     };
   },
   methods: {
+    abbrScript(text) {
+      return text.slice(0, 65) + "...";
+    },
     getCampaignData(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getOneCampaign", id)
         .then((res) => {
           this.campaign = res.data.data;
 
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
-     deleteScript(id) {
-       // this.$store.commit("updateLoadState", true);
+    deleteScript(id) {
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteScript", id)
         .then((res) => {
@@ -273,13 +280,13 @@ export default {
           this.getCampaignData(this.$route.params.id);
           console.log(res.data);
           this.makeToast("success", "Script deleted successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
           // this.error = error;
         });
 
@@ -316,6 +323,9 @@ export default {
       /* unselect the range */
       testingCodeToCopy.setAttribute("type", "hidden");
       window.getSelection().removeAllRanges();
+    },
+    formatScript(text) {
+      return text.replace(/\n/g, "<br />");
     },
   },
   mounted() {
