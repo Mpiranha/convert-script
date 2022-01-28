@@ -268,7 +268,7 @@ export default {
 
   methods: {
     abbrScript(text) {
-      return text.slice(0, 15) + "...";
+      return text.slice(0, 65) + "...";
     },
     getScripts() {
        // this.$store.commit("updateLoadState", true);

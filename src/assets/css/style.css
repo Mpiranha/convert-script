@@ -1047,6 +1047,8 @@ input:checked+.slider:before {
     padding: 0.1rem 0.3rem;
     border-radius: 0.7rem;
     font-size: 0.6rem;
+    min-width: 100px;
+    text-align: center;
 }
 
 .content-display {
@@ -1274,6 +1276,10 @@ input:checked+.slider:before {
 
 .script-table tr {
     cursor: pointer;
+}
+
+.script-table tbody tr td:nth-child(2) {
+    min-width: 264px;
 }
 
 #text--copy {
