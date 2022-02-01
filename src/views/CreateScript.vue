@@ -20,10 +20,7 @@
           >
             <h6 class="title">Generate New Script</h6>
 
-            <button class="btn btn-create" v-b-modal.modal-new-campaign>
-              <span>+</span>
-              Add Script
-            </button>
+           
           </div>
 
           <div class="content-wrap script-custom-height">
@@ -99,8 +96,18 @@
                         v-for="script in generatedScript"
                         :key="script.id"
                         :script-content="formatScript(script.text)"
+                        @favorite-clicked="addRemoveScriptFavorite(script.id)"
+                        @edit-clicked="editScript(script.id)"
+                        @copy-clicked="copyText()"
                       >
                       </script-box>
+                      <input
+                        type="hidden"
+                        id="text--copy"
+                        :value="
+                          generatedScript ? generatedScript.text : ''
+                        "
+                      />
                     </div>
                     <div v-else class="empty-script">
                       Generated Script will display here.
@@ -151,8 +158,26 @@ export default {
     formatScript(text) {
       return text.replace(/\n/g, "<br />");
     },
+    addRemoveScriptFavorite() {
+      this.$store
+        .dispatch("addRemoveFavorite", {
+          script_response_id: this.activeScript.responses[0].id,
+        })
+        .then((res) => {
+          console.log(res.data.data.message);
+
+          this.getScripts();
+          this.makeToast("success", res.data.data.message);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error.response.data.error;
+          this.makeToast("danger", this.error);
+        });
+    },
+    editScript() {},
     getScriptData(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getOneScriptTypeSelect", id)
         .then((res) => {
@@ -166,16 +191,16 @@ export default {
             this.scriptAnswers.push({ answer: "" });
           }
 
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     generateScript() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
 
       this.$store
         .dispatch("generateScript", {
@@ -190,17 +215,17 @@ export default {
 
           this.generatedScript = res.data.data.responses;
           // this.makeToast("success", "Video added successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     postPresetAnswer() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
 
       this.$store
         .dispatch("editScriptTypePresets", {
@@ -217,14 +242,14 @@ export default {
           console.log("Update was successfull");
           this.generateScript();
 
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error);
           this.error = error.response.data.errors;
 
           // this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     onSubmit() {

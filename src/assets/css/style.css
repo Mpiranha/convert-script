@@ -1049,6 +1049,7 @@ input:checked+.slider:before {
     font-size: 0.6rem;
     min-width: 100px;
     text-align: center;
+    min-height: 16px;
 }
 
 .content-display {

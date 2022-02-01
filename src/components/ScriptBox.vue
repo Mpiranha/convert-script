@@ -38,27 +38,34 @@
     </div>
 
     <div class="script-footer">
-      <button class="btn no-shadow btn-share">
+      <button @click="editAction" class="btn no-shadow btn-share">
         <img
           class="foot-icons"
           src="@/assets/icons/convert-icon/draw.svg"
           alt=""
         />
       </button>
-      <button class="btn no-shadow btn-copy">
+      <button @click="copyAction" class="btn no-shadow btn-copy">
         <img
           class="foot-icons"
           src="@/assets/icons/convert-icon/copy.svg"
           alt=""
         />
       </button>
+      <input
+        type="hidden"
+        id="text--copy"
+        :value="scriptContent ? scriptContent : ''"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import alertMixin from "@/mixins/alertMixin";
 export default {
   name: "ScriptBox",
+  mixins: [alertMixin],
   props: {
     scriptContent: {
       type: String,
@@ -74,14 +81,40 @@ export default {
       },
     },
   },
+
   data() {
     return {
       isFavourite: false,
     };
   },
   methods: {
+    copyText() {
+      let testingCodeToCopy = document.querySelector("#text--copy");
+      testingCodeToCopy.setAttribute("type", "text"); // 不是 hidden 才能複製
+      testingCodeToCopy.select();
+
+      try {
+        var successful = document.execCommand("copy");
+        var msg = successful ? "successful" : "unsuccessful";
+        this.makeToast("success", "Script was copied " + msg);
+      } catch (err) {
+        alert("Oops, unable to copy");
+        this.makeToast("danger", "Oops, unable to copy");
+      }
+
+      /* unselect the range */
+      testingCodeToCopy.setAttribute("type", "hidden");
+      window.getSelection().removeAllRanges();
+    },
     toggleFavourite() {
       this.isFavourite = !this.isFavourite;
+      this.$emit("favorite-clicked");
+    },
+    editAction() {
+      this.$emit("edit-clicked");
+    },
+    copyAction() {
+      this.$emit("copy-clicked");
     },
   },
 };
