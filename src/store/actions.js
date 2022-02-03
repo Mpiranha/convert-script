@@ -1,6 +1,7 @@
 // import Vue from 'vue'
 import axios from 'axios'
-const baseUrl = 'https://convertscriptbackend.herokuapp.com';
+const baseUrl = 'https://api.onecopy.ai';
+
 // import {
 //     resolve
 // } from 'core-js/fn/promise'
