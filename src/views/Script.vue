@@ -64,7 +64,9 @@
                           {{ abbrScript(script.responses[0].text) }}
                         </td>
                         <td>
-                          <div class="script-type">{{script.responses[0].script_type}}</div>
+                          <div class="script-type">
+                            {{ script.responses[0].script_type }}
+                          </div>
                         </td>
                         <td class="text-right">
                           <dropdown-tool
@@ -174,7 +176,9 @@
           class="close-modal"
           >Go back</b-button
         >
-        <b-button class="save-modal">Save to</b-button>
+        <b-button @click="editScript(editId, content)" class="save-modal"
+          >Save</b-button
+        >
       </div>
     </b-modal>
 
@@ -239,9 +243,11 @@ export default {
   },
   data() {
     return {
+      triggerEdit: false,
       isFavourite: false,
       scripts: [],
       content: "",
+      editId: "",
       activeScript: null,
       sendValue: null,
       sendOptions: [],
@@ -271,22 +277,22 @@ export default {
       return text.slice(0, 65) + "...";
     },
     getScripts() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getGeneratedScripts")
         .then((res) => {
           this.scripts = res.data.data;
 
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     deleteScript(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteScript", id)
         .then((res) => {
@@ -294,17 +300,40 @@ export default {
           this.getScripts();
           console.log(res.data);
           this.makeToast("success", "Script deleted successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
           // this.error = error;
         });
 
       // this.getCampaign();
+    },
+    editScript(id) {
+      // this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modal-new-campaign");
+      this.$store
+        .dispatch("editScript", {
+          id: id,
+          data: { content: this.content, script_type_id: 1 },
+        })
+        .then((res) => {
+          this.error = null;
+          console.log(res.data);
+          this.getScripts();
+          this.makeToast("success", "Script edited successfully");
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          // this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
+          // this.error = error;
+        });
     },
     addRemoveScriptFavorite() {
       this.$store
@@ -338,11 +367,12 @@ export default {
     },
     openEditModal(id, data) {
       this.$bvModal.show("modal-edit-script");
+      this.editId = id;
       // this.triggerEdit = true;
-      this.$store.commit("triggerEdit", {
-        editStatus: true,
-        id: id,
-      });
+      // this.$store.commit("triggerEdit", {
+      //   editStatus: true,
+      //   id: id,
+      // });
       this.content = data;
       // this.editId = id;
       // this.campaignName = data;

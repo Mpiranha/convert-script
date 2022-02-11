@@ -188,7 +188,7 @@ export default {
             description: "",
             link: "",
           };
-          this.makeToast("success", "Video added successfully");
+          this.makeToast("success", "Submitted added successfully");
            // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {

@@ -76,7 +76,9 @@
 </template>
 
 <script>
+import alertMixin from "@/mixins/alertMixin";
 export default {
+  mixins: [alertMixin],
   name: "Nav",
   props: {
     // msg: String
@@ -99,14 +101,13 @@ export default {
         .dispatch("addSuggestion", this.suggestion)
         .then((res) => {
           console.log(res);
-          this.getAllUsers();
-          this.userData = {
-            name: "",
-            role: null,
-            email: "",
-            plans: [],
+
+          this.suggestion = {
+            parent_id: 1,
+            message: "",
           };
-          this.makeToast("success", "User added successfully");
+          this.$bvModal.hide("modal-suggest");
+          this.makeToast("success", "Submitted Successfully");
           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
