@@ -43,10 +43,11 @@
                 <i class="flaticon-loupe icons"></i>
               </button>
               <input
-                @change="makeToast('primary', 'try me')"
+                @input="searchKeyWord"
                 class="form-control no-shadow search-input"
                 type="text"
                 placeholder="Search"
+                v-model="searchKey"
               />
             </div>
             <loader-modal
@@ -67,7 +68,62 @@
                   <th></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody v-if="searchResult.length > 0">
+                 <tr v-for="result in searchResult" :key="result.id">
+                  <td scope="row">{{ result.email }}</td>
+                  <td class="text-left">{{ result.first_name }}</td>
+                  <td>{{ result.last_name }}</td>
+                  <td>
+                    <label class="switch mb-0">
+                      <input :checked="result.active" type="checkbox" />
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <div class="d-flex">
+                      <span
+                        class="plan-types"
+                        v-for="(plan, index) in result.plan"
+                        :key="index"
+                        >{{ plan }}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    {{ formatDate(result.created_at) }}
+                  </td>
+                  <td>
+                    <dropdown-tool
+                      @edit-clicked="
+                        openEditModal(result.id, {
+                          first_name: result.first_name,
+                          last_name: result.last_name,
+                          role: result.role,
+                          email: result.email,
+                        })
+                      "
+                      @delete-proceed="deleteUser(result.id)"
+                      delete-what="User"
+                    >
+                      <!-- <template v-slot:secondary>
+                        <b-dropdown-item
+                          v-b-modal.modal-campaign
+                          @click="getCurrent(user.name)"
+                          link-class="drop-link"
+                          href="#"
+                        >
+                          <i
+                            class="flaticon-briefcase icons table-drop-icon"
+                          ></i>
+                          Campaign
+                        </b-dropdown-item>
+                      </template> -->
+                    </dropdown-tool>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody v-else-if="users">
+                
                 <tr v-for="user in users" :key="user.id">
                   <td scope="row">{{ user.email }}</td>
                   <td class="text-left">{{ user.first_name }}</td>
@@ -187,6 +243,16 @@
         </b-form-input>
       </b-form-group>
 
+       <b-form-group label="Password">
+        <b-form-input
+          id="name"
+          v-model="userData.password"
+          type="password"
+          class="input-table"
+        >
+        </b-form-input>
+      </b-form-group>
+
       <b-form-group label="Role">
         <b-form-select
           v-model="userData.role"
@@ -235,6 +301,8 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       perPage: 5,
       currentPage: 1,
       users: [],
@@ -264,6 +332,28 @@ export default {
     };
   },
   methods: {
+    searchKeyWord() {
+       this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/admin/users",
+          keyword: this.searchKey
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+       
+          // console.log(res.data + "called now");
+          //this.loading = false;
+           // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+           // this.$store.commit("updateLoadState", false);
+        });
+    },
     getSharedPlans() {
       this.$store
         .dispatch("getSharedPlan")

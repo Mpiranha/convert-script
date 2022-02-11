@@ -53,7 +53,7 @@
       <b-form-group>
         <b-form-textarea
           id="name"
-          v-model="campaignName"
+          v-model="suggestion.message"
           type="text"
           class="input-table"
           rows="10"
@@ -69,7 +69,7 @@
         <b-button @click="$bvModal.hide('modal-suggest')" class="close-modal"
           >Close</b-button
         >
-        <b-button class="save-modal">Submit</b-button>
+        <b-button @click="addSuggestion" class="save-modal">Submit</b-button>
       </div>
     </b-modal>
   </div>
@@ -85,9 +85,39 @@ export default {
   },
   data() {
     return {
-      campaignName: "",
+      suggestion: {
+        parent_id: 1,
+        message: "",
+      },
     };
   },
+  methods: {
+    addSuggestion() {
+      // this.$store.commit("updateLoadState", true);
+      // this.$bvModal.hide("modal-new-user");
+      this.$store
+        .dispatch("addSuggestion", this.suggestion)
+        .then((res) => {
+          console.log(res);
+          this.getAllUsers();
+          this.userData = {
+            name: "",
+            role: null,
+            email: "",
+            plans: [],
+          };
+          this.makeToast("success", "User added successfully");
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error.response.data.error;
+          this.makeToast("danger", this.error);
+          // this.$store.commit("updateLoadState", false);
+        });
+    },
+  },
+  mounted() {},
 };
 </script>
 
@@ -135,7 +165,7 @@ export default {
   min-height: 60px;
 }
 
-@media  (min-width: 1367px) {
+@media (min-width: 1367px) {
   .menu-section .nav-link {
     font-size: 0.9rem;
   }

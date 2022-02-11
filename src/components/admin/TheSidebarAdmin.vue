@@ -123,7 +123,7 @@
           />
           <span class="nav-text"> Roles and Permissions </span>
         </router-link>
-      </li>
+      <!-- </li>
         <li class="nav-item">
         <router-link
           class="nav-link"
@@ -143,9 +143,9 @@
           />
           <span class="nav-text"> Plans </span>
         </router-link>
-      </li>
+      </li> -->
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <router-link
           class="nav-link"
           :class="currentActive == 'integrationadmin' ? 'active' : ''"
@@ -163,7 +163,7 @@
           />
           <span class="nav-text"> Integration </span>
         </router-link>
-      </li>
+      </li> -->
       <li class="nav-item">
         <router-link
           class="nav-link"

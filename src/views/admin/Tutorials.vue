@@ -61,20 +61,12 @@
                     <td scope="row">{{ video.title }}</td>
 
                     <td class="text-right">
-                      <nav class="nav flex-column action-view">
-                        <a
-                          @click="openEditModal(video.id, video)"
-                          class="nav-link"
-                          href="#"
-                          >Edit</a
-                        >
-                        <a
-                          @click="deleteVideo(video.id)"
-                          class="nav-link"
-                          href="#"
-                          >Delete</a
-                        >
-                      </nav>
+                       <dropdown-tool
+                        @edit-clicked="openEditModal(video.id, video)"
+                        @delete-proceed="deleteVideo(video.id)"
+                        delete-what="Tutorial"
+                      >
+                      </dropdown-tool>
                     </td>
                   </tr>
                 </tbody>
@@ -160,6 +152,7 @@
 // @ is an alias to /src
 import Sidebar from "@/components/admin/TheSidebarAdmin.vue";
 import Navbar from "@/components/TheNav.vue";
+import DropdownTool from '@/components/DropdownTool'
 import alertMixin from "@/mixins/alertMixin";
 import orderSort from "@/mixins/orderSort";
 
@@ -169,6 +162,7 @@ export default {
   components: {
     Sidebar,
     Navbar,
+    DropdownTool
   },
   data() {
     return {

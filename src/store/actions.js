@@ -7,6 +7,26 @@ const baseUrl = 'https://api.onecopy.ai';
 // } from 'core-js/fn/promise'
 
 export default {
+
+    // Search
+    search({
+        state
+    }, data) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}${data.endpoint}?search=${data.keyword}`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
     login({
         commit
     }, user) {
@@ -722,6 +742,7 @@ export default {
         })
     },
 
+
     // Upload Script type icon
     uploadIcon({
         state
@@ -1242,7 +1263,7 @@ export default {
     }, data) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
-            axios.post(`${baseUrl}/api/v1/admin/agencies`, data, {})
+            axios.post(`${baseUrl}/api/v1/suggestions`, data, {})
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data

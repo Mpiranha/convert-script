@@ -104,7 +104,7 @@
         </router-link>
       </li>
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <router-link
           class="nav-link"
           :class="currentActive == 'integration' ? 'active' : ''"
@@ -122,7 +122,7 @@
           />
           <span class="nav-text"> Integration </span>
         </router-link>
-      </li>
+      </li> -->
 
       <li class="nav-item">
         <router-link

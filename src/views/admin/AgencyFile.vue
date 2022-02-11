@@ -1,6 +1,5 @@
 <template>
   <div class="container-fluid px-0">
-    
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"
@@ -11,90 +10,85 @@
         <div class="container-fluid scroll-content">
           <div class="sec-padding">
             <div
-            class="
-              dashboard-top
-              d-flex
-              justify-content-between
-              align-items-center
-              mb-5
-            "
-          >
-            <h6 class="title mb-0">Agency File</h6>
-            <div class="d-flex align-items-center">
-              <button
-              @click="clearField"
-                class="btn btn-create"
-                v-b-modal.modal-new-agency
-              >
-                <span>+</span>
-                New File
-              </button>
+              class="
+                dashboard-top
+                d-flex
+                justify-content-between
+                align-items-center
+                mb-5
+              "
+            >
+              <h6 class="title mb-0">Agency File</h6>
+              <div class="d-flex align-items-center">
+                <button
+                  @click="clearField"
+                  class="btn btn-create"
+                  v-b-modal.modal-new-agency
+                >
+                  <span>+</span>
+                  New File
+                </button>
+              </div>
+            </div>
+            <div class="content-wrap set-min-h pt-4 pb-5">
+              <div class="search-form mb-2">
+                <button class="btn search-btn">
+                  <i class="flaticon-loupe icons"></i>
+                </button>
+                <input
+                  @change="makeToast('primary', 'try me')"
+                  class="form-control no-shadow search-input"
+                  type="text"
+                  placeholder="Search"
+                />
+              </div>
+              <loader-modal
+                :loading-state="this.$store.state.loading"
+              ></loader-modal>
+              <div v-if="agencyFiles.length === 0" class="no-data-info">
+                Created agency will display here.
+              </div>
+              <table v-else class="table table-custom">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th class="text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="agency in agencyFiles" :key="agency.id">
+                    <td scope="row">{{ agency.name }}</td>
+
+                    <td class="text-right">
+                      <dropdown-tool
+                        @edit-clicked="openEditModal(agency.id, agency)"
+                        @delete-proceed="deleteAgency(agency.id)"
+                        delete-what="Tutorial"
+                      >
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="d-flex justify-content-center">
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="agencyFileLength"
+                :per-page="perPage"
+                aria-controls="my-table"
+                size="sm"
+                :hide-goto-end-buttons="true"
+                prev-text="<"
+                next-text=">"
+                @change="handlePageChange"
+              ></b-pagination>
             </div>
           </div>
-          <div class="content-wrap set-min-h pt-4 pb-5">
-            <div class="search-form mb-2">
-              <button class="btn search-btn">
-                <i class="flaticon-loupe icons"></i>
-              </button>
-              <input
-                @change="makeToast('primary', 'try me')"
-                class="form-control no-shadow search-input"
-                type="text"
-                placeholder="Search"
-              />
-            </div>
-            <loader-modal
-              :loading-state="this.$store.state.loading"
-            ></loader-modal>
-            <div v-if="agencyFiles.length === 0" class="no-data-info">
-              Created agency will display here.
-            </div>
-            <table v-else class="table table-custom">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th class="text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="agency in agencyFiles" :key="agency.id" >
-                  <td scope="row">{{ agency.name }}</td>
-                  
-                  <td class="text-right">
-                    <nav class="nav flex-column action-view">
-                      <a 
-                      class="nav-link" 
-                      href="#"
-                      @click="openEditModal(agency.id, agency)">Edit</a>
-                      <a 
-                      class="nav-link" 
-                      href="#"
-                      @click="deleteAgency(agency.id)">Delete</a>
-                    </nav>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="d-flex justify-content-center">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="agencyFileLength"
-              :per-page="perPage"
-              aria-controls="my-table"
-              size="sm"
-              :hide-goto-end-buttons="true"
-              prev-text="<"
-              next-text=">"
-              @change="handlePageChange"
-            ></b-pagination>
-          </div>
-          </div>
-          
         </div>
       </div>
     </div>
-     <b-modal
+    <b-modal
       :hide-header="true"
       id="modal-new-agency"
       centered
@@ -150,12 +144,13 @@
           >Close</b-button
         >
         <b-button
-          @click="triggerEdit ? editAgency(editId, agencyFileData) : addAgency()"
+          @click="
+            triggerEdit ? editAgency(editId, agencyFileData) : addAgency()
+          "
           class="save-modal"
-          >
-          {{ triggerEdit ? "Edit" : "Save" }}
-          </b-button
         >
+          {{ triggerEdit ? "Edit" : "Save" }}
+        </b-button>
       </div>
     </b-modal>
   </div>
@@ -165,6 +160,7 @@
 // @ is an alias to /src
 import Sidebar from "@/components/admin/TheSidebarAdmin.vue";
 import Navbar from "@/components/TheNav.vue";
+import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
@@ -173,6 +169,7 @@ export default {
   components: {
     Sidebar,
     Navbar,
+    DropdownTool,
   },
   data() {
     return {
@@ -182,8 +179,7 @@ export default {
       agencyFileLength: 0,
       agencyFileData: {
         name: "",
-        email: ""
-        
+        email: "",
       },
       error: "",
       triggerEdit: false,
@@ -192,7 +188,7 @@ export default {
   },
   methods: {
     getAgency() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllAgencyFiles", {
           number: this.currentPage,
@@ -205,11 +201,11 @@ export default {
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);
 
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
       // this.$store
       //   .dispatch("getAllAgency")
@@ -229,7 +225,7 @@ export default {
       //   });
     },
     addAgency() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-agency");
       this.$store
         .dispatch("addAgencyFile", this.agencyFileData)
@@ -238,20 +234,20 @@ export default {
           this.getAgency();
           this.agencyFileData = {
             name: "",
-            email: ""
+            email: "",
           };
           this.makeToast("success", "AgencyFile added successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     editAgency(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-agency");
       this.$store
         .dispatch("editAgencyFile", {
@@ -263,16 +259,16 @@ export default {
           this.getAgency();
           this.agencyFileData = {
             name: "",
-            email: ""
+            email: "",
           };
           this.makeToast("success", "Agency File edited successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     deleteAgency(id) {
@@ -283,17 +279,17 @@ export default {
           console.log(res);
           this.getAgency();
           this.makeToast("success", "Agency File deleted successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
 
-     handlePageChange(value) {
+    handlePageChange(value) {
       this.currentPage = value;
       this.getAgency();
       console.log("Value: " + value);
@@ -306,10 +302,10 @@ export default {
       this.agencyFileData.name = data.name;
       this.agencyFileData.email = data.email;
     },
-      clearField() {
+    clearField() {
       this.agencyFileData = {
         name: "",
-        email: ""
+        email: "",
       };
       this.triggerEdit = false;
     },
@@ -326,14 +322,12 @@ export default {
   mounted() {
     this.getAgency();
   },
-  computed: {
-  
-  },
+  computed: {},
 };
 </script>
 
 <style>
-.sec-padding{
+.sec-padding {
   padding-left: 200px;
   padding-right: 200px;
 }
