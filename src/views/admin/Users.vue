@@ -122,7 +122,7 @@
                   </td>
                 </tr>
               </tbody>
-              <tbody v-else-if="users">
+              <tbody v-else-if="users && searchKey.length < 1">
                 
                 <tr v-for="user in users" :key="user.id">
                   <td scope="row">{{ user.email }}</td>
