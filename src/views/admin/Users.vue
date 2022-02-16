@@ -19,13 +19,14 @@
           >
             <h6 class="title">Users ({{ userLength }})</h6>
             <div class="d-flex align-items-center">
-              <button
-                @click="clearField"
+              <a
+                href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=Admin&export=UsersExport"
+                target="_blank"
                 class="btn btn-border-secondary no-shadow"
                 to="/agency/setup"
               >
                 Export as CSV
-              </button>
+              </a>
               <button
                 @click="clearField"
                 class="btn btn-create"
@@ -69,7 +70,7 @@
                 </tr>
               </thead>
               <tbody v-if="searchResult.length > 0">
-                 <tr v-for="result in searchResult" :key="result.id">
+                <tr v-for="result in searchResult" :key="result.id">
                   <td scope="row">{{ result.email }}</td>
                   <td class="text-left">{{ result.first_name }}</td>
                   <td>{{ result.last_name }}</td>
@@ -123,7 +124,6 @@
                 </tr>
               </tbody>
               <tbody v-else-if="users && searchKey.length < 1">
-                
                 <tr v-for="user in users" :key="user.id">
                   <td scope="row">{{ user.email }}</td>
                   <td class="text-left">{{ user.first_name }}</td>
@@ -189,6 +189,7 @@
               :hide-goto-end-buttons="true"
               prev-text="<"
               next-text=">"
+              @change="handlePageChange"
             ></b-pagination>
           </div>
         </div>
@@ -243,7 +244,7 @@
         </b-form-input>
       </b-form-group>
 
-       <b-form-group label="Password">
+      <b-form-group label="Password">
         <b-form-input
           id="name"
           v-model="userData.password"
@@ -301,6 +302,7 @@ export default {
   },
   data() {
     return {
+      test: "",
       searchKey: "",
       searchResult: [],
       perPage: 5,
@@ -314,6 +316,7 @@ export default {
         last_name: "",
         role: null,
         email: "",
+        password: "",
         plans: [],
       },
       error: "",
@@ -332,18 +335,41 @@ export default {
     };
   },
   methods: {
+    b64toBlob(b64Data, contentType = "", sliceSize = 512) {
+      const byteCharacters = atob(b64Data);
+      const byteArrays = [];
+
+      for (
+        let offset = 0;
+        offset < byteCharacters.length;
+        offset += sliceSize
+      ) {
+        const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+      }
+
+      const blob = new Blob(byteArrays, { type: contentType });
+      return blob;
+    },
     searchKeyWord() {
-       this.$store
+      this.$store
         .dispatch("search", {
           endpoint: "/api/v1/admin/users",
-          keyword: this.searchKey
+          keyword: this.searchKey,
         })
         .then((res) => {
           this.searchResult = res.data.data;
-       
+
           // console.log(res.data + "called now");
           //this.loading = false;
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
@@ -351,7 +377,7 @@ export default {
           // // this.error = error;
           console.log(error);
           //this.loading = false;
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     getSharedPlans() {
@@ -362,7 +388,7 @@ export default {
           this.filterPlans(this.plans);
           // console.log(res.data + "called now");
           //this.loading = false;
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
@@ -370,7 +396,7 @@ export default {
           // // this.error = error;
           console.log(error);
           //this.loading = false;
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     filterPlans(plans) {
@@ -381,8 +407,33 @@ export default {
         };
       });
     },
+    exportUsers() {
+      // this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("exportUsers")
+        .then((res) => {
+          let blob = this.b64toBlob(res.data, "application/vnd.ms-excel");
+          // var blob = new Blob([csvContent], {
+          //   type: "data:application/octet-stream;base64",
+          // });
+          var url = window.URL.createObjectURL(blob);
+          // you need to precise a front-end button to have a name
+          var a = document.createElement("a");
+          a.style.display = "none";
+          a.href = url;
+          a.download = "user_exports.xlsx";
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.makeToast("success", "your file has downloaded!");
+        })
+        .catch((error) => {
+          console.log(error);
+          // this.$store.commit("updateLoadState", false);
+        });
+    },
     getAllUsers() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllUsers", {
           number: this.currentPage,
@@ -392,15 +443,15 @@ export default {
           this.users = res.data.data;
           this.userLength = res.data.meta.total;
 
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     addUser() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-user");
       this.$store
         .dispatch("addUser", this.userData)
@@ -411,20 +462,21 @@ export default {
             name: "",
             role: null,
             email: "",
+            password: "",
             plans: [],
           };
           this.makeToast("success", "User added successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     editUser(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-user");
       this.$store
         .dispatch("editUser", {
@@ -438,33 +490,34 @@ export default {
             name: "",
             role: null,
             email: "",
+            password: "",
             plans: [],
           };
           this.makeToast("success", "User edited successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error);
           this.error = error;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     deleteUser(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteUser", id)
         .then((res) => {
           console.log(res);
           this.getAllUsers();
           this.makeToast("success", "User deleted successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
 
@@ -477,6 +530,7 @@ export default {
       this.userData.first_name = data.first_name;
       this.userData.role = data.role;
       // console.log(data);
+      this.userData.password = data.password;
       this.userData.email = data.email;
       this.userData.plans = data.plans;
     },
@@ -485,6 +539,7 @@ export default {
         name: "",
         role: null,
         email: "",
+        password: "",
         plans: [],
       };
       this.triggerEdit = false;
@@ -508,6 +563,11 @@ export default {
       } else {
         return name.split(" ")[1];
       }
+    },
+    handlePageChange(value) {
+      this.currentPage = value;
+      this.getAllUsers();
+      console.log("Value: " + value);
     },
   },
 

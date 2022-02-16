@@ -17,7 +17,7 @@
               mb-5
             "
           >
-            <h6 class="title">All Script Type (5)</h6>
+            <h6 class="title">All Script Type ({{ scriptTypeLength }})</h6>
             <div class="d-flex align-items-center">
               <button
                 @click="clearField"
@@ -36,7 +36,8 @@
                 <i class="flaticon-loupe icons"></i>
               </button>
               <input
-                @change="makeToast('primary', 'try me')"
+                v-model="searchKey"
+                @input="searchKeyWord"
                 class="form-control no-shadow search-input"
                 type="text"
                 placeholder="Search"
@@ -58,7 +59,55 @@
                   <th class="text-right">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody v-if="searchResult.length > 0">
+                <tr v-for="result in searchResult" :key="result.id">
+                  <td scope="row">{{ result.id }}</td>
+                  <td class="text-left">{{ result.name }}</td>
+                  <td>{{ result.usage }}</td>
+                  <td>
+                    <label class="switch mb-0">
+                      <input :checked="result.activate" type="checkbox" />
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <dropdown-tool
+                      @edit-clicked="
+                        openEditModal(result.id, {
+                          name: result.name,
+                          desc: result.desc,
+                          icon: result.icon,
+                        })
+                      "
+                      @delete-proceed="deleteScriptType(result.id)"
+                    >
+                      <template v-slot:secondary>
+                        <b-dropdown-item
+                          v-b-modal.modal-campaign
+                          link-class="drop-link"
+                          href="#"
+                        >
+                          <router-link
+                            class="drop-link"
+                            :to="{
+                              name: 'ScriptTypesInput',
+                              params: { id: result.id },
+                            }"
+                          >
+                            <img
+                              class="drop-img-icon"
+                              src="@/assets/icons/admin/sidebar-icon/Input.svg"
+                              alt=""
+                            />
+                            Input
+                          </router-link>
+                        </b-dropdown-item>
+                      </template>
+                    </dropdown-tool>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody v-else-if="scriptTypes && searchKey.length < 1">
                 <tr v-for="scriptType in scriptTypes" :key="scriptType.id">
                   <td scope="row">{{ scriptType.id }}</td>
                   <td class="text-left">{{ scriptType.name }}</td>
@@ -201,6 +250,8 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       perPage: 5,
       currentPage: 1,
       scriptTypes: [],
@@ -216,8 +267,30 @@ export default {
     };
   },
   methods: {
+    searchKeyWord() {
+      this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/admin/script-type",
+          keyword: this.searchKey,
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        });
+    },
     getAllScriptType() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllScriptType", {
           number: this.currentPage,
@@ -229,21 +302,20 @@ export default {
           console.log(res.data);
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     addScriptType() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-script");
 
       const formData = new FormData();
 
       for (const property in this.scriptTypeData) {
-
         if (property == "icon") {
           console.log();
           formData.append(`${property}`, this.scriptTypeData.icon);
@@ -263,17 +335,17 @@ export default {
             icon: null,
           };
           this.makeToast("success", "ScriptType added successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     editScriptType(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-video");
       this.$store
         .dispatch("editScriptType", {
@@ -289,30 +361,30 @@ export default {
             icon: null,
           };
           this.makeToast("success", "Script Type edited successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     deleteScriptType(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteScriptType", id)
         .then((res) => {
           console.log(res);
           this.getAllScriptType();
           this.makeToast("success", "Script Type deleted successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
 

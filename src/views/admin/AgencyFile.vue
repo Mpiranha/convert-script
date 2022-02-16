@@ -36,7 +36,8 @@
                   <i class="flaticon-loupe icons"></i>
                 </button>
                 <input
-                  @change="makeToast('primary', 'try me')"
+                  v-model="searchKey"
+                  @input="searchKeyWord"
                   class="form-control no-shadow search-input"
                   type="text"
                   placeholder="Search"
@@ -55,7 +56,21 @@
                     <th class="text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody>
+                 <tbody v-if="searchResult.length > 0">
+                  <tr v-for="result in searchResult" :key="result.id">
+                    <td scope="row">{{ result.name }}</td>
+
+                    <td class="text-right">
+                      <dropdown-tool
+                        @edit-clicked="openEditModal(result.id, result)"
+                        @delete-proceed="deleteAgency(result.id)"
+                        delete-what="Tutorial"
+                      >
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody v-else-if="agencyFiles && searchKey.length < 1">
                   <tr v-for="agency in agencyFiles" :key="agency.id">
                     <td scope="row">{{ agency.name }}</td>
 
@@ -173,6 +188,8 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       perPage: 5,
       currentPage: 1,
       agencyFiles: [],
@@ -187,6 +204,28 @@ export default {
     };
   },
   methods: {
+     searchKeyWord() {
+      this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/admin/agencies",
+          keyword: this.searchKey,
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        });
+    },
     getAgency() {
       // this.$store.commit("updateLoadState", true);
       this.$store

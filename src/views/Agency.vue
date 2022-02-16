@@ -43,7 +43,7 @@
                 <i class="flaticon-loupe icons"></i>
               </button>
               <input
-                @change="makeToast('primary', 'try me')"
+                 v-model="searchKey"  @input="searchKeyWord"
                 class="form-control no-shadow search-input"
                 type="text"
                 placeholder="Search"

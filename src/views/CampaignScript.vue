@@ -51,7 +51,13 @@
                       <option value=""></option>
                       <option value=""></option>
                     </select> -->
-                    <button class="btn btn-export-all">Export All</button>
+                    <a
+                      href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport"
+                      target="_blank"
+                      class="btn btn-export-all"
+                    >
+                      Export All
+                    </a>
                   </div>
                 </div>
                 <div class="control-height">
@@ -105,7 +111,17 @@
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                      <button class="btn btn-export-all">Export Script</button>
+                      <a
+                        :href="
+                          activeScript
+                            ? `http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${activeScript.responses[0].id}`
+                            : '#'
+                        "
+                        target="_blank"
+                        class="btn btn-export-all"
+                      >
+                        Export Script
+                      </a>
                     </div>
                   </div>
                   <div class="content-display" v-if="activeScript">
@@ -136,7 +152,9 @@
                     <input
                       type="hidden"
                       id="text--copy"
-                      :value="activeScript ? activeScript.responses[0].text : ''"
+                      :value="
+                        activeScript ? activeScript.responses[0].text : ''
+                      "
                     />
                   </div>
                 </div>

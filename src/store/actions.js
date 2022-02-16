@@ -378,7 +378,7 @@ export default {
         })
     },
 
-    
+
 
     getGeneratedScripts({
         // commit,
@@ -490,6 +490,25 @@ export default {
                 })
         })
     },
+    exportFavorites({
+        // commit,
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/export/excel/model?model=User&type=User&export=FavoriteScriptExport`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
 
     getAllFavorites({
         // commit,
@@ -517,6 +536,25 @@ export default {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.post(`${baseUrl}/api/v1/scripts`, data, {})
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    exportScripts({
+        // commit,
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport`)
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data
@@ -578,6 +616,26 @@ export default {
     // Admin Api's
 
     // 
+
+    exportUsers({
+        // commit,
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/export/excel/model?model=User&type=Admin&export=UsersExport`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
     getAllUsers({
         // commit,
         state

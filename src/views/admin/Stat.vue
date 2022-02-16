@@ -75,7 +75,7 @@ export default {
       series: [
         {
           name: "This Month",
-          data: [10, 41, 35, 51, 49, 62, 90, 91, 100],
+          data: [],
         },
       ],
 
@@ -125,15 +125,15 @@ export default {
         },
         xaxis: {
           categories: [
-            "19/May",
-            "20/May",
-            "21/May",
-            "22/May",
-            "23/May",
-            "24/May",
-            "25/May",
-            "26/May",
-            "27/May",
+            // "19/May",
+            // "20/May",
+            // "21/May",
+            // "22/May",
+            // "23/May",
+            // "24/May",
+            // "25/May",
+            // "26/May",
+            // "27/May",
           ],
         },
       },
@@ -146,6 +146,9 @@ export default {
         .dispatch("getStatInfo")
         .then((res) => {
           this.stat = res.data.data.message;
+
+          this.series[0].data = this.stat.data;
+          this.chartOptions.xaxis = this.stat.xaxis;
         
           console.log(res.data);
            // this.$store.commit("updateLoadState", false);
@@ -158,7 +161,8 @@ export default {
   },
   mounted() {
     this.getStatInfo();
-  }
+  },
+  
 };
 </script>
 

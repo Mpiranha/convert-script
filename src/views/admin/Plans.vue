@@ -36,7 +36,7 @@
                   <i class="flaticon-loupe icons"></i>
                 </button>
                 <input
-                  @change="makeToast('primary', 'try me')"
+                   v-model="searchKey"  @input="searchKeyWord"
                   class="form-control no-shadow search-input"
                   type="text"
                   placeholder="Search"
@@ -86,6 +86,7 @@
                 :hide-goto-end-buttons="true"
                 prev-text="<"
                 next-text=">"
+                 @change="handlePageChange"
               ></b-pagination>
             </div>
           </div>
@@ -171,6 +172,11 @@ export default {
     };
   },
   methods: {
+     handlePageChange(value) {
+      this.currentPage = value;
+      this.getAllplans();
+      console.log("Value: " + value);
+    },
     getAllplans() {
        // this.$store.commit("updateLoadState", true);
       this.$store

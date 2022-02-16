@@ -26,7 +26,8 @@
                 <i class="flaticon-loupe icons"></i>
               </button>
               <input
-                @change="makeToast('primary', 'try me')"
+                v-model="searchKey"
+                @input="searchKeyWord"
                 class="form-control no-shadow search-input"
                 type="text"
                 placeholder="Search"
@@ -47,7 +48,35 @@
                   <th class="text-left">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody v-if="searchResult.length > 0">
+                <tr v-for="result in searchResult" :key="result.id">
+                  <td>
+                    {{ result.message }}
+                  </td>
+                  <td class="text-left">{{ result.user.email }}</td>
+                  <td>{{ formatDate(result.created_at) }}</td>
+                  <td class="text-left">
+                    <nav class="nav flex-column action-view">
+                      <a
+                        class="nav-link"
+                        href="#"
+                        v-b-modal.modal-view-script
+                        @click="
+                          getCurrent({
+                            message: result.message,
+                            email: result.user.email,
+                            date: formatDate(result.created_at),
+                          })
+                        "
+                      >
+                        View
+                      </a>
+                      <a class="nav-link" href="#">Mark as Read</a>
+                    </nav>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody v-else-if="suggestions && searchKey.length < 1">
                 <tr v-for="suggestion in suggestions" :key="suggestion.id">
                   <td>
                     {{ suggestion.message }}
@@ -64,7 +93,7 @@
                           getCurrent({
                             message: suggestion.message,
                             email: suggestion.user.email,
-                            date: formatDate(suggestion.created_at)
+                            date: formatDate(suggestion.created_at),
                           })
                         "
                       >
@@ -94,7 +123,7 @@
             </div>
 
             <div class="d-flex justify-content-end">
-              <p class="mr-auto">{{this.suggestionData.date}}</p>
+              <p class="mr-auto">{{ this.suggestionData.date }}</p>
               <b-button
                 @click="$bvModal.hide('modal-view-script')"
                 class="close-modal"
@@ -119,6 +148,7 @@
               :hide-goto-end-buttons="true"
               prev-text="<"
               next-text=">"
+              @change="handlePageChange"
             ></b-pagination>
           </div>
         </div>
@@ -142,6 +172,8 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       perPage: 5,
       currentPage: 1,
       suggestionsLength: 0,
@@ -157,8 +189,30 @@ export default {
     };
   },
   methods: {
+    searchKeyWord() {
+      this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/admin/suggestions",
+          keyword: this.searchKey,
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        });
+    },
     getAllSuggestions() {
-        // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllSuggestions", {
           number: this.currentPage,
@@ -167,16 +221,16 @@ export default {
         .then((res) => {
           this.suggestions = res.data.data;
           this.suggestionsLength = res.data.meta.total;
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     addSuggestion() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-video");
       this.$store
         .dispatch("addSuggestion", this.suggestionData)
@@ -189,13 +243,13 @@ export default {
             link: "",
           };
           this.makeToast("success", "Submitted added successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     openEditModal(id, data) {
@@ -226,6 +280,11 @@ export default {
       var formatedDate = new Date(date);
 
       return formatedDate.toLocaleDateString();
+    },
+    handlePageChange(value) {
+      this.currentPage = value;
+      this.getAllSuggestions();
+      console.log("Value: " + value);
     },
   },
 

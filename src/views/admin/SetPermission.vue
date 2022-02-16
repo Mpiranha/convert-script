@@ -82,6 +82,7 @@
                 :hide-goto-end-buttons="true"
                 prev-text="<"
                 next-text=">"
+                 @change="handlePageChange"
               ></b-pagination>
             </div>
           </div>
@@ -170,6 +171,11 @@ export default {
     };
   },
   methods: {
+     handlePageChange(value) {
+      this.currentPage = value;
+      this.getAllPermissions();
+      console.log("Value: " + value);
+    },
     getRole(id) {
       this.$store
         .dispatch("getOneRole", id)

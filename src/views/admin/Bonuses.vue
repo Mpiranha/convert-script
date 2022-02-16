@@ -37,7 +37,8 @@
                   <i class="flaticon-loupe icons"></i>
                 </button>
                 <input
-                  @change="makeToast('primary', 'try me')"
+                  v-model="searchKey"
+                  @input="searchKeyWord"
                   class="form-control no-shadow search-input"
                   type="text"
                   placeholder="Search"
@@ -47,7 +48,7 @@
                 :loading-state="this.$store.state.loading"
               ></loader-modal>
               <div v-if="bonusesLength === 0" class="no-data-info">
-                Created agency will display here.
+                Created bonuses will display here.
               </div>
               <table v-else class="table table-custom">
                 <thead>
@@ -56,7 +57,22 @@
                     <th class="text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="searchResult.length > 0">
+                  <tr v-for="result in searchResult" :key="result.id">
+                    <td scope="row">{{ result.name }}</td>
+
+                    <td class="text-right">
+                      <dropdown-tool
+                        @edit-clicked="openEditModal(result.id, result)"
+                        @delete-proceed="deleteBonus(result.id)"
+                        delete-what="Bonus"
+                      >
+                      </dropdown-tool>
+                     
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody v-else-if="bonuses && searchKey.length < 1">
                   <tr v-for="bonus in bonuses" :key="bonus.id">
                     <td scope="row">{{ bonus.name }}</td>
 
@@ -67,20 +83,7 @@
                         delete-what="Bonus"
                       >
                       </dropdown-tool>
-                      <!-- <nav class="nav flex-column action-view">
-                        <a
-                          @click="openEditModal(bonus.id, bonus)"
-                          class="nav-link"
-                          href="#"
-                          >Edit</a
-                        >
-                        <a
-                          @click="deleteBonus(bonus.id)"
-                          class="nav-link"
-                          href="#"
-                          >Delete</a
-                        >
-                      </nav> -->
+                    
                     </td>
                   </tr>
                 </tbody>
@@ -96,6 +99,7 @@
                 :hide-goto-end-buttons="true"
                 prev-text="<"
                 next-text=">"
+                 @change="handlePageChange"
               ></b-pagination>
             </div>
           </div>
@@ -157,7 +161,7 @@
 // @ is an alias to /src
 import Sidebar from "@/components/admin/TheSidebarAdmin.vue";
 import Navbar from "@/components/TheNav.vue";
-import DropdownTool from '@/components/DropdownTool'
+import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
@@ -166,10 +170,12 @@ export default {
   components: {
     Sidebar,
     Navbar,
-    DropdownTool
+    DropdownTool,
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       perPage: 5,
       currentPage: 1,
       bonuses: [],
@@ -183,6 +189,33 @@ export default {
     };
   },
   methods: {
+     handlePageChange(value) {
+      this.currentPage = value;
+      this.getAllBonuses();
+      console.log("Value: " + value);
+    },
+     searchKeyWord() {
+       this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/admin/bonuses",
+          keyword: this.searchKey
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+       
+          // console.log(res.data + "called now");
+          //this.loading = false;
+           // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+           // this.$store.commit("updateLoadState", false);
+        });
+    },
     getAllBonuses() {
       // this.$store.commit("updateLoadState", true);
       this.$store

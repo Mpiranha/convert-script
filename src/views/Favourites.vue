@@ -4,7 +4,7 @@
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"
-        current-active="script"
+        current-active="favourites"
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>
@@ -34,7 +34,13 @@
                     {{ scripts.length }}
                   </div>
                   <div class="section-head-right">
-                    <button class="btn btn-export-all">Export All</button>
+                    <a
+                      href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=FavoriteScriptExport"
+                      target="_blank"
+                      class="btn btn-export-all"
+                    >
+                      Export All
+                    </a>
                   </div>
                 </div>
                 <div class="control-height">
@@ -106,7 +112,17 @@
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                      <button class="btn btn-export-all">Export Script</button>
+                      <a
+                        :href="
+                          activeScript
+                            ? `http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=FavoriteScriptExport&Id=${activeScript.response.id}`
+                            : '#'
+                        "
+                        target="_blank"
+                        class="btn btn-export-all"
+                      >
+                        Export Script
+                      </a>
                     </div>
                   </div>
                   <div class="content-display" v-if="activeScript">
@@ -269,14 +285,27 @@ export default {
     abbrScript(text) {
       return text.slice(0, 65) + "...";
     },
+    exportFavorites() {
+      // this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("exportFavorites")
+        .then((res) => {
+          // this.users = res.data.data;
+          console.log(res.data.data);
+
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          // this.$store.commit("updateLoadState", false);
+        });
+    },
     getFavorites() {
       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllFavorites")
         .then((res) => {
           this.scripts = res.data.data;
-
-         
 
           // this.$store.commit("updateLoadState", false);
         })
@@ -294,7 +323,7 @@ export default {
         .then((res) => {
           //console.log(res.data.data.message);
 
-           if (
+          if (
             res.data.data.message ==
             "Script has been removed from favorite scripts"
           ) {

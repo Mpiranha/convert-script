@@ -36,7 +36,8 @@
                   <i class="flaticon-loupe icons"></i>
                 </button>
                 <input
-                  @change="makeToast('primary', 'try me')"
+                  v-model="searchKey"
+                  @input="searchKeyWord"
                   class="form-control no-shadow search-input"
                   type="text"
                   placeholder="Search"
@@ -55,7 +56,51 @@
                     <th class="text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="searchResult.length > 0">
+                  <tr v-for="result in searchResult" :key="result.id">
+                    <td scope="row">{{ result.name }}</td>
+                    <!-- <td scope="row">Admin</td> -->
+                    <td>
+                      <dropdown-tool
+                        @edit-clicked="
+                          openEditModal(result.id, {
+                            name: result.name,
+                          })
+                        "
+                        @delete-proceed="deleteRole(result.id)"
+                        delete-what="Role"
+                      >
+                        <template v-slot:secondary>
+                          <b-dropdown-item link-class="drop-link" href="#">
+                            <router-link
+                              class="drop-link"
+                              :to="{
+                                name: 'SetPermission',
+                                params: { id: result.id },
+                              }"
+                            >
+                              <img
+                                class="drop-img-icon"
+                                src="@/assets/icons/admin/sidebar-icon/roles-permissions.svg"
+                                alt=""
+                              />
+                              Permissions
+                            </router-link>
+                          </b-dropdown-item>
+                          <!-- <b-dropdown-item link-class="drop-link" href="#">
+                            <img
+                              class="drop-img-icon"
+                              src="@/assets/icons/admin/sidebar-icon/roles-permissions.svg"
+                              alt=""
+                            />
+                            Permissions
+                          </b-dropdown-item> -->
+                        </template>
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody v-else-if="roles && searchKey.length < 1">
                   <tr v-for="role in roles" :key="role.id">
                     <td scope="row">{{ role.name }}</td>
                     <!-- <td scope="row">Admin</td> -->
@@ -111,6 +156,7 @@
                 :hide-goto-end-buttons="true"
                 prev-text="<"
                 next-text=">"
+                @change="handlePageChange"
               ></b-pagination>
             </div>
           </div>
@@ -180,6 +226,8 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       perPage: 5,
       currentPage: 1,
       rolesLength: 0,
@@ -200,8 +248,35 @@ export default {
     };
   },
   methods: {
+    handlePageChange(value) {
+      this.currentPage = value;
+      this.getAllRoles();
+      console.log("Value: " + value);
+    },
+    searchKeyWord() {
+      this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/admin/roles",
+          keyword: this.searchKey,
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        });
+    },
     getAllRoles() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllRoles")
         .then((res) => {
@@ -211,15 +286,15 @@ export default {
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);
 
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     addRole() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-role");
       this.$store
         .dispatch("addRole", this.rolesData)
@@ -230,17 +305,17 @@ export default {
             name: "",
           };
           this.makeToast("success", "Role added successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error.response);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     editRole(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-role");
       this.$store
         .dispatch("editRole", {
@@ -254,30 +329,30 @@ export default {
             name: "",
           };
           this.makeToast("success", "Role edited successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     deleteRole(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteRole", id)
         .then((res) => {
           console.log(res);
           this.getAllRoles();
           this.makeToast("success", "Role deleted successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
 

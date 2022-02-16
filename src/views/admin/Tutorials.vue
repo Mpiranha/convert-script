@@ -37,7 +37,8 @@
                   <i class="flaticon-loupe icons"></i>
                 </button>
                 <input
-                  @change="makeToast('primary', 'try me')"
+                  v-model="searchKey"
+                  @input="searchKeyWord"
                   class="form-control no-shadow search-input"
                   type="text"
                   placeholder="Search"
@@ -47,7 +48,7 @@
                 :loading-state="this.$store.state.loading"
               ></loader-modal>
               <div v-if="videos.length === 0" class="no-data-info">
-                Created agency will display here.
+                Created Tutorials will display here.
               </div>
               <table v-else class="table table-custom">
                 <thead>
@@ -56,12 +57,26 @@
                     <th class="text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="searchResult.length > 0">
                   <tr v-for="video in orderedVideo" :key="video.id">
                     <td scope="row">{{ video.title }}</td>
 
                     <td class="text-right">
-                       <dropdown-tool
+                      <dropdown-tool
+                        @edit-clicked="openEditModal(video.id, video)"
+                        @delete-proceed="deleteVideo(video.id)"
+                        delete-what="Tutorial"
+                      >
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody v-else-if="videos && searchKey.length < 1">
+                  <tr v-for="video in videos" :key="video.id">
+                    <td scope="row">{{ video.title }}</td>
+
+                    <td class="text-right">
+                      <dropdown-tool
                         @edit-clicked="openEditModal(video.id, video)"
                         @delete-proceed="deleteVideo(video.id)"
                         delete-what="Tutorial"
@@ -152,7 +167,7 @@
 // @ is an alias to /src
 import Sidebar from "@/components/admin/TheSidebarAdmin.vue";
 import Navbar from "@/components/TheNav.vue";
-import DropdownTool from '@/components/DropdownTool'
+import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 import orderSort from "@/mixins/orderSort";
 
@@ -162,10 +177,12 @@ export default {
   components: {
     Sidebar,
     Navbar,
-    DropdownTool
+    DropdownTool,
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       perPage: 5,
       currentPage: 1,
       videos: [],
@@ -181,8 +198,30 @@ export default {
     };
   },
   methods: {
+    searchKeyWord() {
+      this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/admin/tutorials",
+          keyword: this.searchKey,
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        });
+    },
     getAllVideos() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllVideos", {
           number: this.currentPage,
@@ -194,15 +233,15 @@ export default {
           console.log(res.data);
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     addVideo() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-video");
       this.$store
         .dispatch("addVideo", this.videoData)
@@ -215,17 +254,17 @@ export default {
             link: "",
           };
           this.makeToast("success", "Video added successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     editVideo(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-video");
       this.$store
         .dispatch("editVideo", {
@@ -241,30 +280,30 @@ export default {
             link: "",
           };
           this.makeToast("success", "Video edited successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     deleteVideo(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteVideo", id)
         .then((res) => {
           console.log(res);
           this.getAllVideos();
           this.makeToast("success", "Video deleted successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
       // this.$store
       //   .dispatch("deleteAgency", id)
