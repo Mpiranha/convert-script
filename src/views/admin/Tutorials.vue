@@ -58,13 +58,13 @@
                   </tr>
                 </thead>
                 <tbody v-if="searchResult.length > 0">
-                  <tr v-for="video in orderedVideo" :key="video.id">
-                    <td scope="row">{{ video.title }}</td>
+                  <tr v-for="result in searchResult" :key="result.id">
+                    <td scope="row">{{ result.title }}</td>
 
                     <td class="text-right">
                       <dropdown-tool
-                        @edit-clicked="openEditModal(video.id, video)"
-                        @delete-proceed="deleteVideo(video.id)"
+                        @edit-clicked="openEditModal(result.id, video)"
+                        @delete-proceed="deleteVideo(result.id)"
                         delete-what="Tutorial"
                       >
                       </dropdown-tool>
