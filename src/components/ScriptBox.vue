@@ -45,7 +45,7 @@
           alt=""
         />
       </button>
-      <button @click="copyAction" class="btn no-shadow btn-copy">
+      <button @click="copyText" class="btn no-shadow btn-copy">
         <img
           class="foot-icons"
           src="@/assets/icons/convert-icon/copy.svg"
@@ -132,7 +132,7 @@ export default {
 .box-head {
   display: flex;
   justify-content: space-between;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   margin-bottom: 0.7rem;
 }
 
@@ -155,7 +155,7 @@ export default {
 } */
 
 .script-content-wrap .script-content {
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   margin-bottom: 1.3rem;
   line-height: 20px;
   text-align: justify;

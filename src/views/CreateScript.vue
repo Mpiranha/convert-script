@@ -19,8 +19,6 @@
             "
           >
             <h6 class="title">Generate New Script</h6>
-
-           
           </div>
 
           <div class="content-wrap script-custom-height">
@@ -104,9 +102,7 @@
                       <input
                         type="hidden"
                         id="text--copy"
-                        :value="
-                          generatedScript ? generatedScript.text : ''
-                        "
+                        :value="generatedScript ? generatedScript.text : ''"
                       />
                     </div>
                     <div v-else class="empty-script">
@@ -129,6 +125,7 @@ import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import ScriptBox from "@/components/ScriptBox";
 import { required } from "vuelidate/lib/validators";
+import alertMixin from "@/mixins/alertMixin";
 
 export default {
   name: "ScriptGenerate",
@@ -137,6 +134,7 @@ export default {
     Navbar,
     ScriptBox,
   },
+  mixins: [alertMixin],
   data() {
     return {
       scriptData: [],
@@ -161,21 +159,41 @@ export default {
     addRemoveScriptFavorite() {
       this.$store
         .dispatch("addRemoveFavorite", {
-          script_response_id: this.activeScript.responses[0].id,
+          script_response_id: this.generatedScript[0].id,
         })
         .then((res) => {
           console.log(res.data.data.message);
 
-          this.getScripts();
+          // this.getScripts();
           this.makeToast("success", res.data.data.message);
         })
         .catch((error) => {
           console.log(error);
-          this.error = error.response.data.error;
+          this.error = error;
           this.makeToast("danger", this.error);
         });
     },
-    editScript() {},
+    editScript(id) {
+      this.$store
+        .dispatch("editScript", {
+          id: id,
+          data: { content: this.content, script_type_id: 1 },
+        })
+        .then((res) => {
+          this.error = null;
+          console.log(res.data);
+          this.getScripts();
+          this.makeToast("success", "Script edited successfully");
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          // this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
+          // this.error = error;
+        });
+    },
     getScriptData(id) {
       // this.$store.commit("updateLoadState", true);
       this.$store

@@ -37,9 +37,9 @@ export default {
   flex-direction: column;
   border-radius: 0.4rem;
   margin-bottom: 1rem;
-  padding: 1rem 5rem 1.6rem 0.7rem;
+  padding: 1rem 5rem 1rem 0.7rem;
   box-shadow: 2px 1px 2px #d9d2d2, -1px 2px 2px #d9d2d2;
-  height: 197px;
+  height: 230px;
   max-width: 284px;
 }
 
@@ -49,18 +49,18 @@ export default {
 }
 
 .box-wrap .title {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: bold;
 }
 
 .box-wrap .desc {
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   color: #79869d;
 }
 .box-wrap a {
   color: #8338ec !important;
   margin-top: auto;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   text-decoration: none !important;
 }
 

@@ -191,7 +191,7 @@ body {
 }
 
 .table-custom tbody td {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     vertical-align: middle;
 }
 
@@ -697,8 +697,8 @@ input:checked+.slider:before {
 
 .dashboard-top .desc {
     color: #79869d;
-    font-size: 0.8rem;
-    line-height: 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1rem;
 }
 
 
@@ -1055,7 +1055,7 @@ input:checked+.slider:before {
 .content-display {
     font-size: 0.9rem;
     padding: 1.3rem 1.5rem 0 0;
-    text-align: justify;
+    /* text-align: justify; */
     line-height: 22px;
 }
 
