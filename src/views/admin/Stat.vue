@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid px-0">
-     <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
+    <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"
@@ -136,33 +136,45 @@ export default {
             // "27/May",
           ],
         },
+        noData: {
+          text: "Loading...",
+        },
       },
     };
   },
   methods: {
     getStatInfo() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getStatInfo")
         .then((res) => {
           this.stat = res.data.data.message;
 
-          this.series[0].data = this.stat.data;
-          this.chartOptions.xaxis = this.stat.xaxis;
-        
+          this.series = [
+            {
+              data: this.stat.data,
+            },
+          ];
+
+          this.chartOptions = {
+            xaxis: this.stat.xaxis,
+          };
+
+          // this.series[0].data =;
+          // this.chartOptions.xaxis = this.stat.xaxis;
+
           console.log(res.data);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
   },
   mounted() {
     this.getStatInfo();
   },
-  
 };
 </script>
 
