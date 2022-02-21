@@ -214,6 +214,11 @@
                 <div class="col-6 py-3 pr-4">
                   <div class="title">User Input</div>
                   <div
+                    draggable
+                    @dragstart="startDrag($event, index)"
+                    @drop="onDrop($event, index)"
+                    @dragover.prevent
+                    @dragenter.prevent
                     v-for="(
                       script_type_preset, index
                     ) in scriptTypeData.script_type_presets"
@@ -352,6 +357,20 @@ export default {
     };
   },
   methods: {
+    startDrag(evt, item) {
+      evt.dataTransfer.dropEffect = "move";
+      evt.dataTransfer.effectAllowed = "move";
+      evt.dataTransfer.setData("itemID", item);
+      console.log("drag index " + item);
+    },
+    onDrop(evt, id) {
+      const itemID = evt.dataTransfer.getData("itemID");
+      const item = this.scriptTypeData.script_type_presets[itemID];
+      const itemTwo = this.scriptTypeData.script_type_presets[id];
+      this.$set(this.scriptTypeData.script_type_presets, itemID, itemTwo);
+      this.$set(this.scriptTypeData.script_type_presets, id, item);
+   
+    },
     getScript(id) {
       this.$store
         .dispatch("getOneScript", id)
@@ -360,12 +379,12 @@ export default {
 
           this.updateData(res.data.data);
 
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     addInput(event) {
@@ -487,18 +506,18 @@ export default {
           this.currentIcon = res.data.data.file_url;
 
           this.makeToast("success", "File Uploaded successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error);
           this.error = error;
 
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     editScript() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
 
       if (this.iconRes) {
         this.scriptTypeData.icon = [];
@@ -515,7 +534,7 @@ export default {
           this.getScript(this.$route.params.id);
 
           this.makeToast("success", "Script Type edited successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
@@ -529,7 +548,7 @@ export default {
             }
           }
           // this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
   },

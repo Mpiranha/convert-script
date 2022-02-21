@@ -28,7 +28,7 @@
                 alt=""
               />
             </div>
-            <a href="#">Export</a>
+            <a target="_blank" :href="exportLink">Export</a>
           </div>
         </div>
       </div>
@@ -71,6 +71,10 @@ export default {
       type: String,
       required: true,
     },
+    exportLink: {
+      type: String,
+      required: true,
+    }
   },
   directives: {
     nl2br: {

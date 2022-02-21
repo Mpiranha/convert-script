@@ -20,4 +20,4 @@ export default new Vuex.Store({
   mutations
 })
 
-//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
+//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

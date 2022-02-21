@@ -85,7 +85,15 @@
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                      <button class="btn btn-export-all">Export All</button>
+                      <a target="_blank"
+                        :href="
+                          generatedScript
+                            ? `https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport`
+                            : '#'
+                        "
+                        class="btn btn-export-all"
+                        >Export All</a
+                      >
                     </div>
                   </div>
                   <div class="control-overflow">
@@ -95,8 +103,8 @@
                         :key="script.id"
                         :script-content="formatScript(script.text)"
                         @favorite-clicked="addRemoveScriptFavorite(script.id)"
-                        @edit-clicked="editScript(script.id)"
-                        @copy-clicked="copyText()"
+                        @edit-clicked="openEditModal(script.id, script.text)"
+                        :export-link="`https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${script.id}`"
                       >
                       </script-box>
                       <input
@@ -116,6 +124,33 @@
         </div>
       </div>
     </div>
+    <b-modal
+      :hide-header="true"
+      id="modal-edit-script"
+      centered
+      size="md"
+      :hide-footer="true"
+      dialog-class="control-modal-width"
+      content-class="modal-main"
+    >
+      <quill-editor
+        ref="myQuillEditor"
+        class="mb-3"
+        v-model="content"
+        :options="editorOption"
+      />
+
+      <div class="d-flex justify-content-end">
+        <b-button
+          @click="$bvModal.hide('modal-edit-script')"
+          class="close-modal"
+          >Go back</b-button
+        >
+        <b-button @click="editScript(editId, content)" class="save-modal"
+          >Edit</b-button
+        >
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -126,6 +161,10 @@ import Navbar from "@/components/TheNav.vue";
 import ScriptBox from "@/components/ScriptBox";
 import { required } from "vuelidate/lib/validators";
 import alertMixin from "@/mixins/alertMixin";
+import { quillEditor } from "vue-quill-editor";
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
 
 export default {
   name: "ScriptGenerate",
@@ -133,16 +172,37 @@ export default {
     Sidebar,
     Navbar,
     ScriptBox,
+    quillEditor,
   },
   mixins: [alertMixin],
   data() {
     return {
       scriptData: [],
       scriptAnswers: [],
+      content: "",
       variation: 2,
       generatedScript: [],
       isSubmitted: false,
       preset: [],
+      editId: "",
+      editorOption: {
+        // Some Quill options...
+        theme: "snow",
+        modules: {
+          toolbar: {
+            container: [
+              [{ header: [1, 2, 3, 4, 5, 6, false] }],
+              ["bold", "italic", "underline", "strike"], // toggled buttons
+              [{ list: "ordered" }, { list: "bullet" }],
+              [{ script: "sub" }, { script: "super" }], // superscript/subscript
+              [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+              [{ align: [] }],
+
+              ["clean"],
+            ],
+          },
+        },
+      },
     };
   },
   validations: {
@@ -155,6 +215,18 @@ export default {
   methods: {
     formatScript(text) {
       return text.replace(/\n/g, "<br />");
+    },
+    openEditModal(id, data) {
+      this.$bvModal.show("modal-edit-script");
+      this.editId = id;
+      // this.triggerEdit = true;
+      // this.$store.commit("triggerEdit", {
+      //   editStatus: true,
+      //   id: id,
+      // });
+      this.content = data;
+      // this.editId = id;
+      // this.campaignName = data;
     },
     addRemoveScriptFavorite() {
       this.$store
@@ -174,6 +246,7 @@ export default {
         });
     },
     editScript(id) {
+      this.$bvModal.hide("modal-edit-script");
       this.$store
         .dispatch("editScript", {
           id: id,
@@ -182,7 +255,7 @@ export default {
         .then((res) => {
           this.error = null;
           console.log(res.data);
-          this.getScripts();
+          //this.getScripts();
           this.makeToast("success", "Script edited successfully");
           // this.$store.commit("updateLoadState", false);
         })
