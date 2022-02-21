@@ -302,7 +302,6 @@ export default {
   },
   data() {
     return {
-      test: "",
       searchKey: "",
       searchResult: [],
       perPage: 5,

@@ -942,6 +942,11 @@ input:checked+.slider:before {
     padding: 0.8rem 0.7rem 0.8rem 0.8rem;
 }
 
+.section-head .search-form {
+    flex-grow: 1;
+    margin: 0 1.9rem;
+}
+
 .section-head.bordered {
     border-right: 2px solid #f6f8f9;
 }

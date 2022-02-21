@@ -35,6 +35,8 @@
                 <i class="flaticon-loupe icons"></i>
               </button>
               <input
+                @input="searchKeyWord"
+                v-model="searchKey"
                 class="form-control no-shadow search-input"
                 type="text"
                 placeholder="Search"
@@ -58,8 +60,33 @@
               Created campaigns will display here.
             </div>
             <table v-else class="table table-custom">
-              <tbody>
-                <tr v-for="campaign in orderedCampaign" :key="campaign.id">
+              <tbody v-if="searchResult.length > 0">
+                <tr v-for="result in searchResult" :key="result.id">
+                  <td scope="row">
+                    <router-link
+                      :to="{
+                        name: 'CampaignScript',
+                        params: { id: result.id },
+                      }"
+                    >
+                      {{ result.name }}
+                    </router-link>
+                  </td>
+                  <td>{{ result.scripts_count }}</td>
+                  <td>
+                    {{ formatDate(result.created_at) }}
+                  </td>
+                  <td>
+                    <dropdown-tool
+                      delete-what="Campaign"
+                      @edit-clicked="openEditModal(result.id, result.name)"
+                      @delete-proceed="deleteCampaign(result.id)"
+                    ></dropdown-tool>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody v-else-if="campaigns && searchKey.length < 1">
+                <tr v-for="campaign in campaigns" :key="campaign.id">
                   <td scope="row">
                     <router-link
                       :to="{
@@ -148,6 +175,8 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       campaignName: "",
       accessOptions: [{ value: null, text: "Select Plans" }],
       campaigns: [],
@@ -158,6 +187,28 @@ export default {
     };
   },
   methods: {
+    searchKeyWord() {
+      this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/campaigns",
+          keyword: this.searchKey,
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        });
+    },
     getCampaign() {
       //  // this.$store.commit("updateLoadState", true);
       this.$store
@@ -165,18 +216,18 @@ export default {
         .then((res) => {
           this.campaigns = res.data.data;
           console.log(res.data + "called now");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
           // this.error = error.response.data.errors.root;
           // // this.error = error;
           console.log(error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     addCampaign() {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
 
       this.$bvModal.hide("modal-new-campaign");
       this.$store
@@ -187,12 +238,12 @@ export default {
           // this.getCampaign();
           this.getCampaign();
           this.makeToast("success", "Campaign added successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error.response.data.errors.root;
           // this.error = error;
@@ -203,7 +254,7 @@ export default {
       // this.$vm.$forceUpdate();
     },
     editCampaign(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-campaign");
       this.$store
         .dispatch("editCampaign", { id: id, data: { name: this.campaignName } })
@@ -212,18 +263,18 @@ export default {
           console.log(res.data);
           this.getCampaign();
           this.makeToast("success", "Campaign editted successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error;
         });
     },
     deleteCampaign(id) {
-       // this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteCampaign", id)
         .then((res) => {
@@ -231,13 +282,13 @@ export default {
           this.getCampaign();
           console.log(res.data);
           this.makeToast("success", "Campaign deleted successfully");
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
           // this.error = error;
         });
 

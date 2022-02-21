@@ -38,6 +38,18 @@
                     />
                     {{ scripts.length }}
                   </div>
+                  <div class="search-form mb-0">
+                    <button class="btn search-btn">
+                      <i class="flaticon-loupe icons"></i>
+                    </button>
+                    <input
+                      @input="searchKeyWord"
+                      v-model="searchKey"
+                      class="form-control no-shadow search-input"
+                      type="text"
+                      placeholder="Search"
+                    />
+                  </div>
                   <div class="section-head-right">
                     <a
                       href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport"
@@ -50,7 +62,43 @@
                 </div>
                 <div class="control-height">
                   <table class="table table-section script-table">
-                    <tbody>
+                    <tbody v-if="searchResult.length > 0">
+                      <tr
+                        @click="setActiveScript(result)"
+                        v-for="result in searchResult"
+                        :key="result.id"
+                      >
+                        <td scope="row">
+                          <div class="control-order-tool">
+                            <button class="btn mb-2">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                            <button class="btn btn-down">
+                              <i class="flaticon-up-arrow icons icon-order"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>
+                          {{ abbrScript(result.responses[0].text) }}
+                        </td>
+                        <td>
+                          <div class="script-type">
+                            {{ result.responses[0].script_type }}
+                          </div>
+                        </td>
+                        <td class="text-right">
+                          <dropdown-tool
+                            delete-what="Script"
+                            @edit-clicked="
+                              openEditModal(result.id, result.responses[0].text)
+                            "
+                            @delete-proceed="deleteScript(result.id)"
+                          >
+                          </dropdown-tool>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody v-else-if="scripts && searchKey.length < 1">
                       <tr
                         @click="setActiveScript(script)"
                         v-for="script in scripts"
@@ -259,6 +307,8 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       triggerEdit: false,
       isFavourite: false,
       scripts: [],
@@ -289,6 +339,28 @@ export default {
   },
 
   methods: {
+    searchKeyWord() {
+      this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/scripts",
+          keyword: this.searchKey,
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          // this.$store.commit("updateLoadState", false);
+        });
+    },
     abbrScript(text) {
       return text.slice(0, 65) + "...";
     },
