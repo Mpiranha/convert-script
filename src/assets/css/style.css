@@ -1107,14 +1107,14 @@ input:checked+.slider:before {
 
 .loader-modal {
     position: fixed;
-    top: 60px;
+    top: 65px;
     left: 215px;
     width: calc(100% - 215px);
     height: calc(100% - 60px);
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #fff;
+    background-color: #f6f8f9;
     z-index: 99999;
 }
 
@@ -1317,6 +1317,10 @@ input:checked+.slider:before {
 
 .control-overflow .loader-img {
     width: 3rem;
+}
+
+.b-toaster.b-toaster-top-right .b-toaster-slot, .b-toaster.b-toaster-top-left .b-toaster-slot, .b-toaster.b-toaster-top-center .b-toaster-slot, .b-toaster.b-toaster-top-full .b-toaster-slot {
+    top: 4.5rem !important;
 }
 
 @media screen and (min-width: 1367px) {
