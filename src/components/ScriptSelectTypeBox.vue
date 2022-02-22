@@ -40,7 +40,7 @@ export default {
   padding: 1rem 5rem 1rem 0.7rem;
   box-shadow: 2px 1px 2px #d9d2d2, -1px 2px 2px #d9d2d2;
   height: 230px;
-  max-width: 284px;
+  /* max-width: 284px; */
 }
 
 .box-wrap .img-icon {
