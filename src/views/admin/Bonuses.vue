@@ -205,7 +205,7 @@ export default {
        
           // console.log(res.data + "called now");
           //this.loading = false;
-           // this.$store.commit("updateLoadState", false);
+           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
@@ -213,11 +213,11 @@ export default {
           // // this.error = error;
           console.log(error);
           //this.loading = false;
-           // this.$store.commit("updateLoadState", false);
+           this.$store.commit("updateLoadState", false);
         });
     },
     getAllBonuses() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllBonuses")
         .then((res) => {
@@ -226,15 +226,15 @@ export default {
           console.log(res.data);
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     addBonus() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-bonus");
       this.$store
         .dispatch("addBonuses", this.bonusData)
@@ -247,17 +247,17 @@ export default {
             url: "",
           };
           this.makeToast("success", "Bonus added successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     editBonus(id) {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-bonus");
       this.$store
         .dispatch("editBonuses", {
@@ -273,30 +273,30 @@ export default {
             url: "",
           };
           this.makeToast("success", "Bonus edited successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     deleteBonus(id) {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteBonuses", id)
         .then((res) => {
           console.log(res);
           this.getAllBonuses();
           this.makeToast("success", "Bonus deleted successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     openEditModal(id, data) {

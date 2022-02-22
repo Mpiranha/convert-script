@@ -97,6 +97,7 @@
                     </div>
                   </div>
                   <div class="control-overflow">
+                     <loader-modal :loading-state="loading"></loader-modal>
                     <div v-if="generatedScript.length > 0">
                       <script-box
                         v-for="script in generatedScript"
@@ -177,6 +178,7 @@ export default {
   mixins: [alertMixin],
   data() {
     return {
+      loading: false,
       scriptData: [],
       scriptAnswers: [],
       content: "",
@@ -257,18 +259,18 @@ export default {
           console.log(res.data);
           //this.getScripts();
           this.makeToast("success", "Script edited successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error;
         });
     },
     getScriptData(id) {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getOneScriptTypeSelect", id)
         .then((res) => {
@@ -282,16 +284,17 @@ export default {
             this.scriptAnswers.push({ answer: "" });
           }
 
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     generateScript() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
+      this.loading = true;
 
       this.$store
         .dispatch("generateScript", {
@@ -302,21 +305,24 @@ export default {
             : "",
         })
         .then((res) => {
+          this.loading = false;
           console.log(res);
 
           this.generatedScript = res.data.data.responses;
           // this.makeToast("success", "Video added successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
+          this.loading = false;
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     postPresetAnswer() {
       // this.$store.commit("updateLoadState", true);
+      this.loading = true;
 
       this.$store
         .dispatch("editScriptTypePresets", {
@@ -329,18 +335,20 @@ export default {
           },
         })
         .then((res) => {
+          this.loading = false;
           console.log(res);
           console.log("Update was successfull");
           this.generateScript();
 
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
+          this.loading = false;
           console.log("error: " + error);
           this.error = error.response.data.errors;
 
           // this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     onSubmit() {

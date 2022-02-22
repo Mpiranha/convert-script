@@ -87,6 +87,25 @@
       <li class="nav-item">
         <router-link
           class="nav-link"
+          :class="currentActive == 'category' ? 'active' : ''"
+          to="/admin/category"
+        >
+          <img
+            class="main-icon"
+            src="@/assets/icons/admin/sidebar-icon/category icon - grey.svg"
+            alt=""
+          />
+          <img
+            class="active-icon"
+            src="@/assets/icons/admin/sidebar-active/category active.svg"
+            alt=""
+          />
+          <span class="nav-text"> Category </span>
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link
+          class="nav-link"
           :class="currentActive == 'flagged-script' ? 'active' : ''"
           to="/admin/scripts/flagged"
         >
@@ -109,7 +128,6 @@
           class="nav-link"
           :class="currentActive == 'roles' ? 'active' : ''"
           to="/admin/roles"
-          
         >
           <img
             class="main-icon"
@@ -123,7 +141,7 @@
           />
           <span class="nav-text"> Roles and Permissions </span>
         </router-link>
-      <!-- </li>
+        <!-- </li>
         <li class="nav-item">
         <router-link
           class="nav-link"
@@ -145,7 +163,7 @@
         </router-link>
       </li> -->
 
-      <!-- <li class="nav-item">
+        <!-- <li class="nav-item">
         <router-link
           class="nav-link"
           :class="currentActive == 'integrationadmin' ? 'active' : ''"
@@ -164,6 +182,8 @@
           <span class="nav-text"> Integration </span>
         </router-link>
       </li> -->
+      </li>
+
       <li class="nav-item">
         <router-link
           class="nav-link"
@@ -261,7 +281,11 @@
       </li>
       <li class="nav-item">
         <a @click="logout($event)" class="btn nav-link" href="#">
-          <img class="main-icon" src="@/assets/icons/admin/sidebar-icon/logout.svg" alt="icon" />
+          <img
+            class="main-icon"
+            src="@/assets/icons/admin/sidebar-icon/logout.svg"
+            alt="icon"
+          />
           Logout
         </a>
       </li>

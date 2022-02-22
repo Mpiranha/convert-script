@@ -80,18 +80,18 @@ export default {
 
   methods: {
     getStatInfo() {
-       // this.$store.commit("updateLoadState", true);
+       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getDashboardInfo")
         .then((res) => {
           this.stat = res.data.data.message;
 
           console.log(res.data);
-           // this.$store.commit("updateLoadState", false);
+           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-           // this.$store.commit("updateLoadState", false);
+           this.$store.commit("updateLoadState", false);
         });
     },
   },

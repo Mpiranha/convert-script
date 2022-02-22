@@ -3,7 +3,7 @@
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"
-        current-active="roles"
+        current-active="category"
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
@@ -18,15 +18,15 @@
                 mb-5
               "
             >
-              <h6 class="title">Roles & Permissions</h6>
+              <h6 class="title">Category</h6>
               <div class="d-flex align-items-center">
                 <button
                   @click="clearField"
                   class="btn btn-create"
-                  v-b-modal.modal-new-role
+                  v-b-modal.modal-new-category
                 >
                   <span>+</span>
-                  New Role
+                  New Category
                 </button>
               </div>
             </div>
@@ -46,20 +46,22 @@
               <loader-modal
                 :loading-state="this.$store.state.loading"
               ></loader-modal>
-              <div v-if="roles.length === 0" class="no-data-info">
-                Created agency will display here.
+              <div v-if="categories.length === 0" class="no-data-info">
+                Created Category will display here.
               </div>
               <table v-else class="table table-custom">
                 <thead>
                   <tr>
                     <th>Name</th>
+                    <th class="text-center">ID</th>
                     <th class="text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody v-if="searchResult.length > 0">
                   <tr v-for="result in searchResult" :key="result.id">
                     <td scope="row">{{ result.name }}</td>
-                    <!-- <td scope="row">Admin</td> -->
+
+                     <td>{{ result.id }}</td>
                     <td>
                       <dropdown-tool
                         @edit-clicked="
@@ -67,79 +69,27 @@
                             name: result.name,
                           })
                         "
-                        @delete-proceed="deleteRole(result.id)"
-                        delete-what="Role"
+                        @delete-proceed="deleteCategory(result.id)"
+                        delete-what="Category"
                       >
-                        <template v-slot:secondary>
-                          <b-dropdown-item link-class="drop-link" href="#">
-                            <router-link
-                              class="drop-link"
-                              :to="{
-                                name: 'SetPermission',
-                                params: { id: result.id },
-                              }"
-                            >
-                              <img
-                                class="drop-img-icon"
-                                src="@/assets/icons/admin/sidebar-icon/roles-permissions.svg"
-                                alt=""
-                              />
-                              Permissions
-                            </router-link>
-                          </b-dropdown-item>
-                          <!-- <b-dropdown-item link-class="drop-link" href="#">
-                            <img
-                              class="drop-img-icon"
-                              src="@/assets/icons/admin/sidebar-icon/roles-permissions.svg"
-                              alt=""
-                            />
-                            Permissions
-                          </b-dropdown-item> -->
-                        </template>
                       </dropdown-tool>
                     </td>
                   </tr>
                 </tbody>
-                <tbody v-else-if="roles && searchKey.length < 1">
-                  <tr v-for="role in roles" :key="role.id">
-                    <td scope="row">{{ role.name }}</td>
-                    <!-- <td scope="row">Admin</td> -->
+                <tbody v-else-if="categories && searchKey.length < 1">
+                  <tr v-for="category in categories" :key="category.id">
+                    <td scope="row">{{ category.name }}</td>
+                    <td class="text-center">{{ category.id }}</td>
                     <td>
                       <dropdown-tool
                         @edit-clicked="
-                          openEditModal(role.id, {
-                            name: role.name,
+                          openEditModal(category.id, {
+                            name: category.name,
                           })
                         "
-                        @delete-proceed="deleteRole(role.id)"
-                        delete-what="Role"
+                        @delete-proceed="deleteCategory(category.id)"
+                        delete-what="Category"
                       >
-                        <template v-slot:secondary>
-                          <b-dropdown-item link-class="drop-link" href="#">
-                            <router-link
-                              class="drop-link"
-                              :to="{
-                                name: 'SetPermission',
-                                params: { id: role.id },
-                              }"
-                            >
-                              <img
-                                class="drop-img-icon"
-                                src="@/assets/icons/admin/sidebar-icon/roles-permissions.svg"
-                                alt=""
-                              />
-                              Permissions
-                            </router-link>
-                          </b-dropdown-item>
-                          <!-- <b-dropdown-item link-class="drop-link" href="#">
-                            <img
-                              class="drop-img-icon"
-                              src="@/assets/icons/admin/sidebar-icon/roles-permissions.svg"
-                              alt=""
-                            />
-                            Permissions
-                          </b-dropdown-item> -->
-                        </template>
                       </dropdown-tool>
                     </td>
                   </tr>
@@ -149,7 +99,7 @@
             <div class="d-flex justify-content-center">
               <b-pagination
                 v-model="currentPage"
-                :total-rows="rolesLength"
+                :total-rows="categoryLength"
                 :per-page="perPage"
                 aria-controls="my-table"
                 size="sm"
@@ -166,7 +116,7 @@
 
     <b-modal
       :hide-header="true"
-      id="modal-new-role"
+      id="modal-new-category"
       centered
       size="md"
       :hide-footer="true"
@@ -181,26 +131,32 @@
       <b-form-group label="Name">
         <b-form-input
           id="name"
-          v-model="rolesData.name"
+          v-model="categoryData.name"
           type="text"
           class="input-table"
         >
         </b-form-input>
       </b-form-group>
-      <b-form-group label="" v-slot="{ ariaDescribedby }">
-        <b-form-checkbox-group
-          id="checkbox-group-1"
-          :options="userPlan"
-          :aria-describedby="ariaDescribedby"
-          name="flavour-1"
-        ></b-form-checkbox-group>
+
+      <b-form-group label="ID">
+        <b-form-input
+          id="category-id"
+          v-model="categoryData.id"
+          type="text"
+          class="input-table"
+        >
+        </b-form-input>
       </b-form-group>
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-role')" class="close-modal"
+        <b-button
+          @click="$bvModal.hide('modal-new-category')"
+          class="close-modal"
           >Close</b-button
         >
         <b-button
-          @click="triggerEdit ? editRole(editId, rolesData) : addRole()"
+          @click="
+            triggerEdit ? editCategory(editId, categoryData) : addCategory()
+          "
           class="save-modal"
           >{{ triggerEdit ? "Edit" : "Save" }}</b-button
         >
@@ -217,7 +173,7 @@ import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "RolesPermission",
+  name: "Category",
   mixins: [alertMixin],
   components: {
     Sidebar,
@@ -230,33 +186,27 @@ export default {
       searchResult: [],
       perPage: 5,
       currentPage: 1,
-      rolesLength: 0,
-      roles: [],
-      rolesData: {
+      categoryLength: 0,
+      categories: [],
+      categoryData: {
         name: "",
+        id: "",
       },
       error: "",
       triggerEdit: false,
       editId: null,
-      selectedRole: null,
-      optionsRole: [
-        { value: null, text: "Select a Role" },
-        { value: "User", text: "User" },
-        { value: "Admin", text: "Admin" },
-      ],
-      userPlan: [{ text: "Make role a User Plan", value: "false" }],
     };
   },
   methods: {
     handlePageChange(value) {
       this.currentPage = value;
-      this.getAllRoles();
+      this.getAllCategories();
       console.log("Value: " + value);
     },
     searchKeyWord() {
       this.$store
         .dispatch("search", {
-          endpoint: "/api/v1/admin/roles",
+          endpoint: "/api/v1/admin/script-type-categories",
           keyword: this.searchKey,
         })
         .then((res) => {
@@ -275,12 +225,12 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    getAllRoles() {
+    getAllCategories() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllRoles")
+        .dispatch("getAllCategories")
         .then((res) => {
-          this.roles = res.data.data;
+          this.categories = res.data.data;
           // this.rolesLength = res.data.meta.total;
           console.log(res.data);
           console.log("Current Page: " + this.currentPage);
@@ -293,18 +243,19 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    addRole() {
+    addCategory() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-role");
+      this.$bvModal.hide("modal-new-category");
       this.$store
-        .dispatch("addRole", this.rolesData)
+        .dispatch("addCategory", this.categoryData)
         .then((res) => {
           console.log(res);
-          this.getAllRoles();
-          this.rolesData = {
+          this.getAllCategories();
+          this.categoryData = {
             name: "",
+            id: "",
           };
-          this.makeToast("success", "Role added successfully");
+          this.makeToast("success", "Category added successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -314,21 +265,22 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    editRole(id) {
+    editCategory(id) {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-role");
+      this.$bvModal.hide("modal-new-category");
       this.$store
-        .dispatch("editRole", {
+        .dispatch("editCategory", {
           id: id,
-          data: this.rolesData,
+          data: this.categoryData,
         })
         .then((res) => {
           console.log(res);
-          this.getAllRoles();
-          this.rolesData = {
+          this.getAllCategories();
+          this.categoryData = {
             name: "",
+            id: "",
           };
-          this.makeToast("success", "Role edited successfully");
+          this.makeToast("success", "Category edited successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -338,14 +290,14 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    deleteRole(id) {
+    deleteCategory(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deleteRole", id)
+        .dispatch("deleteCategory", id)
         .then((res) => {
           console.log(res);
-          this.getAllRoles();
-          this.makeToast("success", "Role deleted successfully");
+          this.getAllCategories();
+          this.makeToast("success", "Category deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -357,24 +309,25 @@ export default {
     },
 
     openEditModal(id, data) {
-      this.$bvModal.show("modal-new-role");
+      this.$bvModal.show("modal-new-category");
       this.triggerEdit = true;
       this.editId = id;
-      this.rolesData.name = data.name;
+      this.categoryData.name = data.name;
     },
     clearField() {
-      this.rolesData = {
+      this.categoryData = {
         name: "",
+        id: "",
       };
       this.triggerEdit = false;
     },
     getCurrent(data) {
-      this.rolesData.name = data;
+      this.categoryData.name = data;
     },
   },
 
   mounted() {
-    this.getAllRoles();
+    this.getAllCategories();
   },
 };
 </script>

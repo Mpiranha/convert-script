@@ -200,7 +200,7 @@ export default {
 
           // console.log(res.data + "called now");
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
@@ -208,11 +208,11 @@ export default {
           // // this.error = error;
           console.log(error);
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     getAllSuggestions() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllSuggestions", {
           number: this.currentPage,
@@ -221,16 +221,16 @@ export default {
         .then((res) => {
           this.suggestions = res.data.data;
           this.suggestionsLength = res.data.meta.total;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     addSuggestion() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-video");
       this.$store
         .dispatch("addSuggestion", this.suggestionData)
@@ -243,13 +243,13 @@ export default {
             link: "",
           };
           this.makeToast("success", "Submitted added successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     openEditModal(id, data) {

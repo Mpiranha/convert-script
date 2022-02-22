@@ -44,6 +44,7 @@ import Bonuses from '@/views/admin/Bonuses'
 import Tutorials from '@/views/admin/Tutorials'
 import AgencyFile from '@/views/admin/AgencyFile'
 import Plans from '@/views/admin/Plans'
+import Category from '@/views/admin/Category'
 
 
 
@@ -302,6 +303,15 @@ const routes = [{
     path: '/admin/script/type',
     name: 'ScriptTypes',
     component: ScriptType,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/category',
+    name: 'Category',
+    component: Category,
     meta: {
       requiresAuth: true,
       adminAuth: true

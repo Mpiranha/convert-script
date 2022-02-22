@@ -209,7 +209,7 @@ export default {
 
           // console.log(res.data + "called now");
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
@@ -217,11 +217,11 @@ export default {
           // // this.error = error;
           console.log(error);
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     getAllVideos() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllVideos", {
           number: this.currentPage,
@@ -233,15 +233,15 @@ export default {
           console.log(res.data);
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     addVideo() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-video");
       this.$store
         .dispatch("addVideo", this.videoData)
@@ -254,17 +254,17 @@ export default {
             link: "",
           };
           this.makeToast("success", "Video added successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     editVideo(id) {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-video");
       this.$store
         .dispatch("editVideo", {
@@ -280,30 +280,30 @@ export default {
             link: "",
           };
           this.makeToast("success", "Video edited successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     deleteVideo(id) {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteVideo", id)
         .then((res) => {
           console.log(res);
           this.getAllVideos();
           this.makeToast("success", "Video deleted successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
       // this.$store
       //   .dispatch("deleteAgency", id)
@@ -312,12 +312,12 @@ export default {
       //     this.getAgency();
       //     console.log(res.data);
       //     //   this.loading = false;
-      //      // this.$store.commit("updateLoadState", false);
+      //      this.$store.commit("updateLoadState", false);
       //   })
       //   .catch((error) => {
       //     console.log(error.message);
       //     //   this.loading = false;
-      //      // this.$store.commit("updateLoadState", false);
+      //      this.$store.commit("updateLoadState", false);
       //     // this.error = error.response.data.errors.root;
       //     // this.error = error;
       //   });

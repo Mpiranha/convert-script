@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     addSuggestion() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       // this.$bvModal.hide("modal-new-user");
       this.$store
         .dispatch("addSuggestion", this.suggestion)
@@ -108,13 +108,13 @@ export default {
           };
           this.$bvModal.hide("modal-suggest");
           this.makeToast("success", "Submitted Successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
   },
@@ -129,6 +129,7 @@ export default {
   align-items: center;
   padding: 0.7rem 0.7rem;
   box-shadow: 1px 1px 3px #a69f9f;
+  position: relative;
 }
 
 .content-head .menu-section {

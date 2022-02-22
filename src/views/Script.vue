@@ -350,7 +350,7 @@ export default {
 
           // console.log(res.data + "called now");
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
@@ -358,44 +358,44 @@ export default {
           // // this.error = error;
           console.log(error);
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     abbrScript(text) {
       return text.slice(0, 65) + "...";
     },
     exportScripts() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("exportScripts")
         .then((res) => {
           // this.users = res.data.data;
           console.log(res.data.data);
 
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     getScripts() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getGeneratedScripts")
         .then((res) => {
           this.scripts = res.data.data;
 
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     deleteScript(id) {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteScript", id)
         .then((res) => {
@@ -403,20 +403,20 @@ export default {
           this.getScripts();
           console.log(res.data);
           this.makeToast("success", "Script deleted successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
           // this.error = error;
         });
 
       // this.getCampaign();
     },
     editScript(id) {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-campaign");
       this.$store
         .dispatch("editScript", {
@@ -428,12 +428,12 @@ export default {
           console.log(res.data);
           this.getScripts();
           this.makeToast("success", "Script edited successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error;
         });

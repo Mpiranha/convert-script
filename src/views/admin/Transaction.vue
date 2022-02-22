@@ -162,7 +162,7 @@ export default {
 
           // console.log(res.data + "called now");
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
@@ -170,11 +170,11 @@ export default {
           // // this.error = error;
           console.log(error);
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     getAllTransactions() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllTransactions", {
           number: this.currentPage,
@@ -191,15 +191,15 @@ export default {
           console.log(res.data);
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     updateTransaction(id, data) {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       console.log(typeof data);
       this.$store
         .dispatch("updateTransaction", {
@@ -216,13 +216,13 @@ export default {
           //   name: "",
           // };
           this.makeToast("success", "Transaction edited successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     formatDate(date) {

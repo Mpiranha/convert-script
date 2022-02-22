@@ -1,6 +1,5 @@
 <template>
   <div class="container-fluid px-0">
-    <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"
@@ -9,6 +8,9 @@
       <div class="content-section">
         <navbar></navbar>
         <div class="container scroll-content">
+          <loader-modal
+            :loading-state="this.$store.state.loading"
+          ></loader-modal>
           <div
             class="
               dashboard-top
@@ -57,7 +59,7 @@
                 </div>
                 <div class="control-height">
                   <table class="table table-section script-table">
-                    <tbody  v-if="searchResult.length > 0">
+                    <tbody v-if="searchResult.length > 0">
                       <tr
                         @click="setActiveScript(script)"
                         v-for="script in searchResult"
@@ -347,7 +349,7 @@ export default {
 
           // console.log(res.data + "called now");
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
@@ -355,40 +357,40 @@ export default {
           // // this.error = error;
           console.log(error);
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     abbrScript(text) {
       return text.slice(0, 65) + "...";
     },
     exportFavorites() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("exportFavorites")
         .then((res) => {
           // this.users = res.data.data;
           console.log(res.data.data);
 
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     getFavorites() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllFavorites")
         .then((res) => {
           this.scripts = res.data.data;
 
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     addRemoveScriptFavorite() {

@@ -6,7 +6,7 @@ export default {
   token: localStorage.getItem('token') || '',
   status: '',
   loggedIn: false,
-  // loading: true,
+  loading: true,
   passwordResetStatus: '',
   allAgencies: {},
   triggerEdit: false,

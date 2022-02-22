@@ -56,6 +56,14 @@
                     </b-form-textarea>
                   </b-form-group>
 
+                  <b-form-group label="Category" label-class="input-label">
+                    <b-form-select
+                      class="input-table"
+                      v-model="scriptTypeData.script_type_category_id"
+                      :options="categoryOptions"
+                    ></b-form-select>
+                  </b-form-group>
+
                   <b-form-group label="Upload" label-class="input-label">
                     <b-form-file
                       v-model="icon"
@@ -328,6 +336,7 @@ export default {
         name: "",
         prompt_1: "",
         prompt_2: "",
+        script_type_category_id: "",
         icon: [],
         description: "",
         presence_penalty: "",
@@ -349,7 +358,11 @@ export default {
       fieldOptions: [
         { value: null, text: "None" },
         { value: "text", text: "text" },
+        { value: "textarea", text: "textarea" },
+        { value: "number", text: "number" },
+        { value: "email", text: "email" },
       ],
+      categoryOptions: [{ value: null, text: "None" }],
       icon: null,
       iconRes: null,
       currentIcon: null,
@@ -369,7 +382,6 @@ export default {
       const itemTwo = this.scriptTypeData.script_type_presets[id];
       this.$set(this.scriptTypeData.script_type_presets, itemID, itemTwo);
       this.$set(this.scriptTypeData.script_type_presets, id, item);
-   
     },
     getScript(id) {
       this.$store
@@ -379,12 +391,39 @@ export default {
 
           this.updateData(res.data.data);
 
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    getCategories() {
+      this.$store
+        .dispatch("getAllCategories")
+        .then((res) => {
+          //this.categoryOptions = res.data.data;
+
+          let cat = res.data.data;
+
+          // cat.forEach(function (data) {
+          //   console.log( "cat data " + data);
+          //   this.categoryOptions.push({ value: data.id, text: data.name });
+          // });
+
+         
+         for (let index = 0; index < cat.length; index++) {
+            this.categoryOptions.push({ value: cat[index].id, text: cat[index].name });
+            
+         }
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
         });
     },
     addInput(event) {
@@ -449,6 +488,7 @@ export default {
       this.scriptTypeData.engine = data.engine;
       this.scriptTypeData.temperature = data.temperature;
       // this.scriptTypeData.icon = data.icon;
+      this.script_type_category_id = data.script_type_category_id;
       this.currentIcon = data.icon;
       this.scriptTypeData.description = data.description;
       this.scriptTypeData.presence_penalty = data.presence_penalty;
@@ -506,18 +546,18 @@ export default {
           this.currentIcon = res.data.data.file_url;
 
           this.makeToast("success", "File Uploaded successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error);
           this.error = error;
 
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     editScript() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
 
       if (this.iconRes) {
         this.scriptTypeData.icon = [];
@@ -534,7 +574,7 @@ export default {
           this.getScript(this.$route.params.id);
 
           this.makeToast("success", "Script Type edited successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
@@ -548,13 +588,14 @@ export default {
             }
           }
           // this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
   },
 
   mounted() {
     this.getScript(this.$route.params.id);
+    this.getCategories();
   },
   computed: {},
   watch: {

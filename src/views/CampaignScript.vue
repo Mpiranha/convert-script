@@ -275,22 +275,22 @@ export default {
       return text.slice(0, 65) + "...";
     },
     getCampaignData(id) {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getOneCampaign", id)
         .then((res) => {
           this.campaign = res.data.data;
 
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     deleteScript(id) {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteScript", id)
         .then((res) => {
@@ -298,13 +298,13 @@ export default {
           this.getCampaignData(this.$route.params.id);
           console.log(res.data);
           this.makeToast("success", "Script deleted successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
           // this.error = error;
         });
 

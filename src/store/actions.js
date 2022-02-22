@@ -155,6 +155,28 @@ export default {
         })
     },
 
+    // Tutorial
+
+    getTutorialVideos({
+        // commit,
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/tutorials`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
     // Dashboard
 
     getDashboardInfo({
@@ -1180,6 +1202,85 @@ export default {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.delete(`${baseUrl}/api/v1/admin/roles/${id}`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
+    // Categories
+
+    getAllCategories({
+        // commit,
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/admin/script-type-categories`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    addCategory({
+        state
+    }, data) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.post(`${baseUrl}/api/v1/admin/script-type-categories`, data, {})
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    editCategory({
+        state
+    }, {
+        id,
+        data
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.put(`${baseUrl}/api/v1/admin/script-type-categories/${id}`, data)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    deleteCategory({
+        state
+    }, id) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.delete(`${baseUrl}/api/v1/admin/script-type-categories/${id}`)
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data

@@ -215,7 +215,7 @@ export default {
 
           // console.log(res.data + "called now");
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
@@ -223,11 +223,11 @@ export default {
           // // this.error = error;
           console.log(error);
           //this.loading = false;
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     getAgency() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllAgencyFiles", {
           number: this.currentPage,
@@ -240,11 +240,11 @@ export default {
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);
 
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
       // this.$store
       //   .dispatch("getAllAgency")
@@ -252,7 +252,7 @@ export default {
       //     this.users = res.data.data;
       //     // console.log(res.data + "called now");
       //     //this.loading = false;
-      //      // this.$store.commit("updateLoadState", false);
+      //      this.$store.commit("updateLoadState", false);
       //   })
       //   .catch((error) => {
       //     // // console.log(error);
@@ -260,11 +260,11 @@ export default {
       //     // // this.error = error;
       //     console.log(error);
       //     //this.loading = false;
-      //      // this.$store.commit("updateLoadState", false);
+      //      this.$store.commit("updateLoadState", false);
       //   });
     },
     addAgency() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-agency");
       this.$store
         .dispatch("addAgencyFile", this.agencyFileData)
@@ -276,17 +276,17 @@ export default {
             email: "",
           };
           this.makeToast("success", "AgencyFile added successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     editAgency(id) {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-agency");
       this.$store
         .dispatch("editAgencyFile", {
@@ -301,30 +301,30 @@ export default {
             email: "",
           };
           this.makeToast("success", "Agency File edited successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     deleteAgency(id) {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteAgencyFile", id)
         .then((res) => {
           console.log(res);
           this.getAgency();
           this.makeToast("success", "Agency File deleted successfully");
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-          // this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
 

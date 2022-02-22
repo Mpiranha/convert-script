@@ -178,20 +178,20 @@ export default {
       console.log("Value: " + value);
     },
     getAllplans() {
-       // this.$store.commit("updateLoadState", true);
+       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllPlans")
         .then((res) => {
           this.plans = res.data.data;
-           // this.$store.commit("updateLoadState", false);
+           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-           // this.$store.commit("updateLoadState", false);
+           this.$store.commit("updateLoadState", false);
         });
     },
     addPlan() {
-       // this.$store.commit("updateLoadState", true);
+       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-plan");
       this.$store
         .dispatch("addPlan", {
@@ -206,17 +206,17 @@ export default {
             name: "",
           };
           this.makeToast("success", "Role added successfully");
-           // this.$store.commit("updateLoadState", false);
+           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error.response);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+           this.$store.commit("updateLoadState", false);
         });
     },
     editPlan(id) {
-       // this.$store.commit("updateLoadState", true);
+       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-plan");
       this.$store
         .dispatch("editPlan", {
@@ -231,30 +231,30 @@ export default {
             name: "",
           };
           this.makeToast("success", "Plans edited successfully");
-           // this.$store.commit("updateLoadState", false);
+           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log("error: " + error.response.data.message);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+           this.$store.commit("updateLoadState", false);
         });
     },
     deletePlan(id) {
-       // this.$store.commit("updateLoadState", true);
+       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deletePlan", id)
         .then((res) => {
           console.log(res);
           this.getAllplans();
           this.makeToast("success", "Plan deleted successfully");
-           // this.$store.commit("updateLoadState", false);
+           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
-           // this.$store.commit("updateLoadState", false);
+           this.$store.commit("updateLoadState", false);
         });
     },
 

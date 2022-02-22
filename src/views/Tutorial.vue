@@ -18,40 +18,14 @@
 
           <div class="row mt-3">
             <tutorial-video-box
-              link="https://www.youtube.com/embed/RpXS1iYz6-M"
-              title="Write a high-converting subject line for your email"
+            v-for="video in videos"
+            :key="video.id"
+              :link="video.link"
+              :title="video.title"
             >
             </tutorial-video-box>
 
-            <tutorial-video-box
-              link="https://www.youtube.com/embed/RpXS1iYz6-M"
-              title="Write a high-converting subject line for your email"
-            >
-            </tutorial-video-box>
-
-            <tutorial-video-box
-              link="https://www.youtube.com/embed/RpXS1iYz6-M"
-              title="Write a high-converting subject line for your email"
-            >
-            </tutorial-video-box>
-
-            <tutorial-video-box
-              link="https://www.youtube.com/embed/RpXS1iYz6-M"
-              title="Write a high-converting subject line for your email"
-            >
-            </tutorial-video-box>
-
-            <tutorial-video-box
-              link="https://www.youtube.com/embed/RpXS1iYz6-M"
-              title="Write a high-converting subject line for your email"
-            >
-            </tutorial-video-box>
-
-            <tutorial-video-box
-              link="https://www.youtube.com/embed/RpXS1iYz6-M"
-              title="Write a high-converting subject line for your email"
-            >
-            </tutorial-video-box>
+           
           </div>
         </div>
       </div>
@@ -66,14 +40,42 @@ import Navbar from "@/components/TheNav.vue";
 import TutorialVideoBox from "@/components/TutorialVideoBox";
 
 export default {
-  name: "Dashboard",
+  name: "Tutorial",
   components: {
     Sidebar,
     Navbar,
     TutorialVideoBox,
   },
+  data() {
+    return {
+      videos: [],
+      videoLength: 0,
+    }
+  },
+  methods: {
+     getAllVideos() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getTutorialVideos")
+        .then((res) => {
+          this.videos = res.data.data;
+          // this.videoLength = res.data.meta.total;
+        
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+  },
+  mounted() {
+    this.getAllVideos();
+  },
 };
 </script>
 
 <style scoped>
+
+
 </style>
