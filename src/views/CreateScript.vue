@@ -34,7 +34,20 @@
                           class="form-group"
                         >
                           <label for="">{{ scriptInfo.question.label }}</label>
+                          <textarea
+                            v-if="scriptInfo.question.field_type === 'textarea'"
+                            :class="{
+                              'is-invalid':
+                                $v.scriptAnswers.$each[index].answer.$error,
+                            }"
+                            rows="3"
+                            cols="10"
+                            v-model="scriptAnswers[index].answer"
+                            :placeholder="scriptInfo.question.placeholder"
+                            class="form-control"
+                          ></textarea>
                           <input
+                            v-else
                             :type="scriptInfo.question.field_type"
                             name=""
                             :class="{
@@ -85,7 +98,8 @@
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                      <a target="_blank"
+                      <a
+                        target="_blank"
                         :href="
                           generatedScript
                             ? `https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport`
@@ -97,7 +111,7 @@
                     </div>
                   </div>
                   <div class="control-overflow">
-                     <loader-modal :loading-state="loading"></loader-modal>
+                    <loader-modal :loading-state="loading"></loader-modal>
                     <div v-if="generatedScript.length > 0">
                       <script-box
                         v-for="script in generatedScript"

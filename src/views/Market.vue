@@ -6,7 +6,7 @@
         current-active="marketplace"
       ></sidebar>
       <div class="content-section">
-        <navbar :remove-content="true"></navbar>
+        <navbar :remove-content="false"></navbar>
         <div class="container scroll-content">
           <div
             class="
