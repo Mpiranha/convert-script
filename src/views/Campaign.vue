@@ -210,7 +210,7 @@ export default {
         });
     },
     getCampaign() {
-      //  this.$store.commit("updateLoadState", true);
+       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getCampaigns")
         .then((res) => {

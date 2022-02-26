@@ -106,6 +106,44 @@
       <li class="nav-item">
         <router-link
           class="nav-link"
+          :class="currentActive == 'language' ? 'active' : ''"
+          to="/admin/languages"
+        >
+          <img
+            class="main-icon"
+            src="@/assets/icons/admin/sidebar-icon/category icon - grey.svg"
+            alt=""
+          />
+          <img
+            class="active-icon"
+            src="@/assets/icons/admin/sidebar-active/category active.svg"
+            alt=""
+          />
+          <span class="nav-text"> Language </span>
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link
+          class="nav-link"
+          :class="currentActive == 'tone' ? 'active' : ''"
+          to="/admin/tone"
+        >
+          <img
+            class="main-icon"
+            src="@/assets/icons/admin/sidebar-icon/category icon - grey.svg"
+            alt=""
+          />
+          <img
+            class="active-icon"
+            src="@/assets/icons/admin/sidebar-active/category active.svg"
+            alt=""
+          />
+          <span class="nav-text"> Tone </span>
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link
+          class="nav-link"
           :class="currentActive == 'flagged-script' ? 'active' : ''"
           to="/admin/scripts/flagged"
         >

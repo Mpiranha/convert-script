@@ -45,6 +45,9 @@ import Tutorials from '@/views/admin/Tutorials'
 import AgencyFile from '@/views/admin/AgencyFile'
 import Plans from '@/views/admin/Plans'
 import Category from '@/views/admin/Category'
+import Projects from '@/views/Projects'
+import Language from '@/views/admin/Language'
+import Tone from '@/views/admin/Tone'
 
 
 
@@ -271,6 +274,15 @@ const routes = [{
       requiresAuth: false
     }
   },
+  {
+    path: '/projects',
+    name: 'Projects',
+    component: Projects,
+    meta: {
+      requiresAuth: true,
+      adminAuth: false
+    }
+  },
   // Admin End points
   {
     path: '/admin',
@@ -312,6 +324,24 @@ const routes = [{
     path: '/admin/category',
     name: 'Category',
     component: Category,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/languages',
+    name: 'Languages',
+    component: Language,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/tone',
+    name: 'Tone',
+    component: Tone,
     meta: {
       requiresAuth: true,
       adminAuth: true

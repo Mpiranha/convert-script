@@ -436,7 +436,7 @@ export default {
   }
 
   .btn-drop .name {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .user-info .user-img {

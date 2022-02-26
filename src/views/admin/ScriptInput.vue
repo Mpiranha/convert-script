@@ -220,7 +220,31 @@
                   </b-form-group>
                 </div>
                 <div class="col-6 py-3 pr-4">
-                  <div class="title">User Input</div>
+                  <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="title mb-0">User Input</div>
+
+                    <div class="d-flex">
+                      <b-form-checkbox
+                        v-model="status"
+                        name="checkbox-tone"
+                        value="true"
+                        class="check-text mr-4"
+                        unchecked-value="false"
+                      >
+                        Tone
+                      </b-form-checkbox>
+                      <b-form-checkbox
+                        v-model="status"
+                        name="checkbox-language"
+                        value="true"
+                        class="check-text"
+                        unchecked-value="false"
+                      >
+                        Language
+                      </b-form-checkbox>
+                    </div>
+                  </div>
+
                   <div
                     draggable
                     @dragstart="startDrag($event, index)"
@@ -412,11 +436,12 @@ export default {
           //   this.categoryOptions.push({ value: data.id, text: data.name });
           // });
 
-         
-         for (let index = 0; index < cat.length; index++) {
-            this.categoryOptions.push({ value: cat[index].id, text: cat[index].name });
-            
-         }
+          for (let index = 0; index < cat.length; index++) {
+            this.categoryOptions.push({
+              value: cat[index].id,
+              text: cat[index].name,
+            });
+          }
 
           this.$store.commit("updateLoadState", false);
         })
@@ -617,6 +642,10 @@ export default {
 
 .input-label {
   font-size: 0.8rem !important;
+  color: #474e56;
+}
+
+.check-text {
   color: #474e56;
 }
 
