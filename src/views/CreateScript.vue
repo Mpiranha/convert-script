@@ -82,7 +82,7 @@
                           ></b-form-select>
                         </b-form-group>
                         <b-form-group
-                          label="Choose a tone (Optional)"
+                          label="Change output language (Optional)"
                           label-class="input-label"
                         >
                           <b-form-select

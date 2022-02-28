@@ -421,7 +421,7 @@ export default {
 
 .btn-drop .name {
   font-size: 0.8rem;
-  color: #000;
+  color: #393f46;
   margin-right: 0.5rem;
 }
 

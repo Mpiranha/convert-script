@@ -111,12 +111,12 @@
         >
           <img
             class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/category icon - grey.svg"
+            src="@/assets/icons/admin/sidebar-icon/language.svg"
             alt=""
           />
           <img
             class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/category active.svg"
+            src="@/assets/icons/admin/sidebar-active/language-active.svg"
             alt=""
           />
           <span class="nav-text"> Language </span>
@@ -130,12 +130,12 @@
         >
           <img
             class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/category icon - grey.svg"
+            src="@/assets/icons/admin/sidebar-icon/Tone.svg"
             alt=""
           />
           <img
             class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/category active.svg"
+            src="@/assets/icons/admin/sidebar-active/Tone-active.svg"
             alt=""
           />
           <span class="nav-text"> Tone </span>

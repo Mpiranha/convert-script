@@ -488,16 +488,8 @@ export default {
       this.scriptTypeData.script_type_presets = [];
       console.log("presset length " + data.presets.length);
       for (let i = 0; i < data.presets.length; i++) {
-        // console.log(data.presets[i]);
-        // this.scriptTypeData.script_type_presets[i].script_type_id = data.id;
-        // question: "",
-        // field_type: null,
-        // label: "",
-        // placeholder: "",
-        console.log(data.presets[i]);
+
         this.addInput();
-        // this.scriptTypeData.script_type_presets[i].script_type_id =
-        //   data.presets[i].id;
         this.scriptTypeData.script_type_presets[i].script_type_id = data.id;
         this.scriptTypeData.script_type_presets[i].question =
           data.presets[i].question;
@@ -509,15 +501,7 @@ export default {
           data.presets[i].placeholder;
       }
 
-      // data.presets.forEach(function (preset, index) {
-      //   console.log(preset);
-      //   console.log(index);
-      //   console.log(this.scriptTypeData.script_type_presets)
-      // });
 
-      // console.log(this.scriptTypeData.script_type_presets.length);
-
-      // console.log(data.presets.length);
 
       this.scriptTypeData.name = data.name;
       this.scriptTypeData.prompt_1 = data.prompt_1;
@@ -539,31 +523,6 @@ export default {
       this.scriptTypeData.query = data.query;
       this.scriptTypeData.max_tokens = data.max_tokens;
       this.scriptTypeData.top_p = data.top_p;
-
-      // this.scriptTypeData = {
-      //   script_type_presets: [
-      //     {
-      //       script_type_id: "",
-      //       question: "",
-      //       field_type: null,
-      //       label: "",
-      //       placeholder: "",
-      //     },
-      //   ],
-      //   name: "",
-      //   icon: null,
-      //   description: "",
-      //   presence_penalty: "",
-      //   frequency_penalty: "",
-      //   best_of: "",
-      //   stream: "",
-      //   documents: "",
-      //   query: "",
-      //   max_tokens: "",
-      //   temperature: "",
-      //   top_p: "",
-      //   engine: null,
-      // };
     },
     onIconChange(e) {
       console.log(e.target.files[0]);
