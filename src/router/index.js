@@ -357,6 +357,15 @@ const routes = [{
     }
   },
   {
+    path: '/admin/script/type/input',
+    name: 'ScriptTypesCreate',
+    component: ScriptInput,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
     path: '/admin/scripts/flagged',
     name: 'FlaggedScript',
     component: ScriptFlagged,

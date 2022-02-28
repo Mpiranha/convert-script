@@ -70,6 +70,27 @@
                             </div>
                           </div>
                         </div>
+
+                        <b-form-group
+                          label="Choose a tone (Optional)"
+                          label-class="input-label"
+                        >
+                          <b-form-select
+                            class="form-control"
+                            v-model="tone"
+                            :options="toneOptions"
+                          ></b-form-select>
+                        </b-form-group>
+                        <b-form-group
+                          label="Choose a tone (Optional)"
+                          label-class="input-label"
+                        >
+                          <b-form-select
+                            class="form-control"
+                            v-model="language"
+                            :options="languageOptions"
+                          ></b-form-select>
+                        </b-form-group>
                       </div>
                       <div class="script-form-footer">
                         <div class="desc">Variation</div>
@@ -192,6 +213,10 @@ export default {
   mixins: [alertMixin],
   data() {
     return {
+      tone: null,
+      language: null,
+      toneOptions: [{ value: null, text: "Select Tone" }],
+      languageOptions: [{ value: null, text: "Select Language" }],
       loading: false,
       scriptData: [],
       scriptAnswers: [],
@@ -403,8 +428,8 @@ export default {
 }
 
 .script-form-wrap label {
-  font-size: 0.7rem;
-  color: #848688;
+  font-size: 0.8rem;
+  color: #474e56;
 }
 
 .script-form-wrap form {

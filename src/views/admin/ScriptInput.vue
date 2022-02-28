@@ -20,7 +20,10 @@
           >
             <h6 class="title">Add Input - Script Name</h6>
             <div class="d-flex align-items-center">
-              <button @click="editScript" class="btn btn-create py-2">
+              <button
+                @click="$route.params.id ? editScript() : addScriptType()"
+                class="btn btn-create py-2"
+              >
                 Save
               </button>
             </div>
@@ -220,25 +223,32 @@
                   </b-form-group>
                 </div>
                 <div class="col-6 py-3 pr-4">
-                  <div class="d-flex align-items-center justify-content-between mb-3">
+                  <div
+                    class="
+                      d-flex
+                      align-items-center
+                      justify-content-between
+                      mb-3
+                    "
+                  >
                     <div class="title mb-0">User Input</div>
 
                     <div class="d-flex">
                       <b-form-checkbox
-                        v-model="status"
+                        v-model="scriptTypeData.tone"
                         name="checkbox-tone"
-                        value="true"
+                        :value="1"
                         class="check-text mr-4"
-                        unchecked-value="false"
+                        :unchecked-value="0"
                       >
                         Tone
                       </b-form-checkbox>
                       <b-form-checkbox
-                        v-model="status"
+                        v-model="scriptTypeData.language"
                         name="checkbox-language"
-                        value="true"
+                        :value="1"
                         class="check-text"
-                        unchecked-value="false"
+                        :unchecked-value="0"
                       >
                         Language
                       </b-form-checkbox>
@@ -367,6 +377,8 @@ export default {
         frequency_penalty: "",
         best_of: "",
         stream: "",
+        tone: false,
+        language: false,
         documents: "",
         query: "",
         max_tokens: "",
@@ -457,7 +469,7 @@ export default {
       }
 
       this.scriptTypeData.script_type_presets.push({
-        script_type_id: this.$route.params.id,
+        script_type_id: this.$route.params.id ? this.$route.params.id : "",
         question: "",
         field_type: null,
         label: "",
@@ -513,7 +525,10 @@ export default {
       this.scriptTypeData.engine = data.engine;
       this.scriptTypeData.temperature = data.temperature;
       // this.scriptTypeData.icon = data.icon;
-      this.script_type_category_id = data.script_type_category_id;
+      this.scriptTypeData.script_type_category_id =
+        data.script_type_category;
+      this.scriptTypeData.tone = data.tone;
+      this.scriptTypeData.language = data.language;
       this.currentIcon = data.icon;
       this.scriptTypeData.description = data.description;
       this.scriptTypeData.presence_penalty = data.presence_penalty;
@@ -581,6 +596,42 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+    addScriptType() {
+      this.$store.commit("updateLoadState", true);
+
+      if (this.iconRes) {
+        this.scriptTypeData.icon = [];
+        this.scriptTypeData.icon.push(this.iconRes.id);
+      }
+
+      this.$store
+        .dispatch("addScriptType", this.scriptTypeData)
+        .then((res) => {
+          console.log(res);
+
+          
+
+          this.makeToast("success", "Script Type Added successfully");
+          this.$router.push({
+            name: "ScriptTypes",
+          });
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log("error: " + error.response.data.message);
+          this.error = error.response.data.errors;
+          for (const key in this.error) {
+            if (Object.hasOwnProperty.call(this.error, key)) {
+              //const element = [key];
+              if (this.error[key] !== "undefined") {
+                this.makeToast("danger", this.error[key]);
+              }
+            }
+          }
+          // this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     editScript() {
       this.$store.commit("updateLoadState", true);
 
@@ -619,7 +670,9 @@ export default {
   },
 
   mounted() {
-    this.getScript(this.$route.params.id);
+    if (this.$route.params.id) {
+      this.getScript(this.$route.params.id);
+    }
     this.getCategories();
   },
   computed: {},

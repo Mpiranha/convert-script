@@ -41,7 +41,62 @@
             </div>
           </div>
 
-          <div class="row">
+          <div v-if="searchResult.length > 0" class="row">
+            <script-select-type-box
+              v-for="scriptType in searchResult"
+              :key="scriptType.id"
+              :img-url="
+                scriptType.icon
+                  ? scriptType.icon
+                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
+              "
+              :link-url="
+                $route.params.id
+                  ? {
+                      name: 'CampaignCreateScript',
+                      params: {
+                        campaignId: $route.params.id,
+                        id: scriptType.id,
+                      },
+                    }
+                  : {
+                      name: 'CreateScript',
+                      params: { id: scriptType.id },
+                    }
+              "
+              :type-title="scriptType.name"
+              :desc="scriptType.description"
+            ></script-select-type-box>
+          </div>
+
+          <div v-else-if="category" class="row">
+            <script-select-type-box
+              v-for="scriptType in filteredCategory"
+              :key="scriptType.id"
+              :img-url="
+                scriptType.icon
+                  ? scriptType.icon
+                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
+              "
+              :link-url="
+                $route.params.id
+                  ? {
+                      name: 'CampaignCreateScript',
+                      params: {
+                        campaignId: $route.params.id,
+                        id: scriptType.id,
+                      },
+                    }
+                  : {
+                      name: 'CreateScript',
+                      params: { id: scriptType.id },
+                    }
+              "
+              :type-title="scriptType.name"
+              :desc="scriptType.description"
+            ></script-select-type-box>
+          </div>
+          <div v-else-if="scriptTypes && searchKey.length < 1" class="row">
             <script-select-type-box
               v-for="scriptType in scriptTypes"
               :key="scriptType.id"
@@ -89,12 +144,36 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       scriptTypes: [],
-    categoryOptions: [{ value: null, text: "Select a Category" }],
-      category: "null",
+      categoryOptions: [{ value: null, text: "Select a Category" }],
+      category: null,
     };
   },
   methods: {
+    searchKeyWord() {
+      this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/script-types",
+          keyword: this.searchKey,
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     getScriptType() {
       this.$store.commit("updateLoadState", true);
       this.$store
@@ -110,9 +189,45 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+    getCategories() {
+      this.$store
+        .dispatch("getAllCategories")
+        .then((res) => {
+          //this.categoryOptions = res.data.data;
+
+          let cat = res.data.data;
+
+          // cat.forEach(function (data) {
+          //   console.log( "cat data " + data);
+          //   this.categoryOptions.push({ value: data.id, text: data.name });
+          // });
+
+          for (let index = 0; index < cat.length; index++) {
+            this.categoryOptions.push({
+              value: cat[index].id,
+              text: cat[index].name,
+            });
+          }
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+  },
+  computed: {
+    filteredCategory() {
+      return this.scriptTypes.filter((cat) => {
+        return this.category == cat.script_type_category;
+      });
+    },
   },
   mounted() {
     this.getScriptType();
+    this.getCategories();
   },
 };
 </script>

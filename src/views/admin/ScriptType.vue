@@ -19,14 +19,13 @@
           >
             <h6 class="title">All Script Type ({{ scriptTypeLength }})</h6>
             <div class="d-flex align-items-center">
-              <button
-                @click="clearField"
+              <router-link
+                to="/admin/script/type/input"
                 class="btn btn-create"
-                v-b-modal.modal-new-script
               >
                 <span>+</span>
                 New Script Type
-              </button>
+              </router-link>
             </div>
           </div>
 
