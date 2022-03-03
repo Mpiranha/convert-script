@@ -64,7 +64,7 @@
                       <dropdown-tool
                         @edit-clicked="openEditModal(result.id, result)"
                         @delete-proceed="deleteAgency(result.id)"
-                        delete-what="Tutorial"
+                        delete-what="Agency File"
                       >
                       </dropdown-tool>
                     </td>

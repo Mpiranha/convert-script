@@ -93,15 +93,15 @@
                         </b-form-group>
                       </div>
                       <div class="script-form-footer">
-                        <div class="desc">Variation</div>
+                        <!-- <div class="desc">Variation</div>
                         <input
                           type="text"
                           size="1"
                           v-model="variation"
                           class="btn btn-variation"
-                        />
+                        /> -->
 
-                        <button class="btn btn-create btn-script">
+                        <button class="btn btn-create py-2 btn-script">
                           Generate Script
                         </button>
                       </div>

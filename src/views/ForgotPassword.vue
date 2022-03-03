@@ -6,7 +6,7 @@
           <div class="d-flex justify-content-center mb-5">
             <img
               class="img-logo"
-              src="../assets/image/ConvertScript Logo.png"
+              src="../assets/image/Logo.svg"
               alt="Logo Image"
             />
           </div>

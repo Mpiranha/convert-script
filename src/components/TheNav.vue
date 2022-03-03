@@ -46,7 +46,7 @@
       <div class="modal-head">
         <h3 class="title">Send Suggestion</h3>
         <p class="desc">
-          Tell us about a feature you would love to have on ConvertScript
+          Tell us about a feature you would love to have on Onecopy.ai
         </p>
       </div>
 

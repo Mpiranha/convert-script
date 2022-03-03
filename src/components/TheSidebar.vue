@@ -2,7 +2,7 @@
   <div class="side-bar">
     <img
       class="side-logo"
-      src="@/assets/image/ConvertScript Logo.png"
+      src="@/assets/image/Logo.svg"
       alt="logo"
       srcset=""
     />
