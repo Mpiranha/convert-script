@@ -17,13 +17,9 @@
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link
-            class="nav-link"
-            :class="currentActive == 'support' ? 'active' : ''"
-            to="/support"
-          >
+          <a class="nav-link" href="https://support.onecopy.ai" target="_blank">
             Support
-          </router-link>
+          </a>
         </li>
 
         <li class="nav-item">

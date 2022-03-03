@@ -28,7 +28,7 @@
               }"
             >
               <span>+</span>
-              Add Scripts
+              Add Copy
             </router-link>
           </div>
 
