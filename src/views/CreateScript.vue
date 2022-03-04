@@ -15,10 +15,13 @@
               d-flex
               justify-content-between
               align-items-center
-              mb-5
+              mb-3
             "
           >
-            <h6 class="title">Generate New Script</h6>
+            <h6 class="title">
+              <img class="script-type-icon" :src="scriptType.icon" alt="" />
+              {{ scriptType.name }}
+            </h6>
           </div>
 
           <div class="content-wrap script-custom-height">
@@ -74,6 +77,10 @@
                         <b-form-group
                           label="Choose a tone (Optional)"
                           label-class="input-label"
+                          v-if="
+                            additional_content.script_type_tone
+                              .script_type_allowed_tone
+                          "
                         >
                           <b-form-select
                             class="form-control"
@@ -84,6 +91,10 @@
                         <b-form-group
                           label="Change output language (Optional)"
                           label-class="input-label"
+                          v-if="
+                            additional_content.script_type_language
+                              .script_type_allowed_tone
+                          "
                         >
                           <b-form-select
                             class="form-control"
@@ -102,7 +113,7 @@
                         /> -->
 
                         <button class="btn btn-create py-2 btn-script">
-                          Generate Script
+                          Create Copy
                         </button>
                       </div>
                     </form>
@@ -218,6 +229,15 @@ export default {
       toneOptions: [{ value: null, text: "Select Tone" }],
       languageOptions: [{ value: null, text: "Select Language" }],
       loading: false,
+      additional_content: {
+        script_type_tone: {
+          script_type_allowed_tone: false,
+        },
+        script_type_language: {
+          script_type_allowed_tone: false,
+        },
+      },
+      scriptType: [],
       scriptData: [],
       scriptAnswers: [],
       content: "",
@@ -314,15 +334,25 @@ export default {
         .dispatch("getOneScriptTypeSelect", id)
         .then((res) => {
           this.scriptData = res.data.data;
-
-          // this.scriptData.forEach(function (data, index) {
-          //   console.log(data + " and " + index)
-          //   this.scriptAnswers.push(data.answer);
-          // });
+          this.additional_content = res.data.additional_content;
           for (let i = 0; i < this.scriptData.length; i++) {
             this.scriptAnswers.push({ answer: "" });
           }
 
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    getScriptType(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getOneScriptType", id)
+        .then((res) => {
+          this.scriptType = res.data.data;
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -413,6 +443,7 @@ export default {
     },
   },
   mounted() {
+    this.getScriptType(this.$route.params.id);
     this.getScriptData(this.$route.params.id);
   },
 };
@@ -479,5 +510,10 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.title .script-type-icon {
+  width: 2.5rem;
+  margin-right: 0.7rem;
 }
 </style>

@@ -126,6 +126,24 @@ export default {
                 })
         })
     },
+    updateUserDetails({
+        state
+    }, data) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.post(`${baseUrl}/api/v1/user/profile`, data, {})
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
     resendVerificationEmail({
         state
     }) {
@@ -442,6 +460,25 @@ export default {
         })
     },
 
+    getOneScriptType({
+        // commit,
+        state
+    }, id) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/script-types/${id}`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
     getOneScriptTypeSelect({
         // commit,
         state
