@@ -21,6 +21,9 @@
               >
             </div>
           </div>
+            <loader-modal
+              :loading-state="this.$store.state.loading"
+            ></loader-modal>
 
           <div class="content-wrap extra-margin-left-wrap">
             <b-form-group

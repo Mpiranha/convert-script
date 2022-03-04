@@ -116,9 +116,6 @@
                           </div>
                         </td>
                         <td>
-                          {{ abbrScript(script.response.text) }}
-                        </td>
-                        <td>
                           <div class="script-type">
                             {{
                               script.response.script_type
@@ -126,7 +123,11 @@
                                 : "NIL"
                             }}
                           </div>
+                          <div class="script-content">
+                            {{ abbrScript(script.response.text) }}
+                          </div>
                         </td>
+
                         <td class="text-right">
                           <dropdown-tool
                             delete-what="Script"

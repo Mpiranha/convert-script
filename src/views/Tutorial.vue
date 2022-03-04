@@ -16,6 +16,10 @@
             </div>
           </div>
 
+            <loader-modal
+              :loading-state="this.$store.state.loading"
+            ></loader-modal>
+
           <div class="row mt-3">
             <tutorial-video-box
             v-for="video in videos"
