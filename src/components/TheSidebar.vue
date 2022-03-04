@@ -1,11 +1,6 @@
 <template>
   <div class="side-bar">
-    <img
-      class="side-logo"
-      src="@/assets/image/Logo.svg"
-      alt="logo"
-      srcset=""
-    />
+    <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" srcset="" />
     <nav class="nav flex-column nav-wrap">
       <li class="nav-item">
         <router-link
@@ -26,7 +21,44 @@
           <span class="nav-text"> Dashboard </span>
         </router-link>
       </li>
-
+      <li class="nav-item">
+        <router-link
+          class="nav-link"
+          :class="currentActive == 'new-copy' ? 'active' : ''"
+          to="/script/select"
+        >
+          <img
+            class="main-icon"
+            src="@/assets/icons/convert-icon/New Copy.svg"
+            alt=""
+          />
+          <img
+            class="active-icon"
+            src="@/assets/icons/convert-icon/active-icons/New Copy Active.svg"
+            alt=""
+          />
+          <span class="nav-text"> New Copy </span>
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link
+          class="nav-link"
+          :class="currentActive == 'script' ? 'active' : ''"
+          to="/scripts"
+        >
+          <img
+            class="main-icon"
+            src="@/assets/icons/convert-icon/All script.svg"
+            alt=""
+          />
+          <img
+            class="active-icon"
+            src="@/assets/icons/convert-icon/active-icons/all script.svg"
+            alt=""
+          />
+          <span class="nav-text"> All Copy </span>
+        </router-link>
+      </li>
       <li class="nav-item">
         <router-link
           class="nav-link"
@@ -46,25 +78,7 @@
           <span class="nav-text"> Campaigns </span>
         </router-link>
       </li>
-      <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'script' ? 'active' : ''"
-          to="/scripts"
-        >
-          <img
-            class="main-icon"
-            src="@/assets/icons/convert-icon/All script.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/all script.svg"
-            alt=""
-          />
-          <span class="nav-text"> All Scripts </span>
-        </router-link>
-      </li>
+
       <li class="nav-item">
         <router-link
           class="nav-link"
@@ -141,6 +155,25 @@
             alt=""
           />
           <span class="nav-text"> Settings </span>
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link
+          class="nav-link"
+          :class="currentActive == 'tutorials' ? 'active' : ''"
+          to="/tutorial"
+        >
+          <img
+            class="main-icon"
+            src="@/assets/icons/convert-icon/Tutotials.svg"
+            alt=""
+          />
+          <img
+            class="active-icon"
+            src="@/assets/icons/convert-icon/active-icons/Tutorials Active.svg"
+            alt=""
+          />
+          <span class="nav-text"> Tutorials </span>
         </router-link>
       </li>
     </nav>

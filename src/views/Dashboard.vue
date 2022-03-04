@@ -14,19 +14,19 @@
 
           <div class="row justify-content-between">
             <dashboard-box
-              text="Campaign"
+              text="Total Word Count"
               box-type="leads"
               image-url="Campaigns boxes.svg"
               :box-value="stat.campaigns"
             ></dashboard-box>
             <dashboard-box
-              text="Script"
+              text="Copy Created"
               box-type="links"
               image-url="script boxes.svg"
               :box-value="stat.scripts"
             ></dashboard-box>
             <dashboard-box
-              text="Published"
+              text="Clients"
               box-type="campaign"
               image-url="Published boxes.svg"
               :box-value="stat.published"

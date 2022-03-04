@@ -1049,15 +1049,10 @@ input:checked+.slider:before {
 }
 
 .script-type {
-    background-color: #8338ec;
-    color: #fff;
-    display: inline-block;
-    padding: 0.1rem 0.3rem;
-    border-radius: 0.7rem;
-    font-size: 0.6rem;
-    min-width: 100px;
-    text-align: center;
-    min-height: 16px;
+    color: #000;
+   font-weight: bolder;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
 }
 
 .content-display {

@@ -28,7 +28,7 @@
               }"
             >
               <span>+</span>
-              Add Copy
+              New Copy
             </router-link>
           </div>
 
@@ -43,6 +43,18 @@
                       alt=""
                     />
                     {{ campaign.scripts_count }}
+                  </div>
+                  <div class="search-form mb-0">
+                    <button class="btn search-btn">
+                      <i class="flaticon-loupe icons"></i>
+                    </button>
+                    <input
+                      @input="searchKeyWord"
+                      v-model="searchKey"
+                      class="form-control no-shadow search-input"
+                      type="text"
+                      placeholder="Search"
+                    />
                   </div>
                   <div class="section-head-right">
                     <!-- <select class="sort-select" name="" id="">
@@ -79,11 +91,11 @@
                           </div>
                         </td>
                         <td>
-                          {{ abbrScript(script.responses[0].text) }}
-                        </td>
-                        <td>
                           <div class="script-type">
                             {{ script.responses[0].script_type }}
+                          </div>
+                          <div class="script-content">
+                            {{ abbrScript(script.responses[0].text) }}
                           </div>
                         </td>
                         <td class="text-right">
@@ -245,6 +257,8 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       sendOptions: [{ value: null, text: "Select Plans" }],
       campaign: [],
       content: "",
@@ -271,8 +285,29 @@ export default {
     };
   },
   methods: {
-    abbrScript(text) {
-      return text.slice(0, 65) + "...";
+    searchKeyWord() {
+      this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/scripts",
+          keyword: this.searchKey,
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },    abbrScript(text) {
+      return text.slice(0, 125) + "...";
     },
     getCampaignData(id) {
       this.$store.commit("updateLoadState", true);

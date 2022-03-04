@@ -4,7 +4,7 @@
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"
-        current-active="script"
+        current-active="new-copy"
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>

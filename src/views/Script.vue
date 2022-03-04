@@ -18,11 +18,11 @@
               mb-5
             "
           >
-            <h6 class="title">All Script</h6>
+            <h6 class="title">All Copy</h6>
 
             <router-link class="btn btn-create" to="/script/select">
               <span>+</span>
-              Add Scripts
+              New Copy
             </router-link>
           </div>
 
@@ -79,13 +79,14 @@
                           </div>
                         </td>
                         <td>
-                          {{ abbrScript(result.responses[0].text) }}
-                        </td>
-                        <td>
                           <div class="script-type">
                             {{ result.responses[0].script_type }}
                           </div>
+                          <div class="script-content">
+                            {{ abbrScript(result.responses[0].text) }}
+                          </div>
                         </td>
+
                         <td class="text-right">
                           <dropdown-tool
                             delete-what="Script"
@@ -115,13 +116,14 @@
                           </div>
                         </td>
                         <td>
-                          {{ abbrScript(script.responses[0].text) }}
-                        </td>
-                        <td>
                           <div class="script-type">
                             {{ script.responses[0].script_type }}
                           </div>
+                          <div class="script-content">
+                            {{ abbrScript(script.responses[0].text) }}
+                          </div>
                         </td>
+                       
                         <td class="text-right">
                           <dropdown-tool
                             delete-what="Script"
@@ -362,7 +364,7 @@ export default {
         });
     },
     abbrScript(text) {
-      return text.slice(0, 65) + "...";
+      return text.slice(0, 125) + "...";
     },
     exportScripts() {
       this.$store.commit("updateLoadState", true);

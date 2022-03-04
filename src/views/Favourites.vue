@@ -361,7 +361,7 @@ export default {
         });
     },
     abbrScript(text) {
-      return text.slice(0, 65) + "...";
+      return text.slice(0, 125) + "...";
     },
     exportFavorites() {
       this.$store.commit("updateLoadState", true);

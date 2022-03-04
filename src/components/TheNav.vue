@@ -7,15 +7,7 @@
             Suggest Feature
           </a>
         </li>
-        <li class="nav-item">
-          <router-link
-            class="nav-link"
-            :class="currentActive == 'tutorials' ? 'active' : ''"
-            to="/tutorial"
-          >
-            Tutorials
-          </router-link>
-        </li>
+       
         <li class="nav-item">
           <a class="nav-link" href="https://support.onecopy.ai" target="_blank">
             Support

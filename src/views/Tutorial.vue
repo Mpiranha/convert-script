@@ -3,7 +3,7 @@
     <div class="flex-main-wrap">
       <sidebar
        :user-name="this.$store.state.user.first_name"
-       
+       current-active="tutorials"
       ></sidebar>
       <div class="content-section">
         <navbar current-active="tutorials"></navbar>
