@@ -11,11 +11,8 @@
         <div class="container scroll-content">
           <div class="d-flex">
             <div class="dashboard-top">
-              <h6 class="title">Create Script</h6>
-              <div class="desc">
-                Let's increase your engagement and<br />
-                conversations and get your results.
-              </div>
+              <h6 class="title">Select Template</h6>
+              
             </div>
 
             <div class="select-script-forms">
