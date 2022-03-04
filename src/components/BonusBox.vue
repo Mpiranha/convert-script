@@ -3,7 +3,7 @@
     <div class="box-wrap">
       <h6 class="title">{{ bonusTitle }}</h6>
       <p class="desc">{{ desc }}</p>
-      <a :href="bonusLink">
+      <a :href="bonusLink" target="_blank">
         Download
         <span>
           <img

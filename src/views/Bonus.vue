@@ -14,19 +14,11 @@
           </div>
           <div class="row">
             <bonus-box
-              bonus-title="Bonus Title"
-              desc="This is where the bonus description will be placed"
-              bonus-link="#"
-            ></bonus-box>
-             <bonus-box
-              bonus-title="Bonus Title"
-              desc="This is where the bonus description will be placed"
-              bonus-link="#"
-            ></bonus-box>
-             <bonus-box
-              bonus-title="Bonus Title"
-              desc="This is where the bonus description will be placed"
-              bonus-link="#"
+              v-for="bonus in bonuses"
+              :key="bonus.id"
+              :bonus-title="bonus.name"
+              :desc="bonus.description"
+              :bonus-link="bonus.url"
             ></bonus-box>
           </div>
         </div>
@@ -47,6 +39,33 @@ export default {
     Sidebar,
     Navbar,
     BonusBox,
+  },
+  data() {
+    return {
+      bonuses: [],
+      bonusLength: 0,
+    };
+  },
+
+  methods: {
+    getAllBonuses() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getBonues")
+        .then((res) => {
+          this.bonuses = res.data.data;
+          // this.videoLength = res.data.meta.total;
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+  },
+  mounted() {
+    this.getAllBonuses();
   },
 };
 </script>
