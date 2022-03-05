@@ -244,11 +244,7 @@
             @click="toggleShow()"
             data-target=".user-drop"
           >
-            <img
-              class="user-img"
-              src="@/assets/icons/profile-user.svg"
-              alt=""
-            />
+            <div class="user-img">{{ getFirstLetter(userName) }}</div>
             <div class="name">{{ userName }}</div>
             <div v-if="isShowing" class="user-drop">
               <div class="setup-drop-inner">
@@ -323,6 +319,9 @@ export default {
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/login");
       });
+    },
+    getFirstLetter(text) {
+      return text.toString().charAt(0);
     },
   },
 };
@@ -441,6 +440,13 @@ export default {
   height: 1.7rem;
   border-radius: 50%;
   margin-right: 0.5rem;
+  background-color: #6f6f6f;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: bolder;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 [data-target=".user-drop"] {
