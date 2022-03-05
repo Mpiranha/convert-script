@@ -17,7 +17,7 @@
               text="Total Word Count"
               box-type="leads"
               image-url="Campaigns boxes.svg"
-              :box-value="stat.campaigns"
+              :box-value="stat.script_words_generated"
             ></dashboard-box>
             <dashboard-box
               text="Copy Created"

@@ -81,7 +81,22 @@
                       delete-what="Campaign"
                       @edit-clicked="openEditModal(result.id, result.name)"
                       @delete-proceed="deleteCampaign(result.id)"
-                    ></dropdown-tool>
+                    >
+                      <template v-slot:secondary>
+                        <b-dropdown-item
+                          v-b-modal.add-client
+                          link-class="drop-link"
+                          href="#"
+                        >
+                          <img
+                            class="drop-img-icon"
+                            src="@/assets/icons/convert-icon/Add to client icon.svg"
+                            alt="add to client icon"
+                          />
+                          Add to Client
+                        </b-dropdown-item>
+                      </template>
+                    </dropdown-tool>
                   </td>
                 </tr>
               </tbody>
@@ -106,7 +121,22 @@
                       delete-what="Campaign"
                       @edit-clicked="openEditModal(campaign.id, campaign.name)"
                       @delete-proceed="deleteCampaign(campaign.id)"
-                    ></dropdown-tool>
+                    >
+                      <template v-slot:secondary>
+                        <b-dropdown-item
+                          v-b-modal.modal-add-client
+                          link-class="drop-link"
+                          href="#"
+                        >
+                          <img
+                            class="drop-img-icon"
+                            src="@/assets/icons/convert-icon/Add to client icon.svg"
+                            alt="add to client icon"
+                          />
+                          Add to Client
+                        </b-dropdown-item>
+                      </template>
+                    </dropdown-tool>
                   </td>
                 </tr>
               </tbody>
@@ -155,6 +185,34 @@
         >
       </div>
     </b-modal>
+    <b-modal
+      :hide-header="true"
+      id="modal-add-client"
+      centered
+      size="md"
+      :hide-footer="true"
+      dialog-class="control-width"
+      content-class="modal-main"
+    >
+      <b-form-group
+        label="Add to Client"
+        label-for="pwd"
+        label-class="form-label"
+      >
+        <b-form-select
+          class="input-table"
+          v-model="client"
+          :options="clientOptions"
+        ></b-form-select>
+      </b-form-group>
+
+      <div class="d-flex justify-content-end">
+        <b-button @click="$bvModal.hide('modal-add-client')" class="close-modal"
+          >Close</b-button
+        >
+        <b-button class="save-modal">Add</b-button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -177,6 +235,8 @@ export default {
     return {
       searchKey: "",
       searchResult: [],
+      client: null,
+      clientOptions: [{ value: null, text: "Select a Client" }],
       campaignName: "",
       accessOptions: [{ value: null, text: "Select Plans" }],
       campaigns: [],
@@ -210,7 +270,7 @@ export default {
         });
     },
     getCampaign() {
-       this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getCampaigns")
         .then((res) => {

@@ -378,7 +378,7 @@ export default {
           console.log(res);
 
           this.generatedScript = res.data.data.responses;
-          // this.makeToast("success", "Video added successfully");
+
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -401,12 +401,14 @@ export default {
             // script_type_preset_id: this.scriptData[0].question.id,
             // script_type_id: this.$route.params.id,
             presets: this.preset,
+            languages: this.language ? this.language : [],
+            tones: this.tone ? this.tone : [],
           },
         })
         .then((res) => {
           this.loading = false;
           console.log(res);
-          console.log("Update was successfull");
+
           this.generateScript();
 
           this.$store.commit("updateLoadState", false);
@@ -441,10 +443,64 @@ export default {
       // this.generateScript();
       this.postPresetAnswer();
     },
+    getAllTones() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getAllTones")
+        .then((res) => {
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.toneOptions.push({
+              value: [
+                {
+                  tone_id: res.data.data[i].id,
+                  script_type_id: this.scriptType.id,
+                  user_id: this.$store.state.user.id,
+                },
+              ],
+              text: res.data.data[i].name,
+            });
+          }
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    getAllLanguages() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getAllLanguages")
+        .then((res) => {
+          this.languages = res.data.data;
+
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.languageOptions.push({
+              value: [
+                {
+                  language_id: res.data.data[i].id,
+                  script_type_id: this.scriptType.id,
+                  user_id: this.$store.state.user.id,
+                },
+              ],
+              text: res.data.data[i].name,
+            });
+          }
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
   },
   mounted() {
     this.getScriptType(this.$route.params.id);
     this.getScriptData(this.$route.params.id);
+    this.getAllTones();
+    this.getAllLanguages();
   },
 };
 </script>

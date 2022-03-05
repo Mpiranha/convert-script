@@ -211,10 +211,10 @@
       </div> -->
       <div class="row">
         <div class="col-6">
-          <b-form-group label="Last Name">
+          <b-form-group label="First Name">
             <b-form-input
               id="name"
-              v-model="userData.last_name"
+              v-model="userData.first_name"
               type="text"
               class="input-table"
             >
@@ -222,10 +222,10 @@
           </b-form-group>
         </div>
         <div class="col-6">
-          <b-form-group label="First Name">
+          <b-form-group label="Last Name">
             <b-form-input
               id="name"
-              v-model="userData.first_name"
+              v-model="userData.last_name"
               type="text"
               class="input-table"
             >
