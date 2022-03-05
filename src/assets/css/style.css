@@ -2,24 +2,24 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 @font-face {
-    font-family: "Circular Std Medium";
-    src: url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.eot");
+    font-family: "jost";
+    src: url("../fonts/jost/static/Jost-Regular.ttf");
     /* IE9*/
-    src: url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.eot?#iefix") format("embedded-opentype"),
+    src: url("../fonts/jost/static/Jost-Regular.ttf") format("embedded-opentype"),
         /* IE6-IE8 */
-        url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.woff2") format("woff2"),
+        /* url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.woff2") format("woff2"), */
         /* chrome、firefox */
-        url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.woff") format("woff"),
+        /* url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.woff") format("woff"), */
         /* chrome、firefox */
-        url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.ttf") format("truetype"),
+        /* url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.ttf") format("truetype"), */
         /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-        url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.svg#Circular Std Medium") format("svg");
-    /* iOS 4.1- */
+        /* url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.svg#Circular Std Medium") format("svg"); */
+        /* iOS 4.1- */
 }
 
 
 body {
-    font-family: Roboto !important;
+    font-family: jost, Roboto !important;
 }
 
 .flex-main-wrap {
@@ -1050,7 +1050,7 @@ input:checked+.slider:before {
 
 .script-type {
     color: #000;
-   font-weight: bolder;
+    font-weight: bolder;
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
 }

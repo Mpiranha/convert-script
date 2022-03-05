@@ -242,7 +242,7 @@ import Navbar from "@/components/TheNav.vue";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Suggestions",
+  name: "MarketPlace",
   mixins: [alertMixin],
   components: {
     Sidebar,
@@ -291,7 +291,7 @@ export default {
           perPage: this.perPage,
         })
         .then((res) => {
-          this.market = res.data.result;
+          this.market = res.data;
           console.log(res);
           this.marketLength = res.data.result.total_count;
            this.$store.commit("updateLoadState", false);
@@ -345,12 +345,7 @@ export default {
         return "Just now";
       }
 
-      // console.log("Years:", years);
-      // console.log("Months:", months);
-      // console.log("Days:", days);
-      // console.log("Hours:", hours);
-      // console.log("Minutes:", minutes);
-      // console.log("Seconds:", seconds);
+      
     },
 
     clearField() {

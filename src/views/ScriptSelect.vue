@@ -192,7 +192,7 @@ export default {
         .then((res) => {
           //this.categoryOptions = res.data.data;
 
-          let cat = res.data.data;
+          let cat = res.data.data.reverse();
 
           // cat.forEach(function (data) {
           //   console.log( "cat data " + data);
