@@ -54,19 +54,11 @@
               :loading-state="this.$store.state.loading"
             ></loader-modal>
             <div v-if="marketLength === 0" class="no-data-info">
-              Created Suggestion will display here.
+              No Active Project, Try Again Later.
             </div>
             <table v-else class="table table-custom table-market">
-              <!-- <thead>
-                <tr>
-                  <th>Message</th>
-                  <th class="text-left">Email</th>
-                  <th>Date</th>
-                  <th class="text-left">Action</th>
-                </tr>
-              </thead> -->
               <tbody>
-                <tr v-for="project in market.projects" :key="project.id">
+                <tr v-for="project in market" :key="project.id">
                   <td>
                     <div class="market-desc">
                       <b>{{ project.title }}</b
@@ -127,7 +119,7 @@
                               min: project.budget.maximum,
                               max: project.budget.minimum,
                             },
-                            currency: {code: project.currency.code},
+                            currency: { code: project.currency.code },
                             bids: project.bid_stats.bid_count,
                             time_updated: getProjectTime(project.time_updated),
                           })
@@ -275,16 +267,43 @@ export default {
       error: "",
       triggerEdit: false,
       editId: null,
+      dummy: {
+        id: 33125171,
+        title: "Typing job",
+        type: "Fixed",
+        short_description:
+          "I have a PDF that needs to be type in order to replace/edit some text. I will need 2 files edited an",
+        full_description:
+          "I have a PDF that needs to be type in order to replace/edit some text. I will need 2 files edited and i need it ASAP,",
+        date: 1646608311,
+        bids: 2,
+        status: "open",
+        bid_count: 2,
+        bid_avg: 375,
+        budget_type: "fixed",
+        budget_low: 250,
+        budget_high: 750,
+        url: "http://www.freelancer.com/projects/pdf/Typing-job-33125171",
+        currency_id: 1,
+        currency_code: "USD",
+        currency_sign: "$",
+        currency_name: "US Dollar",
+        currency_exchange_rate: 1,
+        currency_country: "US",
+        currency_is_escrowcom_supported: true,
+        hourly_commitment: null,
+        hourly_interval: null,
+      },
     };
   },
   methods: {
-     handlePageChange(value) {
+    handlePageChange(value) {
       this.currentPage = value;
       this.getMarketData();
       console.log("Value: " + value);
     },
     getMarketData() {
-       this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getMarket", {
           number: this.currentPage,
@@ -293,13 +312,14 @@ export default {
         .then((res) => {
           this.market = res.data;
           console.log(res);
-          this.marketLength = res.data.result.total_count;
-           this.$store.commit("updateLoadState", false);
+          // this.marketLength = res.data.result.total_count;
+          this.marketLength = res.data.length;
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-           this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
     getProjectTime(time) {
@@ -344,8 +364,6 @@ export default {
       } else {
         return "Just now";
       }
-
-      
     },
 
     clearField() {

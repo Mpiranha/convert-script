@@ -1056,7 +1056,7 @@ input:checked+.slider:before {
 }
 
 .content-display {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     padding: 1.3rem 1.5rem 0 0;
     /* text-align: justify; */
     line-height: 22px;

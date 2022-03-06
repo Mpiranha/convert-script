@@ -250,7 +250,7 @@
               <div class="setup-drop-inner">
                 <ul class="nav flex-column">
                   <li class="nav-item">
-                    <router-link class="nav-link" to="/account">
+                    <router-link class="nav-link" to="/settings">
                       <img
                         src="@/assets/icons/convert-icon/account.svg"
                         alt="icon"

@@ -38,6 +38,8 @@
                 <i class="flaticon-loupe icons"></i>
               </button>
               <input
+                @input="searchKeyWord"
+                v-model="searchKey"
                 class="form-control no-shadow search-input"
                 type="text"
                 placeholder="Search"
@@ -54,8 +56,28 @@
                 <option value=""></option>
               </select>
             </div>
-            <table class="table table-custom">
-              <tbody>
+             <div v-if="resellers.length === 0" class="no-data-info">
+              No reseller created.
+            </div>
+            <table v-else class="table table-custom">
+               <tbody v-if="searchResult.length > 0">
+                <tr v-for="reseller in searchResult" :key="reseller.id">
+                  <td scope="row">{{ reseller.first_name }}</td>
+                  <td scope="row">{{ reseller.last_name }}</td>
+                  <td>{{ reseller.active }}</td>
+                  <td>{{ reseller.email }}</td>
+                  <td>{{ formatDate(reseller.created_at) }}</td>
+                  <td>
+                    <dropdown-tool
+                      delete-what="Reseller"
+                      @edit-clicked="openEditModal(reseller.id, reseller)"
+                      @delete-proceed="deleteReseller(reseller.id)"
+                    >
+                    </dropdown-tool>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody v-else-if="resellers && searchKey.length < 1">
                 <tr v-for="reseller in resellers" :key="reseller.id">
                   <td scope="row">{{ reseller.first_name }}</td>
                   <td scope="row">{{ reseller.last_name }}</td>
@@ -98,8 +120,15 @@
           type="text"
           placeholder="first name"
           class="input-table"
+          :class="{ 'is-invalid': submitted && $v.form.first_name.$error }"
         >
         </b-form-input>
+        <div
+          v-if="submitted && !$v.form.first_name.required"
+          class="invalid-feedback"
+        >
+          * first name is required
+        </div>
       </b-form-group>
       <b-form-group label="Last Name" label-for="name" label-class="form-label">
         <b-form-input
@@ -108,8 +137,15 @@
           type="text"
           placeholder="last name"
           class="input-table"
+          :class="{ 'is-invalid': submitted && $v.form.last_name.$error }"
         >
         </b-form-input>
+        <div
+          v-if="submitted && !$v.form.last_name.required"
+          class="invalid-feedback"
+        >
+          * last name is required
+        </div>
       </b-form-group>
 
       <b-form-group label="Email" label-for="email" label-class="form-label">
@@ -119,8 +155,13 @@
           type="text"
           placeholder="user@domain.com"
           class="input-table"
+          :class="{ 'is-invalid': submitted && $v.form.email.$error }"
         >
         </b-form-input>
+        <div v-if="submitted && $v.form.email.$error" class="invalid-feedback">
+          <span v-if="!$v.form.email.required">* Email is required</span>
+          <span v-if="!$v.form.email.email">* Email is invalid</span>
+        </div>
       </b-form-group>
       <b-form-group
         v-if="!triggerEdit"
@@ -133,21 +174,42 @@
           v-model="form.password"
           type="password"
           class="input-table"
+          :class="{ 'is-invalid': submitted && $v.form.password.$error }"
         >
         </b-form-input>
+        <div
+          v-if="submitted && $v.form.password.$error"
+          class="invalid-feedback"
+        >
+          <span v-if="!$v.form.password.required">* Password is required</span>
+          <span v-if="!$v.form.password.minLength"
+            >* Password must be at least 6 characters</span
+          >
+        </div>
       </b-form-group>
       <b-form-group label="Access" label-for="pwd" label-class="form-label">
         <b-form-select
           class="input-table"
           v-model="form.plan"
           :options="planOptions"
+          :class="{ 'is-invalid': submitted && $v.form.plan.$error }"
         ></b-form-select>
+        <div
+          v-if="submitted && !$v.form.plan.required"
+          class="invalid-feedback"
+        >
+          * select suitable plan
+        </div>
       </b-form-group>
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modalPopover')" class="close-modal"
           >Close</b-button
         >
-        <b-button class="save-modal">Save</b-button>
+        <b-button
+          @click="triggerEdit ? editReseller() : addReseller()"
+          class="save-modal"
+          >Submit</b-button
+        >
       </div>
     </b-modal>
   </div>
@@ -159,9 +221,15 @@ import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
+import { required, minLength, email } from "vuelidate/lib/validators";
 
 export default {
   name: "Reseller",
+  provide() {
+    return {
+      $v: this.$v,
+    };
+  },
   mixins: [alertMixin],
   components: {
     Sidebar,
@@ -170,6 +238,8 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       form: {
         first_name: "",
         last_name: "",
@@ -181,9 +251,78 @@ export default {
       planOptions: [{ value: null, text: "Select Plans" }],
       resellers: [],
       triggerEdit: false,
+      submitted: false,
+      error: null,
     };
   },
+  validations: {
+    form: {
+      first_name: {
+        required,
+        minLength: minLength(3),
+      },
+      last_name: {
+        required,
+        minLength: minLength(3),
+      },
+      email: {
+        required,
+        email,
+      },
+      password: {
+        required,
+        minLength: minLength(6),
+      },
+      plan: {
+        required,
+      },
+    },
+  },
   methods: {
+    searchKeyWord() {
+      this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/reseller",
+          keyword: this.searchKey,
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    getAllplans() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getAllPlans")
+        .then((res) => {
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.planOptions.push({
+              value: [
+                {
+                  plan_id: res.data.data[i].id,
+                },
+              ],
+              text: res.data.data[i].name,
+            });
+          }
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     getReseller() {
       this.$store
         .dispatch("getAllReseller")
@@ -201,14 +340,29 @@ export default {
         });
     },
     addReseller() {
+      //event.preventDefault();
+      this.submitted = true;
+
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modalPopover");
 
       this.$store
-        .dispatch("addReseller", this.client)
+        .dispatch("addReseller", {
+          first_name: this.form.first_name,
+          last_name: this.form.last_name,
+          role: "User",
+          email: this.form.email,
+          password: this.form.password,
+          plan: this.form.plan,
+        })
         .then((res) => {
           this.error = null;
           console.log(res.data);
+          this.makeToast("success", "Reseller created successfully");
           // this.getCampaign();
           this.form = {
             first_name: "",
@@ -223,6 +377,15 @@ export default {
         })
         .catch((error) => {
           console.log(error.message);
+          this.error = error.response.data.errors;
+          for (const key in this.error) {
+            if (Object.hasOwnProperty.call(this.error, key)) {
+              //const element = [key];
+              if (this.error[key] !== "undefined") {
+                this.makeToast("danger", this.error[key]);
+              }
+            }
+          }
           this.$store.commit("updateLoadState", false);
           // this.error = error.response.data.errors.root;
           // this.error = error;
@@ -308,6 +471,7 @@ export default {
   },
   mounted() {
     this.getReseller();
+    this.getAllplans();
   },
 };
 </script>

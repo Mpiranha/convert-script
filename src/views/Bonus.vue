@@ -1,10 +1,13 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar  :user-name="this.$store.state.user.first_name"></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name"></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="container scroll-content">
+          <loader-modal
+            :loading-state="this.$store.state.loading"
+          ></loader-modal>
           <div class="dashboard-top">
             <h6 class="title">Bonuses</h6>
             <div class="desc">
