@@ -19,13 +19,20 @@
           >
             <h6 class="title">Reseller</h6>
 
-            <button class="btn btn-create" v-b-modal.modalPopover>
+            <button
+              @click="clearField"
+              class="btn btn-create"
+              v-b-modal.modalPopover
+            >
               <span>+</span>
               New Account
             </button>
           </div>
 
-          <div class="content-wrap pt-4 pb-5">
+          <div class="content-wrap set-min-h pt-4 pb-5">
+            <loader-modal
+              :loading-state="this.$store.state.loading"
+            ></loader-modal>
             <div class="search-form">
               <button class="btn search-btn">
                 <i class="flaticon-loupe icons"></i>
@@ -38,7 +45,7 @@
             </div>
 
             <div class="sort-wrap">
-              <div class="acct-desc">2/50 Account</div>
+              <div class="acct-desc">{{ resellers.length }} /50 Account</div>
 
               <select class="sort-select" name="" id="">
                 <option selected>Sort</option>
@@ -49,31 +56,19 @@
             </div>
             <table class="table table-custom">
               <tbody>
-                <tr>
-                  <td scope="row">John Doe</td>
-                  <td>Active</td>
-                  <td>john@gmail.com</td>
-                  <td>05/072021</td>
+                <tr v-for="reseller in resellers" :key="reseller.id">
+                  <td scope="row">{{ reseller.first_name }}</td>
+                  <td scope="row">{{ reseller.last_name }}</td>
+                  <td>{{ reseller.active }}</td>
+                  <td>{{ reseller.email }}</td>
+                  <td>{{ formatDate(reseller.created_at) }}</td>
                   <td>
-                    <b-dropdown
-                      offset="-30"
-                      toggle-class="no-shadow drop-toogle-btn"
-                      menu-class="drop-main-wrap"
-                      size="sm"
-                      no-caret
+                    <dropdown-tool
+                      delete-what="Reseller"
+                      @edit-clicked="openEditModal(reseller.id, reseller)"
+                      @delete-proceed="deleteReseller(reseller.id)"
                     >
-                      <template #button-content>
-                        <i class="flaticon-menu icons"></i>
-                      </template>
-                      <b-dropdown-item link-class="drop-link" href="#">
-                        <i class="flaticon-pencil icons table-drop-icon"></i>
-                        Edit
-                      </b-dropdown-item>
-                      <b-dropdown-item link-class="drop-link" href="#">
-                        <i class="flaticon-trash icons table-drop-icon"></i>
-                        Delete
-                      </b-dropdown-item>
-                    </b-dropdown>
+                    </dropdown-tool>
                   </td>
                 </tr>
               </tbody>
@@ -92,12 +87,26 @@
       dialog-class="control-width"
       content-class="modal-main"
     >
-      <b-form-group label="Name" label-for="name" label-class="form-label">
+      <b-form-group
+        label="First Name"
+        label-for="name"
+        label-class="form-label"
+      >
         <b-form-input
           id="name"
-          v-model="form.name"
+          v-model="form.first_name"
           type="text"
-          placeholder="Name"
+          placeholder="first name"
+          class="input-table"
+        >
+        </b-form-input>
+      </b-form-group>
+      <b-form-group label="Last Name" label-for="name" label-class="form-label">
+        <b-form-input
+          id="name"
+          v-model="form.last_name"
+          type="text"
+          placeholder="last name"
           class="input-table"
         >
         </b-form-input>
@@ -113,10 +122,15 @@
         >
         </b-form-input>
       </b-form-group>
-      <b-form-group label="Password" label-for="pwd" label-class="form-label">
+      <b-form-group
+        v-if="!triggerEdit"
+        label="Password"
+        label-for="pwd"
+        label-class="form-label"
+      >
         <b-form-input
           id="password"
-          v-model="form.pwd"
+          v-model="form.password"
           type="password"
           class="input-table"
         >
@@ -125,12 +139,14 @@
       <b-form-group label="Access" label-for="pwd" label-class="form-label">
         <b-form-select
           class="input-table"
-          v-model="form.access"
-          :options="accessOptions"
+          v-model="form.plan"
+          :options="planOptions"
         ></b-form-select>
       </b-form-group>
       <div class="d-flex justify-content-end">
-        <b-button  @click="$bvModal.hide('modalPopover')" class="close-modal">Close</b-button>
+        <b-button @click="$bvModal.hide('modalPopover')" class="close-modal"
+          >Close</b-button
+        >
         <b-button class="save-modal">Save</b-button>
       </div>
     </b-modal>
@@ -141,32 +157,162 @@
 // @ is an alias to /src
 import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
+import DropdownTool from "@/components/DropdownTool";
+import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Dashboard",
+  name: "Reseller",
+  mixins: [alertMixin],
   components: {
     Sidebar,
     Navbar,
+    DropdownTool,
   },
   data() {
     return {
       form: {
-        name: "",
+        first_name: "",
+        last_name: "",
+        role: "",
         email: "",
-        pwd: "",
-        access: "null",
+        password: "",
+        plan: null,
       },
-      accessOptions: [{ value: null, text: "Select Plans" }],
+      planOptions: [{ value: null, text: "Select Plans" }],
+      resellers: [],
+      triggerEdit: false,
     };
+  },
+  methods: {
+    getReseller() {
+      this.$store
+        .dispatch("getAllReseller")
+        .then((res) => {
+          this.resellers = res.data.data;
+          // console.log(res.data + "called now");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    addReseller() {
+      this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modalPopover");
+
+      this.$store
+        .dispatch("addReseller", this.client)
+        .then((res) => {
+          this.error = null;
+          console.log(res.data);
+          // this.getCampaign();
+          this.form = {
+            first_name: "",
+            last_name: "",
+            role: "",
+            email: "",
+            password: "",
+            plan: null,
+          };
+          this.getReseller();
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error.message);
+          this.$store.commit("updateLoadState", false);
+          // this.error = error.response.data.errors.root;
+          // this.error = error;
+        });
+
+      // this.getCampaign();
+
+      // this.$vm.$forceUpdate();
+    },
+    editReseller(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modalPopover");
+      this.$store
+        .dispatch("editReseller", { id: id, data: this.client })
+        .then((res) => {
+          this.error = null;
+          console.log(res.data);
+          this.form = {
+            first_name: "",
+            last_name: "",
+            role: "",
+            email: "",
+            password: "",
+            plan: null,
+          };
+          this.getReseller();
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error.message);
+          this.$store.commit("updateLoadState", false);
+          // this.error = error.response.data.errors.root;
+          // this.error = error;
+        });
+    },
+    deleteReseller(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("deleteReseller", id)
+        .then((res) => {
+          this.error = null;
+          this.getReseller();
+          console.log(res.data);
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error.message);
+          this.$store.commit("updateLoadState", false);
+          // this.error = error.response.data.errors.root;
+          // this.error = error;
+        });
+
+      // this.getCampaign();
+    },
+
+    openEditModal(id, data) {
+      this.$bvModal.show("modalPopover");
+      this.triggerEdit = true;
+      this.editId = id;
+
+      this.form.first_name = data.first_name;
+      this.form.last_name = data.last_name;
+      this.form.role = data.role;
+      this.form.email = data.email;
+      this.form.plan = data.plan;
+    },
+    clearField() {
+      this.form = {
+        first_name: "",
+        last_name: "",
+        role: "",
+        email: "",
+        password: "",
+        plan: null,
+      };
+      this.triggerEdit = false;
+    },
+    formatDate(date) {
+      var formatedDate = new Date(date);
+
+      return formatedDate.toLocaleDateString();
+    },
+  },
+  mounted() {
+    this.getReseller();
   },
 };
 </script>
 
 <style>
-
-
-
-
 .drop-toogle-btn {
   background-color: transparent !important;
   border: none !important;
@@ -178,16 +324,4 @@ export default {
   font-size: 0.9rem;
   margin-right: 0.3rem;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 </style>

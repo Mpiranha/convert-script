@@ -43,7 +43,8 @@
                 <i class="flaticon-loupe icons"></i>
               </button>
               <input
-                 v-model="searchKey"  @input="searchKeyWord"
+                v-model="searchKey"
+                @input="searchKeyWord"
                 class="form-control no-shadow search-input"
                 type="text"
                 placeholder="Search"
@@ -60,7 +61,9 @@
                 <option value=""></option>
               </select>
             </div>
-            <loader-modal :loading-state="loading"></loader-modal>
+            <loader-modal
+              :loading-state="this.$store.state.loading"
+            ></loader-modal>
             <div v-if="agency.length === 0" class="no-data-info">
               Created agency will display here.
             </div>
@@ -231,18 +234,18 @@ export default {
         .then((res) => {
           this.agency = res.data.data;
           // console.log(res.data + "called now");
-          this.loading = false;
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
           // this.error = error.response.data.errors.root;
           // // this.error = error;
           console.log(error);
-          this.loading = false;
+          this.$store.commit("updateLoadState", false);
         });
     },
     addAgency() {
-      this.loading = true;
+      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-client");
 
       this.$store
@@ -251,12 +254,14 @@ export default {
           this.error = null;
           console.log(res.data);
           // this.getCampaign();
+          this.makeToast("success", "Agency added successfully");
           this.getAgency();
-          this.loading = false;
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error.message);
-          this.loading = false;
+          this.makeToast("danger", error);
+          this.$store.commit("updateLoadState", false);
           // this.error = error.response.data.errors.root;
           // this.error = error;
         });
@@ -266,36 +271,40 @@ export default {
       // this.$vm.$forceUpdate();
     },
     editAgency(id) {
-      this.loading = true;
+      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-client");
       this.$store
         .dispatch("editAgency", { id: id, data: this.client })
         .then((res) => {
           this.error = null;
           console.log(res.data);
+          this.makeToast("success", "Agency editted successfully");
           this.getAgency();
-          this.loading = false;
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error.message);
-          this.loading = false;
+          this.makeToast("danger", error);
+          this.$store.commit("updateLoadState", false);
           // this.error = error.response.data.errors.root;
           // this.error = error;
         });
     },
     deleteAgency(id) {
-      this.loading = true;
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteAgency", id)
         .then((res) => {
           this.error = null;
+          this.makeToast("success", "Agency deleted successfully");
           this.getAgency();
           console.log(res.data);
-          this.loading = false;
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error.message);
-          this.loading = false;
+          this.makeToast("danger", error);
+          this.$store.commit("updateLoadState", false);
           // this.error = error.response.data.errors.root;
           // this.error = error;
         });
