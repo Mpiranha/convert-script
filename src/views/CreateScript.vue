@@ -154,11 +154,11 @@
                         :export-link="`https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${script.id}`"
                       >
                       </script-box>
-                      <input
+                      <textarea
                         type="hidden"
                         id="text--copy"
                         :value="generatedScript ? generatedScript.text : ''"
-                      />
+                      ></textarea>
                     </div>
                     <div v-else class="empty-script">
                       Generated Script will display here.

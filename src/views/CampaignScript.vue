@@ -161,13 +161,13 @@
                       />
                       Copy to clipboard
                     </button>
-                    <input
+                    <textarea
                       type="hidden"
                       id="text--copy"
                       :value="
                         activeScript ? activeScript.responses[0].text : ''
                       "
-                    />
+                    ></textarea>
                   </div>
                 </div>
               </div>

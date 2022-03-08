@@ -7,7 +7,7 @@
             Suggest Feature
           </a>
         </li>
-       
+
         <li class="nav-item">
           <a class="nav-link" href="https://support.onecopy.ai" target="_blank">
             Support
@@ -15,7 +15,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#">
+          <a class="nav-link notification-icon" href="#">
             <i class="flaticon-bell icons head-icon"></i>
           </a>
         </li>
@@ -79,6 +79,10 @@ export default {
         parent_id: 1,
         message: "",
       },
+      HW_config: {
+        selector: ".notification-icon", // CSS selector where to inject the badge
+        account: "J4WWZ7",
+      },
     };
   },
   methods: {
@@ -106,11 +110,28 @@ export default {
         });
     },
   },
-  mounted() {},
+  mounted() {
+    let notificationWidget = document.createElement("script");
+    notificationWidget.setAttribute(
+      "src",
+      "https://cdn.headwayapp.co/widget.js"
+    );
+    notificationWidget.setAttribute("async", "true");
+    document.head.appendChild(notificationWidget);
+
+    const waitForHeadway = () => {
+      if (window["Headway"]) {
+        window.Headway.init(this.HW_config);
+      } else {
+        setTimeout(() => waitForHeadway(), 100);
+      }
+    };
+    waitForHeadway();
+  },
 };
 </script>
 
-<style scoped>
+<style>
 .content-head {
   background-color: #ffffff;
   display: flex;
@@ -153,6 +174,14 @@ export default {
 
 .fix-height {
   min-height: 60px;
+}
+
+#HW_badge_cont {
+ position: absolute !important;
+}
+
+#HW_badge {
+  background-color: green !important;
 }
 
 @media (min-width: 1367px) {

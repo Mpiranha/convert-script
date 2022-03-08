@@ -52,11 +52,11 @@
           alt=""
         />
       </button>
-      <input
+      <textarea
         type="hidden"
         id="text--copy"
         :value="scriptContent ? scriptContent : ''"
-      />
+      ></textarea>
     </div>
   </div>
 </template>
@@ -74,7 +74,7 @@ export default {
     exportLink: {
       type: String,
       required: true,
-    }
+    },
   },
   directives: {
     nl2br: {

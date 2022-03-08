@@ -205,11 +205,11 @@
                       />
                       Copy to clipboard
                     </button>
-                    <input
+                    <textarea
                       type="hidden"
                       id="text--copy"
                       :value="activeScript ? activeScript.response.text : ''"
-                    />
+                    ></textarea>
                   </div>
                 </div>
               </div>
