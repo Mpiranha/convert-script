@@ -13,17 +13,10 @@
               <h6 class="title">Account Details</h6>
               <div class="desc">Edit your account information, here.</div>
             </div>
-            <div class="ml-auto align-self-end mb-2">
-              <b-button
-                @click="updateUserDetails()"
-                class="save-modal px-3 py-2"
-                >Save</b-button
-              >
-            </div>
           </div>
-            <loader-modal
-              :loading-state="this.$store.state.loading"
-            ></loader-modal>
+          <loader-modal
+            :loading-state="this.$store.state.loading"
+          ></loader-modal>
 
           <div class="content-wrap extra-margin-left-wrap">
             <b-form-group
@@ -106,11 +99,16 @@
                 </div>
               </div>
             </b-form-group> -->
+
+            <div class="d-flex justify-content-end align-self-end mb-2">
+              <b-button
+                @click="updateUserDetails()"
+                class="save-modal px-4 py-2"
+                >Save</b-button
+              >
+            </div>
           </div>
 
-          <div class="d-flex justify-content-end align-self-end mb-2">
-            <b-button class="save-modal px-3 py-2">Save</b-button>
-          </div>
           <div class="content-wrap extra-margin-left-wrap">
             <password-input
               label="Current Password"
@@ -170,6 +168,10 @@
               <span v-else-if="!$v.pwd.confirmNewPassword.sameAsPassword"
                 >* Passwords must match</span
               >
+            </div>
+
+            <div class="d-flex justify-content-end align-self-end mb-2">
+              <b-button class="save-modal px-4 py-2">Save</b-button>
             </div>
           </div>
         </div>

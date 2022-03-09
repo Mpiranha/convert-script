@@ -93,7 +93,7 @@
                             @edit-clicked="
                               openEditModal(script.id, script.response.text)
                             "
-                            @delete-proceed="deleteScript(script.id)"
+                            @delete-proceed="deleteScript(script.response.id)"
                           >
                           </dropdown-tool>
                         </td>
@@ -134,7 +134,7 @@
                             @edit-clicked="
                               openEditModal(script.id, script.response.text)
                             "
-                            @delete-proceed="deleteScript(script.id)"
+                            @delete-proceed="deleteScript(script.response.id)"
                           >
                           </dropdown-tool>
                         </td>
@@ -416,6 +416,50 @@ export default {
           console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
+        });
+    },
+    deleteScript(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("deleteScript", id)
+        .then((res) => {
+          this.error = null;
+          this.getFavorites();
+          console.log(res.data);
+          this.makeToast("success", "Script deleted successfully");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
+          // this.error = error;
+        });
+
+      // this.getCampaign();
+    },
+    editScript(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modal-edit-script");
+      this.$store
+        .dispatch("editScript", {
+          id: id,
+          data: { content: this.content, script_type_id: 1 },
+        })
+        .then((res) => {
+          this.error = null;
+          console.log(res.data);
+          this.getFavorites()
+          this.makeToast("success", "Script edited successfully");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
+          // this.error = error;
         });
     },
     onEditorBlur(quill) {
