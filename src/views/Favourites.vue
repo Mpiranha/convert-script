@@ -425,7 +425,7 @@ export default {
         .then((res) => {
           this.error = null;
           this.getFavorites();
-          console.log(res.data);
+          (this.activeScript = null), console.log(res.data);
           this.makeToast("success", "Script deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
@@ -450,7 +450,7 @@ export default {
         .then((res) => {
           this.error = null;
           console.log(res.data);
-          this.getFavorites()
+          this.getFavorites();
           this.makeToast("success", "Script edited successfully");
           this.$store.commit("updateLoadState", false);
         })
