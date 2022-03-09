@@ -17,6 +17,7 @@
         <li class="nav-item">
           <a class="nav-link notification-icon" href="#">
             <i class="flaticon-bell icons head-icon"></i>
+            <div class="nofi-anchor"></div>
           </a>
         </li>
       </ul>
@@ -75,13 +76,10 @@ export default {
   },
   data() {
     return {
+      widget: undefined,
       suggestion: {
         parent_id: 1,
         message: "",
-      },
-      HW_config: {
-        selector: ".notification-icon", // CSS selector where to inject the badge
-        account: "J4WWZ7",
       },
     };
   },
@@ -119,9 +117,20 @@ export default {
     notificationWidget.setAttribute("async", "true");
     document.head.appendChild(notificationWidget);
 
+    let config = {
+      selector: ".nofi-anchor", // CSS selector where to inject the badge
+      account: "J4WWZ7",
+      trigger: ".notification-icon",
+      callbacks: {
+        onWidgetReady: function (widget) {
+          this.widget = widget;
+        },
+      },
+    };
+
     const waitForHeadway = () => {
       if (window["Headway"]) {
-        window.Headway.init(this.HW_config);
+        window.Headway.init(config);
       } else {
         setTimeout(() => waitForHeadway(), 100);
       }
@@ -175,15 +184,30 @@ export default {
 .fix-height {
   min-height: 60px;
 }
-
+.notification-icon {
+  position: relative;
+}
 #HW_badge_cont {
- position: absolute !important;
+  position: absolute !important;
+  top: 0;
 }
 
 #HW_badge {
-  background-color: green !important;
+  background-color: transparent !important;
+  font-size: 0;
+  height: 11px;
+  width: 11px;
+  top: 15px;
+  left: 9px;
 }
 
+#HW_badge.HW_visible {
+background-color: #8338ec !important;
+}
+
+.HW_frame_cont {
+  top: 70px !important;
+}
 @media (min-width: 1367px) {
   .menu-section .nav-link {
     font-size: 0.9rem;
