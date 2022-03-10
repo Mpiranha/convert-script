@@ -31,12 +31,12 @@
           <div class="content-wrap word-usage-stat">
             <div class="label">Word Usage Count</div>
             <b-progress
-              :value="progressValue"
-              :max="max"
+              :value="wordStat.script_words_generated"
+              :max="wordStat.limit"
               animated
               height="0.8rem"
             ></b-progress>
-            <div class="value">324500 of 50000</div>
+            <div class="value">{{ wordStat.script_words_generated }} of {{ wordStat.limit }}</div>
           </div>
         </div>
       </div>
@@ -59,7 +59,31 @@ export default {
     return {
       progressValue: 50,
       max: 100,
+      wordStat: {
+        limit: null,
+        script_words_generated: null,
+      },
     };
+  },
+  methods: {
+    getStatInfo() {
+      //  this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getDashboardInfo")
+        .then((res) => {
+          this.wordStat = res.data.data.message;
+
+          console.log(res.data);
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+  },
+  mounted() {
+    this.getStatInfo();
   },
 };
 </script>
