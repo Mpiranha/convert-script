@@ -202,7 +202,7 @@ export default {
           for (let index = 0; index < cat.length; index++) {
             this.categoryOptions.push({
               value: cat[index].id,
-              text: cat[index].name,
+              text: cat[index].name + " (" + cat[index].scripts + ")",
             });
           }
 
