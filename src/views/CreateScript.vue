@@ -453,7 +453,11 @@ export default {
               value: [
                 {
                   tone_id: res.data.data[i].id,
-                  script_type_id: this.scriptType.id,
+                  script_type_id: this.scriptType.id
+                    ? this.scriptType.id
+                    : setTimeout(() => {
+                        return this.scriptType.id;
+                      }, 3000),
                   user_id: this.$store.state.user.id,
                 },
               ],
@@ -480,7 +484,11 @@ export default {
               value: [
                 {
                   language_id: res.data.data[i].id,
-                  script_type_id: this.scriptType.id,
+                  script_type_id: this.scriptType.id
+                    ? this.scriptType.id
+                    : setTimeout(() => {
+                        return this.scriptType.id;
+                      }, 3000),
                   user_id: this.$store.state.user.id,
                 },
               ],
