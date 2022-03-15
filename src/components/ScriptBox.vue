@@ -159,7 +159,7 @@ export default {
 } */
 
 .script-content-wrap .script-content {
-  font-size: 0.85rem;
+  font-size: 1.1rem;
   margin-bottom: 1.3rem;
   line-height: 20px;
   text-align: justify;

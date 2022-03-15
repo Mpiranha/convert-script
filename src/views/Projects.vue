@@ -18,8 +18,6 @@
             "
           >
             <h6 class="title">Saved Projects</h6>
-
-           
           </div>
 
           <div class="content-wrap set-min-h pt-4 pb-5">
@@ -28,6 +26,8 @@
                 <i class="flaticon-loupe icons"></i>
               </button>
               <input
+                @input="searchKeyWord"
+                v-model="searchKey"
                 class="form-control no-shadow search-input"
                 type="text"
                 placeholder="Search"
@@ -35,7 +35,7 @@
             </div>
 
             <div class="sort-wrap">
-              <div class="acct-desc">{{ marketLength }} Projects</div>
+              <div class="acct-desc">{{ projects.length }} Projects</div>
 
               <select class="sort-select" name="" id="">
                 <option value="none" selected>Sort</option>
@@ -47,31 +47,26 @@
             <loader-modal
               :loading-state="this.$store.state.loading"
             ></loader-modal>
-            <div v-if="marketLength === 0" class="no-data-info">
-              Created Suggestion will display here.
+            <div v-if="projects.length === 0" class="no-data-info">
+              Saved Projects Will Display Here.
             </div>
             <table v-else class="table table-custom table-market">
-              <!-- <thead>
-                <tr>
-                  <th>Message</th>
-                  <th class="text-left">Email</th>
-                  <th>Date</th>
-                  <th class="text-left">Action</th>
-                </tr>
-              </thead> -->
-              <tbody>
-                <tr v-for="project in market.projects" :key="project.id">
+              <tbody v-if="searchResult.length > 0">
+                <tr v-for="project in searchResult" :key="project.id">
                   <td>
                     <div class="market-desc">
-                      <b>{{ project.title }}</b
+                      <b>{{ project.freelancer_ad_id.title }}</b
                       ><br />
-                      {{ project.preview_description }}
+                      {{ project.freelancer_ad_id.short_description }}
                     </div>
                   </td>
                   <td>
-                    {{ getProjectTime(project.time_updated) }} with
-                    {{ project.bid_stats.bid_count }}
-                    {{ project.bid_stats.bid_count > 1 ? "bids" : "bid" }}
+                    {{ getProjectTime(project.freelancer_ad_id.updated_at) }}
+                    with
+                    {{ project.freelancer_ad_id.bid_count }}
+                    {{
+                      project.freelancer_ad_id.bid_count > 1 ? "bids" : "bid"
+                    }}
                   </td>
                   <td>
                     <img
@@ -80,10 +75,14 @@
                       alt="location icon"
                     />
 
-                    {{ project.location.city ? project.location.city : "NIL" }},
                     {{
-                      project.location.country.name
-                        ? project.location.country.name
+                      project.freelancer_ad_id.currency_country
+                        ? project.freelancer_ad_id.currency_country
+                        : "NIL"
+                    }},
+                    {{
+                      project.freelancer_ad_id.currency_country
+                        ? project.freelancer_ad_id.currency_country
                         : "NIL"
                     }}
                   </td>
@@ -91,46 +90,155 @@
                     <div class="price">
                       <div>
                         {{
-                          project.type == "fixed"
-                            ? project.budget.maximum
-                            : project.budget.minimum +
+                          project.freelancer_ad_id.type == "Fixed"
+                            ? project.freelancer_ad_id.budget_high
+                            : project.freelancer_ad_id.budget_low +
                               "-" +
-                              project.budget.maximum
+                              project.freelancer_ad_id.budget_high
                         }}
-                        {{ project.currency.code }}
+                        {{ project.freelancer_ad_id.currency_code }}
                       </div>
-                      {{ project.type }}
+                      {{ project.freelancer_ad_id.type }}
                     </div>
                   </td>
                   <td class="text-left">
                     <nav class="nav action-view">
-                      <a
-                        class="nav-link"
+                      <button
+                        class="btn no-shadow nav-link"
                         href="#"
                         v-b-modal.modal-view-script
                         @click="
                           getCurrent({
-                            title: project.title,
-                            description: project.preview_description,
-                            type: project.type,
+                            title: project.freelancer_ad_id.title,
+                            description:
+                              project.freelancer_ad_id.full_description,
+                            type: project.freelancer_ad_id.type,
                             location: {
-                              city: project.location.city,
-                              country: project.location.country.name,
+                              city: project.freelancer_ad_id.currency_country,
+                              country:
+                                project.freelancer_ad_id.currency_country,
                             },
                             budget: {
-                              min: project.budget.maximum,
-                              max: project.budget.minimum,
+                              min: project.freelancer_ad_id.budget_low,
+                              max: project.freelancer_ad_id.budget_high,
                             },
-                            currency: {code: project.currency.code},
-                            bids: project.bid_stats.bid_count,
-                            time_updated: getProjectTime(project.time_updated),
+                            currency: {
+                              code: project.freelancer_ad_id.currency_code,
+                            },
+                            bids: project.freelancer_ad_id.bid_count,
+                            time_updated: getProjectTime(
+                              project.freelancer_ad_id.updated_at
+                            ),
+                            url: project.freelancer_ad_id.url,
                           })
                         "
                       >
                         View
-                      </a>
+                      </button>
                       <span>|</span>
-                      <a class="nav-link" href="#">Delete</a>
+                      <button
+                        @click="deleteSavedProject(project.freelancer_ad_id.id)"
+                        class="btn no-shadow nav-link"
+                        href="#"
+                      >
+                        Remove
+                      </button>
+                    </nav>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody v-else-if="projects && searchKey.length < 1">
+                <tr v-for="project in projects" :key="project.id">
+                  <td>
+                    <div class="market-desc">
+                      <b>{{ project.freelancer_ad_id.title }}</b
+                      ><br />
+                      {{ project.freelancer_ad_id.short_description }}
+                    </div>
+                  </td>
+                  <td>
+                    {{ getProjectTime(project.freelancer_ad_id.updated_at) }}
+                    with
+                    {{ project.freelancer_ad_id.bid_count }}
+                    {{
+                      project.freelancer_ad_id.bid_count > 1 ? "bids" : "bid"
+                    }}
+                  </td>
+                  <td>
+                    <img
+                      class="icon-location"
+                      src="@/assets/icons/convert-icon/Marketplace.svg"
+                      alt="location icon"
+                    />
+
+                    {{
+                      project.freelancer_ad_id.currency_country
+                        ? project.freelancer_ad_id.currency_country
+                        : "NIL"
+                    }},
+                    {{
+                      project.freelancer_ad_id.currency_country
+                        ? project.freelancer_ad_id.currency_country
+                        : "NIL"
+                    }}
+                  </td>
+                  <td>
+                    <div class="price">
+                      <div>
+                        {{
+                          project.freelancer_ad_id.type == "Fixed"
+                            ? project.freelancer_ad_id.budget_high
+                            : project.freelancer_ad_id.budget_low +
+                              "-" +
+                              project.freelancer_ad_id.budget_high
+                        }}
+                        {{ project.freelancer_ad_id.currency_code }}
+                      </div>
+                      {{ project.freelancer_ad_id.type }}
+                    </div>
+                  </td>
+                  <td class="text-left">
+                    <nav class="nav action-view">
+                      <button
+                        class="btn no-shadow nav-link"
+                        href="#"
+                        v-b-modal.modal-view-script
+                        @click="
+                          getCurrent({
+                            title: project.freelancer_ad_id.title,
+                            description:
+                              project.freelancer_ad_id.full_description,
+                            type: project.freelancer_ad_id.type,
+                            location: {
+                              city: project.freelancer_ad_id.currency_country,
+                              country:
+                                project.freelancer_ad_id.currency_country,
+                            },
+                            budget: {
+                              min: project.freelancer_ad_id.budget_low,
+                              max: project.freelancer_ad_id.budget_high,
+                            },
+                            currency: {
+                              code: project.freelancer_ad_id.currency_code,
+                            },
+                            bids: project.freelancer_ad_id.bid_count,
+                            time_updated: getProjectTime(
+                              project.freelancer_ad_id.updated_at
+                            ),
+                            url: project.freelancer_ad_id.url,
+                          })
+                        "
+                      >
+                        View
+                      </button>
+                      <span>|</span>
+                      <button
+                        @click="deleteSavedProject(project.freelancer_ad_id.id)"
+                        class="btn no-shadow nav-link"
+                        href="#"
+                      >
+                        Remove
+                      </button>
                     </nav>
                   </td>
                 </tr>
@@ -151,7 +259,7 @@
               <div class="price">
                 <div>
                   {{
-                    activeMarketData.type == "fixed"
+                    activeMarketData.type == "Fixed"
                       ? activeMarketData.budget.max
                       : activeMarketData.budget.min +
                         "-" +
@@ -179,7 +287,7 @@
                   />
                   {{
                     activeMarketData.location.city
-                      ? project.location.city
+                      ? activeMarketData.location.city
                       : "NIL"
                   }},
                   {{
@@ -200,17 +308,16 @@
                   class="close-modal"
                   >Close</b-button
                 >
-                <b-button
-                  @click="
-                    triggerEdit ? editAgency(editId, campaignName) : addAgency()
-                  "
+                <a
+                  :href="activeMarketData.url"
+                  target="_blank"
                   class="save-modal"
-                  >Open Project</b-button
+                  >Open Project</a
                 >
               </div>
             </div>
           </b-modal>
-          <div class="d-flex justify-content-center">
+          <!-- <div class="d-flex justify-content-center">
             <b-pagination
               v-model="currentPage"
               :total-rows="marketLength"
@@ -222,7 +329,7 @@
               next-text=">"
               @change="handlePageChange"
             ></b-pagination>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -236,7 +343,7 @@ import Navbar from "@/components/TheNav.vue";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Suggestions",
+  name: "SavedProjects",
   mixins: [alertMixin],
   components: {
     Sidebar,
@@ -244,10 +351,12 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       perPage: 5,
       currentPage: 1,
       marketLength: 0,
-      market: [],
+      projects: [],
       activeMarketData: {
         title: "",
         description: "",
@@ -265,6 +374,7 @@ export default {
         },
         bids: "",
         time_updated: "",
+        url: "",
       },
       error: "",
       triggerEdit: false,
@@ -272,35 +382,74 @@ export default {
     };
   },
   methods: {
-     handlePageChange(value) {
-      this.currentPage = value;
-      this.getMarketData();
-      console.log("Value: " + value);
-    },
-    getMarketData() {
-       this.$store.commit("updateLoadState", true);
+    searchKeyWord() {
       this.$store
-        .dispatch("getMarket", {
-          number: this.currentPage,
-          perPage: this.perPage,
+        .dispatch("search", {
+          endpoint: "/api/v1/marketplace-saved",
+          keyword: this.searchKey,
         })
         .then((res) => {
-          this.market = res.data.result;
+          this.searchResult = res.data.data;
+
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    handlePageChange(value) {
+      this.currentPage = value;
+      this.getSavedProject();
+      console.log("Value: " + value);
+    },
+    getSavedProject() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getSavedProject")
+        .then((res) => {
+          this.projects = res.data.data;
           console.log(res);
-          this.marketLength = res.data.result.total_count;
-           this.$store.commit("updateLoadState", false);
+          // this.marketLength = res.data.result.total_count;
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-           this.$store.commit("updateLoadState", false);
+          this.$store.commit("updateLoadState", false);
         });
     },
+    deleteSavedProject(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("deleteSavedProject", id)
+        .then((res) => {
+          console.log(res);
+          this.getSavedProject();
+          this.makeToast("success", "project removed successfully");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error.response.data.message;
+          this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+
     getProjectTime(time) {
       if (!time) {
         return "NIL";
       }
-      var diff = Date.now() - time;
+
+      var mil = new Date(time);
+      var diff = Date.now() - mil.getTime();
 
       var seconds = Math.floor(diff / 1000),
         minutes = Math.floor(seconds / 60),
@@ -346,14 +495,6 @@ export default {
       // console.log("Minutes:", minutes);
       // console.log("Seconds:", seconds);
     },
-
-    clearField() {
-      this.client = {
-        name: "",
-        email: "",
-      };
-      this.triggerEdit = false;
-    },
     getCurrent(data) {
       this.activeMarketData.title = data.title;
       this.activeMarketData.description = data.description;
@@ -371,11 +512,7 @@ export default {
       };
       this.activeMarketData.bids = data.bids;
       this.activeMarketData.time_updated = data.time_updated;
-    },
-    orderSort(arr) {
-      return arr.sort(function (a, b) {
-        return a.id - b.id;
-      });
+      this.activeMarketData.url = data.url;
     },
     formatDate(date) {
       var formatedDate = new Date(date);
@@ -385,7 +522,7 @@ export default {
   },
 
   mounted() {
-    this.getMarketData();
+    this.getSavedProject();
   },
   computed: {},
 };

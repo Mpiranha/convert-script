@@ -386,7 +386,7 @@ export default {
       this.$store
         .dispatch("getGeneratedScripts")
         .then((res) => {
-          this.scripts = res.data.data;
+          this.scripts = res.data.data.reverse();
 
           this.$store.commit("updateLoadState", false);
         })

@@ -305,7 +305,7 @@ export default {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.get(`${baseUrl}/api/v1/reseller`)
                 .then(resp => {
-                 
+
                     resolve(resp)
                 })
                 .catch(err => {
@@ -320,7 +320,7 @@ export default {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.post(`${baseUrl}/api/v1/reseller`, data, {})
                 .then(resp => {
-                 
+
                     resolve(resp)
                 })
                 .catch(err => {
@@ -338,7 +338,7 @@ export default {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.put(`${baseUrl}/api/v1/reseller/${id}`, data)
                 .then(resp => {
-                 
+
                     resolve(resp)
                 })
                 .catch(err => {
@@ -353,7 +353,7 @@ export default {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.delete(`${baseUrl}/api/v1/reseller/${id}`)
                 .then(resp => {
-                 
+
                     resolve(resp)
                 })
                 .catch(err => {
@@ -743,6 +743,82 @@ export default {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.get(`${baseUrl}/api/v1/marketplace?page=${page.number}&per_page=${page.perPage}`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
+    getSavedProject({
+        // commit,
+        state
+    }, page) {
+        if (page) {
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+                axios.get(`${baseUrl}/api/v1/marketplace-saved?page=${page.number}&per_page=${page.perPage}`)
+                    .then(resp => {
+                        // commit("get_all_agencies_success", {
+                        //     agencies: resp.data
+                        // });
+
+                        resolve(resp)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        } else {
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+                axios.get(`${baseUrl}/api/v1/marketplace-saved`)
+                    .then(resp => {
+                        // commit("get_all_agencies_success", {
+                        //     agencies: resp.data
+                        // });
+
+                        resolve(resp)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        }
+    },
+
+
+    saveProject({
+        state
+    }, data) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.post(`${baseUrl}/api/v1/marketplace-saved`, data, {})
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
+    deleteSavedProject({
+        state
+    }, id) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.delete(`${baseUrl}/api/v1/marketplace-saved/${id}`)
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data

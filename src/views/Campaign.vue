@@ -274,7 +274,7 @@ export default {
       this.$store
         .dispatch("getCampaigns")
         .then((res) => {
-          this.campaigns = res.data.data;
+          this.campaigns = res.data.data.reverse();
           console.log(res.data + "called now");
           this.$store.commit("updateLoadState", false);
         })
