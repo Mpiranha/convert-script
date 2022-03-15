@@ -117,10 +117,10 @@
                         </td>
                         <td>
                           <div class="script-type">
-                            {{ script.responses[0].script_type }}
+                            {{ script.script_type }}
                           </div>
                           <div class="script-content">
-                            {{ abbrScript(script.responses[0].text) }}
+                            {{ abbrScript(script.text) }}
                           </div>
                         </td>
                        
@@ -128,7 +128,7 @@
                           <dropdown-tool
                             delete-what="Script"
                             @edit-clicked="
-                              openEditModal(script.id, script.responses[0].text)
+                              openEditModal(script.id, script.text)
                             "
                             @delete-proceed="deleteScript(script.id)"
                           >
@@ -166,7 +166,7 @@
                       <a
                         :href="
                           activeScript
-                            ? `http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${activeScript.responses[0].id}`
+                            ? `http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${activeScript.id}`
                             : '#'
                         "
                         target="_blank"
@@ -178,7 +178,7 @@
                   </div>
                   <div class="content-display" v-if="activeScript">
                     <div
-                      v-html="formatScript(activeScript.responses[0].text)"
+                      v-html="formatScript(activeScript.text)"
                     ></div>
                   </div>
                   <div v-else class="no-select">Select a Script to Preview</div>
@@ -205,7 +205,7 @@
                       type="hidden"
                       id="text--copy"
                       :value="
-                        activeScript ? activeScript.responses[0].text : ''
+                        activeScript ? activeScript.text : ''
                       "
                     ></textarea>
                   </div>
@@ -443,7 +443,7 @@ export default {
     addRemoveScriptFavorite() {
       this.$store
         .dispatch("addRemoveFavorite", {
-          script_response_id: this.activeScript.responses[0].id,
+          script_response_id: this.activeScript.id,
         })
         .then((res) => {
           console.log(res.data.data.message);
@@ -491,7 +491,7 @@ export default {
     },
     setActiveScript(data) {
       this.activeScript = data;
-      this.isFavourite = data.responses[0].favorite;
+      this.isFavourite = data.favorite;
     },
     copyText() {
       let testingCodeToCopy = document.querySelector("#text--copy");
