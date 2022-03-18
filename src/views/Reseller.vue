@@ -56,11 +56,11 @@
                 <option value=""></option>
               </select>
             </div>
-             <div v-if="resellers.length === 0" class="no-data-info">
+            <div v-if="resellers.length === 0" class="no-data-info">
               No reseller created.
             </div>
             <table v-else class="table table-custom">
-               <tbody v-if="searchResult.length > 0">
+              <tbody v-if="searchResult.length > 0">
                 <tr v-for="reseller in searchResult" :key="reseller.id">
                   <td scope="row">{{ reseller.first_name }}</td>
                   <td scope="row">{{ reseller.last_name }}</td>
@@ -246,7 +246,11 @@ export default {
         role: "",
         email: "",
         password: "",
-        plan: null,
+        plan: [
+          {
+            plan_id: "",
+          },
+        ],
       },
       planOptions: [{ value: null, text: "Select Plans" }],
       resellers: [],
@@ -399,7 +403,16 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modalPopover");
       this.$store
-        .dispatch("editReseller", { id: id, data: this.client })
+        .dispatch("editReseller", {
+          id: id,
+          data: {
+            first_name: this.form.first_name,
+            last_name: this.form.last_name,
+            role: "User",
+            email: this.form.email,
+            plan: this.form.plan,
+          },
+        })
         .then((res) => {
           this.error = null;
           console.log(res.data);
@@ -450,7 +463,7 @@ export default {
       this.form.last_name = data.last_name;
       this.form.role = data.role;
       this.form.email = data.email;
-      this.form.plan = data.plan;
+      this.form.plan[0].plan_id = data.plans[0].id;
     },
     clearField() {
       this.form = {

@@ -372,6 +372,8 @@ export default {
           campaign_id: this.$route.params.campaignId
             ? this.$route.params.campaignId
             : "",
+          tone_id: this.tone ? this.tone[0].tone_id : "",
+          language_id: this.language ? this.language[0].language_id : "",
         })
         .then((res) => {
           this.loading = false;

@@ -742,7 +742,7 @@ export default {
     }, page) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
-            axios.get(`${baseUrl}/api/v1/marketplace?page=${page.number}&per_page=${page.perPage}`)
+            axios.get(`${baseUrl}F?page=${page.number}&per_page=${page.perPage}`)
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data
