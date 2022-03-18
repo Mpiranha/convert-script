@@ -13,7 +13,7 @@
           :class="currentActive == 'stat' ? 'active' : ''"
           to="/admin"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/sidebar/dashboard.svg"
             alt=""
@@ -22,7 +22,7 @@
             class="active-icon"
             src="@/assets/icons/convert-icon/active-icons/dashboard 1.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Stat </span>
         </router-link>
       </li>
@@ -33,7 +33,7 @@
           :class="currentActive == 'users' ? 'active' : ''"
           to="/admin/users"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/user.svg"
             alt=""
@@ -42,7 +42,7 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/user.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Users </span>
         </router-link>
       </li>
@@ -52,7 +52,7 @@
           :class="currentActive == 'transaction' ? 'active' : ''"
           to="/admin/transactions"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/transaction.svg"
             alt=""
@@ -61,7 +61,7 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/transaction.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Transactions </span>
         </router-link>
       </li>
@@ -71,7 +71,7 @@
           :class="currentActive == 'script-type' ? 'active' : ''"
           to="/admin/script/type"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/scripts-type.svg"
             alt=""
@@ -80,7 +80,7 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/scripts-type.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Script Type </span>
         </router-link>
       </li>
@@ -90,7 +90,7 @@
           :class="currentActive == 'category' ? 'active' : ''"
           to="/admin/category"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/category icon - grey.svg"
             alt=""
@@ -99,7 +99,7 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/category active.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Category </span>
         </router-link>
       </li>
@@ -109,7 +109,7 @@
           :class="currentActive == 'language' ? 'active' : ''"
           to="/admin/languages"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/language.svg"
             alt=""
@@ -118,7 +118,7 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/language-active.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Language </span>
         </router-link>
       </li>
@@ -128,7 +128,7 @@
           :class="currentActive == 'tone' ? 'active' : ''"
           to="/admin/tone"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/Tone.svg"
             alt=""
@@ -137,7 +137,7 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/Tone-active.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Tone </span>
         </router-link>
       </li>
@@ -147,7 +147,7 @@
           :class="currentActive == 'flagged-script' ? 'active' : ''"
           to="/admin/scripts/flagged"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/flagged-script.svg"
             alt=""
@@ -156,7 +156,7 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/flagged-script.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Flagged Script </span>
         </router-link>
       </li>
@@ -167,7 +167,7 @@
           :class="currentActive == 'roles' ? 'active' : ''"
           to="/admin/roles"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/roles-permissions.svg"
             alt=""
@@ -176,7 +176,7 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/roles-permissions.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Roles and Permissions </span>
         </router-link>
         <!-- </li>
@@ -228,7 +228,7 @@
           :class="currentActive == 'suggestion' ? 'active' : ''"
           to="/admin/suggestions"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/suggestion.svg"
             alt=""
@@ -237,7 +237,7 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/suggestion.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Suggestion </span>
         </router-link>
       </li>
@@ -247,7 +247,7 @@
           :class="currentActive == 'configuration' ? 'active' : ''"
           to="/admin/config"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/configuration.svg"
             alt=""
@@ -256,7 +256,7 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/configuration.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Configuration </span>
         </router-link>
       </li>
@@ -266,7 +266,7 @@
           :class="currentActive == 'bonuses' ? 'active' : ''"
           to="/admin/bonuses"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/bonuses.svg"
             alt=""
@@ -275,7 +275,7 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/bonuses.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Bonuses </span>
         </router-link>
       </li>
@@ -285,7 +285,7 @@
           :class="currentActive == 'tutorials' ? 'active' : ''"
           to="/admin/tutorials"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/tutorials.svg"
             alt=""
@@ -294,7 +294,7 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/tutorial.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Tutorials </span>
         </router-link>
       </li>
@@ -304,7 +304,7 @@
           :class="currentActive == 'agency-files' ? 'active' : ''"
           to="/admin/agency/files"
         >
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/agency-file.svg"
             alt=""
@@ -313,17 +313,17 @@
             class="active-icon"
             src="@/assets/icons/admin/sidebar-active/agency-files.svg"
             alt=""
-          />
+          /> -->
           <span class="nav-text"> Agency Files </span>
         </router-link>
       </li>
       <li class="nav-item">
         <a @click="logout($event)" class="btn nav-link" href="#">
-          <img
+          <!-- <img
             class="main-icon"
             src="@/assets/icons/admin/sidebar-icon/logout.svg"
             alt="icon"
-          />
+          /> -->
           Logout
         </a>
       </li>
