@@ -29,7 +29,7 @@
               text="Clients"
               box-type="campaign"
               image-url="Published boxes.svg"
-              :box-value="stat.published"
+              :box-value="stat.agencies"
             ></dashboard-box>
           </div>
           <loader-modal
