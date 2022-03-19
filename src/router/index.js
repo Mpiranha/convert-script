@@ -48,6 +48,7 @@ import Category from '@/views/admin/Category'
 import Projects from '@/views/Projects'
 import Language from '@/views/admin/Language'
 import Tone from '@/views/admin/Tone'
+import Keyword from '@/views/admin/Keyword'
 
 
 
@@ -333,6 +334,15 @@ const routes = [{
     path: '/admin/languages',
     name: 'Languages',
     component: Language,
+    meta: {
+      requiresAuth: true,
+      adminAuth: true
+    }
+  },
+  {
+    path: '/admin/keywords',
+    name: 'Keywords',
+    component: Keyword,
     meta: {
       requiresAuth: true,
       adminAuth: true

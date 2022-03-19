@@ -260,6 +260,25 @@
           <span class="nav-text"> Configuration </span>
         </router-link>
       </li>
+       <li class="nav-item">
+        <router-link
+          class="nav-link"
+          :class="currentActive == 'keyword' ? 'active' : ''"
+          to="/admin/keywords"
+        >
+          <!-- <img
+            class="main-icon"
+            src="@/assets/icons/admin/sidebar-icon/configuration.svg"
+            alt=""
+          />
+          <img
+            class="active-icon"
+            src="@/assets/icons/admin/sidebar-active/configuration.svg"
+            alt=""
+          /> -->
+          <span class="nav-text"> Keyword </span>
+        </router-link>
+      </li>
       <li class="nav-item">
         <router-link
           class="nav-link"
