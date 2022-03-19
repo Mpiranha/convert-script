@@ -106,6 +106,28 @@ export default {
                 })
         })
     },
+    changePassword({
+        commit
+    }, data) {
+        return new Promise((resolve, reject) => {
+
+            axios.post(`${baseUrl}/api/v1/user/change/password`, data, {})
+                .then(resp => {
+                    // const token = resp.data.token
+                    // const data = resp.user
+                    // localStorage.setItem('token', token)
+                    //axios.defaults.headers.common['Authorization'] = token
+
+                    commit('reset_password_success', resp)
+                    resolve(resp)
+                }).catch(err => {
+                    // commit('auth_error', err)
+                    // localStorage.removeItem('token')
+                    commit('reset_password_error', err)
+                    reject(err)
+                })
+        })
+    },
     getUser({
         commit,
         state

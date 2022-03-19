@@ -171,7 +171,9 @@
             </div>
 
             <div class="d-flex justify-content-end align-self-end mb-2">
-              <b-button class="save-modal px-4 py-2">Save</b-button>
+              <b-button @click="changePassword" class="save-modal px-4 py-2"
+                >Save</b-button
+              >
             </div>
           </div>
         </div>
@@ -306,6 +308,34 @@ export default {
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
+        });
+    },
+    changePassword: function (event) {
+      event.preventDefault();
+      this.submittedPwd = true;
+
+      this.$v.$touch();
+      if (this.$v.pwd.$invalid) {
+        return;
+      }
+
+      let data = {
+        current_password: this.pwd.password,
+        password: this.pwd.newPassword,
+      };
+
+      this.$store
+        .dispatch("changePassword", data)
+        .then((res) => {
+          this.error = null;
+
+          this.makeToast("success", res.data.message);
+        })
+        .catch((error) => {
+          // console.log(error);
+
+          this.error = error;
+          this.makeToast("danger", this.error);
         });
     },
   },
