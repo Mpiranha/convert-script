@@ -71,8 +71,8 @@
               <tbody>
                 <tr v-for="agency in orderedAgency" :key="agency.id">
                   <td scope="row">{{ agency.name }}</td>
-                  <td>5</td>
-                  <td>Covertscript.com/clientlink</td>
+                  <td>{{ agency.id }}</td>
+                  <td>{{ agency.email }}</td>
                   <td>
                     {{ formatDate(agency.created_at) }}
                   </td>

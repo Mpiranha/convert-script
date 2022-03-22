@@ -355,6 +355,30 @@ export default {
       // this.getCampaign();
     },
 
+    getAgency() {
+      this.$store
+        .dispatch("getAllAgency")
+        .then((res) => {
+          var data = res.data.data;
+
+          for (let index = 0; index < data.length; index++) {
+            this.clientOptions.push({
+              value: data[index].id,
+              text: data[index].name,
+            });
+          }
+         
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+
     openEditModal(id, data) {
       this.$bvModal.show("modal-new-campaign");
       this.triggerEdit = true;
@@ -378,6 +402,7 @@ export default {
   },
 
   mounted() {
+    this.getAgency();
     this.getCampaign();
   },
   computed: {

@@ -25,15 +25,64 @@
             </div>
             <div class="content-wrap px-3 pt-4 pb-4">
               <label for="">Freelancer.com Marketplace keyword</label>
-              <div class="search-form flex-column mx-0 mb-4">
+              <div class="search-form flex-column px-2 mx-0 mb-4">
                 <input
                   class="form-control no-shadow search-input"
                   type="text"
+                  v-model="keyword"
                 />
               </div>
               <div class="d-flex justify-content-end">
-                <b-button class="save-modal py-2">Save</b-button>
+                <b-button
+                  @click="triggerEdit ? editKeyword(keywords.id) : addKeyword"
+                  class="save-modal py-2"
+                  >Save</b-button
+                >
               </div>
+            </div>
+
+            <div class="content-wrap pt-4 pb-2">
+              <!-- <div class="search-form mb-2">
+                <button class="btn search-btn">
+                  <i class="flaticon-loupe icons"></i>
+                </button>
+                <input
+                   v-model="searchKey"  @input="searchKeyWord"
+                  class="form-control no-shadow search-input"
+                  type="text"
+                  placeholder="Search"
+                />
+              </div> -->
+
+              <div v-if="this.keywords.length === 0" class="no-data-info">
+                No Keyword
+              </div>
+              <table v-else class="table table-custom">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th class="text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td scope="row">{{ keywords.words }}</td>
+                    <!-- <td scope="row">Admin</td> -->
+                    <td>
+                      <dropdown-tool
+                        @edit-clicked="
+                          openEditModal(keywords.id, {
+                            word: keywords.words,
+                          })
+                        "
+                        @delete-proceed="deleteKeyword(keyword.id)"
+                        delete-what="keyword"
+                      >
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -46,7 +95,7 @@
 // @ is an alias to /src
 import Sidebar from "@/components/admin/TheSidebarAdmin.vue";
 import Navbar from "@/components/TheNav.vue";
-// import DropdownTool from "@/components/DropdownTool";
+import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
@@ -55,18 +104,15 @@ export default {
   components: {
     Sidebar,
     Navbar,
-    // DropdownTool,
+    DropdownTool,
   },
   data() {
     return {
       perPage: 5,
       currentPage: 1,
-      plansLength: 0,
-      plans: [],
-      plansData: {
-        type: "",
-        name: "",
-      },
+      keywordsLength: 0,
+      keywords: [],
+      keyword: "",
       error: "",
       triggerEdit: false,
       editId: null,
@@ -78,12 +124,12 @@ export default {
       this.getAllplans();
       console.log("Value: " + value);
     },
-    getAllplans() {
-      this.$store.commit("updateLoadState", true);
+    getAllKeywords() {
+      // this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllPlans")
+        .dispatch("getKeywords")
         .then((res) => {
-          this.plans = res.data.data;
+          this.keywords = res.data.data;
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -91,22 +137,19 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    addPlan() {
+    addKeyword() {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-plan");
+
       this.$store
-        .dispatch("addPlan", {
+        .dispatch("addKeyword", {
           name: this.plansData.name,
           type: this.plansData.type,
         })
         .then((res) => {
           console.log(res);
-          this.getAllplans();
-          this.plansData = {
-            type: "",
-            name: "",
-          };
-          this.makeToast("success", "Role added successfully");
+          this.getAllKeywords();
+          this.keyword = "";
+          this.makeToast("success", "Keyword added successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -116,22 +159,21 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    editPlan(id) {
+    editKeyword(id) {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-plan");
       this.$store
-        .dispatch("editPlan", {
+        .dispatch("editKeyword", {
           id: id,
-          data: this.plansData,
+          data: {
+            words: this.keyword,
+          },
         })
         .then((res) => {
           console.log(res);
-          this.getAllplans();
-          this.plansData = {
-            type: "",
-            name: "",
-          };
-          this.makeToast("success", "Plans edited successfully");
+          this.getAllKeywords();
+          this.keyword = "";
+          this.makeToast("success", "Keyword edited successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -141,14 +183,14 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    deletePlan(id) {
+    deleteKeyword(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deletePlan", id)
+        .dispatch("deleteKeyword", id)
         .then((res) => {
           console.log(res);
-          this.getAllplans();
-          this.makeToast("success", "Plan deleted successfully");
+          this.getAllKeywords();
+          this.makeToast("success", "Keyword deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -160,23 +202,18 @@ export default {
     },
 
     openEditModal(id, data) {
-      this.$bvModal.show("modal-new-plan");
       this.triggerEdit = true;
       this.editId = id;
-      this.plansData.name = data.name;
-      this.plansData.type = data.type;
+      this.keyword = data.word;
     },
     clearField() {
-      this.plansData = {
-        type: "",
-        name: "",
-      };
+      this.keyword = "";
       this.triggerEdit = false;
     },
   },
 
   mounted() {
-    this.getAllplans();
+    this.getAllKeywords();
   },
 };
 </script>

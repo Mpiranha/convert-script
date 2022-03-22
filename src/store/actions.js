@@ -1070,6 +1070,85 @@ export default {
         })
     },
 
+    // Keywords
+
+    getKeywords({
+        // commit,
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/admin/freelancer-keyword`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    addKeyword({
+        state
+    }, data) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.post(`${baseUrl}/api/v1/admin/freelancer-keyword`, data, {})
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    editKeyword({
+        state
+    }, {
+        id,
+        data
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.put(`${baseUrl}/api/v1/admin/freelancer-keyword/${id}`, data)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+    deleteKeyword({
+        state
+    }, id) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.delete(`${baseUrl}/api/v1/admin/freelancer-keyword/${id}`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
 
     // Upload Script type icon
     uploadIcon({
