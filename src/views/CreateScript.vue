@@ -290,7 +290,7 @@ export default {
     addRemoveScriptFavorite() {
       this.$store
         .dispatch("addRemoveFavorite", {
-          script_response_id: this.generatedScript[0].id,
+          script_response_id: this.generatedScript.id,
         })
         .then((res) => {
           console.log(res.data.data.message);
