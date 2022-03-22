@@ -144,14 +144,12 @@
                   </div>
                   <div class="control-overflow">
                     <loader-modal :loading-state="loading"></loader-modal>
-                    <div v-if="generatedScript.length > 0">
+                    <div v-if="generatedScript">
                       <script-box
-                        v-for="script in generatedScript"
-                        :key="script.id"
-                        :script-content="formatScript(script.text)"
-                        @favorite-clicked="addRemoveScriptFavorite(script.id)"
-                        @edit-clicked="openEditModal(script.id, script.text)"
-                        :export-link="`https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${script.id}`"
+                        :script-content="formatScript(generatedScript.text)"
+                        @favorite-clicked="addRemoveScriptFavorite(generatedScript.id)"
+                        @edit-clicked="openEditModal(generatedScript.id, generatedScript.text)"
+                        :export-link="`https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${generatedScript.id}`"
                       >
                       </script-box>
                       <textarea
@@ -242,7 +240,7 @@ export default {
       scriptAnswers: [],
       content: "",
       variation: 2,
-      generatedScript: [],
+      generatedScript: null,
       isSubmitted: false,
       preset: [],
       editId: "",
@@ -379,7 +377,7 @@ export default {
           this.loading = false;
           console.log(res);
 
-          this.generatedScript = res.data.data.responses;
+          this.generatedScript = res.data.data;
 
           this.$store.commit("updateLoadState", false);
         })
