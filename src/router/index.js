@@ -23,8 +23,8 @@ import CreateScript from '@/views/CreateScript'
 import Script from '@/views/Script'
 import Market from '@/views/Market'
 import Favourites from '@/views/Favourites'
-import Presets from '@/views/Presets'
-import PresetAdd from '@/views/PresetAdd'
+// import Presets from '@/views/Presets'
+// import PresetAdd from '@/views/PresetAdd'
 import Integration from '@/views/Integration'
 import IntegrationNew from '@/views/IntegrationNew'
 import Settings from '@/views/Settings'
@@ -222,24 +222,24 @@ const routes = [{
       adminAuth: false
     }
   },
-  {
-    path: '/presets',
-    name: 'Preset',
-    component: Presets,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/presets/create',
-    name: 'CreatePreset',
-    component: PresetAdd,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
+  // {
+  //   path: '/presets',
+  //   name: 'Preset',
+  //   component: Presets,
+  //   meta: {
+  //     requiresAuth: true,
+  //     adminAuth: false
+  //   }
+  // },
+  // {
+  //   path: '/presets/create',
+  //   name: 'CreatePreset',
+  //   component: PresetAdd,
+  //   meta: {
+  //     requiresAuth: true,
+  //     adminAuth: false
+  //   }
+  // },
   {
     path: '/integration',
     name: 'Integration',

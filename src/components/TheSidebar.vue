@@ -98,7 +98,7 @@
           <span class="nav-text"> My Favourites </span>
         </router-link>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <router-link
           class="nav-link"
           :class="currentActive == 'presets' ? 'active' : ''"
@@ -116,7 +116,7 @@
           />
           <span class="nav-text"> Presets </span>
         </router-link>
-      </li>
+      </li> -->
 
       <!-- <li class="nav-item">
         <router-link

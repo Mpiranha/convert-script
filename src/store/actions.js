@@ -149,12 +149,17 @@ export default {
         })
     },
     updateUserDetails({
+        commit,
         state
     }, data) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
-            axios.post(`${baseUrl}/api/v1/user/profile`, data, {})
+            axios.post(`${baseUrl}/api/v1/user/update`, data, {})
                 .then(resp => {
+                    localStorage.setItem('user', JSON.stringify(resp.data.data))
+                    commit("get_user_success", {
+                        user: resp.data.data
+                    })
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data
                     // });

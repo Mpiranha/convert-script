@@ -19,14 +19,30 @@
           >
             <h6 class="title">All Campaign</h6>
 
-            <button
-              @click="clearField"
-              class="btn btn-create"
-              v-b-modal.modal-new-campaign
-            >
-              <span>+</span>
-              New Campaigns
-            </button>
+            <div class="d-flex align-items-center ml-auto">
+              <button
+                @click="resetFilter"
+                v-if="selectedAgency"
+                class="btn btn-cancel-filters"
+              >
+                <img src="@/assets/icons/cancel.svg" alt="cancel icon" />
+              </button>
+              <b-form-group class="mb-0 mr-3" label-class="input-label">
+                <b-form-select
+                  class="input-table"
+                  v-model="selectedAgency"
+                  :options="clientOptions"
+                ></b-form-select>
+              </b-form-group>
+              <button
+                @click="clearField"
+                class="btn btn-create"
+                v-b-modal.modal-new-campaign
+              >
+                <span>+</span>
+                New Campaigns
+              </button>
+            </div>
           </div>
 
           <div class="content-wrap set-min-h pt-4 pb-5">
@@ -85,6 +101,46 @@
                       <template v-slot:secondary>
                         <b-dropdown-item
                           v-b-modal.add-client
+                          link-class="drop-link"
+                          href="#"
+                        >
+                          <img
+                            class="drop-img-icon"
+                            src="@/assets/icons/convert-icon/Add to client icon.svg"
+                            alt="add to client icon"
+                          />
+                          Add to Client
+                        </b-dropdown-item>
+                      </template>
+                    </dropdown-tool>
+                  </td>
+                </tr>
+              </tbody>
+               <tbody v-else-if="selectedAgency">
+                <tr v-for="campaign in filteredCampaign" :key="campaign.id">
+                  <td scope="row">
+                    <router-link
+                      :to="{
+                        name: 'CampaignScript',
+                        params: { id: campaign.id },
+                      }"
+                    >
+                      {{ campaign.name }}
+                    </router-link>
+                  </td>
+                  <td>{{ campaign.scripts_count }}</td>
+                  <td>
+                    {{ formatDate(campaign.created_at) }}
+                  </td>
+                  <td>
+                    <dropdown-tool
+                      delete-what="Campaign"
+                      @edit-clicked="openEditModal(campaign.id, campaign.name)"
+                      @delete-proceed="deleteCampaign(campaign.id)"
+                    >
+                      <template v-slot:secondary>
+                        <b-dropdown-item
+                          v-b-modal.modal-add-client
                           link-class="drop-link"
                           href="#"
                         >
@@ -244,6 +300,8 @@ export default {
       loading: true,
       triggerEdit: false,
       editId: null,
+      agencyOptions: [{ value: null, text: "Select a Client" }],
+      selectedAgency: null,
     };
   },
   methods: {
@@ -367,7 +425,7 @@ export default {
               text: data[index].name,
             });
           }
-         
+
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -399,6 +457,9 @@ export default {
 
       return formatedDate.toLocaleDateString();
     },
+    resetFilter() {
+      this.selectedAgency = null;
+    },
   },
 
   mounted() {
@@ -412,9 +473,17 @@ export default {
     orderedCampaign() {
       return this.orderSort(this.campaigns);
     },
+    filteredCampaign() {
+      return this.campaigns.filter((cat) => {
+        return this.selectedAgency == cat.script_type_category;
+      });
+    },
   },
 };
 </script>
 
 <style>
+.btn-cancel-filters img {
+  width: 1rem;
+}
 </style>

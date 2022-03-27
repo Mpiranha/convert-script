@@ -126,7 +126,7 @@
                       <a
                         :href="
                           activeScript
-                            ? `http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${activeScript.responses[0].id}`
+                            ? `https://convertscript.test/api/v1/export/text/script/${activeScript.responses[0].id}`
                             : '#'
                         "
                         target="_blank"
@@ -306,7 +306,8 @@ export default {
           //this.loading = false;
           this.$store.commit("updateLoadState", false);
         });
-    },    abbrScript(text) {
+    },
+    abbrScript(text) {
       return text.slice(0, 125) + "...";
     },
     getCampaignData(id) {

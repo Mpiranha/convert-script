@@ -88,20 +88,38 @@
                             :options="toneOptions"
                           ></b-form-select>
                         </b-form-group>
-                        <b-form-group
-                          label="Change output language (Optional)"
-                          label-class="input-label"
-                          v-if="
-                            additional_content.script_type_language
-                              .script_type_allowed_tone
-                          "
-                        >
-                          <b-form-select
-                            class="form-control"
-                            v-model="language"
-                            :options="languageOptions"
-                          ></b-form-select>
-                        </b-form-group>
+                        <div class="row">
+                          <b-form-group
+                            class="col-6"
+                            label="Input language (Optional)"
+                            label-class="input-label"
+                            v-if="
+                              additional_content.script_type_language
+                                .script_type_allowed_tone
+                            "
+                          >
+                            <b-form-select
+                              class="form-control"
+                              v-model="languageInput"
+                              :options="languageOptions"
+                            ></b-form-select>
+                          </b-form-group>
+                          <b-form-group
+                            class="col-6"
+                            label="Output language (Optional)"
+                            label-class="input-label"
+                            v-if="
+                              additional_content.script_type_language
+                                .script_type_allowed_tone
+                            "
+                          >
+                            <b-form-select
+                              class="form-control"
+                              v-model="languageOutput"
+                              :options="languageOptions"
+                            ></b-form-select>
+                          </b-form-group>
+                        </div>
                       </div>
                       <div class="script-form-footer">
                         <!-- <div class="desc">Variation</div>
@@ -146,16 +164,27 @@
                     <loader-modal :loading-state="loading"></loader-modal>
                     <div v-if="generatedScript">
                       <script-box
-                        :script-content="formatScript(generatedScript.text)"
-                        @favorite-clicked="addRemoveScriptFavorite(generatedScript.id)"
-                        @edit-clicked="openEditModal(generatedScript.id, generatedScript.text)"
+                        :script-content="formatScript(generatedScript.scriptResponses[0].text)"
+                        @favorite-clicked="
+                          addRemoveScriptFavorite(generatedScript.id)
+                        "
+                        @edit-clicked="
+                          openEditModal(
+                            generatedScript.id,
+                            generatedScript.scriptResponses[0].text
+                          )
+                        "
                         :export-link="`https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${generatedScript.id}`"
                       >
                       </script-box>
                       <textarea
                         type="hidden"
                         id="text--copy"
-                        :value="generatedScript ? generatedScript.text : ''"
+                        :value="
+                          generatedScript
+                            ? generatedScript.scriptResponses[0].text
+                            : ''
+                        "
                       ></textarea>
                     </div>
                     <div v-else class="empty-script">
@@ -223,7 +252,8 @@ export default {
   data() {
     return {
       tone: null,
-      language: null,
+      languageInput: null,
+      languageOutput: null,
       toneOptions: [{ value: null, text: "Select Tone" }],
       languageOptions: [{ value: null, text: "Select Language" }],
       loading: false,
@@ -371,7 +401,13 @@ export default {
             ? this.$route.params.campaignId
             : "",
           tone_id: this.tone ? this.tone[0].tone_id : "",
-          language_id: this.language ? this.language[0].language_id : "",
+          output_language_id: this.languageOutput
+            ? this.languageOutput[0].language_id
+            : "",
+          input_language_id: this.languageInput
+            ? this.languageInput[0].language_id
+            : "",
+          // language_id: this.language ? this.language[0].language_id : "",
         })
         .then((res) => {
           this.loading = false;
@@ -401,7 +437,7 @@ export default {
             // script_type_preset_id: this.scriptData[0].question.id,
             // script_type_id: this.$route.params.id,
             presets: this.preset,
-            languages: this.language ? this.language : [],
+            languages: this.languageInput ? this.languageInput : [],
             tones: this.tone ? this.tone : [],
           },
         })

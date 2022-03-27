@@ -80,10 +80,10 @@
                         </td>
                         <td>
                           <div class="script-type">
-                            {{ result.responses[0].script_type }}
+                            {{ result.scriptResponses[0].script_type }}
                           </div>
                           <div class="script-content">
-                            {{ abbrScript(result.responses[0].text) }}
+                            {{ abbrScript(result.scriptResponses[0].text) }}
                           </div>
                         </td>
 
@@ -91,7 +91,7 @@
                           <dropdown-tool
                             delete-what="Script"
                             @edit-clicked="
-                              openEditModal(result.id, result.responses[0].text)
+                              openEditModal(result.id, result.scriptResponses[0].text)
                             "
                             @delete-proceed="deleteScript(result.id)"
                           >
@@ -117,10 +117,10 @@
                         </td>
                         <td>
                           <div class="script-type">
-                            {{ script.script_type }}
+                            {{ script.scriptResponses[0].script_type }}
                           </div>
                           <div class="script-content">
-                            {{ abbrScript(script.text) }}
+                            {{ abbrScript(script.scriptResponses[0].text) }}
                           </div>
                         </td>
                        
@@ -128,7 +128,7 @@
                           <dropdown-tool
                             delete-what="Script"
                             @edit-clicked="
-                              openEditModal(script.id, script.text)
+                              openEditModal(script.scriptResponses[0].id, script.scriptResponses[0].text)
                             "
                             @delete-proceed="deleteScript(script.id)"
                           >
@@ -166,7 +166,7 @@
                       <a
                         :href="
                           activeScript
-                            ? `http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${activeScript.id}`
+                            ? `https://convertscript.test/api/v1/export/text/script/${activeScript.id}`
                             : '#'
                         "
                         target="_blank"
@@ -178,7 +178,7 @@
                   </div>
                   <div class="content-display" v-if="activeScript">
                     <div
-                      v-html="formatScript(activeScript.text)"
+                      v-html="formatScript(activeScript.scriptResponses[0].text)"
                     ></div>
                   </div>
                   <div v-else class="no-select">Select a Script to Preview</div>

@@ -170,7 +170,7 @@
                       <a
                         :href="
                           activeScript
-                            ? `http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=FavoriteScriptExport&Id=${activeScript.response.id}`
+                            ? `https://convertscript.test/api/v1/export/text/script/${activeScript.response.id}`
                             : '#'
                         "
                         target="_blank"

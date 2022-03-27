@@ -295,17 +295,14 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          this.getAllCategories();
-          this.categoryData = {
-            name: "",
-            id: "",
-          };
+         
+         
           this.makeToast("success", "Profile Updated successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.response);
-          this.error = error.response.data.error;
+          // console.log(error.response);
+          this.error = error;
           this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
         });
