@@ -1186,13 +1186,13 @@ input:checked+.slider:before {
 
 
 .modal-head .title {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 0;
 }
 
 .modal-head .desc {
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     color: #848688;
 }
 
