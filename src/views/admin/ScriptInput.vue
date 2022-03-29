@@ -67,7 +67,23 @@
                     ></b-form-select>
                   </b-form-group>
 
-                  <b-form-group label="Upload" label-class="input-label">
+                   <b-form-group label="ICON URL" label-class="input-label">
+                    <b-form-input
+                      id="name"
+                      v-model="scriptTypeData.icon"
+                      type="text"
+                      class="input-table"
+                    >
+                    </b-form-input>
+                  </b-form-group>
+
+                  <img
+                    class="icon-prev"
+                    :src="scriptTypeData.icon"
+                    alt="script type icon"
+                  />
+
+                  <!-- <b-form-group label="Upload" label-class="input-label">
                     <b-form-file
                       v-model="icon"
                       :state="Boolean(icon)"
@@ -76,8 +92,8 @@
                       @change="onIconChange($event)"
                     >
                     </b-form-file>
-                  </b-form-group>
-                  <img
+                  </b-form-group> -->
+                  <!-- <img
                     class="icon-prev"
                     :src="
                       currentIcon
@@ -85,7 +101,7 @@
                         : '@/assets/icons/convert-icon/Aweber.svg'
                     "
                     alt=""
-                  />
+                  /> -->
                   <hr class="my-4" />
                   <div class="title">Backend Input</div>
 
@@ -371,7 +387,6 @@ export default {
         prompt_1: "",
         prompt_2: "",
         script_type_category_id: "",
-        icon: [],
         description: "",
         presence_penalty: "",
         frequency_penalty: "",
@@ -508,12 +523,12 @@ export default {
       this.scriptTypeData.prompt_2 = data.prompt_2;
       this.scriptTypeData.engine = data.engine;
       this.scriptTypeData.temperature = data.temperature;
-      // this.scriptTypeData.icon = data.icon;
+      this.scriptTypeData.icon = data.icon;
       this.scriptTypeData.script_type_category_id =
         data.script_type_category;
       this.scriptTypeData.tone = data.tone;
       this.scriptTypeData.language = data.language;
-      this.currentIcon = data.icon;
+      // this.currentIcon = data.icon;
       this.scriptTypeData.description = data.description;
       this.scriptTypeData.presence_penalty = data.presence_penalty;
       this.scriptTypeData.frequency_penalty = data.frequency_penalty;
@@ -558,10 +573,10 @@ export default {
     addScriptType() {
       this.$store.commit("updateLoadState", true);
 
-      if (this.iconRes) {
-        this.scriptTypeData.icon = [];
-        this.scriptTypeData.icon.push(this.iconRes.id);
-      }
+      // if (this.iconRes) {
+      //   this.scriptTypeData.icon = [];
+      //   this.scriptTypeData.icon.push(this.iconRes.id);
+      // }
 
       this.$store
         .dispatch("addScriptType", this.scriptTypeData)
@@ -594,10 +609,10 @@ export default {
     editScript() {
       this.$store.commit("updateLoadState", true);
 
-      if (this.iconRes) {
-        this.scriptTypeData.icon = [];
-        this.scriptTypeData.icon.push(this.iconRes.id);
-      }
+      // if (this.iconRes) {
+      //   this.scriptTypeData.icon = [];
+      //   this.scriptTypeData.icon.push(this.iconRes.id);
+      // }
 
       this.$store
         .dispatch("editScriptType", {
