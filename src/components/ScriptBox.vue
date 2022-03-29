@@ -38,14 +38,14 @@
     </div>
 
     <div class="script-footer">
-      <button @click="editAction" class="btn no-shadow btn-share">
+      <!-- <button @click="editAction" class="btn no-shadow btn-share">
         <img
           class="foot-icons"
           src="@/assets/icons/convert-icon/draw.svg"
           alt=""
         />
-      </button>
-      <button @click="copyText" class="btn no-shadow btn-copy">
+      </button> -->
+      <button @click="copyText" class="btn no-shadow ml-auto btn-copy">
         <img
           class="foot-icons"
           src="@/assets/icons/convert-icon/copy.svg"

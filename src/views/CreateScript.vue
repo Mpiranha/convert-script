@@ -164,28 +164,32 @@
                     <loader-modal :loading-state="loading"></loader-modal>
                     <div v-if="generatedScript">
                       <script-box
-                        :script-content="formatScript(generatedScript.scriptResponses[0].text)"
+                        v-for="script in generatedScript"
+                        :key="script.id"
+                        :script-content="
+                          formatScript(script.scriptResponses[0].text)
+                        "
                         @favorite-clicked="
-                          addRemoveScriptFavorite(generatedScript.id)
+                          addRemoveScriptFavorite(script.id)
                         "
                         @edit-clicked="
                           openEditModal(
-                            generatedScript.id,
-                            generatedScript.scriptResponses[0].text
+                            script.id,
+                            script.scriptResponses[0].text
                           )
                         "
-                        :export-link="`https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${generatedScript.id}`"
+                        :export-link="`https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${script.id}`"
                       >
                       </script-box>
-                      <textarea
+                      <!-- <textarea
                         type="hidden"
                         id="text--copy"
                         :value="
                           generatedScript
-                            ? generatedScript.scriptResponses[0].text
+                            ? script.scriptResponses[0].text
                             : ''
                         "
-                      ></textarea>
+                      ></textarea> -->
                     </div>
                     <div v-else class="empty-script">
                       Generated Script will display here.
@@ -270,7 +274,7 @@ export default {
       scriptAnswers: [],
       content: "",
       variation: 2,
-      generatedScript: null,
+      generatedScript: [],
       isSubmitted: false,
       preset: [],
       editId: "",
@@ -412,8 +416,7 @@ export default {
         .then((res) => {
           this.loading = false;
           console.log(res);
-
-          this.generatedScript = res.data.data;
+          this.generatedScript.push(res.data.data);
 
           this.$store.commit("updateLoadState", false);
         })
