@@ -2,14 +2,14 @@
   <div class="script-content-wrap">
     <div class="box-head">
       <div class="left-section">
-        <div class="d-flex align-items-center">
+        <button @click="saveAction" class="d-flex align-items-center no-shadow btn btn-save-to">
           <img
             class="icon-save"
             src="@/assets/icons/convert-icon/save 1.svg"
             alt=""
           />
           <span> Save to </span>
-        </div>
+        </button>
       </div>
       <div class="right-section">
         <div class="d-flex align-items-center">
@@ -120,6 +120,9 @@ export default {
     copyAction() {
       this.$emit("copy-clicked");
     },
+    saveAction() {
+      this.$emit("save-clicked");
+    },
   },
 };
 </script>
@@ -138,6 +141,7 @@ export default {
   justify-content: space-between;
   font-size: 0.85rem;
   margin-bottom: 0.7rem;
+  align-items: center;
 }
 
 .box-head .icon-save,
@@ -175,5 +179,9 @@ export default {
 }
 .script-footer .foot-icons {
   width: 1rem;
+}
+
+.btn-save-to {
+  background-color: transparent;
 }
 </style>

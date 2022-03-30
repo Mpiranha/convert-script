@@ -290,7 +290,6 @@ export default {
         .dispatch("updateUserDetails", {
           first_name: this.userDetails.first_name,
           last_name: this.userDetails.last_name,
-          role: "User",
           email: this.email,
         })
         .then((res) => {

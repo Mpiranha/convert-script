@@ -162,16 +162,15 @@
                   </div>
                   <div class="control-overflow">
                     <loader-modal :loading-state="loading"></loader-modal>
-                    <div v-if="generatedScript">
+                    <div v-if="generatedScript.length > 0">
                       <script-box
+                        @save-clicked="saveCampaign"
                         v-for="script in generatedScript"
                         :key="script.id"
                         :script-content="
                           formatScript(script.scriptResponses[0].text)
                         "
-                        @favorite-clicked="
-                          addRemoveScriptFavorite(script.id)
-                        "
+                        @favorite-clicked="addRemoveScriptFavorite(script.id)"
                         @edit-clicked="
                           openEditModal(
                             script.id,
@@ -229,6 +228,30 @@
         >
       </div>
     </b-modal>
+    <b-modal
+      :hide-header="true"
+      id="modal-add-campaign"
+      centered
+      size="md"
+      :hide-footer="true"
+      dialog-class="control-width"
+      content-class="modal-main"
+    >
+      <b-form-group label="Add to Campaign" label-class="form-label">
+        <b-form-select
+          class="input-table"
+          v-model="selectedCampaign"
+          :options="campaignOptions"
+        ></b-form-select>
+      </b-form-group>
+
+      <div class="d-flex justify-content-end">
+        <b-button @click="$bvModal.hide('modal-add-campaign')" class="close-modal"
+          >Close</b-button
+        >
+        <b-button class="save-modal">Add</b-button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -255,6 +278,8 @@ export default {
   mixins: [alertMixin],
   data() {
     return {
+      selectedCampaign: null,
+      campaignOptions: [{ value: null, text: "Select a Campaign" }],
       tone: null,
       languageInput: null,
       languageOutput: null,
@@ -306,6 +331,32 @@ export default {
     },
   },
   methods: {
+    saveCampaign() {
+      this.$bvModal.show("modal-add-campaign");
+    },
+    getCampaign() {
+      // this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getCampaigns")
+        .then((res) => {
+          let data = res.data.data;
+          for (let index = 0; index < data.length; index++) {
+            this.campaignOptions.push({
+              value: data[index].id,
+              text: data[index].name,
+            });
+          }
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     formatScript(text) {
       return text.replace(/\n/g, "<br />");
     },
@@ -544,6 +595,7 @@ export default {
     },
   },
   mounted() {
+    this.getCampaign();
     this.getScriptType(this.$route.params.id);
     this.getScriptData(this.$route.params.id);
     this.getAllTones();

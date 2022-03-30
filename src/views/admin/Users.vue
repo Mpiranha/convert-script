@@ -278,7 +278,7 @@
         <b-button
           @click="triggerEdit ? editUser(editId) : addUser()"
           class="save-modal"
-          >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
+          >{{ triggerEdit ? "Edit" : "Add User" }}</b-button
         >
       </div>
     </b-modal>

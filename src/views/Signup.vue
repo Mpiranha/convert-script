@@ -15,20 +15,41 @@
           <div class="error">{{ error }}</div>
           <form action="#" method="post">
             <div class="form-group">
-              <label for="my-input">Name</label>
+              <label for="my-input">First Name</label>
               <input
                 id="my-input"
                 class="form-control input-signin"
                 type="text"
                 name=""
-                v-model="userData.name"
-                :class="{ 'is-invalid': submitted && $v.userData.name.$error }"
+                v-model="userData.first_name"
+                :class="{
+                  'is-invalid': submitted && $v.userData.first_name.$error,
+                }"
               />
               <div
-                v-if="submitted && !$v.userData.name.required"
+                v-if="submitted && !$v.userData.first_name.required"
                 class="invalid-feedback"
               >
-                * Name is required
+                * First Name is required
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="my-input">Last Name</label>
+              <input
+                id="my-input"
+                class="form-control input-signin"
+                type="text"
+                name=""
+                v-model="userData.last_name"
+                :class="{
+                  'is-invalid': submitted && $v.userData.last_name.$error,
+                }"
+              />
+              <div
+                v-if="submitted && !$v.userData.last_name.required"
+                class="invalid-feedback"
+              >
+                * Last Name is required
               </div>
             </div>
             <div class="form-group">
@@ -119,19 +140,24 @@ export default {
   data() {
     return {
       userData: {
-        name: "",
+        first_name: "",
+        last_name: "",
         email: "",
         role: "User",
         password: "",
         confirmPassword: "",
       },
       submitted: false,
-      error: null
+      error: null,
     };
   },
   validations: {
     userData: {
-      name: {
+      first_name: {
+        required,
+        minLength: minLength(3),
+      },
+      last_name: {
         required,
         minLength: minLength(3),
       },
@@ -163,18 +189,19 @@ export default {
       }
 
       let user = {
-        name: this.userData.name,
+        first_name: this.userData.first_name,
+        last_name: this.userData.last_name,
         role: this.userData.role,
         email: this.userData.email,
         password: this.userData.password,
       };
 
-     // console.log(user);
+      // console.log(user);
       this.$store
         .dispatch("register", user)
         .then((res) => {
           this.error = null;
-          this.$store.dispatch("getUser")
+          this.$store.dispatch("getUser");
           this.$router.push("/");
           console.log(res.data.data);
         })
