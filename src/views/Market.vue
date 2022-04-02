@@ -42,7 +42,7 @@
               />
             </div>
 
-            <div class="sort-wrap">
+            <!-- <div class="sort-wrap">
               <div class="acct-desc">{{ marketLength }} Projects</div>
 
               <select class="sort-select" name="" id="">
@@ -51,7 +51,7 @@
                 <option value=""></option>
                 <option value=""></option>
               </select>
-            </div>
+            </div> -->
             <loader-modal
               :loading-state="this.$store.state.loading"
             ></loader-modal>

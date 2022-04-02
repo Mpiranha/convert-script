@@ -64,7 +64,7 @@
                       <option value=""></option>
                     </select> -->
                     <a
-                      href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport"
+                      href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptscriptResponsesExport"
                       target="_blank"
                       class="btn btn-export-all"
                     >
@@ -92,17 +92,17 @@
                         </td>
                         <td>
                           <div class="script-type">
-                            {{ script.responses[0].script_type }}
+                            {{ script.scriptResponses[0].script_type }}
                           </div>
                           <div class="script-content">
-                            {{ abbrScript(script.responses[0].text) }}
+                            {{ abbrScript(script.scriptResponses[0].text) }}
                           </div>
                         </td>
                         <td class="text-right">
                           <dropdown-tool
                             delete-what="Script from this Campaign"
                             @edit-clicked="
-                              openEditModal(script.id, script.responses[0].text)
+                              openEditModal(script.id, script.scriptResponses[0].text)
                             "
                             @delete-proceed="deleteScript(script.id)"
                           >
@@ -126,7 +126,7 @@
                       <a
                         :href="
                           activeScript
-                            ? `https://convertscript.test/api/v1/export/text/script/${activeScript.responses[0].id}`
+                            ? `https://convertscript.test/api/v1/export/text/script/${activeScript.scriptResponses[0].id}`
                             : '#'
                         "
                         target="_blank"
@@ -138,7 +138,7 @@
                   </div>
                   <div class="content-display" v-if="activeScript">
                     <div
-                      v-html="formatScript(activeScript.responses[0].text)"
+                      v-html="formatScript(activeScript.scriptResponses[0].text)"
                     ></div>
                   </div>
                   <div v-else class="no-select">Select a Script to Preview</div>
@@ -165,7 +165,7 @@
                       type="hidden"
                       id="text--copy"
                       :value="
-                        activeScript ? activeScript.responses[0].text : ''
+                        activeScript ? activeScript.scriptResponses[0].text : ''
                       "
                     ></textarea>
                   </div>

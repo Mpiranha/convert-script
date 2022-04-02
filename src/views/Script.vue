@@ -117,10 +117,10 @@
                         </td>
                         <td>
                           <div class="script-type">
-                            {{ script.scriptResponses[0].script_type }}
+                            {{ script.script_type_name }}
                           </div>
                           <div class="script-content">
-                            {{ abbrScript(script.scriptResponses[0].text) }}
+                            {{ abbrScript(script.text) }}
                           </div>
                         </td>
                        
@@ -128,7 +128,7 @@
                           <dropdown-tool
                             delete-what="Script"
                             @edit-clicked="
-                              openEditModal(script.scriptResponses[0].id, script.scriptResponses[0].text)
+                              openEditModal(script.id, script.text)
                             "
                             @delete-proceed="deleteScript(script.id)"
                           >
@@ -178,7 +178,7 @@
                   </div>
                   <div class="content-display" v-if="activeScript">
                     <div
-                      v-html="formatScript(activeScript.scriptResponses[0].text)"
+                      v-html="formatScript(activeScript.text)"
                     ></div>
                   </div>
                   <div v-else class="no-select">Select a Script to Preview</div>
@@ -423,7 +423,7 @@ export default {
       this.$store
         .dispatch("editScript", {
           id: id,
-          data: { content: this.content, script_type_id: 1 },
+          data: { content: this.content, script_type_id: id },
         })
         .then((res) => {
           this.error = null;

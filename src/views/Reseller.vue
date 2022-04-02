@@ -46,7 +46,7 @@
               />
             </div>
 
-            <div class="sort-wrap">
+            <!-- <div class="sort-wrap">
               <div class="acct-desc">{{ resellers.length }} /50 Account</div>
 
               <select class="sort-select" name="" id="">
@@ -55,7 +55,7 @@
                 <option value=""></option>
                 <option value=""></option>
               </select>
-            </div>
+            </div> -->
             <div v-if="resellers.length === 0" class="no-data-info">
               No reseller created.
             </div>
