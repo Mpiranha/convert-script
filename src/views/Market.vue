@@ -59,7 +59,7 @@
               No Active Project, Try Again Later.
             </div>
             <table v-else class="table table-custom table-market">
-                <tbody  v-if="searchResult.length > 0">
+              <tbody v-if="searchResult.length > 0">
                 <tr v-for="project in searchResult" :key="project.id">
                   <td>
                     <div class="market-desc">

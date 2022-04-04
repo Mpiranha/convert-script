@@ -86,7 +86,7 @@
                       "
                       @delete-proceed="deleteAgency(agency.id)"
                     >
-                      <template v-slot:secondary>
+                      <!-- <template v-slot:secondary>
                         <b-dropdown-item
                           v-b-modal.modal-campaign
                           @click="getCurrent(agency.name)"
@@ -98,7 +98,7 @@
                           ></i>
                           Campaign
                         </b-dropdown-item>
-                      </template>
+                      </template> -->
                     </dropdown-tool>
                   </td>
                 </tr>

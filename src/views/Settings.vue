@@ -294,8 +294,7 @@ export default {
         })
         .then((res) => {
           console.log(res);
-         
-         
+
           this.makeToast("success", "Profile Updated successfully");
           this.$store.commit("updateLoadState", false);
         })

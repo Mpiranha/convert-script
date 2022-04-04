@@ -47,7 +47,7 @@
                 :loading-state="this.$store.state.loading"
               ></loader-modal>
               <div v-if="agencyFiles.length === 0" class="no-data-info">
-                Created agency will display here.
+                Created Agency Files will display here.
               </div>
               <table v-else class="table table-custom">
                 <thead>
@@ -56,7 +56,7 @@
                     <th class="text-right">Action</th>
                   </tr>
                 </thead>
-                 <tbody v-if="searchResult.length > 0">
+                <tbody v-if="searchResult.length > 0">
                   <tr v-for="result in searchResult" :key="result.id">
                     <td scope="row">{{ result.name }}</td>
 
@@ -126,26 +126,17 @@
         >
         </b-form-input>
       </b-form-group>
-      <b-form-group label="Email">
-        <b-form-input
-          id="name"
-          v-model="agencyFileData.email"
-          type="email"
-          class="input-table"
-        >
-        </b-form-input>
-      </b-form-group>
-      <!-- <b-form-group label="Description">
+      <b-form-group label="Description">
         <b-form-textarea
           id="name"
-          v-model="agencyFileData.desc"
+          v-model="agencyFileData.description"
           type="text"
           class="input-table"
           rows="4"
         >
         </b-form-textarea>
-      </b-form-group> -->
-      <!-- <b-form-group label="Access URL">
+      </b-form-group>
+      <b-form-group label="Access URL">
         <b-form-input
           id="name"
           v-model="agencyFileData.url"
@@ -153,7 +144,7 @@
           class="input-table"
         >
         </b-form-input>
-      </b-form-group> -->
+      </b-form-group>
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-agency')" class="close-modal"
           >Close</b-button
@@ -196,7 +187,8 @@ export default {
       agencyFileLength: 0,
       agencyFileData: {
         name: "",
-        email: "",
+        description: "",
+        url: "",
       },
       error: "",
       triggerEdit: false,
@@ -204,7 +196,7 @@ export default {
     };
   },
   methods: {
-     searchKeyWord() {
+    searchKeyWord() {
       this.$store
         .dispatch("search", {
           endpoint: "/api/v1/admin/agencies",
@@ -246,22 +238,6 @@ export default {
           console.log(error);
           this.$store.commit("updateLoadState", false);
         });
-      // this.$store
-      //   .dispatch("getAllAgency")
-      //   .then((res) => {
-      //     this.users = res.data.data;
-      //     // console.log(res.data + "called now");
-      //     //this.loading = false;
-      //      this.$store.commit("updateLoadState", false);
-      //   })
-      //   .catch((error) => {
-      //     // // console.log(error);
-      //     // this.error = error.response.data.errors.root;
-      //     // // this.error = error;
-      //     console.log(error);
-      //     //this.loading = false;
-      //      this.$store.commit("updateLoadState", false);
-      //   });
     },
     addAgency() {
       this.$store.commit("updateLoadState", true);
@@ -273,7 +249,8 @@ export default {
           this.getAgency();
           this.agencyFileData = {
             name: "",
-            email: "",
+            description: "",
+            url: "",
           };
           this.makeToast("success", "AgencyFile added successfully");
           this.$store.commit("updateLoadState", false);
@@ -298,7 +275,8 @@ export default {
           this.getAgency();
           this.agencyFileData = {
             name: "",
-            email: "",
+            description: "",
+            url: "",
           };
           this.makeToast("success", "Agency File edited successfully");
           this.$store.commit("updateLoadState", false);
@@ -339,12 +317,14 @@ export default {
       this.triggerEdit = true;
       this.editId = id;
       this.agencyFileData.name = data.name;
-      this.agencyFileData.email = data.email;
+      this.agencyFileData.description = data.description;
+      this.agencyFileData.url = data.url;
     },
     clearField() {
       this.agencyFileData = {
         name: "",
-        email: "",
+        description: "",
+        url: "",
       };
       this.triggerEdit = false;
     },

@@ -499,58 +499,72 @@ const parseJwt = (token) => {
 router.beforeEach((to, from, next) => {
   console.log(window.location.hash.split('#')[1])
   const loginpath = window.location.hash.split('#')[1];
-  if (to.matched.some(record => record.meta.requiresAuth)) {
 
-    if (store.getters.isAuthenticated) {
-      console.log('authenticated');
-      if (localStorage.token) {
-        const jwtPayload = parseJwt(localStorage.token);
-        if (jwtPayload.exp < Date.now() / 1000) {
-          // token expired
-          store.dispatch("logout");
-          next("/login");
+  console.log(to);
 
-          return;
+  if (to.matched.length > 0) {
+
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+
+
+      if (store.getters.isAuthenticated) {
+        console.log('authenticated');
+        if (localStorage.token) {
+          const jwtPayload = parseJwt(localStorage.token);
+          if (jwtPayload.exp < Date.now() / 1000) {
+            // token expired
+            store.dispatch("logout");
+            next("/login");
+
+            return;
+          }
         }
-      }
 
 
 
-      // store.dispatch("getUser");
-      let role = store.state.user.role || JSON.parse(localStorage.getItem('user'));
-      console.log("Role " + role);
+        // store.dispatch("getUser");
+        let role = store.state.user.role || JSON.parse(localStorage.getItem('user'));
+        console.log("Role " + role);
 
 
 
 
-      if (to.matched.some(record => record.meta.adminAuth)) {
+        if (to.matched.some(record => record.meta.adminAuth)) {
 
-        if (role === "Admin") {
-          next();
-          return;
-        } else {
+          if (role === "Admin") {
+            next();
+            return;
+          } else {
 
-          next({
-            name: "NotFound",
-            query: {
-              from: window.location.hash.split('#')[1]
-            }
-          });
+            next({
+              name: "NotFound",
+              query: {
+                from: window.location.hash.split('#')[1]
+              }
+            });
+          }
         }
-      }
 
-      next();
+        next();
+      } else {
+        console.log("Not Authenticated");
+        next({
+          name: 'Login',
+          query: {
+            from: loginpath
+          }
+        })
+      }
     } else {
-      console.log("Not Authenticated");
-      next({
-        name: 'Login',
-        query: {
-          from: loginpath
-        }
-      })
+      next();
     }
   } else {
-    next();
+    next({
+      name: "NotFound",
+      query: {
+        from: window.location.hash.split('#')[1]
+      }
+    });
   }
   // if (to.matched.some(record => record.meta.requiresAuth)) {
   //   const loginpath = window.location.hash.split('#')[1]

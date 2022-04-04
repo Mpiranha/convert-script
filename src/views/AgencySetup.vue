@@ -8,6 +8,9 @@
       <div class="content-section">
         <navbar></navbar>
         <div class="container scroll-content">
+          <loader-modal
+            :loading-state="this.$store.state.loading"
+          ></loader-modal>
           <div class="dashboard-top">
             <h6 class="title">Agency Setup</h6>
             <div class="desc">
@@ -17,19 +20,11 @@
           </div>
           <div class="row">
             <bonus-box
-              bonus-title="File Name"
-              desc="This is where the file description will be."
-              bonus-link="#"
-            ></bonus-box>
-            <bonus-box
-              bonus-title="File Name"
-              desc="This is where the file description will be."
-              bonus-link="#"
-            ></bonus-box>
-            <bonus-box
-              bonus-title="File Name"
-              desc="This is where the file description will be."
-              bonus-link="#"
+              v-for="agencyFile in agencyFiles"
+              :key="agencyFile.id"
+              :bonus-title="agencyFile.name"
+              :desc="agencyFile.description"
+              :bonus-link="agencyFile.url"
             ></bonus-box>
           </div>
         </div>
@@ -45,11 +40,36 @@ import Navbar from "@/components/TheNav.vue";
 import BonusBox from "@/components/BonusBox";
 
 export default {
-  name: "Dashboard",
+  name: "AgencyFiles",
   components: {
     Sidebar,
     Navbar,
     BonusBox,
+  },
+  data() {
+    return {
+      agencyFiles: [],
+    };
+  },
+  methods: {
+    getAllAgencyFiles() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getAgencyFilesUser")
+        .then((res) => {
+          this.agencyFiles = res.data.data;
+          // this.videoLength = res.data.meta.total;
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+  },
+  mounted() {
+    this.getAllAgencyFiles();
   },
 };
 </script>

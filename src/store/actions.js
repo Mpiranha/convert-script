@@ -761,6 +761,28 @@ export default {
         })
     },
 
+    // Agency Files
+
+    getAgencyFilesUser({
+        // commit,
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/agency-files`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
     // Market
 
     getMarket({
@@ -1258,10 +1280,10 @@ export default {
     getAllAgencyFiles({
         // commit,
         state
-    }, page) {
+    }) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
-            axios.get(`${baseUrl}/api/v1/admin/agencies?page=${page.number}&per_page=${page.perPage}`)
+            axios.get(`${baseUrl}/api/v1/admin/agency-files`)
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data
@@ -1279,7 +1301,7 @@ export default {
     }, data) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
-            axios.post(`${baseUrl}/api/v1/admin/agencies`, data, {})
+            axios.post(`${baseUrl}/api/v1/admin/agency-files`, data, {})
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data
@@ -1300,7 +1322,7 @@ export default {
     }) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
-            axios.put(`${baseUrl}/api/v1/admin/agencies/${id}`, data)
+            axios.put(`${baseUrl}/api/v1/admin/agency-files/${id}`, data)
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data
@@ -1318,7 +1340,7 @@ export default {
     }, id) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
-            axios.delete(`${baseUrl}/api/v1/admin/agencies/${id}`)
+            axios.delete(`${baseUrl}/api/v1/admin/agency-files/${id}`)
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data
