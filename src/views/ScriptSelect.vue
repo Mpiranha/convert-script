@@ -176,7 +176,7 @@ export default {
       this.$store
         .dispatch("getScriptTypes")
         .then((res) => {
-          this.scriptTypes = res.data.data;
+          this.scriptTypes = res.data.data.reverse();
 
           console.log(res.data);
           this.$store.commit("updateLoadState", false);
