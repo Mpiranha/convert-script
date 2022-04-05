@@ -257,6 +257,7 @@ export default {
   },
   methods: {
     getUser() {
+       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getUser")
         .then((res) => {

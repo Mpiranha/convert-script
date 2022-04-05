@@ -424,7 +424,7 @@ export default {
       console.log("Value: " + value);
     },
     getMarketData() {
-      // this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getMarket", {
           number: this.currentPage,

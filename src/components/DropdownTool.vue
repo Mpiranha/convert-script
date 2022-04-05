@@ -20,6 +20,7 @@
       @click="modalShow = !modalShow"
       link-class="drop-link"
       href="#"
+      v-if="!noDelete"
     >
       <i class="flaticon-trash icons table-drop-icon"></i>
       Delete
@@ -57,7 +58,7 @@
 <script>
 export default {
   name: "DropdownTool",
-  props: ["deleteWhat"],
+  props: ["deleteWhat","noDelete"],
   data() {
     return {
       modalShow: false,

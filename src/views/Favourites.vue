@@ -134,8 +134,23 @@
                             @edit-clicked="
                               openEditModal(script.id, script.response.text)
                             "
+                            :no-delete="true"
                             @delete-proceed="deleteScript(script.response.id)"
                           >
+                            <template v-slot:secondary>
+                              <b-dropdown-item
+                                v-b-modal.add-client
+                                link-class="drop-link"
+                                href="#"
+                              >
+                                <img
+                                  class="drop-img-icon"
+                                  src="@/assets/icons/convert-icon/my Favourites.svg"
+                                  alt="remove from favorite icon"
+                                />
+                                Remove from favorite
+                              </b-dropdown-item>
+                            </template>
                           </dropdown-tool>
                         </td>
                       </tr>

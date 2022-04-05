@@ -229,6 +229,7 @@ export default {
   },
   methods: {
     getAgency() {
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getAllAgency")
         .then((res) => {
