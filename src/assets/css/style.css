@@ -1307,17 +1307,15 @@ input:checked+.slider:before {
 
 
 
-.control-overflow .loader-modal {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
+.script-form-footer .loader-modal {
+    position: static;
     background-color: #fff;
-    height: 100%;
+    width: 3rem !important;
+    margin-right: 0.7rem;
 }
 
-.control-overflow .loader-img {
-    width: 3rem;
+.script-form-footer .loader-img {
+    width: 2rem;
 }
 
 .b-toaster.b-toaster-top-right .b-toaster-slot,

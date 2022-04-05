@@ -129,6 +129,7 @@
                           v-model="variation"
                           class="btn btn-variation"
                         /> -->
+                         <loader-modal :loading-state="loading"></loader-modal>
 
                         <button class="btn btn-create py-2 btn-script">
                           Create Copy
@@ -161,7 +162,7 @@
                     </div>
                   </div>
                   <div class="control-overflow">
-                    <loader-modal :loading-state="loading"></loader-modal>
+                   
                     <div v-if="generatedScript.length > 0">
                       <script-box
                         @save-clicked="saveCampaign"
