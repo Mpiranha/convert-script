@@ -67,7 +67,7 @@
                     ></b-form-select>
                   </b-form-group>
 
-                   <b-form-group label="ICON URL" label-class="input-label">
+                  <b-form-group label="ICON URL" label-class="input-label">
                     <b-form-input
                       id="name"
                       v-model="scriptTypeData.icon"
@@ -403,17 +403,59 @@ export default {
       },
       error: "",
       endineOptions: [
-        { value: null, text: "Select an Engine" },
-        { value: "davinci-instruct-beta", text: "davinci-instruct-beta" },
+        {
+          value: null,
+          text: "Select an Engine",
+        },
+        {
+          value: "davinci-instruct-beta",
+          text: "davinci-instruct-beta",
+        },
+        {
+          value: "text-davinci-002",
+          text: "text-davinci-002",
+        },
+        {
+          value: "text-curie-001",
+          text: "text-curie-001",
+        },
+        {
+          value: "text-babbage-001",
+          text: "text-babbage-001",
+        },
+        {
+          value: "text-ada-001",
+          text: "text-ada-001",
+        },
       ],
       fieldOptions: [
-        { value: null, text: "None" },
-        { value: "text", text: "text" },
-        { value: "textarea", text: "textarea" },
-        { value: "number", text: "number" },
-        { value: "email", text: "email" },
+        {
+          value: null,
+          text: "None",
+        },
+        {
+          value: "text",
+          text: "text",
+        },
+        {
+          value: "textarea",
+          text: "textarea",
+        },
+        {
+          value: "number",
+          text: "number",
+        },
+        {
+          value: "email",
+          text: "email",
+        },
       ],
-      categoryOptions: [{ value: null, text: "None" }],
+      categoryOptions: [
+        {
+          value: null,
+          text: "None",
+        },
+      ],
       icon: null,
       iconRes: null,
       currentIcon: null,
@@ -503,7 +545,6 @@ export default {
       this.scriptTypeData.script_type_presets = [];
       console.log("presset length " + data.presets.length);
       for (let i = 0; i < data.presets.length; i++) {
-
         this.addInput();
         this.scriptTypeData.script_type_presets[i].script_type_id = data.id;
         this.scriptTypeData.script_type_presets[i].question =
@@ -516,16 +557,13 @@ export default {
           data.presets[i].placeholder;
       }
 
-
-
       this.scriptTypeData.name = data.name;
       this.scriptTypeData.prompt_1 = data.prompt_1;
       this.scriptTypeData.prompt_2 = data.prompt_2;
       this.scriptTypeData.engine = data.engine;
       this.scriptTypeData.temperature = data.temperature;
       this.scriptTypeData.icon = data.icon;
-      this.scriptTypeData.script_type_category_id =
-        data.script_type_category;
+      this.scriptTypeData.script_type_category_id = data.script_type_category;
       this.scriptTypeData.tone = data.tone;
       this.scriptTypeData.language = data.language;
       // this.currentIcon = data.icon;
@@ -582,8 +620,6 @@ export default {
         .dispatch("addScriptType", this.scriptTypeData)
         .then((res) => {
           console.log(res);
-
-          
 
           this.makeToast("success", "Script Type Added successfully");
           this.$router.push({
@@ -664,7 +700,7 @@ export default {
   margin-bottom: 1rem;
   font-size: 0.85rem;
   font-weight: bold;
-  color: #474e56;
+  color: #474e56; 
 }
 
 .input-label {
