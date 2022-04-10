@@ -303,6 +303,7 @@ export default {
     currentActive: String,
     userName: {
       type: String,
+      
     },
   },
   data() {
@@ -320,7 +321,7 @@ export default {
         this.$router.push("/login");
       });
     },
-    getFirstLetter(text) {
+    getFirstLetter(text) { 
       return text.toString().charAt(0);
     },
   },

@@ -1010,7 +1010,7 @@ input:checked+.slider:before {
     border: none;
     border-bottom: 2px solid #f6f8f9;
     vertical-align: middle;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     padding: 0.7rem 0.5rem;
 }
 
@@ -1065,7 +1065,32 @@ input:checked+.slider:before {
     padding: 1.3rem 1.5rem 0 0;
     /* text-align: justify; */
     line-height: 22px;
+    min-height: 100px;
+    height: calc(100% - (59px + 34px));
+    overflow-y: auto;
+
 }
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #8338ec;
+    border-radius: 15px;
+}
+
+/* ::-webkit-scrollbar-button {
+   background-color: #8338ec;
+   display: block;
+   background-size: 10px;
+   background-repeat: no-repeat;
+} */
 
 .no-select {
     color: #b3abab;

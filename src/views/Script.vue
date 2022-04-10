@@ -139,7 +139,7 @@
                   </table>
                 </div>
               </div>
-              <div class="col-6">
+              <div class="col-6 h-100">
                 <div class="d-flex flex-column h-100">
                   <div class="section-head">
                     <div class="section-head-right d-flex align-items-center">
