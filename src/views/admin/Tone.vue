@@ -7,107 +7,109 @@
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
-        <div class="container scroll-content">
-          <div class="sec-padding">
-            <div
-              class="
-                dashboard-top
-                d-flex
-                justify-content-between
-                align-items-center
-                mb-5
-              "
-            >
-              <h6 class="title">Tone</h6>
-              <div class="d-flex align-items-center">
-                <button
-                  @click="clearField"
-                  class="btn btn-create"
-                  v-b-modal.modal-new-tone
-                >
-                  <span>+</span>
-                  New Tone
-                </button>
+        <div class="scroll-content">
+          <div class="container">
+            <div class="sec-padding">
+              <div
+                class="
+                  dashboard-top
+                  d-flex
+                  justify-content-between
+                  align-items-center
+                  mb-5
+                "
+              >
+                <h6 class="title">Tone</h6>
+                <div class="d-flex align-items-center">
+                  <button
+                    @click="clearField"
+                    class="btn btn-create"
+                    v-b-modal.modal-new-tone
+                  >
+                    <span>+</span>
+                    New Tone
+                  </button>
+                </div>
               </div>
-            </div>
-            <div class="content-wrap set-min-h pt-4 pb-5">
-              <div class="search-form mb-2">
-                <button class="btn search-btn">
-                  <i class="flaticon-loupe icons"></i>
-                </button>
-                <input
-                  v-model="searchKey"
-                  @input="searchKeyWord"
-                  class="form-control no-shadow search-input"
-                  type="text"
-                  placeholder="Search"
-                />
-              </div>
-              <loader-modal
-                :loading-state="this.$store.state.loading"
-              ></loader-modal>
-              <div v-if="tones.length === 0" class="no-data-info">
-                Created Tones will display here.
-              </div>
-              <table v-else class="table table-custom">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th class="text-center">ID</th>
-                    <th class="text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody v-if="searchResult.length > 0">
-                  <tr v-for="result in searchResult" :key="result.id">
-                    <td scope="row">{{ result.name }}</td>
+              <div class="content-wrap set-min-h pt-4 pb-5">
+                <div class="search-form mb-2">
+                  <button class="btn search-btn">
+                    <i class="flaticon-loupe icons"></i>
+                  </button>
+                  <input
+                    v-model="searchKey"
+                    @input="searchKeyWord"
+                    class="form-control no-shadow search-input"
+                    type="text"
+                    placeholder="Search"
+                  />
+                </div>
+                <loader-modal
+                  :loading-state="this.$store.state.loading"
+                ></loader-modal>
+                <div v-if="tones.length === 0" class="no-data-info">
+                  Created Tones will display here.
+                </div>
+                <table v-else class="table table-custom">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th class="text-center">ID</th>
+                      <th class="text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody v-if="searchResult.length > 0">
+                    <tr v-for="result in searchResult" :key="result.id">
+                      <td scope="row">{{ result.name }}</td>
 
-                     <td>{{ result.id }}</td>
-                    <td>
-                      <dropdown-tool
-                        @edit-clicked="
-                          openEditModal(result.id, {
-                            name: result.name,
-                          })
-                        "
-                        @delete-proceed="deleteTone(result.id)"
-                        delete-what="Tone"
-                      >
-                      </dropdown-tool>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody v-else-if="tones && searchKey.length < 1">
-                  <tr v-for="tone in tones" :key="tone.id">
-                    <td scope="row">{{ tone.name }}</td>
-                    <td class="text-center">{{ tone.id }}</td>
-                    <td>
-                      <dropdown-tool
-                        @edit-clicked="
-                          openEditModal(tone.id, {
-                            name: tone.name,
-                          })
-                        "
-                        @delete-proceed="deleteTone(tone.id)"
-                        delete-what="Tone"
-                      >
-                      </dropdown-tool>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="d-flex justify-content-center">
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="toneLength"
-                :per-page="perPage"
-                aria-controls="my-table"
-                size="sm"
-                :hide-goto-end-buttons="true"
-                prev-text="<"
-                next-text=">"
-                @change="handlePageChange"
-              ></b-pagination>
+                      <td>{{ result.id }}</td>
+                      <td>
+                        <dropdown-tool
+                          @edit-clicked="
+                            openEditModal(result.id, {
+                              name: result.name,
+                            })
+                          "
+                          @delete-proceed="deleteTone(result.id)"
+                          delete-what="Tone"
+                        >
+                        </dropdown-tool>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tbody v-else-if="tones && searchKey.length < 1">
+                    <tr v-for="tone in tones" :key="tone.id">
+                      <td scope="row">{{ tone.name }}</td>
+                      <td class="text-center">{{ tone.id }}</td>
+                      <td>
+                        <dropdown-tool
+                          @edit-clicked="
+                            openEditModal(tone.id, {
+                              name: tone.name,
+                            })
+                          "
+                          @delete-proceed="deleteTone(tone.id)"
+                          delete-what="Tone"
+                        >
+                        </dropdown-tool>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="d-flex justify-content-center">
+                <b-pagination
+                  v-model="currentPage"
+                  :total-rows="toneLength"
+                  :per-page="perPage"
+                  aria-controls="my-table"
+                  size="sm"
+                  :hide-goto-end-buttons="true"
+                  prev-text="<"
+                  next-text=">"
+                  @change="handlePageChange"
+                ></b-pagination>
+              </div>
             </div>
           </div>
         </div>
@@ -148,15 +150,11 @@
         </b-form-input>
       </b-form-group>
       <div class="d-flex justify-content-end">
-        <b-button
-          @click="$bvModal.hide('modal-new-tone')"
-          class="close-modal"
+        <b-button @click="$bvModal.hide('modal-new-tone')" class="close-modal"
           >Close</b-button
         >
         <b-button
-          @click="
-            triggerEdit ? editTone(editId, toneData) : addTone()
-          "
+          @click="triggerEdit ? editTone(editId, toneData) : addTone()"
           class="save-modal"
           >{{ triggerEdit ? "Edit" : "Save" }}</b-button
         >
@@ -184,7 +182,7 @@ export default {
     return {
       searchKey: "",
       searchResult: [],
-      perPage: 5,
+      perPage: 20,
       currentPage: 1,
       toneLength: 0,
       tones: [],

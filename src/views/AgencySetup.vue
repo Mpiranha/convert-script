@@ -7,25 +7,27 @@
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>
-        <div class="container scroll-content">
-          <loader-modal
-            :loading-state="this.$store.state.loading"
-          ></loader-modal>
-          <div class="dashboard-top">
-            <h6 class="title">Agency Setup</h6>
-            <div class="desc">
-              Download all files and documents to setup your<br />
-              agency
+        <div class="scroll-content">
+          <div class="container">
+            <loader-modal
+              :loading-state="this.$store.state.loading"
+            ></loader-modal>
+            <div class="dashboard-top">
+              <h6 class="title">Agency Setup</h6>
+              <div class="desc">
+                Download all files and documents to setup your<br />
+                agency
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <bonus-box
-              v-for="agencyFile in agencyFiles"
-              :key="agencyFile.id"
-              :bonus-title="agencyFile.name"
-              :desc="agencyFile.description"
-              :bonus-link="agencyFile.url"
-            ></bonus-box>
+            <div class="row">
+              <bonus-box
+                v-for="agencyFile in agencyFiles"
+                :key="agencyFile.id"
+                :bonus-title="agencyFile.name"
+                :desc="agencyFile.description"
+                :bonus-link="agencyFile.url"
+              ></bonus-box>
+            </div>
           </div>
         </div>
       </div>

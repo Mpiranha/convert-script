@@ -4,39 +4,43 @@
       <sidebar :user-name="this.$store.state.user.first_name"></sidebar>
       <div class="content-section">
         <navbar></navbar>
-        <div class="container scroll-content">
-          <div class="dashboard-top mb-5">
-            <h6 class="title">Billing</h6>
-          </div>
+        <div class="scroll-content">
+          <div class="container">
+            <div class="dashboard-top mb-5">
+              <h6 class="title">Billing</h6>
+            </div>
 
-          <div class="content-wrap pt-4 pb-5">
-            <table class="table table-custom">
-              <tbody>
-                <tr>
-                  <td scope="row">Plan 1</td>
-                  <td>05/072021</td>
-                  <td>Active</td>
-                </tr>
-                <tr>
-                  <td scope="row">Plan 2</td>
-                  <td></td>
-                  <td>
-                    <button class="btn btn-upgrade">Upgrade</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <div class="content-wrap pt-4 pb-5">
+              <table class="table table-custom">
+                <tbody>
+                  <tr>
+                    <td scope="row">Plan 1</td>
+                    <td>05/072021</td>
+                    <td>Active</td>
+                  </tr>
+                  <tr>
+                    <td scope="row">Plan 2</td>
+                    <td></td>
+                    <td>
+                      <button class="btn btn-upgrade">Upgrade</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-          <div class="content-wrap word-usage-stat">
-            <div class="label">Word Usage Count</div>
-            <b-progress
-              :value="wordStat.script_words_generated"
-              :max="wordStat.limit"
-              animated
-              height="0.8rem"
-            ></b-progress>
-            <div class="value">{{ wordStat.script_words_generated }} of {{ wordStat.limit }}</div>
+            <div class="content-wrap word-usage-stat">
+              <div class="label">Word Usage Count</div>
+              <b-progress
+                :value="wordStat.script_words_generated"
+                :max="wordStat.limit"
+                animated
+                height="0.8rem"
+              ></b-progress>
+              <div class="value">
+                {{ wordStat.script_words_generated }} of {{ wordStat.limit }}
+              </div>
+            </div>
           </div>
         </div>
       </div>

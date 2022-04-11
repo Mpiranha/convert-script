@@ -353,7 +353,7 @@ export default {
     return {
       searchKey: "",
       searchResult: [],
-      perPage: 5,
+      perPage: 20,
       currentPage: 1,
       marketLength: 0,
       projects: [],

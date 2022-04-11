@@ -8,45 +8,47 @@
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
-        <div class="container scroll-content">
-          <div class="dashboard-top">
-            <h6 class="title">Admin Dashboard</h6>
-          </div>
+        <div class="scroll-content">
+          <div class="container">
+            <div class="dashboard-top">
+              <h6 class="title">Admin Dashboard</h6>
+            </div>
 
-          <div class="row justify-content-between">
-            <dashboard-box
-              text="Users"
-              box-type="leads"
-              image-url="Campaigns boxes.svg"
-              :box-value="stat.user"
-            ></dashboard-box>
-            <dashboard-box
-              text="Transactions"
-              box-type="links"
-              image-url="script boxes.svg"
-              :box-value="stat.transactions"
-            ></dashboard-box>
-            <dashboard-box
-              text="Scripts"
-              box-type="campaign"
-              image-url="Published boxes.svg"
-              :box-value="stat.published"
-            ></dashboard-box>
-          </div>
+            <div class="row justify-content-between">
+              <dashboard-box
+                text="Users"
+                box-type="leads"
+                image-url="Campaigns boxes.svg"
+                :box-value="stat.user"
+              ></dashboard-box>
+              <dashboard-box
+                text="Transactions"
+                box-type="links"
+                image-url="script boxes.svg"
+                :box-value="stat.transactions"
+              ></dashboard-box>
+              <dashboard-box
+                text="Scripts"
+                box-type="campaign"
+                image-url="Published boxes.svg"
+                :box-value="stat.published"
+              ></dashboard-box>
+            </div>
 
-          <div class="dashboard-top">
-            <h6 class="title">Words/Day Chart</h6>
-          </div>
+            <div class="dashboard-top">
+              <h6 class="title">Words/Day Chart</h6>
+            </div>
 
-          <div class="row mb-4">
-            <div class="col-12">
-              <div class="chart-box">
-                <apexchart
-                  type="line"
-                  height="350"
-                  :options="chartOptions"
-                  :series="series"
-                ></apexchart>
+            <div class="row mb-4">
+              <div class="col-12">
+                <div class="chart-box">
+                  <apexchart
+                    type="line"
+                    height="350"
+                    :options="chartOptions"
+                    :series="series"
+                  ></apexchart>
+                </div>
               </div>
             </div>
           </div>

@@ -7,7 +7,8 @@
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>
-        <div class="container scroll-content">
+        <div class="scroll-content">
+        <div class="container">
           <div
             class="
               dashboard-top
@@ -96,6 +97,7 @@
               </tbody>
             </table>
           </div>
+        </div>
         </div>
       </div>
     </div>

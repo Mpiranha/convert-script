@@ -7,167 +7,169 @@
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
-        <div class="container scroll-content">
-          <div
-            class="
-              dashboard-top
-              d-flex
-              justify-content-between
-              align-items-center
-              mb-5
-            "
-          >
-            <h6 class="title">All Script Type ({{ scriptTypeLength }})</h6>
-            <div class="d-flex align-items-center">
-              <router-link
-                to="/admin/script/type/input"
-                class="btn btn-create"
-              >
-                <span>+</span>
-                New Script Type
-              </router-link>
+        <div class="scroll-content">
+          <div class="container">
+            <div
+              class="
+                dashboard-top
+                d-flex
+                justify-content-between
+                align-items-center
+                mb-5
+              "
+            >
+              <h6 class="title">All Script Type ({{ scriptTypeLength }})</h6>
+              <div class="d-flex align-items-center">
+                <router-link
+                  to="/admin/script/type/input"
+                  class="btn btn-create"
+                >
+                  <span>+</span>
+                  New Script Type
+                </router-link>
+              </div>
             </div>
-          </div>
 
-          <div class="content-wrap set-min-h pt-4 pb-5">
-            <div class="search-form mb-2">
-              <button class="btn search-btn">
-                <i class="flaticon-loupe icons"></i>
-              </button>
-              <input
-                v-model="searchKey"
-                @input="searchKeyWord"
-                class="form-control no-shadow search-input"
-                type="text"
-                placeholder="Search"
-              />
-            </div>
-            <loader-modal
-              :loading-state="this.$store.state.loading"
-            ></loader-modal>
-            <div v-if="scriptTypeLength === 0" class="no-data-info">
-              Created Script Type will display here.
-            </div>
-            <table v-else class="table table-custom">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Script Type</th>
-                  <th>Usage</th>
-                  <th>Status</th>
-                  <th class="text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody v-if="searchResult.length > 0">
-                <tr v-for="result in searchResult" :key="result.id">
-                  <td scope="row">{{ result.id }}</td>
-                  <td class="text-left">{{ result.name }}</td>
-                  <td>{{ result.usage }}</td>
-                  <td>
-                    <label class="switch mb-0">
-                      <input :checked="result.activate" type="checkbox" />
-                      <span class="slider round"></span>
-                    </label>
-                  </td>
-                  <td>
-                    <dropdown-tool
-                      @edit-clicked="
-                        openEditModal(result.id, {
-                          name: result.name,
-                          desc: result.desc,
-                          icon: result.icon,
-                        })
-                      "
-                      @delete-proceed="deleteScriptType(result.id)"
-                    >
-                      <template v-slot:secondary>
-                        <b-dropdown-item
-                          v-b-modal.modal-campaign
-                          link-class="drop-link"
-                          href="#"
-                        >
-                          <router-link
-                            class="drop-link"
-                            :to="{
-                              name: 'ScriptTypesInput',
-                              params: { id: result.id },
-                            }"
+            <div class="content-wrap set-min-h pt-4 pb-5">
+              <div class="search-form mb-2">
+                <button class="btn search-btn">
+                  <i class="flaticon-loupe icons"></i>
+                </button>
+                <input
+                  v-model="searchKey"
+                  @input="searchKeyWord"
+                  class="form-control no-shadow search-input"
+                  type="text"
+                  placeholder="Search"
+                />
+              </div>
+              <loader-modal
+                :loading-state="this.$store.state.loading"
+              ></loader-modal>
+              <div v-if="scriptTypeLength === 0" class="no-data-info">
+                Created Script Type will display here.
+              </div>
+              <table v-else class="table table-custom">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Script Type</th>
+                    <th>Usage</th>
+                    <th>Status</th>
+                    <th class="text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody v-if="searchResult.length > 0">
+                  <tr v-for="result in searchResult" :key="result.id">
+                    <td scope="row">{{ result.id }}</td>
+                    <td class="text-left">{{ result.name }}</td>
+                    <td>{{ result.usage }}</td>
+                    <td>
+                      <label class="switch mb-0">
+                        <input :checked="result.activate" type="checkbox" />
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <dropdown-tool
+                        @edit-clicked="
+                          openEditModal(result.id, {
+                            name: result.name,
+                            desc: result.desc,
+                            icon: result.icon,
+                          })
+                        "
+                        @delete-proceed="deleteScriptType(result.id)"
+                      >
+                        <template v-slot:secondary>
+                          <b-dropdown-item
+                            v-b-modal.modal-campaign
+                            link-class="drop-link"
+                            href="#"
                           >
-                            <img
-                              class="drop-img-icon"
-                              src="@/assets/icons/admin/sidebar-icon/Input.svg"
-                              alt=""
-                            />
-                            Input
-                          </router-link>
-                        </b-dropdown-item>
-                      </template>
-                    </dropdown-tool>
-                  </td>
-                </tr>
-              </tbody>
-              <tbody v-else-if="scriptTypes && searchKey.length < 1">
-                <tr v-for="scriptType in scriptTypes" :key="scriptType.id">
-                  <td scope="row">{{ scriptType.id }}</td>
-                  <td class="text-left">{{ scriptType.name }}</td>
-                  <td>{{ scriptType.usage }}</td>
-                  <td>
-                    <label class="switch mb-0">
-                      <input :checked="scriptType.activate" type="checkbox" />
-                      <span class="slider round"></span>
-                    </label>
-                  </td>
-                  <td>
-                    <dropdown-tool
-                      @edit-clicked="
-                        openEditModal(scriptType.id, {
-                          name: scriptType.name,
-                          desc: scriptType.desc,
-                          icon: scriptType.icon,
-                        })
-                      "
-                      @delete-proceed="deleteScriptType(scriptType.id)"
-                    >
-                      <template v-slot:secondary>
-                        <b-dropdown-item
-                          v-b-modal.modal-campaign
-                          link-class="drop-link"
-                          href="#"
-                        >
-                          <router-link
-                            class="drop-link"
-                            :to="{
-                              name: 'ScriptTypesInput',
-                              params: { id: scriptType.id },
-                            }"
+                            <router-link
+                              class="drop-link"
+                              :to="{
+                                name: 'ScriptTypesInput',
+                                params: { id: result.id },
+                              }"
+                            >
+                              <img
+                                class="drop-img-icon"
+                                src="@/assets/icons/admin/sidebar-icon/Input.svg"
+                                alt=""
+                              />
+                              Input
+                            </router-link>
+                          </b-dropdown-item>
+                        </template>
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody v-else-if="scriptTypes && searchKey.length < 1">
+                  <tr v-for="scriptType in scriptTypes" :key="scriptType.id">
+                    <td scope="row">{{ scriptType.id }}</td>
+                    <td class="text-left">{{ scriptType.name }}</td>
+                    <td>{{ scriptType.usage }}</td>
+                    <td>
+                      <label class="switch mb-0">
+                        <input :checked="scriptType.activate" type="checkbox" />
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <dropdown-tool
+                        @edit-clicked="
+                          openEditModal(scriptType.id, {
+                            name: scriptType.name,
+                            desc: scriptType.desc,
+                            icon: scriptType.icon,
+                          })
+                        "
+                        @delete-proceed="deleteScriptType(scriptType.id)"
+                      >
+                        <template v-slot:secondary>
+                          <b-dropdown-item
+                            v-b-modal.modal-campaign
+                            link-class="drop-link"
+                            href="#"
                           >
-                            <img
-                              class="drop-img-icon"
-                              src="@/assets/icons/admin/sidebar-icon/Input.svg"
-                              alt=""
-                            />
-                            Input
-                          </router-link>
-                        </b-dropdown-item>
-                      </template>
-                    </dropdown-tool>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="d-flex justify-content-center">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="scriptTypeLength"
-              :per-page="perPage"
-              aria-controls="my-table"
-              size="sm"
-              :hide-goto-end-buttons="true"
-              prev-text="<"
-              next-text=">"
-              @change="handlePageChange"
-            ></b-pagination>
+                            <router-link
+                              class="drop-link"
+                              :to="{
+                                name: 'ScriptTypesInput',
+                                params: { id: scriptType.id },
+                              }"
+                            >
+                              <img
+                                class="drop-img-icon"
+                                src="@/assets/icons/admin/sidebar-icon/Input.svg"
+                                alt=""
+                              />
+                              Input
+                            </router-link>
+                          </b-dropdown-item>
+                        </template>
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="d-flex justify-content-center">
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="scriptTypeLength"
+                :per-page="perPage"
+                aria-controls="my-table"
+                size="sm"
+                :hide-goto-end-buttons="true"
+                prev-text="<"
+                next-text=">"
+                @change="handlePageChange"
+              ></b-pagination>
+            </div>
           </div>
         </div>
       </div>
@@ -251,7 +253,7 @@ export default {
     return {
       searchKey: "",
       searchResult: [],
-      perPage: 5,
+      perPage: 20,
       currentPage: 1,
       scriptTypes: [],
       scriptTypeLength: 0,

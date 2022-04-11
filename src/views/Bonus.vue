@@ -4,25 +4,27 @@
       <sidebar :user-name="this.$store.state.user.first_name"></sidebar>
       <div class="content-section">
         <navbar></navbar>
-        <div class="container scroll-content">
-          <loader-modal
-            :loading-state="this.$store.state.loading"
-          ></loader-modal>
-          <div class="dashboard-top">
-            <h6 class="title">Bonuses</h6>
-            <div class="desc">
-              Let's increase your engagement and<br />
-              conversions and get your result
+        <div class="scroll-content">
+          <div class="container">
+            <loader-modal
+              :loading-state="this.$store.state.loading"
+            ></loader-modal>
+            <div class="dashboard-top">
+              <h6 class="title">Bonuses</h6>
+              <div class="desc">
+                Let's increase your engagement and<br />
+                conversions and get your result
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <bonus-box
-              v-for="bonus in bonuses"
-              :key="bonus.id"
-              :bonus-title="bonus.name"
-              :desc="bonus.description"
-              :bonus-link="bonus.url"
-            ></bonus-box>
+            <div class="row">
+              <bonus-box
+                v-for="bonus in bonuses"
+                :key="bonus.id"
+                :bonus-title="bonus.name"
+                :desc="bonus.description"
+                :bonus-link="bonus.url"
+              ></bonus-box>
+            </div>
           </div>
         </div>
       </div>

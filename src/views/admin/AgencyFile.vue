@@ -7,97 +7,99 @@
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
-        <div class="container-fluid scroll-content">
-          <div class="sec-padding">
-            <div
-              class="
-                dashboard-top
-                d-flex
-                justify-content-between
-                align-items-center
-                mb-5
-              "
-            >
-              <h6 class="title mb-0">Agency File</h6>
-              <div class="d-flex align-items-center">
-                <button
-                  @click="clearField"
-                  class="btn btn-create"
-                  v-b-modal.modal-new-agency
-                >
-                  <span>+</span>
-                  New File
-                </button>
+        <div class="scroll-content">
+          <div class="container-fluid">
+            <div class="sec-padding">
+              <div
+                class="
+                  dashboard-top
+                  d-flex
+                  justify-content-between
+                  align-items-center
+                  mb-5
+                "
+              >
+                <h6 class="title mb-0">Agency File</h6>
+                <div class="d-flex align-items-center">
+                  <button
+                    @click="clearField"
+                    class="btn btn-create"
+                    v-b-modal.modal-new-agency
+                  >
+                    <span>+</span>
+                    New File
+                  </button>
+                </div>
               </div>
-            </div>
-            <div class="content-wrap set-min-h pt-4 pb-5">
-              <div class="search-form mb-2">
-                <button class="btn search-btn">
-                  <i class="flaticon-loupe icons"></i>
-                </button>
-                <input
-                  v-model="searchKey"
-                  @input="searchKeyWord"
-                  class="form-control no-shadow search-input"
-                  type="text"
-                  placeholder="Search"
-                />
-              </div>
-              <loader-modal
-                :loading-state="this.$store.state.loading"
-              ></loader-modal>
-              <div v-if="agencyFiles.length === 0" class="no-data-info">
-                Created Agency Files will display here.
-              </div>
-              <table v-else class="table table-custom">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th class="text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody v-if="searchResult.length > 0">
-                  <tr v-for="result in searchResult" :key="result.id">
-                    <td scope="row">{{ result.name }}</td>
+              <div class="content-wrap set-min-h pt-4 pb-5">
+                <div class="search-form mb-2">
+                  <button class="btn search-btn">
+                    <i class="flaticon-loupe icons"></i>
+                  </button>
+                  <input
+                    v-model="searchKey"
+                    @input="searchKeyWord"
+                    class="form-control no-shadow search-input"
+                    type="text"
+                    placeholder="Search"
+                  />
+                </div>
+                <loader-modal
+                  :loading-state="this.$store.state.loading"
+                ></loader-modal>
+                <div v-if="agencyFiles.length === 0" class="no-data-info">
+                  Created Agency Files will display here.
+                </div>
+                <table v-else class="table table-custom">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th class="text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody v-if="searchResult.length > 0">
+                    <tr v-for="result in searchResult" :key="result.id">
+                      <td scope="row">{{ result.name }}</td>
 
-                    <td class="text-right">
-                      <dropdown-tool
-                        @edit-clicked="openEditModal(result.id, result)"
-                        @delete-proceed="deleteAgency(result.id)"
-                        delete-what="Agency File"
-                      >
-                      </dropdown-tool>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody v-else-if="agencyFiles && searchKey.length < 1">
-                  <tr v-for="agency in agencyFiles" :key="agency.id">
-                    <td scope="row">{{ agency.name }}</td>
+                      <td class="text-right">
+                        <dropdown-tool
+                          @edit-clicked="openEditModal(result.id, result)"
+                          @delete-proceed="deleteAgency(result.id)"
+                          delete-what="Agency File"
+                        >
+                        </dropdown-tool>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tbody v-else-if="agencyFiles && searchKey.length < 1">
+                    <tr v-for="agency in agencyFiles" :key="agency.id">
+                      <td scope="row">{{ agency.name }}</td>
 
-                    <td class="text-right">
-                      <dropdown-tool
-                        @edit-clicked="openEditModal(agency.id, agency)"
-                        @delete-proceed="deleteAgency(agency.id)"
-                        delete-what="Tutorial"
-                      >
-                      </dropdown-tool>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="d-flex justify-content-center">
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="agencyFileLength"
-                :per-page="perPage"
-                aria-controls="my-table"
-                size="sm"
-                :hide-goto-end-buttons="true"
-                prev-text="<"
-                next-text=">"
-                @change="handlePageChange"
-              ></b-pagination>
+                      <td class="text-right">
+                        <dropdown-tool
+                          @edit-clicked="openEditModal(agency.id, agency)"
+                          @delete-proceed="deleteAgency(agency.id)"
+                          delete-what="Tutorial"
+                        >
+                        </dropdown-tool>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="d-flex justify-content-center">
+                <b-pagination
+                  v-model="currentPage"
+                  :total-rows="agencyFileLength"
+                  :per-page="perPage"
+                  aria-controls="my-table"
+                  size="sm"
+                  :hide-goto-end-buttons="true"
+                  prev-text="<"
+                  next-text=">"
+                  @change="handlePageChange"
+                ></b-pagination>
+              </div>
             </div>
           </div>
         </div>
@@ -181,7 +183,7 @@ export default {
     return {
       searchKey: "",
       searchResult: [],
-      perPage: 5,
+      perPage: 20,
       currentPage: 1,
       agencyFiles: [],
       agencyFileLength: 0,

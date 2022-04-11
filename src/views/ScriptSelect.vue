@@ -8,7 +8,8 @@
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>
-        <div class="container scroll-content">
+         <div class="scroll-content">
+        <div class="container">
           <div class="d-flex">
             <div class="dashboard-top">
               <h6 class="title">Select Template</h6>
@@ -121,6 +122,7 @@
             ></script-select-type-box>
           </div>
         </div>
+         </div>
       </div>
     </div>
   </div>
@@ -176,7 +178,7 @@ export default {
       this.$store
         .dispatch("getScriptTypes")
         .then((res) => {
-          this.scriptTypes = res.data.data.reverse();
+          this.scriptTypes = res.data.data;
 
           console.log(res.data);
           this.$store.commit("updateLoadState", false);

@@ -7,115 +7,112 @@
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
-        <div class="container scroll-content">
-          <div
-            class="
-              dashboard-top
-              d-flex
-              justify-content-between
-              align-items-center
-              mb-5
-            "
-          >
-            <h6 class="title">Transactions ({{ transactionsLength }})</h6>
-          </div>
+        <div class="scroll-content">
+          <div class="container">
+            <div
+              class="
+                dashboard-top
+                d-flex
+                justify-content-between
+                align-items-center
+                mb-5
+              "
+            >
+              <h6 class="title">Transactions ({{ transactionsLength }})</h6>
+            </div>
 
-          <div class="content-wrap set-min-h pt-4 pb-5">
-            <div class="search-form mb-2">
-              <button class="btn search-btn">
-                <i class="flaticon-loupe icons"></i>
-              </button>
-              <input
-                v-model="searchKey"
-                @input="searchKeyWord"
-                class="form-control no-shadow search-input"
-                type="text"
-                placeholder="Search"
-              />
-            </div>
-            <loader-modal
-              :loading-state="this.$store.state.loading"
-            ></loader-modal>
-            <div v-if="this.transactionsLength == 0" class="no-data-info">
-              No Transaction Yet
-            </div>
-            <table v-else class="table table-custom">
-              <thead>
-                <tr>
-                  <th>Transaction ID</th>
-                  <th>Date</th>
-                  <th>Email</th>
-                  <th>Plan</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              
+            <div class="content-wrap set-min-h pt-4 pb-5">
+              <div class="search-form mb-2">
+                <button class="btn search-btn">
+                  <i class="flaticon-loupe icons"></i>
+                </button>
+                <input
+                  v-model="searchKey"
+                  @input="searchKeyWord"
+                  class="form-control no-shadow search-input"
+                  type="text"
+                  placeholder="Search"
+                />
+              </div>
+              <loader-modal
+                :loading-state="this.$store.state.loading"
+              ></loader-modal>
+              <div v-if="this.transactionsLength == 0" class="no-data-info">
+                No Transaction Yet
+              </div>
+              <table v-else class="table table-custom">
+                <thead>
+                  <tr>
+                    <th>Transaction ID</th>
+                    <th>Date</th>
+                    <th>Email</th>
+                    <th>Plan</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+
                 <tbody v-if="searchResult.length > 0">
-                <tr
-                  v-for="(result, index) in searchResult"
-                  :key="result.id"
-                >
-                  <td scope="row">{{ result.transactionId }}</td>
-                  <td class="text-left">
-                    {{ formatDate(result.created_at) }}
-                  </td>
-                  <td>{{ result.user.email }}</td>
-                  <td>{{ result.plan }}</td>
+                  <tr v-for="(result, index) in searchResult" :key="result.id">
+                    <td scope="row">{{ result.transactionId }}</td>
+                    <td class="text-left">
+                      {{ formatDate(result.created_at) }}
+                    </td>
+                    <td>{{ result.user.email }}</td>
+                    <td>{{ result.plan }}</td>
 
-                  <td class="text-left">
-                    <label class="switch mb-0">
-                      <input
-                        v-model="status[index]"
-                        type="checkbox"
-                        @change="
-                          updateTransaction(result.id, status[index])
-                        "
-                      />
-                      <span class="slider round"></span>
-                    </label>
-                  </td>
-                </tr>
-              </tbody>
-              <tbody v-else-if="transactions && searchKey.length < 1">
-                <tr
-                  v-for="(transaction, index) in transactions"
-                  :key="transaction.id"
-                >
-                  <td scope="row">{{ transaction.transactionId }}</td>
-                  <td class="text-left">
-                    {{ formatDate(transaction.created_at) }}
-                  </td>
-                  <td>{{ transaction.user.email }}</td>
-                  <td>{{ transaction.plan }}</td>
+                    <td class="text-left">
+                      <label class="switch mb-0">
+                        <input
+                          v-model="status[index]"
+                          type="checkbox"
+                          @change="updateTransaction(result.id, status[index])"
+                        />
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody v-else-if="transactions && searchKey.length < 1">
+                  <tr
+                    v-for="(transaction, index) in transactions"
+                    :key="transaction.id"
+                  >
+                    <td scope="row">{{ transaction.transactionId }}</td>
+                    <td class="text-left">
+                      {{ formatDate(transaction.created_at) }}
+                    </td>
+                    <td>{{ transaction.user.email }}</td>
+                    <td>{{ transaction.plan }}</td>
 
-                  <td class="text-left">
-                    <label class="switch mb-0">
-                      <input
-                        v-model="status[index]"
-                        type="checkbox"
-                        @change="
-                          updateTransaction(transaction.id, status[index])
-                        "
-                      />
-                      <span class="slider round"></span>
-                    </label>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="d-flex justify-content-center">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="transactionsLength"
-              :per-page="perPage"
-              aria-controls="my-table"
-              size="sm"
-              :hide-goto-end-buttons="true"
-              prev-text="<"
-              next-text=">"
-              @change="handlePageChange"
-            ></b-pagination>
+                    <td class="text-left">
+                      <label class="switch mb-0">
+                        <input
+                          v-model="status[index]"
+                          type="checkbox"
+                          @change="
+                            updateTransaction(transaction.id, status[index])
+                          "
+                        />
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="d-flex justify-content-center">
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="transactionsLength"
+                :per-page="perPage"
+                aria-controls="my-table"
+                size="sm"
+                :hide-goto-end-buttons="true"
+                prev-text="<"
+                next-text=">"
+                @change="handlePageChange"
+              ></b-pagination>
+            </div>
           </div>
         </div>
       </div>
@@ -140,7 +137,7 @@ export default {
     return {
       searchKey: "",
       searchResult: [],
-      perPage: 5,
+      perPage: 20,
       currentPage: 1,
       transactions: [],
       transactionsLength: 0,

@@ -7,7 +7,8 @@
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
-        <div class="container scroll-content">
+         <div class="scroll-content">
+        <div class="container">
           <div class="sec-padding">
             <div
               class="
@@ -104,6 +105,7 @@
             </div>
           </div>
         </div>
+        </div>
       </div>
     </div>
     <b-modal
@@ -176,7 +178,7 @@ export default {
     return {
       searchKey: "",
       searchResult: [],
-      perPage: 5,
+      perPage: 20,
       currentPage: 1,
       bonuses: [],
       bonusesLength: 0,

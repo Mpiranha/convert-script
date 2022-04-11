@@ -8,180 +8,184 @@
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>
-        <div class="container scroll-content">
-          <div
-            class="
-              dashboard-top
-              d-flex
-              justify-content-between
-              align-items-center
-              mb-3
-            "
-          >
-            <h6 class="title">
-              <img class="script-type-icon" :src="scriptType.icon" alt="" />
-              {{ scriptType.name }}
-            </h6>
-          </div>
+        <div class="scroll-content">
+          <div class="container">
+            <div
+              class="
+                dashboard-top
+                d-flex
+                justify-content-between
+                align-items-center
+                mb-3
+              "
+            >
+              <h6 class="title">
+                <img class="script-type-icon" :src="scriptType.icon" alt="" />
+                {{ scriptType.name }}
+              </h6>
+            </div>
 
-          <div class="content-wrap script-custom-height">
-            <div class="row h-100">
-              <div class="col-6 no-gutter-right">
-                <div class="bordered-right h-100">
-                  <div class="script-form-wrap">
-                    <form action="#" method="GET" @submit.prevent="onSubmit">
-                      <div class="script-form">
-                        <div
-                          v-for="(scriptInfo, index) in scriptData"
-                          :key="scriptInfo.id"
-                          class="form-group"
-                        >
-                          <label for="">{{ scriptInfo.question.label }}</label>
-                          <textarea
-                            v-if="scriptInfo.question.field_type === 'textarea'"
-                            :class="{
-                              'is-invalid':
-                                $v.scriptAnswers.$each[index].answer.$error,
-                            }"
-                            rows="3"
-                            cols="10"
-                            v-model="scriptAnswers[index].answer"
-                            :placeholder="scriptInfo.question.placeholder"
-                            class="form-control"
-                          ></textarea>
-                          <input
-                            v-else
-                            :type="scriptInfo.question.field_type"
-                            name=""
-                            :class="{
-                              'is-invalid':
-                                $v.scriptAnswers.$each[index].answer.$error,
-                            }"
-                            id=""
-                            v-model="scriptAnswers[index].answer"
-                            class="form-control"
-                            :placeholder="scriptInfo.question.placeholder"
-                          />
-                          <div class="invalid-feedback">
-                            <div
+            <div class="content-wrap script-custom-height">
+              <div class="row h-100">
+                <div class="col-6 no-gutter-right">
+                  <div class="bordered-right h-100">
+                    <div class="script-form-wrap">
+                      <form action="#" method="GET" @submit.prevent="onSubmit">
+                        <div class="script-form">
+                          <div
+                            v-for="(scriptInfo, index) in scriptData"
+                            :key="scriptInfo.id"
+                            class="form-group"
+                          >
+                            <label for="">{{
+                              scriptInfo.question.label
+                            }}</label>
+                            <textarea
                               v-if="
-                                !$v.scriptAnswers.$each[index].answer
-                                  .required && isSubmitted
+                                scriptInfo.question.field_type === 'textarea'
                               "
-                            >
-                              Answer is required
+                              :class="{
+                                'is-invalid':
+                                  $v.scriptAnswers.$each[index].answer.$error,
+                              }"
+                              rows="3"
+                              cols="10"
+                              v-model="scriptAnswers[index].answer"
+                              :placeholder="scriptInfo.question.placeholder"
+                              class="form-control"
+                            ></textarea>
+                            <input
+                              v-else
+                              :type="scriptInfo.question.field_type"
+                              name=""
+                              :class="{
+                                'is-invalid':
+                                  $v.scriptAnswers.$each[index].answer.$error,
+                              }"
+                              id=""
+                              v-model="scriptAnswers[index].answer"
+                              class="form-control"
+                              :placeholder="scriptInfo.question.placeholder"
+                            />
+                            <div class="invalid-feedback">
+                              <div
+                                v-if="
+                                  !$v.scriptAnswers.$each[index].answer
+                                    .required && isSubmitted
+                                "
+                              >
+                                Answer is required
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        <b-form-group
-                          label="Choose a tone (Optional)"
-                          label-class="input-label"
-                          v-if="
-                            additional_content.script_type_tone
-                              .script_type_allowed_tone
-                          "
-                        >
-                          <b-form-select
-                            class="form-control"
-                            v-model="tone"
-                            :options="toneOptions"
-                          ></b-form-select>
-                        </b-form-group>
-                        <div class="row">
                           <b-form-group
-                            class="col-6"
-                            label="Input language (Optional)"
+                            label="Choose a tone (Optional)"
                             label-class="input-label"
                             v-if="
-                              additional_content.script_type_language
+                              additional_content.script_type_tone
                                 .script_type_allowed_tone
                             "
                           >
                             <b-form-select
                               class="form-control"
-                              v-model="languageInput"
-                              :options="languageOptions"
+                              v-model="tone"
+                              :options="toneOptions"
                             ></b-form-select>
                           </b-form-group>
-                          <b-form-group
-                            class="col-6"
-                            label="Output language (Optional)"
-                            label-class="input-label"
-                            v-if="
-                              additional_content.script_type_language
-                                .script_type_allowed_tone
-                            "
-                          >
-                            <b-form-select
-                              class="form-control"
-                              v-model="languageOutput"
-                              :options="languageOptions"
-                            ></b-form-select>
-                          </b-form-group>
+                          <div class="row">
+                            <b-form-group
+                              class="col-6"
+                              label="Input language (Optional)"
+                              label-class="input-label"
+                              v-if="
+                                additional_content.script_type_language
+                                  .script_type_allowed_tone
+                              "
+                            >
+                              <b-form-select
+                                class="form-control"
+                                v-model="languageInput"
+                                :options="languageOptions"
+                              ></b-form-select>
+                            </b-form-group>
+                            <b-form-group
+                              class="col-6"
+                              label="Output language (Optional)"
+                              label-class="input-label"
+                              v-if="
+                                additional_content.script_type_language
+                                  .script_type_allowed_tone
+                              "
+                            >
+                              <b-form-select
+                                class="form-control"
+                                v-model="languageOutput"
+                                :options="languageOptions"
+                              ></b-form-select>
+                            </b-form-group>
+                          </div>
                         </div>
-                      </div>
-                      <div class="script-form-footer">
-                        <!-- <div class="desc">Variation</div>
+                        <div class="script-form-footer">
+                          <!-- <div class="desc">Variation</div>
                         <input
                           type="text"
                           size="1"
                           v-model="variation"
                           class="btn btn-variation"
                         /> -->
-                         <loader-modal :loading-state="loading"></loader-modal>
+                          <loader-modal :loading-state="loading"></loader-modal>
 
-                        <button class="btn btn-create py-2 btn-script">
-                          Create Copy
-                        </button>
-                      </div>
-                    </form>
+                          <button class="btn btn-create py-2 btn-script">
+                            Create Copy
+                          </button>
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-6 no-gutter-left">
-                <div class="d-flex flex-column h-100">
-                  <div class="section-head bordered-bottom">
-                    <div class="section-head-right">
-                      <!-- <select class="sort-select" name="" id="">
+                <div class="col-6 no-gutter-left">
+                  <div class="d-flex flex-column h-100">
+                    <div class="section-head bordered-bottom">
+                      <div class="section-head-right">
+                        <!-- <select class="sort-select" name="" id="">
                         <option value="none" selected>Export All</option>
                         <option value=""></option>
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                      <a
-                        target="_blank"
-                        :href="
-                          generatedScript
-                            ? `https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport`
-                            : '#'
-                        "
-                        class="btn btn-export-all"
-                        >Export All</a
-                      >
+                        <a
+                          target="_blank"
+                          :href="
+                            generatedScript
+                              ? `https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport`
+                              : '#'
+                          "
+                          class="btn btn-export-all"
+                          >Export All</a
+                        >
+                      </div>
                     </div>
-                  </div>
-                  <div class="control-overflow">
-                   
-                    <div v-if="generatedScript.length > 0">
-                      <script-box
-                        @save-clicked="saveCampaign"
-                        v-for="script in generatedScript"
-                        :key="script.id"
-                        :script-content="
-                          formatScript(script.scriptResponses[0].text)
-                        "
-                        @favorite-clicked="addRemoveScriptFavorite(script.id)"
-                        @edit-clicked="
-                          openEditModal(
-                            script.id,
-                            script.scriptResponses[0].text
-                          )
-                        "
-                        :export-link="`https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${script.id}`"
-                      >
-                      </script-box>
-                      <!-- <textarea
+                    <div class="control-overflow">
+                      <div v-if="generatedScript.length > 0">
+                        <script-box
+                          @save-clicked="saveCampaign"
+                          v-for="script in generatedScript"
+                          :key="script.id"
+                          :script-content="
+                            formatScript(script.scriptResponses[0].text)
+                          "
+                          @favorite-clicked="addRemoveScriptFavorite(script.id)"
+                          @edit-clicked="
+                            openEditModal(
+                              script.id,
+                              script.scriptResponses[0].text
+                            )
+                          "
+                          :export-link="`https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${script.id}`"
+                        >
+                        </script-box>
+                        <!-- <textarea
                         type="hidden"
                         id="text--copy"
                         :value="
@@ -190,9 +194,10 @@
                             : ''
                         "
                       ></textarea> -->
-                    </div>
-                    <div v-else class="empty-script">
-                      Generated Script will display here.
+                      </div>
+                      <div v-else class="empty-script">
+                        Generated Script will display here.
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -247,7 +252,9 @@
       </b-form-group>
 
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-add-campaign')" class="close-modal"
+        <b-button
+          @click="$bvModal.hide('modal-add-campaign')"
+          class="close-modal"
           >Close</b-button
         >
         <b-button class="save-modal">Add</b-button>

@@ -7,7 +7,8 @@
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
-        <div class="container scroll-content">
+         <div class="scroll-content">
+        <div class="container">
           <loader-modal
             :loading-state="this.$store.state.loading"
           ></loader-modal>
@@ -86,6 +87,7 @@
             </div>
           </div>
         </div>
+         </div>
       </div>
     </div>
   </div>
@@ -108,7 +110,7 @@ export default {
   },
   data() {
     return {
-      perPage: 5,
+      perPage: 20,
       currentPage: 1,
       keywordsLength: 0,
       keywords: [],

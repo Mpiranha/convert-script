@@ -8,206 +8,217 @@
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>
-        <div class="container scroll-content">
-          <div
-            class="
-              dashboard-top
-              d-flex
-              justify-content-between
-              align-items-center
-              mb-5
-            "
-          >
-            <h6 class="title">All Copy</h6>
+        <div class="scroll-content">
+          <div class="container">
+            <div
+              class="
+                dashboard-top
+                d-flex
+                justify-content-between
+                align-items-center
+                mb-5
+              "
+            >
+              <h6 class="title">All Copy</h6>
 
-            <router-link class="btn btn-create" to="/script/select">
-              <span>+</span>
-              New Copy
-            </router-link>
-          </div>
+              <router-link class="btn btn-create" to="/script/select">
+                <span>+</span>
+                New Copy
+              </router-link>
+            </div>
 
-          <div class="content-wrap script-custom-height">
-            <div class="row h-100">
-              <div class="col-6 h-100 bordered-right pr-0">
-                <div class="section-head">
-                  <div class="section-head-left">
-                    <img
-                      class="section-head-icon"
-                      src="@/assets/icons/convert-icon/All script.svg"
-                      alt=""
-                    />
-                    {{ scripts.length }}
-                  </div>
-                  <div class="search-form mb-0">
-                    <button class="btn search-btn">
-                      <i class="flaticon-loupe icons"></i>
-                    </button>
-                    <input
-                      @input="searchKeyWord"
-                      v-model="searchKey"
-                      class="form-control no-shadow search-input"
-                      type="text"
-                      placeholder="Search"
-                    />
-                  </div>
-                  <div class="section-head-right">
-                    <a
-                      href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport"
-                      target="_blank"
-                      class="btn btn-export-all"
-                    >
-                      Export All
-                    </a>
-                  </div>
-                </div>
-                <div class="control-height">
-                  <table class="table table-section script-table">
-                    <tbody v-if="searchResult.length > 0">
-                      <tr
-                        @click="setActiveScript(result)"
-                        v-for="result in searchResult"
-                        :key="result.id"
-                      >
-                        <td scope="row">
-                          <div class="control-order-tool">
-                            <button class="btn mb-2">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                            <button class="btn btn-down">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="script-type">
-                            {{ result.scriptResponses[0].script_type }}
-                          </div>
-                          <div class="script-content">
-                            {{ abbrScript(result.scriptResponses[0].text) }}
-                          </div>
-                        </td>
-
-                        <td class="text-right">
-                          <dropdown-tool
-                            delete-what="Script"
-                            @edit-clicked="
-                              openEditModal(result.id, result.scriptResponses[0].text)
-                            "
-                            @delete-proceed="deleteScript(result.id)"
-                          >
-                          </dropdown-tool>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tbody v-else-if="scripts && searchKey.length < 1">
-                      <tr
-                        @click="setActiveScript(script)"
-                        v-for="script in scripts"
-                        :key="script.id"
-                      >
-                        <td scope="row">
-                          <div class="control-order-tool">
-                            <button class="btn mb-2">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                            <button class="btn btn-down">
-                              <i class="flaticon-up-arrow icons icon-order"></i>
-                            </button>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="script-type">
-                            {{ script.script_type_name }}
-                          </div>
-                          <div class="script-content">
-                            {{ abbrScript(script.text) }}
-                          </div>
-                        </td>
-                       
-                        <td class="text-right">
-                          <dropdown-tool
-                            delete-what="Script"
-                            @edit-clicked="
-                              openEditModal(script.id, script.text)
-                            "
-                            @delete-proceed="deleteScript(script.id)"
-                          >
-                          </dropdown-tool>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="col-6 h-100">
-                <div class="d-flex flex-column h-100">
+            <div class="content-wrap script-custom-height">
+              <div class="row h-100">
+                <div class="col-6 h-100 bordered-right pr-0">
                   <div class="section-head">
-                    <div class="section-head-right d-flex align-items-center">
-                      <div class="fav-star" @click="toggleFavourite">
-                        <img
-                          v-if="isFavourite"
-                          class="fav-icon"
-                          src="@/assets/icons/convert-icon/star.png"
-                          alt=""
-                        />
-                        <img
-                          v-else
-                          class="fav-icon"
-                          src="@/assets/icons/convert-icon/my Favourites.svg"
-                          alt=""
-                        />
-                      </div>
-                      <!-- <select class="sort-select" name="" id="">
+                    <div class="section-head-left">
+                      <img
+                        class="section-head-icon"
+                        src="@/assets/icons/convert-icon/All script.svg"
+                        alt=""
+                      />
+                      {{ scripts.length }}
+                    </div>
+                    <div class="search-form mb-0">
+                      <button class="btn search-btn">
+                        <i class="flaticon-loupe icons"></i>
+                      </button>
+                      <input
+                        @input="searchKeyWord"
+                        v-model="searchKey"
+                        class="form-control no-shadow search-input"
+                        type="text"
+                        placeholder="Search"
+                      />
+                    </div>
+                    <div class="section-head-right">
+                      <a
+                        href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport"
+                        target="_blank"
+                        class="btn btn-export-all"
+                      >
+                        Export All
+                      </a>
+                    </div>
+                  </div>
+                  <div class="control-height">
+                    <table class="table table-section script-table">
+                      <tbody v-if="searchResult.length > 0">
+                        <tr
+                          @click="setActiveScript(result)"
+                          v-for="result in searchResult"
+                          :key="result.id"
+                        >
+                          <td scope="row">
+                            <div class="control-order-tool">
+                              <button class="btn mb-2">
+                                <i
+                                  class="flaticon-up-arrow icons icon-order"
+                                ></i>
+                              </button>
+                              <button class="btn btn-down">
+                                <i
+                                  class="flaticon-up-arrow icons icon-order"
+                                ></i>
+                              </button>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="script-type">
+                              {{ result.scriptResponses[0].script_type }}
+                            </div>
+                            <div class="script-content">
+                              {{ abbrScript(result.scriptResponses[0].text) }}
+                            </div>
+                          </td>
+
+                          <td class="text-right">
+                            <dropdown-tool
+                              delete-what="Script"
+                              @edit-clicked="
+                                openEditModal(
+                                  result.id,
+                                  result.scriptResponses[0].text
+                                )
+                              "
+                              @delete-proceed="deleteScript(result.id)"
+                            >
+                            </dropdown-tool>
+                          </td>
+                        </tr>
+                      </tbody>
+                      <tbody v-else-if="scripts && searchKey.length < 1">
+                        <tr
+                          @click="setActiveScript(script)"
+                          v-for="script in scripts"
+                          :key="script.id"
+                        >
+                          <td scope="row">
+                            <div class="control-order-tool">
+                              <button class="btn mb-2">
+                                <i
+                                  class="flaticon-up-arrow icons icon-order"
+                                ></i>
+                              </button>
+                              <button class="btn btn-down">
+                                <i
+                                  class="flaticon-up-arrow icons icon-order"
+                                ></i>
+                              </button>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="script-type">
+                              {{ script.script_type_name }}
+                            </div>
+                            <div class="script-content">
+                              {{ abbrScript(script.text) }}
+                            </div>
+                          </td>
+
+                          <td class="text-right">
+                            <dropdown-tool
+                              delete-what="Script"
+                              @edit-clicked="
+                                openEditModal(script.id, script.text)
+                              "
+                              @delete-proceed="deleteScript(script.id)"
+                            >
+                            </dropdown-tool>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-6 h-100">
+                  <div class="d-flex flex-column h-100">
+                    <div class="section-head">
+                      <div class="section-head-right d-flex align-items-center">
+                        <div class="fav-star" @click="toggleFavourite">
+                          <img
+                            v-if="isFavourite"
+                            class="fav-icon"
+                            src="@/assets/icons/convert-icon/star.png"
+                            alt=""
+                          />
+                          <img
+                            v-else
+                            class="fav-icon"
+                            src="@/assets/icons/convert-icon/my Favourites.svg"
+                            alt=""
+                          />
+                        </div>
+                        <!-- <select class="sort-select" name="" id="">
                         <option value="none" selected>Export Script</option>
                         <option value=""></option>
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                      <a
-                        :href="
-                          activeScript
-                            ? `https://convertscript.test/api/v1/export/text/script/${activeScript.id}`
-                            : '#'
-                        "
-                        target="_blank"
-                        class="btn btn-export-all"
-                      >
-                        Export Script
-                      </a>
+                        <a
+                          :href="
+                            activeScript
+                              ? `https://convertscript.test/api/v1/export/text/script/${activeScript.id}`
+                              : '#'
+                          "
+                          target="_blank"
+                          class="btn btn-export-all"
+                        >
+                          Export Script
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                  <div class="content-display" v-if="activeScript">
-                    <div
-                      v-html="formatScript(activeScript.text)"
-                    ></div>
-                  </div>
-                  <div v-else class="no-select">Select a Script to Preview</div>
-                  <div class="section-footer">
-                    <button
-                      class="btn no-shadow btn-share"
-                      v-b-modal.modal-send-script
-                    >
-                      <img
-                        class="foot-icons"
-                        src="@/assets/icons/convert-icon/send.svg"
-                        alt=""
-                      />
-                    </button>
-                    <button @click="copyText" class="btn no-shadow btn-copy">
-                      <img
-                        class="foot-icons"
-                        src="@/assets/icons/convert-icon/copy.svg"
-                        alt=""
-                      />
-                      Copy to clipboard
-                    </button>
-                    <textarea
-                      type="hidden"
-                      id="text--copy"
-                      :value="
-                        activeScript ? activeScript.text : ''
-                      "
-                    ></textarea>
+                    <div class="content-display" v-if="activeScript">
+                      <div v-html="formatScript(activeScript.text)"></div>
+                    </div>
+                    <div v-else class="no-select">
+                      Select a Script to Preview
+                    </div>
+                    <div class="section-footer">
+                      <button
+                        class="btn no-shadow btn-share"
+                        v-b-modal.modal-send-script
+                      >
+                        <img
+                          class="foot-icons"
+                          src="@/assets/icons/convert-icon/send.svg"
+                          alt=""
+                        />
+                      </button>
+                      <button @click="copyText" class="btn no-shadow btn-copy">
+                        <img
+                          class="foot-icons"
+                          src="@/assets/icons/convert-icon/copy.svg"
+                          alt=""
+                        />
+                        Copy to clipboard
+                      </button>
+                      <textarea
+                        type="hidden"
+                        id="text--copy"
+                        :value="activeScript ? activeScript.text : ''"
+                      ></textarea>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -7,51 +7,52 @@
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>
-        <div class="container scroll-content">
-          <div
-            class="
-              dashboard-top
-              d-flex
-              justify-content-between
-              align-items-center
-              mb-5
-            "
-          >
-            <h6 class="title">Agency</h6>
-            <div class="d-flex align-items-center">
-              <router-link
-                @click="clearField"
-                class="btn btn-border-secondary"
-                to="/agency/setup"
-              >
-                Agency Setup
-              </router-link>
-              <button
-                @click="clearField"
-                class="btn btn-create"
-                v-b-modal.modal-new-client
-              >
-                <span>+</span>
-                New Client
-              </button>
-            </div>
-          </div>
-
-          <div class="content-wrap set-min-h pt-4 pb-5">
-            <div class="search-form">
-              <button class="btn search-btn">
-                <i class="flaticon-loupe icons"></i>
-              </button>
-              <input
-                v-model="searchKey"
-                @input="searchKeyWord"
-                class="form-control no-shadow search-input"
-                type="text"
-                placeholder="Search"
-              />
+        <div class="scroll-content">
+          <div class="container">
+            <div
+              class="
+                dashboard-top
+                d-flex
+                justify-content-between
+                align-items-center
+                mb-5
+              "
+            >
+              <h6 class="title">Agency</h6>
+              <div class="d-flex align-items-center">
+                <router-link
+                  @click="clearField"
+                  class="btn btn-border-secondary"
+                  to="/agency/setup"
+                >
+                  Agency Setup
+                </router-link>
+                <button
+                  @click="clearField"
+                  class="btn btn-create"
+                  v-b-modal.modal-new-client
+                >
+                  <span>+</span>
+                  New Client
+                </button>
+              </div>
             </div>
 
-            <!-- <div class="sort-wrap">
+            <div class="content-wrap set-min-h pt-4 pb-5">
+              <div class="search-form">
+                <button class="btn search-btn">
+                  <i class="flaticon-loupe icons"></i>
+                </button>
+                <input
+                  v-model="searchKey"
+                  @input="searchKeyWord"
+                  class="form-control no-shadow search-input"
+                  type="text"
+                  placeholder="Search"
+                />
+              </div>
+
+              <!-- <div class="sort-wrap">
               <div class="acct-desc">{{ agencyLength }} Client(s)</div>
 
               <select class="sort-select" name="" id="">
@@ -61,32 +62,32 @@
                 <option value=""></option>
               </select>
             </div> -->
-            <loader-modal
-              :loading-state="this.$store.state.loading"
-            ></loader-modal>
-            <div v-if="agency.length === 0" class="no-data-info">
-              Created agency will display here.
-            </div>
-            <table v-else class="table table-custom">
-              <tbody>
-                <tr v-for="agency in orderedAgency" :key="agency.id">
-                  <td scope="row">{{ agency.name }}</td>
-                  <td>{{ agency.id }}</td>
-                  <td>{{ agency.email }}</td>
-                  <td>
-                    {{ formatDate(agency.created_at) }}
-                  </td>
-                  <td>
-                    <dropdown-tool
-                      @edit-clicked="
-                        openEditModal(agency.id, {
-                          name: agency.name,
-                          email: agency.email,
-                        })
-                      "
-                      @delete-proceed="deleteAgency(agency.id)"
-                    >
-                      <!-- <template v-slot:secondary>
+              <loader-modal
+                :loading-state="this.$store.state.loading"
+              ></loader-modal>
+              <div v-if="agency.length === 0" class="no-data-info">
+                Created agency will display here.
+              </div>
+              <table v-else class="table table-custom">
+                <tbody>
+                  <tr v-for="agency in orderedAgency" :key="agency.id">
+                    <td scope="row">{{ agency.name }}</td>
+                    <td>{{ agency.id }}</td>
+                    <td>{{ agency.email }}</td>
+                    <td>
+                      {{ formatDate(agency.created_at) }}
+                    </td>
+                    <td>
+                      <dropdown-tool
+                        @edit-clicked="
+                          openEditModal(agency.id, {
+                            name: agency.name,
+                            email: agency.email,
+                          })
+                        "
+                        @delete-proceed="deleteAgency(agency.id)"
+                      >
+                        <!-- <template v-slot:secondary>
                         <b-dropdown-item
                           v-b-modal.modal-campaign
                           @click="getCurrent(agency.name)"
@@ -99,11 +100,12 @@
                           Campaign
                         </b-dropdown-item>
                       </template> -->
-                    </dropdown-tool>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

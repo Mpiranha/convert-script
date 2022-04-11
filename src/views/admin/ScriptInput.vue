@@ -8,82 +8,83 @@
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
-        <div class="container scroll-content">
-          <div
-            class="
-              dashboard-top
-              d-flex
-              justify-content-between
-              align-items-center
-              mb-2
-            "
-          >
-            <h6 class="title">Add Input - Script Name</h6>
-            <div class="d-flex align-items-center">
-              <button
-                @click="$route.params.id ? editScript() : addScriptType()"
-                class="btn btn-create py-2"
-              >
-                Save
-              </button>
-            </div>
-          </div>
-
-          <div class="content-wrap set-min-h">
-            <form
-              ref="scriptForm"
-              enctype="multipart/form-data"
-              action=""
-              method="post"
+        <div class="scroll-content">
+          <div class="container">
+            <div
+              class="
+                dashboard-top
+                d-flex
+                justify-content-between
+                align-items-center
+                mb-2
+              "
             >
-              <div class="row set-min-h input-main-container">
-                <div class="col-6 py-3 pl-4 bordered-right">
-                  <b-form-group label="Name" label-class="input-label">
-                    <b-form-input
-                      id="name"
-                      v-model="scriptTypeData.name"
-                      type="text"
-                      class="input-table"
-                    >
-                    </b-form-input>
-                  </b-form-group>
+              <h6 class="title">Add Input - Script Name</h6>
+              <div class="d-flex align-items-center">
+                <button
+                  @click="$route.params.id ? editScript() : addScriptType()"
+                  class="btn btn-create py-2"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
 
-                  <b-form-group label="Description" label-class="input-label">
-                    <b-form-textarea
-                      id="name"
-                      v-model="scriptTypeData.description"
-                      type="text"
-                      class="input-table"
-                      rows="4"
-                    >
-                    </b-form-textarea>
-                  </b-form-group>
+            <div class="content-wrap set-min-h">
+              <form
+                ref="scriptForm"
+                enctype="multipart/form-data"
+                action=""
+                method="post"
+              >
+                <div class="row set-min-h input-main-container">
+                  <div class="col-6 py-3 pl-4 bordered-right">
+                    <b-form-group label="Name" label-class="input-label">
+                      <b-form-input
+                        id="name"
+                        v-model="scriptTypeData.name"
+                        type="text"
+                        class="input-table"
+                      >
+                      </b-form-input>
+                    </b-form-group>
 
-                  <b-form-group label="Category" label-class="input-label">
-                    <b-form-select
-                      class="input-table"
-                      v-model="scriptTypeData.script_type_category_id"
-                      :options="categoryOptions"
-                    ></b-form-select>
-                  </b-form-group>
+                    <b-form-group label="Description" label-class="input-label">
+                      <b-form-textarea
+                        id="name"
+                        v-model="scriptTypeData.description"
+                        type="text"
+                        class="input-table"
+                        rows="4"
+                      >
+                      </b-form-textarea>
+                    </b-form-group>
 
-                  <b-form-group label="ICON URL" label-class="input-label">
-                    <b-form-input
-                      id="name"
-                      v-model="scriptTypeData.icon"
-                      type="text"
-                      class="input-table"
-                    >
-                    </b-form-input>
-                  </b-form-group>
+                    <b-form-group label="Category" label-class="input-label">
+                      <b-form-select
+                        class="input-table"
+                        v-model="scriptTypeData.script_type_category_id"
+                        :options="categoryOptions"
+                      ></b-form-select>
+                    </b-form-group>
 
-                  <img
-                    class="icon-prev"
-                    :src="scriptTypeData.icon"
-                    alt="script type icon"
-                  />
+                    <b-form-group label="ICON URL" label-class="input-label">
+                      <b-form-input
+                        id="name"
+                        v-model="scriptTypeData.icon"
+                        type="text"
+                        class="input-table"
+                      >
+                      </b-form-input>
+                    </b-form-group>
 
-                  <!-- <b-form-group label="Upload" label-class="input-label">
+                    <img
+                      class="icon-prev"
+                      :src="scriptTypeData.icon"
+                      alt="script type icon"
+                    />
+
+                    <!-- <b-form-group label="Upload" label-class="input-label">
                     <b-form-file
                       v-model="icon"
                       :state="Boolean(icon)"
@@ -93,7 +94,7 @@
                     >
                     </b-form-file>
                   </b-form-group> -->
-                  <!-- <img
+                    <!-- <img
                     class="icon-prev"
                     :src="
                       currentIcon
@@ -102,255 +103,259 @@
                     "
                     alt=""
                   /> -->
-                  <hr class="my-4" />
-                  <div class="title">Backend Input</div>
+                    <hr class="my-4" />
+                    <div class="title">Backend Input</div>
 
-                  <b-form-group label-class="input-label" label="Prompt 1">
-                    <b-form-input
-                      v-model="scriptTypeData.prompt_1"
-                      type="text"
-                      class="input-table"
-                    >
-                    </b-form-input>
-                  </b-form-group>
-
-                  <b-form-group label-class="input-label" label="Prompt 2">
-                    <b-form-input
-                      v-model="scriptTypeData.prompt_2"
-                      type="text"
-                      class="input-table"
-                    >
-                    </b-form-input>
-                  </b-form-group>
-
-                  <b-form-group
-                    label="Engine"
-                    label-for="pwd"
-                    label-class="input-label"
-                  >
-                    <b-form-select
-                      class="input-table"
-                      v-model="scriptTypeData.engine"
-                      :options="endineOptions"
-                    ></b-form-select>
-                  </b-form-group>
-                  <b-form-group
-                    label-class="input-label"
-                    label="Response length (1-2048)"
-                  >
-                    <b-form-input id="name" type="text" class="input-table">
-                    </b-form-input>
-                  </b-form-group>
-                  <b-form-group
-                    label-class="input-label"
-                    label="Temperature (0.00 - 1.00)"
-                  >
-                    <b-form-input
-                      id="name"
-                      v-model="scriptTypeData.temperature"
-                      type="number"
-                      min="0.00"
-                      max="1.00"
-                      step="0.01"
-                      class="input-table"
-                    >
-                    </b-form-input>
-                  </b-form-group>
-                  <b-form-group
-                    label-class="input-label"
-                    label="Top P (0.00 - 1.00)"
-                  >
-                    <b-form-input
-                      id="name"
-                      v-model="scriptTypeData.top_p"
-                      type="number"
-                      min="0.00"
-                      max="1.00"
-                      step="0.01"
-                      class="input-table"
-                    >
-                    </b-form-input>
-                  </b-form-group>
-                  <b-form-group
-                    label-class="input-label"
-                    label="Frequency Penalty (0.00 - 1.00)"
-                  >
-                    <b-form-input
-                      id="name"
-                      v-model="scriptTypeData.frequency_penalty"
-                      type="number"
-                      min="0.00"
-                      max="1.00"
-                      step="0.01"
-                      class="input-table"
-                    >
-                    </b-form-input>
-                  </b-form-group>
-                  <b-form-group
-                    label-class="input-label"
-                    label="Presence Penalty (0.00 - 1.00)"
-                  >
-                    <b-form-input
-                      id="name"
-                      v-model="scriptTypeData.presence_penalty"
-                      type="number"
-                      min="0.00"
-                      max="1.00"
-                      step="0.01"
-                      class="input-table"
-                    >
-                    </b-form-input>
-                  </b-form-group>
-                  <b-form-group
-                    label-class="input-label"
-                    label="Best of (1-20)"
-                  >
-                    <b-form-input
-                      id="name"
-                      v-model="scriptTypeData.best_of"
-                      type="number"
-                      step="1"
-                      min="0"
-                      max="20"
-                      class="input-table"
-                    >
-                    </b-form-input>
-                  </b-form-group>
-                  <b-form-group
-                    label-class="input-label"
-                    label="Max Tokens (0 - 100)"
-                  >
-                    <b-form-input
-                      id="name"
-                      v-model="scriptTypeData.max_tokens"
-                      type="number"
-                      min="0"
-                      max="100"
-                      step="1"
-                      class="input-table"
-                    >
-                    </b-form-input>
-                  </b-form-group>
-                  <b-form-group
-                    label="Show Probabilities"
-                    label-class="input-label"
-                  >
-                    <b-form-select class="input-table"></b-form-select>
-                  </b-form-group>
-                </div>
-                <div class="col-6 py-3 pr-4">
-                  <div
-                    class="
-                      d-flex
-                      align-items-center
-                      justify-content-between
-                      mb-3
-                    "
-                  >
-                    <div class="title mb-0">User Input</div>
-
-                    <div class="d-flex">
-                      <b-form-checkbox
-                        v-model="scriptTypeData.tone"
-                        name="checkbox-tone"
-                        :value="1"
-                        class="check-text mr-4"
-                        :unchecked-value="0"
-                      >
-                        Tone
-                      </b-form-checkbox>
-                      <b-form-checkbox
-                        v-model="scriptTypeData.language"
-                        name="checkbox-language"
-                        :value="1"
-                        class="check-text"
-                        :unchecked-value="0"
-                      >
-                        Language
-                      </b-form-checkbox>
-                    </div>
-                  </div>
-
-                  <div
-                    draggable
-                    @dragstart="startDrag($event, index)"
-                    @drop="onDrop($event, index)"
-                    @dragover.prevent
-                    @dragenter.prevent
-                    v-for="(
-                      script_type_preset, index
-                    ) in scriptTypeData.script_type_presets"
-                    :key="index"
-                    class="input-box"
-                  >
-                    <div class="row">
-                      <div class="col-12">
-                        <b-form-group
-                          label-class="input-label"
-                          label="Question"
-                        >
-                          <b-form-input
-                            v-model="script_type_preset.question"
-                            type="text"
-                            class="input-table"
-                          >
-                          </b-form-input>
-                        </b-form-group>
-                      </div>
-                      <div class="col-8">
-                        <b-form-group label-class="input-label" label="Label">
-                          <b-form-input
-                            id="name"
-                            type="text"
-                            v-model="script_type_preset.label"
-                            class="input-table"
-                          >
-                          </b-form-input>
-                        </b-form-group>
-                      </div>
-                      <div class="col-4">
-                        <b-form-group
-                          label="Field Type"
-                          label-class="input-label"
-                        >
-                          <b-form-select
-                            class="input-table"
-                            v-model="script_type_preset.field_type"
-                            :options="fieldOptions"
-                          ></b-form-select>
-                        </b-form-group>
-                      </div>
-                    </div>
-                    <b-form-group
-                      label-class="input-label"
-                      label="Placeholder text"
-                      class="mb-0"
-                    >
+                    <b-form-group label-class="input-label" label="Prompt 1">
                       <b-form-input
-                        v-model="script_type_preset.placeholder"
-                        id="name"
+                        v-model="scriptTypeData.prompt_1"
                         type="text"
                         class="input-table"
                       >
                       </b-form-input>
                     </b-form-group>
-                    <div class="d-flex justify-content-end">
-                      <button
-                        @click="deleteInput($event, index)"
-                        class="btn btn-delete no-shadow"
+
+                    <b-form-group label-class="input-label" label="Prompt 2">
+                      <b-form-input
+                        v-model="scriptTypeData.prompt_2"
+                        type="text"
+                        class="input-table"
                       >
-                        Delete
+                      </b-form-input>
+                    </b-form-group>
+
+                    <b-form-group
+                      label="Engine"
+                      label-for="pwd"
+                      label-class="input-label"
+                    >
+                      <b-form-select
+                        class="input-table"
+                        v-model="scriptTypeData.engine"
+                        :options="endineOptions"
+                      ></b-form-select>
+                    </b-form-group>
+                    <b-form-group
+                      label-class="input-label"
+                      label="Response length (1-2048)"
+                    >
+                      <b-form-input id="name" type="text" class="input-table">
+                      </b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                      label-class="input-label"
+                      label="Temperature (0.00 - 1.00)"
+                    >
+                      <b-form-input
+                        id="name"
+                        v-model="scriptTypeData.temperature"
+                        type="number"
+                        min="0.00"
+                        max="1.00"
+                        step="0.01"
+                        class="input-table"
+                      >
+                      </b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                      label-class="input-label"
+                      label="Top P (0.00 - 1.00)"
+                    >
+                      <b-form-input
+                        id="name"
+                        v-model="scriptTypeData.top_p"
+                        type="number"
+                        min="0.00"
+                        max="1.00"
+                        step="0.01"
+                        class="input-table"
+                      >
+                      </b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                      label-class="input-label"
+                      label="Frequency Penalty (0.00 - 1.00)"
+                    >
+                      <b-form-input
+                        id="name"
+                        v-model="scriptTypeData.frequency_penalty"
+                        type="number"
+                        min="0.00"
+                        max="1.00"
+                        step="0.01"
+                        class="input-table"
+                      >
+                      </b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                      label-class="input-label"
+                      label="Presence Penalty (0.00 - 1.00)"
+                    >
+                      <b-form-input
+                        id="name"
+                        v-model="scriptTypeData.presence_penalty"
+                        type="number"
+                        min="0.00"
+                        max="1.00"
+                        step="0.01"
+                        class="input-table"
+                      >
+                      </b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                      label-class="input-label"
+                      label="Best of (1-20)"
+                    >
+                      <b-form-input
+                        id="name"
+                        v-model="scriptTypeData.best_of"
+                        type="number"
+                        step="1"
+                        min="0"
+                        max="20"
+                        class="input-table"
+                      >
+                      </b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                      label-class="input-label"
+                      label="Max Tokens (0 - 100)"
+                    >
+                      <b-form-input
+                        id="name"
+                        v-model="scriptTypeData.max_tokens"
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="1"
+                        class="input-table"
+                      >
+                      </b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                      label="Show Probabilities"
+                      label-class="input-label"
+                    >
+                      <b-form-select class="input-table"></b-form-select>
+                    </b-form-group>
+                  </div>
+                  <div class="col-6 py-3 pr-4">
+                    <div
+                      class="
+                        d-flex
+                        align-items-center
+                        justify-content-between
+                        mb-3
+                      "
+                    >
+                      <div class="title mb-0">User Input</div>
+
+                      <div class="d-flex">
+                        <b-form-checkbox
+                          v-model="scriptTypeData.tone"
+                          name="checkbox-tone"
+                          :value="1"
+                          class="check-text mr-4"
+                          :unchecked-value="0"
+                        >
+                          Tone
+                        </b-form-checkbox>
+                        <b-form-checkbox
+                          v-model="scriptTypeData.language"
+                          name="checkbox-language"
+                          :value="1"
+                          class="check-text"
+                          :unchecked-value="0"
+                        >
+                          Language
+                        </b-form-checkbox>
+                      </div>
+                    </div>
+
+                    <div
+                      draggable
+                      @dragstart="startDrag($event, index)"
+                      @drop="onDrop($event, index)"
+                      @dragover.prevent
+                      @dragenter.prevent
+                      v-for="(
+                        script_type_preset, index
+                      ) in scriptTypeData.script_type_presets"
+                      :key="index"
+                      class="input-box"
+                    >
+                      <div class="row">
+                        <div class="col-12">
+                          <b-form-group
+                            label-class="input-label"
+                            label="Question"
+                          >
+                            <b-form-input
+                              v-model="script_type_preset.question"
+                              type="text"
+                              class="input-table"
+                            >
+                            </b-form-input>
+                          </b-form-group>
+                        </div>
+                        <div class="col-8">
+                          <b-form-group label-class="input-label" label="Label">
+                            <b-form-input
+                              id="name"
+                              type="text"
+                              v-model="script_type_preset.label"
+                              class="input-table"
+                            >
+                            </b-form-input>
+                          </b-form-group>
+                        </div>
+                        <div class="col-4">
+                          <b-form-group
+                            label="Field Type"
+                            label-class="input-label"
+                          >
+                            <b-form-select
+                              class="input-table"
+                              v-model="script_type_preset.field_type"
+                              :options="fieldOptions"
+                            ></b-form-select>
+                          </b-form-group>
+                        </div>
+                      </div>
+                      <b-form-group
+                        label-class="input-label"
+                        label="Placeholder text"
+                        class="mb-0"
+                      >
+                        <b-form-input
+                          v-model="script_type_preset.placeholder"
+                          id="name"
+                          type="text"
+                          class="input-table"
+                        >
+                        </b-form-input>
+                      </b-form-group>
+                      <div class="d-flex justify-content-end">
+                        <button
+                          @click="deleteInput($event, index)"
+                          class="btn btn-delete no-shadow"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                      <button
+                        @click="addInput($event)"
+                        class="btn btn-add-input"
+                      >
+                        +
                       </button>
                     </div>
                   </div>
-                  <div class="d-flex justify-content-center">
-                    <button @click="addInput($event)" class="btn btn-add-input">
-                      +
-                    </button>
-                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>
@@ -700,7 +705,7 @@ export default {
   margin-bottom: 1rem;
   font-size: 0.85rem;
   font-weight: bold;
-  color: #474e56; 
+  color: #474e56;
 }
 
 .input-label {

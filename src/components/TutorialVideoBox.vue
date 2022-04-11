@@ -55,7 +55,7 @@ export default {
 }
 
 .vid-wrap .vid-info .title {
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: #79869d;
   margin-bottom: 0.6rem;
 }
@@ -68,7 +68,7 @@ export default {
 
 .vid-info a {
   color: #8338ec;
-  font-size: 0.8rem;
+  font-size: 1rem;
   text-decoration: none !important;
 }
 

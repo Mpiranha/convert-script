@@ -7,106 +7,107 @@
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
-        <div class="container scroll-content">
-          <div
-            class="
-              dashboard-top
-              d-flex
-              justify-content-between
-              align-items-center
-              mb-5
-            "
-          >
-            <h6 class="title">Users ({{ userLength }})</h6>
-            <div class="d-flex align-items-center">
-              <a
-                href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=Admin&export=UsersExport"
-                target="_blank"
-                class="btn btn-border-secondary no-shadow"
-                to="/agency/setup"
-              >
-                Export as CSV
-              </a>
-              <button
-                @click="clearField"
-                class="btn btn-create"
-                v-b-modal.modal-new-user
-              >
-                <span>+</span>
-                New User
-              </button>
+        <div class="scroll-content">
+          <div class="container">
+            <div
+              class="
+                dashboard-top
+                d-flex
+                justify-content-between
+                align-items-center
+                mb-5
+              "
+            >
+              <h6 class="title">Users ({{ userLength }})</h6>
+              <div class="d-flex align-items-center">
+                <a
+                  href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=Admin&export=UsersExport"
+                  target="_blank"
+                  class="btn btn-border-secondary no-shadow"
+                  to="/agency/setup"
+                >
+                  Export as CSV
+                </a>
+                <button
+                  @click="clearField"
+                  class="btn btn-create"
+                  v-b-modal.modal-new-user
+                >
+                  <span>+</span>
+                  New User
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div class="content-wrap set-min-h pt-4 pb-5">
-            <div class="search-form mb-2">
-              <button class="btn search-btn">
-                <i class="flaticon-loupe icons"></i>
-              </button>
-              <input
-                @input="searchKeyWord"
-                class="form-control no-shadow search-input"
-                type="text"
-                placeholder="Search"
-                v-model="searchKey"
-              />
-            </div>
-            <loader-modal
-              :loading-state="this.$store.state.loading"
-            ></loader-modal>
-            <div v-if="users.length === 0" class="no-data-info">
-              Created users will display here.
-            </div>
-            <table v-else class="table table-custom">
-              <thead>
-                <tr>
-                  <th>Email</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Status</th>
-                  <th>Plan</th>
-                  <th>Registration Date</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody v-if="searchResult.length > 0">
-                <tr v-for="result in searchResult" :key="result.id">
-                  <td scope="row">{{ result.email }}</td>
-                  <td class="text-left">{{ result.first_name }}</td>
-                  <td>{{ result.last_name }}</td>
-                  <td>
-                    <label class="switch mb-0">
-                      <input :checked="result.active" type="checkbox" />
-                      <span class="slider round"></span>
-                    </label>
-                  </td>
-                  <td>
-                    <div class="d-flex">
-                      <span
-                        class="plan-types"
-                        v-for="(plan, index) in result.plan"
-                        :key="index"
-                        >{{ plan }}
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    {{ formatDate(result.created_at) }}
-                  </td>
-                  <td>
-                    <dropdown-tool
-                      @edit-clicked="
-                        openEditModal(result.id, {
-                          first_name: result.first_name,
-                          last_name: result.last_name,
-                          role: result.role,
-                          email: result.email,
-                        })
-                      "
-                      @delete-proceed="deleteUser(result.id)"
-                      delete-what="User"
-                    >
-                      <!-- <template v-slot:secondary>
+            <div class="content-wrap set-min-h pt-4 pb-5">
+              <div class="search-form mb-2">
+                <button class="btn search-btn">
+                  <i class="flaticon-loupe icons"></i>
+                </button>
+                <input
+                  @input="searchKeyWord"
+                  class="form-control no-shadow search-input"
+                  type="text"
+                  placeholder="Search"
+                  v-model="searchKey"
+                />
+              </div>
+              <loader-modal
+                :loading-state="this.$store.state.loading"
+              ></loader-modal>
+              <div v-if="users.length === 0" class="no-data-info">
+                Created users will display here.
+              </div>
+              <table v-else class="table table-custom">
+                <thead>
+                  <tr>
+                    <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Status</th>
+                    <th>Plan</th>
+                    <th>Registration Date</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody v-if="searchResult.length > 0">
+                  <tr v-for="result in searchResult" :key="result.id">
+                    <td scope="row">{{ result.email }}</td>
+                    <td class="text-left">{{ result.first_name }}</td>
+                    <td>{{ result.last_name }}</td>
+                    <td>
+                      <label class="switch mb-0">
+                        <input :checked="result.active" type="checkbox" />
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <div class="d-flex">
+                        <span
+                          class="plan-types"
+                          v-for="(plan, index) in result.plan"
+                          :key="index"
+                          >{{ plan }}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      {{ formatDate(result.created_at) }}
+                    </td>
+                    <td>
+                      <dropdown-tool
+                        @edit-clicked="
+                          openEditModal(result.id, {
+                            first_name: result.first_name,
+                            last_name: result.last_name,
+                            role: result.role,
+                            email: result.email,
+                          })
+                        "
+                        @delete-proceed="deleteUser(result.id)"
+                        delete-what="User"
+                      >
+                        <!-- <template v-slot:secondary>
                         <b-dropdown-item
                           v-b-modal.modal-campaign
                           @click="getCurrent(user.name)"
@@ -119,48 +120,48 @@
                           Campaign
                         </b-dropdown-item>
                       </template> -->
-                    </dropdown-tool>
-                  </td>
-                </tr>
-              </tbody>
-              <tbody v-else-if="users && searchKey.length < 1">
-                <tr v-for="user in users" :key="user.id">
-                  <td scope="row">{{ user.email }}</td>
-                  <td class="text-left">{{ user.first_name }}</td>
-                  <td>{{ user.last_name }}</td>
-                  <td>
-                    <label class="switch mb-0">
-                      <input :checked="user.active" type="checkbox" />
-                      <span class="slider round"></span>
-                    </label>
-                  </td>
-                  <td>
-                    <div class="d-flex">
-                      <span
-                        class="plan-types"
-                        v-for="(plan, index) in user.plan"
-                        :key="index"
-                        >{{ plan }}
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    {{ formatDate(user.created_at) }}
-                  </td>
-                  <td>
-                    <dropdown-tool
-                      @edit-clicked="
-                        openEditModal(user.id, {
-                          first_name: user.first_name,
-                          last_name: user.last_name,
-                          role: user.role,
-                          email: user.email,
-                        })
-                      "
-                      @delete-proceed="deleteUser(user.id)"
-                      delete-what="User"
-                    >
-                      <!-- <template v-slot:secondary>
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody v-else-if="users && searchKey.length < 1">
+                  <tr v-for="user in users" :key="user.id">
+                    <td scope="row">{{ user.email }}</td>
+                    <td class="text-left">{{ user.first_name }}</td>
+                    <td>{{ user.last_name }}</td>
+                    <td>
+                      <label class="switch mb-0">
+                        <input :checked="user.active" type="checkbox" />
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <div class="d-flex">
+                        <span
+                          class="plan-types"
+                          v-for="(plan, index) in user.plan"
+                          :key="index"
+                          >{{ plan }}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      {{ formatDate(user.created_at) }}
+                    </td>
+                    <td>
+                      <dropdown-tool
+                        @edit-clicked="
+                          openEditModal(user.id, {
+                            first_name: user.first_name,
+                            last_name: user.last_name,
+                            role: user.role,
+                            email: user.email,
+                          })
+                        "
+                        @delete-proceed="deleteUser(user.id)"
+                        delete-what="User"
+                      >
+                        <!-- <template v-slot:secondary>
                         <b-dropdown-item
                           v-b-modal.modal-campaign
                           @click="getCurrent(user.name)"
@@ -173,24 +174,25 @@
                           Campaign
                         </b-dropdown-item>
                       </template> -->
-                    </dropdown-tool>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="d-flex justify-content-center">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="userLength"
-              :per-page="perPage"
-              aria-controls="my-table"
-              size="sm"
-              :hide-goto-end-buttons="true"
-              prev-text="<"
-              next-text=">"
-              @change="handlePageChange"
-            ></b-pagination>
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="d-flex justify-content-center">
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="userLength"
+                :per-page="perPage"
+                aria-controls="my-table"
+                size="sm"
+                :hide-goto-end-buttons="true"
+                prev-text="<"
+                next-text=">"
+                @change="handlePageChange"
+              ></b-pagination>
+            </div>
           </div>
         </div>
       </div>
@@ -304,7 +306,7 @@ export default {
     return {
       searchKey: "",
       searchResult: [],
-      perPage: 5,
+      perPage: 20,
       currentPage: 1,
       users: [],
       userLength: 0,

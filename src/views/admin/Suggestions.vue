@@ -7,7 +7,8 @@
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
-        <div class="container scroll-content">
+         <div class="scroll-content">
+        <div class="container">
           <div
             class="
               dashboard-top
@@ -152,6 +153,7 @@
             ></b-pagination>
           </div>
         </div>
+         </div>
       </div>
     </div>
   </div>
@@ -174,7 +176,7 @@ export default {
     return {
       searchKey: "",
       searchResult: [],
-      perPage: 5,
+      perPage: 20,
       currentPage: 1,
       suggestionsLength: 0,
       suggestions: [],
