@@ -1,5 +1,5 @@
 <template>
-  <div class="col-4">
+  <div class="col-6">
     <div class="vid-wrap">
       <iframe
         :src="link"
@@ -62,7 +62,7 @@ export default {
 
 .vid-wrap iframe {
   width: 100%;
-  height: 150px;
+  height: 190px;
   border-radius: 0.4rem 0.4rem 0 0;
 }
 
