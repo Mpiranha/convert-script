@@ -1132,7 +1132,7 @@ input:checked+.slider:before {
 
 .loader-modal {
     position: fixed;
-    top: 65px;
+    top: 60px;
     left: 215px;
     width: calc(100% - 215px);
     height: calc(100% - 60px);
