@@ -2,7 +2,10 @@
   <div class="script-content-wrap">
     <div class="box-head">
       <div class="left-section">
-        <button @click="saveAction" class="d-flex align-items-center no-shadow btn btn-save-to">
+        <button
+          @click="saveAction"
+          class="d-flex align-items-center no-shadow btn btn-save-to"
+        >
           <img
             class="icon-save"
             src="@/assets/icons/convert-icon/save 1.svg"
@@ -53,9 +56,11 @@
         />
       </button>
       <textarea
+        ref="input"
         type="hidden"
         id="text--copy"
-        :value="scriptContent ? scriptContent : ''"
+        class="text--copy"
+        :value="scriptContentRaw ? scriptContentRaw : ''"
       ></textarea>
     </div>
   </div>
@@ -68,6 +73,10 @@ export default {
   mixins: [alertMixin],
   props: {
     scriptContent: {
+      type: String,
+      required: true,
+    },
+    scriptContentRaw: {
       type: String,
       required: true,
     },
@@ -93,7 +102,8 @@ export default {
   },
   methods: {
     copyText() {
-      let testingCodeToCopy = document.querySelector("#text--copy");
+      console.log(this.$refs.input.value);
+      let testingCodeToCopy = this.$refs.input;
       testingCodeToCopy.setAttribute("type", "text"); // 不是 hidden 才能複製
       testingCodeToCopy.select();
 

@@ -175,6 +175,7 @@
                           :script-content="
                             formatScript(script.scriptResponses[0].text)
                           "
+                          :script-content-raw="script.scriptResponses[0].text"
                           @favorite-clicked="addRemoveScriptFavorite(script.id)"
                           @edit-clicked="
                             openEditModal(
@@ -185,15 +186,7 @@
                           :export-link="`https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${script.id}`"
                         >
                         </script-box>
-                        <!-- <textarea
-                        type="hidden"
-                        id="text--copy"
-                        :value="
-                          generatedScript
-                            ? script.scriptResponses[0].text
-                            : ''
-                        "
-                      ></textarea> -->
+                      
                       </div>
                       <div v-else class="empty-script">
                         Generated Script will display here.
