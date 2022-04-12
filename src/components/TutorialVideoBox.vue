@@ -62,7 +62,7 @@ export default {
 
 .vid-wrap iframe {
   width: 100%;
-  height: 190px;
+  height: 300px;
   border-radius: 0.4rem 0.4rem 0 0;
 }
 

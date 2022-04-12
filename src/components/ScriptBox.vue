@@ -175,8 +175,8 @@ export default {
 .script-content-wrap .script-content {
   font-size: 1.1rem;
   margin-bottom: 1.3rem;
-  line-height: 20px;
-  text-align: justify;
+  line-height: 1.6;
+  text-align: left;
 }
 
 .script-footer {

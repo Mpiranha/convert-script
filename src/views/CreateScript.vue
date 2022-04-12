@@ -607,7 +607,7 @@ export default {
 
 <style>
 .script-form-wrap {
-  padding: 2.5rem 2rem 1rem 1rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   height: calc(100% - 24px);
