@@ -184,7 +184,7 @@
                           target="_blank"
                           class="btn btn-export-all"
                         >
-                          Export Script
+                          Export Copy
                         </a>
                       </div>
                     </div>
