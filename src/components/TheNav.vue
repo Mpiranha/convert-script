@@ -147,6 +147,7 @@ export default {
   align-items: center;
   padding: 0.7rem 0.7rem;
   box-shadow: 1px 1px 3px #a69f9f;
+  z-index: 1;
   position: relative;
 }
 
@@ -202,7 +203,7 @@ export default {
 }
 
 #HW_badge.HW_visible {
-background-color: #8338ec !important;
+  background-color: #8338ec !important;
 }
 
 .HW_frame_cont {

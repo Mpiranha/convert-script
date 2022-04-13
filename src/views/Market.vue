@@ -7,7 +7,7 @@
       ></sidebar>
       <div class="content-section">
         <navbar :remove-content="false"></navbar>
-        <div class="scroll-content">
+        <div ref="scrollContent" class="scroll-content">
           <div class="container">
             <div
               class="
@@ -423,6 +423,7 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.currentPage = value;
       this.getMarketData();
+     this.$refs.scrollContent.scroll(0, 0);
       console.log("Value: " + value);
     },
     getMarketData() {
