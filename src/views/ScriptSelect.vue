@@ -145,7 +145,7 @@ export default {
       searchKey: "",
       searchResult: [],
       scriptTypes: [],
-      categoryOptions: [{ value: null, text: "Select a Category" }],
+      categoryOptions: [{ value: null, text: "All Categories (0)" }],
       category: null,
     };
   },
@@ -177,10 +177,10 @@ export default {
       this.$store
         .dispatch("getScriptTypes")
         .then((res) => {
-          this.categoryOptions[0] = {
+          this.$set(this.categoryOptions, 0, {
             value: null,
             text: "All Categories (" + res.data.data.length + ")",
-          };
+          });
           this.scriptTypes = res.data.data;
 
           console.log(res.data);

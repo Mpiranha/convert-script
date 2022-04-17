@@ -1014,7 +1014,7 @@ input:checked+.slider:before {
     border-bottom: 2px solid #f6f8f9;
     vertical-align: middle;
     font-size: 0.9rem;
-    padding: 0.7rem 0.5rem;
+    padding: 0.7rem 0.5rem 0.7rem 1rem;
 }
 
 .table-section tr {

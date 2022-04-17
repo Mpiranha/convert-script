@@ -189,17 +189,13 @@
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                        <a
-                          :href="
-                            activeScript
-                              ? `https://convertscript.test/api/v1/export/text/script/${activeScript.id}`
-                              : '#'
-                          "
+                        <button
+                          @click="exportScript(activeScript.id)"
                           target="_blank"
                           class="btn btn-export-all"
                         >
                           Export Copy
-                        </a>
+                        </button>
                       </div>
                     </div>
                     <div class="content-display" v-if="activeScript">
@@ -391,10 +387,10 @@ export default {
     abbrScript(text) {
       return text.slice(0, 125) + "...";
     },
-    exportScripts() {
+    exportScript(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("exportScripts")
+        .dispatch("exportOneScript", id)
         .then((res) => {
           // this.users = res.data.data;
           console.log(res.data.data);

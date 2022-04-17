@@ -231,7 +231,7 @@
           class="close-modal"
           >Go back</b-button
         >
-        <b-button class="save-modal">Save to</b-button>
+        <b-button @click="editScript(editId, content)" class="save-modal">Save to</b-button>
       </div>
     </b-modal>
     <b-modal
@@ -374,6 +374,29 @@ export default {
         });
 
       // this.getCampaign();
+    },
+     editScript(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modal-edit-script");
+      this.$store
+        .dispatch("editScript", {
+          id: id,
+          data: { text: this.content },
+        })
+        .then(() => {
+          this.error = null;
+          this.activeScript = null;
+          this.getScripts();
+          this.makeToast("success", "Script edited successfully");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
+          // this.error = error;
+        });
     },
     setActiveScript(data) {
       this.activeScript = data;

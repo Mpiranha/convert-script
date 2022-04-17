@@ -286,7 +286,7 @@
           class="close-modal"
           >Go back</b-button
         >
-        <b-button class="save-modal">Save to</b-button>
+        <b-button @click="editScript(editId, content)" class="save-modal">Save</b-button>
       </div>
     </b-modal>
 
@@ -516,15 +516,12 @@ export default {
       this.$store
         .dispatch("editScript", {
           id: id,
-          data: {
-            content: this.content,
-            script_type_id: 1,
-          },
+          data: { text: this.content },
         })
-        .then((res) => {
+        .then(() => {
           this.error = null;
-          console.log(res.data);
-          this.getFavorites();
+          this.activeScript = null;
+          this.getScripts();
           this.makeToast("success", "Script edited successfully");
           this.$store.commit("updateLoadState", false);
         })
