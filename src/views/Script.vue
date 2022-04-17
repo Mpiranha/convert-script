@@ -113,7 +113,7 @@
                           v-for="script in scripts"
                           :key="script.id"
                         >
-                          <td scope="row">
+                          <!-- <td scope="row">
                             <div class="control-order-tool">
                               <button class="btn mb-2">
                                 <i
@@ -126,7 +126,7 @@
                                 ></i>
                               </button>
                             </div>
-                          </td>
+                          </td> -->
                           <td>
                             <div class="script-type">
                               {{ script.script_type_name }}
@@ -154,6 +154,20 @@
                 <div class="col-6 h-100">
                   <div class="d-flex flex-column h-100">
                     <div class="section-head">
+                      <button
+                        class="
+                          d-flex
+                          align-items-center
+                          no-shadow
+                          btn btn-save-to
+                        "
+                      >
+                        <img
+                          src="/img/save 1.81c8ddc5.svg"
+                          alt=""
+                          class="icon-save mr-2"
+                        /><span> Save to </span>
+                      </button>
                       <div class="section-head-right d-flex align-items-center">
                         <div class="fav-star" @click="toggleFavourite">
                           <img
@@ -195,7 +209,7 @@
                       Select a Script to Preview
                     </div>
                     <div class="section-footer">
-                      <button
+                      <!-- <button
                         class="btn no-shadow btn-share"
                         v-b-modal.modal-send-script
                       >
@@ -204,7 +218,7 @@
                           src="@/assets/icons/convert-icon/send.svg"
                           alt=""
                         />
-                      </button>
+                      </button> -->
                       <button @click="copyText" class="btn no-shadow btn-copy">
                         <img
                           class="foot-icons"
@@ -430,15 +444,15 @@ export default {
     },
     editScript(id) {
       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-campaign");
+      this.$bvModal.hide("modal-edit-script");
       this.$store
         .dispatch("editScript", {
           id: id,
-          data: { content: this.content, script_type_id: id },
+          data: { text: this.content },
         })
-        .then((res) => {
+        .then(() => {
           this.error = null;
-          console.log(res.data);
+          this.activeScript = null;
           this.getScripts();
           this.makeToast("success", "Script edited successfully");
           this.$store.commit("updateLoadState", false);

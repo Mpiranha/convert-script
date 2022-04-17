@@ -110,7 +110,7 @@
                           v-for="script in scripts"
                           :key="script.id"
                         >
-                          <td scope="row">
+                          <!-- <td scope="row">
                             <div class="control-order-tool">
                               <button class="btn mb-2">
                                 <i
@@ -123,12 +123,12 @@
                                 ></i>
                               </button>
                             </div>
-                          </td>
+                          </td> -->
                           <td>
                             <div class="script-type">
                               {{
-                                script.response.script_type
-                                  ? script.response.script_type
+                                script.response.script_type_name
+                                  ? script.response.script_type_name
                                   : "NIL"
                               }}
                             </div>
@@ -151,6 +151,7 @@
                                   v-b-modal.add-client
                                   link-class="drop-link"
                                   href="#"
+                                  @click="addRemoveScriptFavorite(script.response.id)"
                                 >
                                   <img
                                     class="drop-img-icon"
@@ -170,6 +171,20 @@
                 <div class="col-6">
                   <div class="d-flex flex-column h-100">
                     <div class="section-head">
+                       <button
+                        class="
+                          d-flex
+                          align-items-center
+                          no-shadow
+                          btn btn-save-to
+                        "
+                      >
+                        <img
+                          src="/img/save 1.81c8ddc5.svg"
+                          alt=""
+                          class="icon-save mr-2"
+                        /><span> Save to </span>
+                      </button>
                       <div class="section-head-right d-flex align-items-center">
                         <div class="fav-star" @click="toggleFavourite">
                           <img
@@ -213,7 +228,7 @@
                       Select a Script to Preview
                     </div>
                     <div class="section-footer">
-                      <button
+                      <!-- <button
                         class="btn no-shadow btn-share"
                         v-b-modal.modal-send-script
                       >
@@ -222,7 +237,7 @@
                           src="@/assets/icons/convert-icon/send.svg"
                           alt=""
                         />
-                      </button>
+                      </button> -->
                       <button @click="copyText" class="btn no-shadow btn-copy">
                         <img
                           class="foot-icons"
@@ -350,12 +365,41 @@ export default {
         modules: {
           toolbar: {
             container: [
-              [{ header: [1, 2, 3, 4, 5, 6, false] }],
+              [
+                {
+                  header: [1, 2, 3, 4, 5, 6, false],
+                },
+              ],
               ["bold", "italic", "underline", "strike"], // toggled buttons
-              [{ list: "ordered" }, { list: "bullet" }],
-              [{ script: "sub" }, { script: "super" }], // superscript/subscript
-              [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-              [{ align: [] }],
+              [
+                {
+                  list: "ordered",
+                },
+                {
+                  list: "bullet",
+                },
+              ],
+              [
+                {
+                  script: "sub",
+                },
+                {
+                  script: "super",
+                },
+              ], // superscript/subscript
+              [
+                {
+                  color: [],
+                },
+                {
+                  background: [],
+                },
+              ], // dropdown with defaults from theme
+              [
+                {
+                  align: [],
+                },
+              ],
 
               ["clean"],
             ],
@@ -421,10 +465,10 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    addRemoveScriptFavorite() {
+    addRemoveScriptFavorite(id) {
       this.$store
         .dispatch("addRemoveFavorite", {
-          script_response_id: this.activeScript.response.id,
+          script_response_id: id ? id : this.activeScript.response.id,
         })
         .then((res) => {
           //console.log(res.data.data.message);
@@ -472,7 +516,10 @@ export default {
       this.$store
         .dispatch("editScript", {
           id: id,
-          data: { content: this.content, script_type_id: 1 },
+          data: {
+            content: this.content,
+            script_type_id: 1,
+          },
         })
         .then((res) => {
           this.error = null;

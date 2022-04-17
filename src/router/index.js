@@ -55,417 +55,466 @@ import Keyword from '@/views/admin/Keyword'
 Vue.use(VueRouter)
 
 const routes = [{
-    path: '/login',
-    name: 'Login',
-    component: Login
-  },
-  {
-    path: '/register',
-    name: 'Signup',
-    component: Signup
-  },
-  {
-    path: '/reset-password',
-    name: 'ForgotPassword',
-    component: ForgotPassword
-  },
-  {
-    path: '/verify',
-    name: 'Verify',
-    component: Verify,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/',
-    name: 'Dashboard',
-    component: Dashboard,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/tutorial',
-    name: 'Tutorial',
-    component: Tutorial,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/billing',
-    name: 'Billing',
-    component: Billing,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/bonus',
-    name: 'Bonus',
-    component: Bonus,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/market',
-    name: 'Market',
-    component: Market,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/agency',
-    name: 'Agency',
-    component: Agency,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/agency/setup',
-    name: 'AgencySetup',
-    component: AgencySetup,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/reseller',
-    name: 'Reseller',
-    component: Reseller,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/campaign',
-    name: 'Campaign',
-    component: Campaign,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/campaign/:id',
-    name: 'CampaignScript',
-    component: CampaignScript,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/campaign/:id/script/select',
-    name: 'CampaignScriptSelect',
-    component: ScriptSelect,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/campaign/:campaignId/script/new/:id',
-    name: 'CampaignCreateScript',
-    component: CreateScript,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/script/select',
-    name: 'ScriptSelect',
-    component: ScriptSelect,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/script/new/:id',
-    name: 'CreateScript',
-    component: CreateScript,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/scripts',
-    name: 'Scripts',
-    component: Script,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/favourites',
-    name: 'Favourites',
-    component: Favourites,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  // {
-  //   path: '/presets',
-  //   name: 'Preset',
-  //   component: Presets,
-  //   meta: {
-  //     requiresAuth: true,
-  //     adminAuth: false
-  //   }
-  // },
-  // {
-  //   path: '/presets/create',
-  //   name: 'CreatePreset',
-  //   component: PresetAdd,
-  //   meta: {
-  //     requiresAuth: true,
-  //     adminAuth: false
-  //   }
-  // },
-  {
-    path: '/integration',
-    name: 'Integration',
-    component: Integration,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/integration/new',
-    name: 'IntegrationNew',
-    component: IntegrationNew,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/settings',
-    name: 'Settings',
-    component: Settings,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  {
-    path: '/404',
-    name: 'NotFound',
-    component: NotFound,
-    meta: {
-      requiresAuth: false
-    }
-  },
-  {
-    path: '/projects',
-    name: 'Projects',
-    component: Projects,
-    meta: {
-      requiresAuth: true,
-      adminAuth: false
-    }
-  },
-  // Admin End points
-  {
-    path: '/admin',
-    name: 'Stat',
-    component: Stat,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/users',
-    name: 'Users',
-    component: Users,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/transactions',
-    name: 'Transactions',
-    component: Transaction,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/script/type',
-    name: 'ScriptTypes',
-    component: ScriptType,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/category',
-    name: 'Category',
-    component: Category,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/languages',
-    name: 'Languages',
-    component: Language,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/keywords',
-    name: 'Keywords',
-    component: Keyword,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/tone',
-    name: 'Tone',
-    component: Tone,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/script/type/:id/input',
-    name: 'ScriptTypesInput',
-    component: ScriptInput,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/script/type/input',
-    name: 'ScriptTypesCreate',
-    component: ScriptInput,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/scripts/flagged',
-    name: 'FlaggedScript',
-    component: ScriptFlagged,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/roles',
-    name: 'RolesPermissions',
-    component: RolesPermissions,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/roles/:id/permissions',
-    name: 'SetPermission',
-    component: SetPermission,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/plans',
-    name: 'Plans',
-    component: Plans,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
+  path: '/login',
+  name: 'Login',
+  component: Login,
+  meta: {
+    title: 'OneCopy AI Writer - Login'
+  }
+},
+{
+  path: '/register',
+  name: 'Signup',
+  component: Signup,
+  meta: {
+    title: 'OneCopy AI Writer - Sign Up'
+  }
+},
+{
+  path: '/reset-password',
+  name: 'ForgotPassword',
+  component: ForgotPassword,
+  meta: {
+    title: 'OneCopy AI Writer - Password Reset'
+  }
+},
+{
+  path: '/verify',
+  name: 'Verify',
+  component: Verify,
+  meta: {
+    title: 'OneCopy AI Writer - Verify',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/',
+  name: 'Dashboard',
+  component: Dashboard,
+  meta: {
+    title: 'Dashboard',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/tutorial',
+  name: 'Tutorial',
+  component: Tutorial,
+  meta: {
+    title: 'Tutorials',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/billing',
+  name: 'Billing',
+  component: Billing,
+  meta: {
+    title: 'Billings',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/bonus',
+  name: 'Bonus',
+  component: Bonus,
+  meta: {
+    title: 'Bonuses',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/market',
+  name: 'Market',
+  component: Market,
+  meta: {
+    title: 'Market Place',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/agency',
+  name: 'Agency',
+  component: Agency,
+  meta: {
+    title: 'Agencies',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/agency/setup',
+  name: 'AgencySetup',
+  component: AgencySetup,
+  meta: {
+    title: 'Agency - Setup',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/reseller',
+  name: 'Reseller',
+  component: Reseller,
+  meta: {
+    title: 'Reseller',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/campaign',
+  name: 'Campaign',
+  component: Campaign,
+  meta: {
+    title: 'Campaign',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/campaign/:id',
+  name: 'CampaignScript',
+  component: CampaignScript,
+  meta: {
+    title: 'Campaign - Copies',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/campaign/:id/script/select',
+  name: 'CampaignScriptSelect',
+  component: ScriptSelect,
+  meta: {
+    title: 'Campaign - Copy Type Select',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/campaign/:campaignId/script/new/:id',
+  name: 'CampaignCreateScript',
+  component: CreateScript,
+  meta: {
+    title: 'Campaign - Generate Copy',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/script/select',
+  name: 'ScriptSelect',
+  component: ScriptSelect,
+  meta: {
+    title: 'Copy Type Select',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/script/new/:id',
+  name: 'CreateScript',
+  component: CreateScript,
+  meta: {
+    title: 'Generate Copy',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/scripts',
+  name: 'Scripts',
+  component: Script,
+  meta: {
+    title: 'All Copies',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/favourites',
+  name: 'Favourites',
+  component: Favourites,
+  meta: {
+    title: 'Favorites',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+// {
+//   path: '/presets',
+//   name: 'Preset',
+//   component: Presets,
+//   meta: {
+//     requiresAuth: true,
+//     adminAuth: false
+//   }
+// },
+// {
+//   path: '/presets/create',
+//   name: 'CreatePreset',
+//   component: PresetAdd,
+//   meta: {
+//     requiresAuth: true,
+//     adminAuth: false
+//   }
+// },
+{
+  path: '/integration',
+  name: 'Integration',
+  component: Integration,
+  meta: {
+    title: 'Integration',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/integration/new',
+  name: 'IntegrationNew',
+  component: IntegrationNew,
+  meta: {
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/settings',
+  name: 'Settings',
+  component: Settings,
+  meta: {
+    title: 'Account Settings',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/404',
+  name: 'NotFound',
+  component: NotFound,
+  meta: {
+    title: '404',
+    requiresAuth: false
+  }
+},
+{
+  path: '/projects',
+  name: 'Projects',
+  component: Projects,
+  meta: {
+    title: 'Pojects',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+// Admin End points
+{
+  path: '/admin',
+  name: 'Stat',
+  component: Stat,
+  meta: {
+    title: 'Admin - Dashbord',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/users',
+  name: 'Users',
+  component: Users,
+  meta: {
+    title: 'Admin - All Users',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/transactions',
+  name: 'Transactions',
+  component: Transaction,
+  meta: {
+    title: 'Admin - Transaction',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/script/type',
+  name: 'ScriptTypes',
+  component: ScriptType,
+  meta: {
+    title: 'Script Type',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/category',
+  name: 'Category',
+  component: Category,
+  meta: {
+    title: 'Categories',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/languages',
+  name: 'Languages',
+  component: Language,
+  meta: {
+    title: 'Languages',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/keywords',
+  name: 'Keywords',
+  component: Keyword,
+  meta: {
+    title: 'Keyword',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/tone',
+  name: 'Tone',
+  component: Tone,
+  meta: {
+    title: 'Tone',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/script/type/:id/input',
+  name: 'ScriptTypesInput',
+  component: ScriptInput,
+  meta: {
+    title: 'Script Type - Setup',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/script/type/input',
+  name: 'ScriptTypesCreate',
+  component: ScriptInput,
+  meta: {
+    title: 'Script Type - Setup',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/scripts/flagged',
+  name: 'FlaggedScript',
+  component: ScriptFlagged,
+  meta: {
+    title: 'Flagged Scripts',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/roles',
+  name: 'RolesPermissions',
+  component: RolesPermissions,
+  meta: {
+    title: 'Permissions',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/roles/:id/permissions',
+  name: 'SetPermission',
+  component: SetPermission,
+  meta: {
+    title: 'Roles - Permissions',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/plans',
+  name: 'Plans',
+  component: Plans,
+  meta: {
+    title: 'Plans',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
 
-  {
-    path: '/admin/integration',
-    name: 'IntegrationAdmin',
-    component: IntegrationAdmin,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/suggestions',
-    name: 'Suggestions',
-    component: Suggestions,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/config',
-    name: 'Configuration',
-    component: Configuration,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/bonuses',
-    name: 'Bonuses',
-    component: Bonuses,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/tutorials',
-    name: 'Tutorials',
-    component: Tutorials,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
-  {
-    path: '/admin/agency/files',
-    name: 'AgencyFile',
-    component: AgencyFile,
-    meta: {
-      requiresAuth: true,
-      adminAuth: true
-    }
-  },
+{
+  path: '/admin/integration',
+  name: 'IntegrationAdmin',
+  component: IntegrationAdmin,
+  meta: {
+    title: 'Integration',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/suggestions',
+  name: 'Suggestions',
+  component: Suggestions,
+  meta: {
+    title: 'Suggestions',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/config',
+  name: 'Configuration',
+  component: Configuration,
+  meta: {
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/bonuses',
+  name: 'Bonuses',
+  component: Bonuses,
+  meta: {
+    title: 'Admin - Bonuses',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/tutorials',
+  name: 'Tutorials',
+  component: Tutorials,
+  meta: {
+    title: 'Admin - Tutorials',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/agency/files',
+  name: 'AgencyFile',
+  component: AgencyFile,
+  meta: {
+    title: 'Agency - Files',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
 
 
   // {
@@ -497,10 +546,14 @@ const parseJwt = (token) => {
 
 
 router.beforeEach((to, from, next) => {
-  console.log(window.location.hash.split('#')[1])
+
   const loginpath = window.location.hash.split('#')[1];
 
-  console.log(to);
+  const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
+
+  if (nearestWithTitle) {
+    document.title = nearestWithTitle.meta.title;
+  }
 
   if (to.matched.length > 0) {
 

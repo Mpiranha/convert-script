@@ -20,6 +20,9 @@
 
 body {
     font-family: jost, Roboto !important;
+    scrollbar-color: #8338ec #f1f1f1;
+    scrollbar-width: 10px;
+    /* scrollbar */
 }
 
 .flex-main-wrap {
@@ -1064,12 +1067,20 @@ input:checked+.slider:before {
     font-size: 1.1rem;
     padding: 1.3rem 1.5rem 0 0;
     /* text-align: justify; */
-    line-height: 22px;
+    text-align: left;
+    line-height: 1.6;
     min-height: 100px;
     height: calc(100% - (59px + 34px));
     overflow-y: auto;
 
 }
+
+
+.ql-container {
+    font-size: 1.1rem !important;
+    font-family: jost, Roboto !important;
+}
+
 
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -1316,7 +1327,7 @@ input:checked+.slider:before {
     cursor: pointer;
 }
 
-.script-table tbody tr td:nth-child(2) {
+.script-table tbody tr td:nth-child(1) {
     min-width: 264px;
 }
 
@@ -1391,6 +1402,18 @@ input:checked+.slider:before {
 
 .select-script-forms .search-form .search-btn {
     padding: 0.05rem 0.75rem;
+}
+
+.btn-save-to {
+    background-color: transparent;
+    font-size: 0.8rem !important;
+    display: flex;
+    align-items: center;
+    padding-left: 0 !important;
+}
+
+.icon-save {
+    width: 1rem;
 }
 
 @media screen and (min-width: 1367px) {

@@ -31,7 +31,7 @@
                 alt=""
               />
             </div>
-            <a target="_blank" :href="exportLink">Export</a>
+            <a class="export-link" target="_blank" :href="exportLink">Export</a>
           </div>
         </div>
       </div>
@@ -146,10 +146,15 @@ export default {
   padding: 1rem 1rem 0.5rem 1rem;
 }
 
+.export-link {
+	margin-bottom: -0.1rem;
+
+}
+
 .box-head {
   display: flex;
   justify-content: space-between;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   margin-bottom: 0.7rem;
   align-items: center;
 }
@@ -161,6 +166,7 @@ export default {
 
 .box-head .icon-save {
   margin-right: 0.3rem;
+  width: 1.1rem;
 }
 
 .box-head a {
@@ -192,6 +198,13 @@ export default {
 }
 
 .btn-save-to {
-  background-color: transparent;
+  color: inherit;
+  font-size: inherit;
 }
+
+.btn-save-to:hover {
+  color: inherit;
+}
+
+
 </style>

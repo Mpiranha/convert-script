@@ -104,6 +104,7 @@
                             v-b-modal.add-client
                             link-class="drop-link"
                             href="#"
+                            @click="getCampaignId(result.id)"
                           >
                             <img
                               class="drop-img-icon"
@@ -146,6 +147,7 @@
                             v-b-modal.modal-add-client
                             link-class="drop-link"
                             href="#"
+                            @click="getCampaignId(campaign.id)"
                           >
                             <img
                               class="drop-img-icon"
@@ -188,6 +190,7 @@
                             v-b-modal.modal-add-client
                             link-class="drop-link"
                             href="#"
+                             @click="getCampaignId(campaign.id)"
                           >
                             <img
                               class="drop-img-icon"
@@ -272,7 +275,7 @@
         <b-button @click="$bvModal.hide('modal-add-client')" class="close-modal"
           >Close</b-button
         >
-        <b-button class="save-modal">Add</b-button>
+        <b-button @click="addToClient(campaignIdToAdd)" class="save-modal">Add</b-button>
       </div>
     </b-modal>
   </div>
@@ -298,6 +301,7 @@ export default {
       searchKey: "",
       searchResult: [],
       client: null,
+      campaignIdToAdd: null,
       clientOptions: [{ value: null, text: "Select a Client" }],
       campaignName: "",
       accessOptions: [{ value: null, text: "Select Plans" }],
@@ -332,6 +336,9 @@ export default {
           //this.loading = false;
           this.$store.commit("updateLoadState", false);
         });
+    },
+    getCampaignId(id) {
+      this.campaignIdToAdd = id;
     },
     getCampaign() {
       this.$store.commit("updateLoadState", true);
@@ -417,6 +424,30 @@ export default {
         });
 
       // this.getCampaign();
+    },
+
+    addToClient(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modal-add-client");
+      this.$store
+        .dispatch("addCampaignToAgency", {
+          id: id,
+          data: { agency_id: this.client, campaign_id: id },
+        })
+        .then((res) => {
+          console.log(res);
+          this.error = null;
+          this.client = null;
+          this.makeToast("success", "Campaign Added successfully");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
+          // this.error = error;
+        });
     },
 
     getAgency() {

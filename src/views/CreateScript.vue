@@ -4,7 +4,7 @@
     <div class="flex-main-wrap">
       <sidebar
         :user-name="this.$store.state.user.first_name"
-        current-active="script"
+        current-active="new-copy"
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>
@@ -168,24 +168,26 @@
                     </div>
                     <div class="control-overflow">
                       <div v-if="generatedScript.length > 0">
+                        <div v-for="script in generatedScript"  :key="script.id">
                         <script-box
                           @save-clicked="saveCampaign"
-                          v-for="script in generatedScript"
-                          :key="script.id"
+                          v-for="response in script.scriptResponses"
+                          :key="response.id"
                           :script-content="
-                            formatScript(script.scriptResponses[0].text)
+                            formatScript(response.text)
                           "
-                          :script-content-raw="script.scriptResponses[0].text"
-                          @favorite-clicked="addRemoveScriptFavorite(script.id)"
+                          :script-content-raw="response.text"
+                          @favorite-clicked="addRemoveScriptFavorite(response.id)"
                           @edit-clicked="
                             openEditModal(
-                              script.id,
-                              script.scriptResponses[0].text
+                              response.id,
+                              response.text
                             )
                           "
                           :export-link="`https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport&Id=${script.id}`"
                         >
                         </script-box>
+                        </div>
                       
                       </div>
                       <div v-else class="empty-script">

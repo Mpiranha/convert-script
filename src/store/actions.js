@@ -486,6 +486,25 @@ export default {
         })
     },
 
+    addCampaignToAgency({
+        state
+    }, { id, data }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.post(`${baseUrl}/api/v1/agency/${id}/campaign`, data, {})
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
     // Scripts
 
 
@@ -497,7 +516,7 @@ export default {
     }) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
-            axios.put(`${baseUrl}/api/v1/scripts/${id}`, data)
+            axios.put(`${baseUrl}/api/v1/script-responses/${id}`, data)
                 .then(resp => {
                     // commit("get_all_agencies_success", {
                     //     agencies: resp.data
