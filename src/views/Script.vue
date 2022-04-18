@@ -195,7 +195,7 @@
                           target="_blank"
                           class="btn btn-export-all"
                         >
-                          Export Copy
+                          Export
                         </button>
                       </div>
                     </div>

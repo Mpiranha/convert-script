@@ -155,7 +155,7 @@
                           target="_blank"
                           class="btn btn-export-all"
                         >
-                          Export Script
+                          Export
                         </a>
                       </div>
                     </div>
