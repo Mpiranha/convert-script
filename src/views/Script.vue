@@ -422,7 +422,18 @@ export default {
         .dispatch("exportOneScript", id)
         .then((res) => {
           // this.users = res.data.data;
-          console.log(res.data.data);
+          console.log(res);
+
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          //a.style = "display: none";
+          var url = res.config.url;
+          
+          a.href = url;
+          a.download = true;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
 
           this.$store.commit("updateLoadState", false);
         })

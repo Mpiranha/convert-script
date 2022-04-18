@@ -151,7 +151,9 @@
                                   v-b-modal.add-client
                                   link-class="drop-link"
                                   href="#"
-                                  @click="addRemoveScriptFavorite(script.response.id)"
+                                  @click="
+                                    addRemoveScriptFavorite(script.response.id)
+                                  "
                                 >
                                   <img
                                     class="drop-img-icon"
@@ -171,7 +173,7 @@
                 <div class="col-6">
                   <div class="d-flex flex-column h-100">
                     <div class="section-head">
-                       <button
+                      <button
                         v-b-modal.modal-add-campaign
                         class="
                           d-flex
@@ -207,17 +209,14 @@
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                        <a
-                          :href="
-                            activeScript
-                              ? `https://convertscript.test/api/v1/export/text/script/${activeScript.response.id}`
-                              : '#'
-                          "
-                          target="_blank"
+                        <button
+                          @click="exportScript(activeScript.response.id)"
+                          
+                         
                           class="btn btn-export-all"
                         >
                           Export
-                        </a>
+                        </button>
                       </div>
                     </div>
                     <div class="content-display" v-if="activeScript">
@@ -287,7 +286,9 @@
           class="close-modal"
           >Go back</b-button
         >
-        <b-button @click="editScript(editId, content)" class="save-modal">Save</b-button>
+        <b-button @click="editScript(editId, content)" class="save-modal"
+          >Save</b-button
+        >
       </div>
     </b-modal>
 
@@ -413,7 +414,7 @@ export default {
   },
 
   methods: {
-     getCampaign() {
+    getCampaign() {
       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getCampaigns")
@@ -468,6 +469,32 @@ export default {
         .then((res) => {
           // this.users = res.data.data;
           console.log(res.data.data);
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    exportScript(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("exportOneScript", id)
+        .then((res) => {
+          // this.users = res.data.data;
+          console.log(res);
+
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          //a.style = "display: none";
+          var url = res.config.url;
+
+          a.href = url;
+          a.download = true;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
 
           this.$store.commit("updateLoadState", false);
         })

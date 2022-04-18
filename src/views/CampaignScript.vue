@@ -146,17 +146,12 @@
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                        <a
-                          :href="
-                            activeScript
-                              ? `https://convertscript.test/api/v1/export/text/script/${activeScript.scriptResponses[0].id}`
-                              : '#'
-                          "
-                          target="_blank"
+                        <button
+                         @click="exportScript(activeScript.scriptResponses[0].id)"
                           class="btn btn-export-all"
                         >
                           Export
-                        </a>
+                        </button>
                       </div>
                     </div>
                     <div class="content-display" v-if="activeScript">
@@ -422,6 +417,32 @@ export default {
           this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error;
+        });
+    },
+    exportScript(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("exportOneScript", id)
+        .then((res) => {
+          // this.users = res.data.data;
+          console.log(res);
+
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          //a.style = "display: none";
+          var url = res.config.url;
+
+          a.href = url;
+          a.download = true;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
         });
     },
     setActiveScript(data) {
