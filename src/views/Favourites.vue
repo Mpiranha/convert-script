@@ -172,6 +172,7 @@
                   <div class="d-flex flex-column h-100">
                     <div class="section-head">
                        <button
+                        v-b-modal.modal-add-campaign
                         class="
                           d-flex
                           align-items-center
@@ -292,28 +293,28 @@
 
     <b-modal
       :hide-header="true"
-      id="modal-send-script"
+      id="modal-add-campaign"
       centered
       size="md"
       :hide-footer="true"
       dialog-class="control-width"
       content-class="modal-main"
     >
-      <b-form-group label="Send to" label-for="pwd" label-class="form-label">
+      <b-form-group label="Add to Campaign" label-class="form-label">
         <b-form-select
           class="input-table"
-          v-model="sendValue"
-          :options="sendOptions"
+          v-model="selectedCampaign"
+          :options="campaignOptions"
         ></b-form-select>
       </b-form-group>
 
       <div class="d-flex justify-content-end">
         <b-button
-          @click="$bvModal.hide('modal-send-script')"
+          @click="$bvModal.hide('modal-add-campaign')"
           class="close-modal"
           >Close</b-button
         >
-        <b-button class="save-modal">Send</b-button>
+        <b-button class="save-modal">Add</b-button>
       </div>
     </b-modal>
   </div>
@@ -351,6 +352,8 @@ export default {
   },
   data() {
     return {
+      selectedCampaign: null,
+      campaignOptions: [{ value: null, text: "Select a Campaign" }],
       searchKey: "",
       searchResult: [],
       isFavourite: false,
@@ -410,6 +413,29 @@ export default {
   },
 
   methods: {
+     getCampaign() {
+      // this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getCampaigns")
+        .then((res) => {
+          let data = res.data.data;
+          for (let index = 0; index < data.length; index++) {
+            this.campaignOptions.push({
+              value: data[index].id,
+              text: data[index].name,
+            });
+          }
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     searchKeyWord() {
       this.$store
         .dispatch("search", {
@@ -596,6 +622,7 @@ export default {
     },
   },
   mounted() {
+    this.getCampaign();
     this.getFavorites();
   },
 };
