@@ -211,8 +211,6 @@
                       </select> -->
                         <button
                           @click="exportScript(activeScript.response.id)"
-                          
-                         
                           class="btn btn-export-all"
                         >
                           Export
@@ -315,7 +313,7 @@
           class="close-modal"
           >Close</b-button
         >
-        <b-button class="save-modal">Add</b-button>
+        <b-button @click="saveToCampaign" class="save-modal">Add</b-button>
       </div>
     </b-modal>
   </div>
@@ -414,6 +412,14 @@ export default {
   },
 
   methods: {
+    saveToCampaign() {
+      this.$bvModal.hide("modal-add-campaign");
+      this.editScript(
+        this.activeScript.response.id,
+        this.selectedCampaign,
+        this.activeScript.response.text
+      );
+    },
     getCampaign() {
       // this.$store.commit("updateLoadState", true);
       this.$store
@@ -563,19 +569,26 @@ export default {
 
       // this.getCampaign();
     },
-    editScript(id) {
+    editScript(id, campaignId, txt) {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-edit-script");
       this.$store
         .dispatch("editScript", {
           id: id,
-          data: { text: this.content },
+          data: campaignId
+            ? { campaign_id: 1, text: txt }
+            : { text: this.content },
         })
         .then(() => {
           this.error = null;
           this.activeScript = null;
-          this.getScripts();
-          this.makeToast("success", "Script edited successfully");
+          this.getFavorites();
+          if (campaignId) {
+            this.selectedCampaign = null;
+            this.makeToast("success", "Script added to campaign successfully");
+          } else {
+            this.makeToast("success", "Script edited successfully");
+          }
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {

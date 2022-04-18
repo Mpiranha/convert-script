@@ -97,10 +97,10 @@
                           </td> -->
                           <td>
                             <div class="script-type">
-                              {{ script.scriptResponses[0].script_type }}
+                              {{ script.script_type_name }}
                             </div>
                             <div class="script-content">
-                              {{ abbrScript(script.scriptResponses[0].text) }}
+                              {{ abbrScript(script.text) }}
                             </div>
                           </td>
                           <td class="text-right">
@@ -109,7 +109,7 @@
                               @edit-clicked="
                                 openEditModal(
                                   script.id,
-                                  script.scriptResponses[0].text
+                                  script.text
                                 )
                               "
                               @delete-proceed="deleteScript(script.id)"
@@ -147,7 +147,7 @@
                         <option value=""></option>
                       </select> -->
                         <button
-                         @click="exportScript(activeScript.scriptResponses[0].id)"
+                         @click="exportScript(activeScript.id)"
                           class="btn btn-export-all"
                         >
                           Export
@@ -157,7 +157,7 @@
                     <div class="content-display" v-if="activeScript">
                       <div
                         v-html="
-                          formatScript(activeScript.scriptResponses[0].text)
+                          formatScript(activeScript.text)
                         "
                       ></div>
                     </div>
@@ -188,7 +188,7 @@
                         id="text--copy"
                         :value="
                           activeScript
-                            ? activeScript.scriptResponses[0].text
+                            ? activeScript.text
                             : ''
                         "
                       ></textarea>
@@ -253,7 +253,7 @@
           class="close-modal"
           >Close</b-button
         >
-        <b-button class="save-modal">Add</b-button>
+        <b-button @click="saveToCampaign" class="save-modal">Add</b-button>
       </div>
     </b-modal>
   </div>
@@ -312,6 +312,14 @@ export default {
     };
   },
   methods: {
+    saveToCampaign() {
+      this.$bvModal.hide("modal-add-campaign");
+      this.editScript(
+        this.activeScript.id,
+        this.selectedCampaign,
+        this.activeScript.text
+      );
+    },
      getCampaign() {
       // this.$store.commit("updateLoadState", true);
       this.$store
@@ -396,19 +404,26 @@ export default {
 
       // this.getCampaign();
     },
-     editScript(id) {
+      editScript(id, campaignId, txt) {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-edit-script");
       this.$store
         .dispatch("editScript", {
           id: id,
-          data: { text: this.content },
+          data: campaignId
+            ? { campaign_id: 1, text: txt }
+            : { text: this.content },
         })
         .then(() => {
           this.error = null;
           this.activeScript = null;
-          this.getScripts();
-          this.makeToast("success", "Script edited successfully");
+         this.getCampaignData(this.$route.params.id);
+          if (campaignId) {
+            this.selectedCampaign = null;
+            this.makeToast("success", "Script added to campaign successfully");
+          } else {
+            this.makeToast("success", "Script edited successfully");
+          }
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {

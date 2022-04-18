@@ -168,27 +168,25 @@
                     </div>
                     <div class="control-overflow">
                       <div v-if="generatedScript.length > 0">
-                        <div v-for="script in generatedScript"  :key="script.id">
-                        <script-box
-                          @save-clicked="saveCampaign"
-                          v-for="response in script.scriptResponses"
-                          :key="response.id"
-                          :script-content="
-                            formatScript(response.text)
-                          "
-                          :script-content-raw="response.text"
-                          @favorite-clicked="addRemoveScriptFavorite(response.id)"
-                          @edit-clicked="
-                            openEditModal(
-                              response.id,
-                              response.text
-                            )
-                          "
-                          @export-clicked="exportScript(response.id)"
+                        <div v-for="script in generatedScript" :key="script.id">
+                          <script-box
+                            @save-clicked="
+                              saveCampaign(response.id, response.text)
+                            "
+                            v-for="response in script.scriptResponses"
+                            :key="response.id"
+                            :script-content="formatScript(response.text)"
+                            :script-content-raw="response.text"
+                            @favorite-clicked="
+                              addRemoveScriptFavorite(response.id)
+                            "
+                            @edit-clicked="
+                              openEditModal(response.id, response.text)
+                            "
+                            @export-clicked="exportScript(response.id)"
                           >
-                        </script-box>
+                          </script-box>
                         </div>
-                      
                       </div>
                       <div v-else class="empty-script">
                         Generated Script will display here.
@@ -252,7 +250,7 @@
           class="close-modal"
           >Close</b-button
         >
-        <b-button class="save-modal">Add</b-button>
+        <b-button @click="saveToCampaign" class="save-modal">Add</b-button>
       </div>
     </b-modal>
   </div>
@@ -306,6 +304,10 @@ export default {
       isSubmitted: false,
       preset: [],
       editId: "",
+      selectedSave: {
+        id: null,
+        text: null,
+      },
       editorOption: {
         // Some Quill options...
         theme: "snow",
@@ -334,8 +336,21 @@ export default {
     },
   },
   methods: {
-    saveCampaign() {
+    saveToCampaign() {
+      this.$bvModal.hide("modal-add-campaign");
+      this.editScript(
+        this.selectedSave.id,
+        this.selectedCampaign,
+        this.selectedSave.text
+      );
+    },
+    saveCampaign(id, txt) {
       this.$bvModal.show("modal-add-campaign");
+
+      this.selectedSave = {
+        id: id,
+        text: txt,
+      };
     },
     getCampaign() {
       // this.$store.commit("updateLoadState", true);
@@ -390,28 +405,6 @@ export default {
           console.log(error);
           this.error = error;
           this.makeToast("danger", this.error);
-        });
-    },
-    editScript(id) {
-      this.$bvModal.hide("modal-edit-script");
-      this.$store
-        .dispatch("editScript", {
-          id: id,
-          data: { content: this.content, script_type_id: 1 },
-        })
-        .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          //this.getScripts();
-          this.makeToast("success", "Script edited successfully");
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error);
-          this.error = error;
-          this.$store.commit("updateLoadState", false);
-          this.makeToast("danger", this.error);
-          // this.error = error;
         });
     },
     getScriptData(id) {
@@ -515,6 +508,36 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+    editScript(id, campaignId, txt) {
+      this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modal-edit-script");
+      this.$store
+        .dispatch("editScript", {
+          id: id,
+          data: campaignId
+            ? { campaign_id: 1, text: txt }
+            : { text: this.content },
+        })
+        .then(() => {
+          this.error = null;
+          this.activeScript = null;
+
+          if (campaignId) {
+            this.selectedCampaign = null;
+            this.makeToast("success", "Script added to campaign successfully");
+          } else {
+            this.makeToast("success", "Script edited successfully");
+          }
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
+          // this.error = error;
+        });
+    },
     onSubmit() {
       // set all fields to touched
       this.$v.$touch();
@@ -565,7 +588,7 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-     exportScript(id) {
+    exportScript(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("exportOneScript", id)
@@ -591,6 +614,7 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+
     getAllLanguages() {
       this.$store.commit("updateLoadState", true);
       this.$store

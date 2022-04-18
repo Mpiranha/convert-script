@@ -28,7 +28,7 @@
                 >
                   <img src="@/assets/icons/cancel.svg" alt="cancel icon" />
                 </button>
-                <b-form-group class="mb-0 mr-3" label-class="input-label">
+                <b-form-group class="mb-0 mr-3 w-30" label-class="input-label">
                   <b-form-select
                     class="input-table"
                     v-model="selectedAgency"
