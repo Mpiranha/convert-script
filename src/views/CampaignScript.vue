@@ -134,7 +134,7 @@
                         "
                       >
                         <img
-                          src="/img/save 1.81c8ddc5.svg"
+                          src="@/assets/icons/convert-icon/save 1.svg"
                           alt=""
                           class="icon-save mr-2"
                         /><span> Save to </span>

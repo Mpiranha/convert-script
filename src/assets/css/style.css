@@ -1406,7 +1406,7 @@ input:checked+.slider:before {
 
 .btn-save-to {
     background-color: transparent;
-    font-size: 1rem !important;
+    font-size: 0.9rem !important;
     display: flex;
     align-items: center;
     padding-left: 0 !important;
