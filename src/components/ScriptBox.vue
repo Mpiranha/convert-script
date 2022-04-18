@@ -31,7 +31,7 @@
                 alt=""
               />
             </div>
-            <a class="export-link" target="_blank" :href="exportLink">Export</a>
+            <a href="#" @click="exportAction($event)" class="export-link">Export</a>
           </div>
         </div>
       </div>
@@ -80,10 +80,7 @@ export default {
       type: String,
       required: true,
     },
-    exportLink: {
-      type: String,
-      required: true,
-    },
+   
   },
   directives: {
     nl2br: {
@@ -133,6 +130,10 @@ export default {
     saveAction() {
       this.$emit("save-clicked");
     },
+    exportAction(e) {
+      e.preventDefault();
+      this.$emit("export-clicked");
+    }
   },
 };
 </script>
