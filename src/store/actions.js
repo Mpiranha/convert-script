@@ -739,6 +739,26 @@ export default {
         })
     },
 
+    exportAllScript({
+        // commit,
+        state
+    }, id) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/export/text/download/user/${id}/all-script-responses`)
+                .then(resp => {
+                    // commit("get_all_agencies_success", {
+                    //     agencies: resp.data
+                    // });
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
     deleteScript({
         state
     }, id) {

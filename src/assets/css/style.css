@@ -1019,9 +1019,7 @@ input:checked+.slider:before {
     padding: 0.7rem 0.5rem 0.7rem 1rem;
 }
 
-.table-section tr {
-    /* border-right: 2px solid #f6f8f9; */
-}
+
 
 .section-head-right {
     margin-left: auto;
