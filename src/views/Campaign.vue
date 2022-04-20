@@ -28,9 +28,9 @@
                 >
                   <img src="@/assets/icons/cancel.svg" alt="cancel icon" />
                 </button>
-                <b-form-group class="mb-0 mr-3 w-30" label-class="input-label">
+                <b-form-group class="mb-0 mr-3" label-class="input-label">
                   <b-form-select
-                    class="input-table"
+                    class="input-table manage-width"
                     v-model="selectedAgency"
                     :options="clientOptions"
                   ></b-form-select>
@@ -522,5 +522,9 @@ export default {
 <style>
 .btn-cancel-filters img {
   width: 1rem;
+}
+
+.manage-width {
+  width: 200px !important;
 }
 </style>

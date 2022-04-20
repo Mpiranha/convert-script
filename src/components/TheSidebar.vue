@@ -325,6 +325,15 @@ export default {
       return text.toString().charAt(0);
     },
   },
+  mounted() {
+    document.addEventListener("click", function(e) {
+      if (this.isShowing) {
+        if (e.target.classList.hasClass("user-drop")) {
+          alert("hey");
+        }
+      }
+    });
+  }
 };
 </script>
 

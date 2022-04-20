@@ -52,7 +52,7 @@
             </div>
             <table v-else class="table table-custom table-market">
               <tbody v-if="searchResult.length > 0">
-                <tr v-for="project in searchResult" :key="project.id">
+                <tr v-for="project in searchResult" :key="project.freelancer_ad_id.id">
                   <td>
                     <div class="market-desc">
                       <b>{{ project.freelancer_ad_id.title }}</b
@@ -76,8 +76,8 @@
                     />
 
                     {{
-                      project.freelancer_ad_id.currency_country
-                        ? project.freelancer_ad_id.currency_country
+                      project.freelancer_ad_id.city
+                        ? project.freelancer_ad_id.city
                         : "NIL"
                     }},
                     {{
@@ -148,7 +148,8 @@
                 </tr>
               </tbody>
               <tbody v-else-if="projects && searchKey.length < 1">
-                <tr v-for="project in projects" :key="project.id">
+                <tr v-for="project in projects" :key="project.freelancer_ad_id.id">
+               
                   <td>
                     <div class="market-desc">
                       <b>{{ project.freelancer_ad_id.title }}</b
@@ -172,8 +173,8 @@
                     />
 
                     {{
-                      project.freelancer_ad_id.currency_country
-                        ? project.freelancer_ad_id.currency_country
+                      project.freelancer_ad_id.city
+                        ? project.freelancer_ad_id.city
                         : "NIL"
                     }},
                     {{
@@ -210,7 +211,7 @@
                               project.freelancer_ad_id.full_description,
                             type: project.freelancer_ad_id.type,
                             location: {
-                              city: project.freelancer_ad_id.currency_country,
+                              city: project.freelancer_ad_id.city,
                               country:
                                 project.freelancer_ad_id.currency_country,
                             },
@@ -235,13 +236,15 @@
                       <button
                         @click="deleteSavedProject(project.freelancer_ad_id.id)"
                         class="btn no-shadow nav-link"
-                        href="#"
+                       
                       >
                         Remove
                       </button>
                     </nav>
                   </td>
                 </tr>
+              
+             
               </tbody>
             </table>
           </div>

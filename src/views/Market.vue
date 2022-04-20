@@ -82,8 +82,8 @@
                       />
 
                       {{
-                        project.currency_country
-                          ? project.currency_country
+                        project.city
+                          ? project.city
                           : "NIL"
                       }},
                       {{
@@ -117,7 +117,7 @@
                               description: project.full_description,
                               type: project.type,
                               location: {
-                                city: project.currency_country,
+                                city: project.city,
                                 country: project.currency_country,
                               },
                               budget: {
@@ -167,8 +167,8 @@
                       />
 
                       {{
-                        project.currency_country
-                          ? project.currency_country
+                        project.city
+                          ? project.city
                           : "NIL"
                       }},
                       {{
@@ -202,7 +202,7 @@
                               description: project.full_description,
                               type: project.type,
                               location: {
-                                city: project.currency_country,
+                                city: project.city,
                                 country: project.currency_country,
                               },
                               budget: {
