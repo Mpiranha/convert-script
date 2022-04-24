@@ -102,24 +102,12 @@
                             last_name: result.last_name,
                             role: result.role,
                             email: result.email,
+                            plans: result.plans,
                           })
                         "
                         @delete-proceed="deleteUser(result.id)"
                         delete-what="User"
                       >
-                        <!-- <template v-slot:secondary>
-                        <b-dropdown-item
-                          v-b-modal.modal-campaign
-                          @click="getCurrent(user.name)"
-                          link-class="drop-link"
-                          href="#"
-                        >
-                          <i
-                            class="flaticon-briefcase icons table-drop-icon"
-                          ></i>
-                          Campaign
-                        </b-dropdown-item>
-                      </template> -->
                       </dropdown-tool>
                     </td>
                   </tr>
@@ -156,6 +144,7 @@
                             last_name: user.last_name,
                             role: user.role,
                             email: user.email,
+                            plans: user.plans,
                           })
                         "
                         @delete-proceed="deleteUser(user.id)"
@@ -533,7 +522,14 @@ export default {
       // console.log(data);
       this.userData.password = data.password;
       this.userData.email = data.email;
-      this.userData.plans = data.plans;
+
+      data.plans.forEach((plan, index) => {
+        this.userData.plans[index] = {
+          plan_id: plan.id,
+        };
+      });
+
+      // this.userData.plans = data.plans;
     },
     clearField() {
       this.userData = {

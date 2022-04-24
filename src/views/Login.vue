@@ -129,17 +129,18 @@ export default {
         .dispatch("login", this.user)
         .then(() => {
           this.error = null;
-          this.$store.dispatch("getUser")
+          this.$store.dispatch("getUser");
           this.$router.push(this.$route.query.from || "/").catch(() => {
             // console.log(error);
           });
 
           //console.log(res.data);
         })
-        .catch((error) => {
+        .catch((errors) => {
           // console.log(error);
-          this.error = error;
-          console.log(error)
+          this.error = errors.response.data.errors.root;
+          
+          console.log();
           // this.error = error;
         });
       // const ( username, password ) = this
