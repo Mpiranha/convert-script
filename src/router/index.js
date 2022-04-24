@@ -93,7 +93,7 @@ const routes = [{
   name: 'Dashboard',
   component: Dashboard,
   meta: {
-    title: 'Dashboard',
+    title: 'OneCopy AI Writer - Dashboard',
     requiresAuth: true,
     adminAuth: false
   }
@@ -103,7 +103,7 @@ const routes = [{
   name: 'Tutorial',
   component: Tutorial,
   meta: {
-    title: 'Tutorials',
+    title: 'OneCopy AI Writer - Tutorials',
     requiresAuth: true,
     adminAuth: false
   }
@@ -113,7 +113,7 @@ const routes = [{
   name: 'Billing',
   component: Billing,
   meta: {
-    title: 'Billings',
+    title: 'OneCopy AI Writer - Billings',
     requiresAuth: true,
     adminAuth: false
   }
@@ -123,7 +123,7 @@ const routes = [{
   name: 'Bonus',
   component: Bonus,
   meta: {
-    title: 'Bonuses',
+    title: 'OneCopy AI Writer - Bonuses',
     requiresAuth: true,
     adminAuth: false
   }
@@ -133,7 +133,7 @@ const routes = [{
   name: 'Market',
   component: Market,
   meta: {
-    title: 'Market Place',
+    title: 'OneCopy AI Writer - MarketPlace',
     requiresAuth: true,
     adminAuth: false
   }
@@ -143,7 +143,7 @@ const routes = [{
   name: 'Agency',
   component: Agency,
   meta: {
-    title: 'Agencies',
+    title: 'OneCopy AI Writer - Agency',
     requiresAuth: true,
     adminAuth: false
   }
@@ -153,7 +153,7 @@ const routes = [{
   name: 'AgencySetup',
   component: AgencySetup,
   meta: {
-    title: 'Agency - Setup',
+    title: 'OneCopy AI Writer - Agency Setup',
     requiresAuth: true,
     adminAuth: false
   }
@@ -163,7 +163,7 @@ const routes = [{
   name: 'Reseller',
   component: Reseller,
   meta: {
-    title: 'Reseller',
+    title: 'OneCopy AI Writer - Reseller',
     requiresAuth: true,
     adminAuth: false
   }
@@ -173,7 +173,7 @@ const routes = [{
   name: 'Campaign',
   component: Campaign,
   meta: {
-    title: 'Campaign',
+    title: 'OneCopy AI Writer - All Campaign',
     requiresAuth: true,
     adminAuth: false
   }
@@ -183,7 +183,7 @@ const routes = [{
   name: 'CampaignScript',
   component: CampaignScript,
   meta: {
-    title: 'Campaign - Copies',
+    title: 'OneCopy AI Writer - All Campaign Copies',
     requiresAuth: true,
     adminAuth: false
   }
@@ -193,7 +193,7 @@ const routes = [{
   name: 'CampaignScriptSelect',
   component: ScriptSelect,
   meta: {
-    title: 'Campaign - Copy Type Select',
+    title: 'OneCopy AI Writer - Template Select',
     requiresAuth: true,
     adminAuth: false
   }
@@ -203,7 +203,7 @@ const routes = [{
   name: 'CampaignCreateScript',
   component: CreateScript,
   meta: {
-    title: 'Campaign - Generate Copy',
+    title: 'OneCopy AI Writer - Generate Copy',
     requiresAuth: true,
     adminAuth: false
   }
@@ -213,7 +213,7 @@ const routes = [{
   name: 'ScriptSelect',
   component: ScriptSelect,
   meta: {
-    title: 'Copy Type Select',
+    title: 'OneCopy AI Writer - Template Select',
     requiresAuth: true,
     adminAuth: false
   }
@@ -223,7 +223,7 @@ const routes = [{
   name: 'CreateScript',
   component: CreateScript,
   meta: {
-    title: 'Generate Copy',
+    title: 'OneCopy AI Writer - Generate Copy',
     requiresAuth: true,
     adminAuth: false
   }
@@ -233,7 +233,7 @@ const routes = [{
   name: 'Scripts',
   component: Script,
   meta: {
-    title: 'All Copies',
+    title: 'OneCopy AI Writer - All Copies',
     requiresAuth: true,
     adminAuth: false
   }
@@ -243,7 +243,7 @@ const routes = [{
   name: 'Favourites',
   component: Favourites,
   meta: {
-    title: 'Favorites',
+    title: 'OneCopy AI Writer - Favorites',
     requiresAuth: true,
     adminAuth: false
   }
@@ -271,7 +271,7 @@ const routes = [{
   name: 'Integration',
   component: Integration,
   meta: {
-    title: 'Integration',
+    title: 'OneCopy AI Writer - Integration',
     requiresAuth: true,
     adminAuth: false
   }
@@ -290,7 +290,7 @@ const routes = [{
   name: 'Settings',
   component: Settings,
   meta: {
-    title: 'Account Settings',
+    title: 'OneCopy AI Writer - Account Settings',
     requiresAuth: true,
     adminAuth: false
   }
@@ -309,7 +309,7 @@ const routes = [{
   name: 'Projects',
   component: Projects,
   meta: {
-    title: 'Pojects',
+    title: 'OneCopy AI Writer - Saved Pojects',
     requiresAuth: true,
     adminAuth: false
   }
@@ -320,7 +320,7 @@ const routes = [{
   name: 'Stat',
   component: Stat,
   meta: {
-    title: 'Admin - Dashbord',
+    title: 'OneCopy AI Writer - Admin Dashbord',
     requiresAuth: true,
     adminAuth: true
   }
@@ -330,7 +330,7 @@ const routes = [{
   name: 'Users',
   component: Users,
   meta: {
-    title: 'Admin - All Users',
+    title: 'OneCopy AI Writer Admin - All Users',
     requiresAuth: true,
     adminAuth: true
   }
@@ -340,7 +340,7 @@ const routes = [{
   name: 'Transactions',
   component: Transaction,
   meta: {
-    title: 'Admin - Transaction',
+    title: 'OneCopy AI Writer Admin - Transaction',
     requiresAuth: true,
     adminAuth: true
   }
@@ -350,7 +350,7 @@ const routes = [{
   name: 'ScriptTypes',
   component: ScriptType,
   meta: {
-    title: 'Script Type',
+    title: 'OneCopy AI Writer - Copy Templates',
     requiresAuth: true,
     adminAuth: true
   }
@@ -360,7 +360,7 @@ const routes = [{
   name: 'Category',
   component: Category,
   meta: {
-    title: 'Categories',
+    title: 'OneCopy AI Writer - Categories',
     requiresAuth: true,
     adminAuth: true
   }
@@ -370,14 +370,14 @@ const routes = [{
   name: 'Languages',
   component: Language,
   meta: {
-    title: 'Languages',
+    title: 'OneCopy AI Writer - Languages',
     requiresAuth: true,
     adminAuth: true
   }
 },
 {
   path: '/admin/keywords',
-  name: 'Keywords',
+  name: 'OneCopy AI Writer - Keywords',
   component: Keyword,
   meta: {
     title: 'Keyword',
@@ -390,7 +390,7 @@ const routes = [{
   name: 'Tone',
   component: Tone,
   meta: {
-    title: 'Tone',
+    title: 'OneCopy AI Writer - Tone',
     requiresAuth: true,
     adminAuth: true
   }
@@ -400,7 +400,7 @@ const routes = [{
   name: 'ScriptTypesInput',
   component: ScriptInput,
   meta: {
-    title: 'Script Type - Setup',
+    title: 'OneCopy AI Writer - Template Setup',
     requiresAuth: true,
     adminAuth: true
   }
@@ -410,7 +410,7 @@ const routes = [{
   name: 'ScriptTypesCreate',
   component: ScriptInput,
   meta: {
-    title: 'Script Type - Setup',
+    title: 'OneCopy AI Writer - Template Setup',
     requiresAuth: true,
     adminAuth: true
   }
@@ -420,7 +420,7 @@ const routes = [{
   name: 'FlaggedScript',
   component: ScriptFlagged,
   meta: {
-    title: 'Flagged Scripts',
+    title: 'OneCopy AI Writer - Flagged Scripts',
     requiresAuth: true,
     adminAuth: true
   }
@@ -430,7 +430,7 @@ const routes = [{
   name: 'RolesPermissions',
   component: RolesPermissions,
   meta: {
-    title: 'Permissions',
+    title: 'OneCopy AI Writer - Permissions',
     requiresAuth: true,
     adminAuth: true
   }
@@ -440,7 +440,7 @@ const routes = [{
   name: 'SetPermission',
   component: SetPermission,
   meta: {
-    title: 'Roles - Permissions',
+    title: 'OneCopy AI Writer - Roles Permissions',
     requiresAuth: true,
     adminAuth: true
   }
@@ -450,7 +450,7 @@ const routes = [{
   name: 'Plans',
   component: Plans,
   meta: {
-    title: 'Plans',
+    title: 'OneCopy AI Writer - Plans',
     requiresAuth: true,
     adminAuth: true
   }
@@ -471,7 +471,7 @@ const routes = [{
   name: 'Suggestions',
   component: Suggestions,
   meta: {
-    title: 'Suggestions',
+    title: 'OneCopy AI Writer - Suggestions',
     requiresAuth: true,
     adminAuth: true
   }
@@ -490,7 +490,7 @@ const routes = [{
   name: 'Bonuses',
   component: Bonuses,
   meta: {
-    title: 'Admin - Bonuses',
+    title: 'OneCopy AI Writer - Bonuses Setup',
     requiresAuth: true,
     adminAuth: true
   }
@@ -500,7 +500,7 @@ const routes = [{
   name: 'Tutorials',
   component: Tutorials,
   meta: {
-    title: 'Admin - Tutorials',
+    title: 'OneCopy AI Writer - Tutorials Setup',
     requiresAuth: true,
     adminAuth: true
   }
@@ -510,21 +510,11 @@ const routes = [{
   name: 'AgencyFile',
   component: AgencyFile,
   meta: {
-    title: 'Agency - Files',
+    title: 'OneCopy AI Writer - Agency Files Setup',
     requiresAuth: true,
     adminAuth: true
   }
 },
-
-
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // }
 ]
 
 
