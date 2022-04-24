@@ -252,6 +252,7 @@
                   <li class="nav-item">
                     <router-link class="nav-link" to="/settings">
                       <img
+                        rel="preload"
                         src="@/assets/icons/convert-icon/account.svg"
                         alt="icon"
                       />
@@ -261,6 +262,7 @@
                   <li class="nav-item">
                     <router-link class="nav-link" to="/bonus">
                       <img
+                        rel="preload"
                         src="@/assets/icons/convert-icon/bonus.svg"
                         alt="icon"
                       />
@@ -270,6 +272,7 @@
                   <li class="nav-item">
                     <router-link class="nav-link" to="/billing">
                       <img
+                        rel="preload"
                         src="@/assets/icons/convert-icon/billiing.svg"
                         alt="icon"
                       />
@@ -279,6 +282,7 @@
                   <li class="nav-item">
                     <a @click="logout($event)" class="btn nav-link" href="#">
                       <img
+                        rel="preload"
                         src="@/assets/icons/convert-icon/logout.svg"
                         alt="icon"
                       />
@@ -303,7 +307,6 @@ export default {
     currentActive: String,
     userName: {
       type: String,
-      
     },
   },
   data() {
@@ -321,19 +324,19 @@ export default {
         this.$router.push("/login");
       });
     },
-    getFirstLetter(text) { 
+    getFirstLetter(text) {
       return text.toString().charAt(0);
     },
   },
   mounted() {
-    document.addEventListener("click", function(e) {
+    document.addEventListener("click", function (e) {
       if (this.isShowing) {
         if (e.target.classList.hasClass("user-drop")) {
           alert("hey");
         }
       }
     });
-  }
+  },
 };
 </script>
 

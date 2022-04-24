@@ -65,8 +65,7 @@
                       <option value=""></option>
                     </select> -->
                       <a
-                        href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptscriptResponsesExport"
-                        target="_blank"
+                        @click="exportAllScripts($store.state.user.id)"
                         class="btn btn-export-all"
                       >
                         Export All
@@ -107,10 +106,7 @@
                             <dropdown-tool
                               delete-what="Script from this Campaign"
                               @edit-clicked="
-                                openEditModal(
-                                  script.id,
-                                  script.text
-                                )
+                                openEditModal(script.id, script.text)
                               "
                               @delete-proceed="deleteScript(script.id)"
                             >
@@ -124,7 +120,7 @@
                 <div class="col-6 h-100">
                   <div class="d-flex flex-column h-100">
                     <div class="section-head">
-                       <button
+                      <button
                         v-b-modal.modal-add-campaign
                         class="
                           d-flex
@@ -147,7 +143,7 @@
                         <option value=""></option>
                       </select> -->
                         <button
-                         @click="exportScript(activeScript.id)"
+                          @click="exportScript(activeScript.id)"
                           class="btn btn-export-all"
                         >
                           Export
@@ -155,11 +151,7 @@
                       </div>
                     </div>
                     <div class="content-display" v-if="activeScript">
-                      <div
-                        v-html="
-                          formatScript(activeScript.text)
-                        "
-                      ></div>
+                      <div v-html="formatScript(activeScript.text)"></div>
                     </div>
                     <div v-else class="no-select">
                       Select a Script to Preview
@@ -186,11 +178,7 @@
                       <textarea
                         type="hidden"
                         id="text--copy"
-                        :value="
-                          activeScript
-                            ? activeScript.text
-                            : ''
-                        "
+                        :value="activeScript ? activeScript.text : ''"
                       ></textarea>
                     </div>
                   </div>
@@ -227,10 +215,12 @@
           class="close-modal"
           >Go back</b-button
         >
-        <b-button @click="editScript(editId, content)" class="save-modal">Save to</b-button>
+        <b-button @click="editScript(editId, content)" class="save-modal"
+          >Save to</b-button
+        >
       </div>
     </b-modal>
-  <b-modal
+    <b-modal
       :hide-header="true"
       id="modal-add-campaign"
       centered
@@ -320,7 +310,7 @@ export default {
         this.activeScript.text
       );
     },
-     getCampaign() {
+    getCampaign() {
       // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getCampaigns")
@@ -368,6 +358,32 @@ export default {
     abbrScript(text) {
       return text.slice(0, 125) + "...";
     },
+    exportAllScripts(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("exportAllCampaignScripts", id)
+        .then((res) => {
+          // this.users = res.data.data;
+          console.log(res);
+
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          //a.style = "display: none";
+          var url = res.config.url;
+
+          a.href = url;
+          a.download = true;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     getCampaignData(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
@@ -404,7 +420,7 @@ export default {
 
       // this.getCampaign();
     },
-      editScript(id, campaignId, txt) {
+    editScript(id, campaignId, txt) {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-edit-script");
       this.$store
@@ -417,7 +433,7 @@ export default {
         .then(() => {
           this.error = null;
           this.activeScript = null;
-         this.getCampaignData(this.$route.params.id);
+          this.getCampaignData(this.$route.params.id);
           if (campaignId) {
             this.selectedCampaign = null;
             this.makeToast("success", "Script added to campaign successfully");

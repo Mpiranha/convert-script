@@ -50,8 +50,8 @@
                     </div>
                     <div class="section-head-right">
                       <a
-                        href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=FavoriteScriptExport"
-                        target="_blank"
+                        href="#"
+                        @click="exportFavorites($store.state.user.id)"
                         class="btn btn-export-all"
                       >
                         Export All
@@ -468,13 +468,24 @@ export default {
     abbrScript(text) {
       return text.slice(0, 125) + "...";
     },
-    exportFavorites() {
+    exportScript(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("exportFavorites")
+        .dispatch("exportOneScript", id)
         .then((res) => {
           // this.users = res.data.data;
-          console.log(res.data.data);
+          console.log(res);
+
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          //a.style = "display: none";
+          var url = res.config.url;
+
+          a.href = url;
+          a.download = true;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
 
           this.$store.commit("updateLoadState", false);
         })
@@ -483,10 +494,10 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    exportScript(id) {
+    exportFavorites(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("exportOneScript", id)
+        .dispatch("exportAllFavorites", id)
         .then((res) => {
           // this.users = res.data.data;
           console.log(res);

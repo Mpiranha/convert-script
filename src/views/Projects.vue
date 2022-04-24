@@ -52,7 +52,10 @@
             </div>
             <table v-else class="table table-custom table-market">
               <tbody v-if="searchResult.length > 0">
-                <tr v-for="project in searchResult" :key="project.freelancer_ad_id.id">
+                <tr
+                  v-for="project in searchResult"
+                  :key="project.freelancer_ad_id.id"
+                >
                   <td>
                     <div class="market-desc">
                       <b>{{ project.freelancer_ad_id.title }}</b
@@ -148,8 +151,10 @@
                 </tr>
               </tbody>
               <tbody v-else-if="projects && searchKey.length < 1">
-                <tr v-for="project in projects" :key="project.freelancer_ad_id.id">
-               
+                <tr
+                  v-for="project in filteredNull"
+                  :key="project.freelancer_ad_id.id"
+                >
                   <td>
                     <div class="market-desc">
                       <b>{{ project.freelancer_ad_id.title }}</b
@@ -236,15 +241,12 @@
                       <button
                         @click="deleteSavedProject(project.freelancer_ad_id.id)"
                         class="btn no-shadow nav-link"
-                       
                       >
                         Remove
                       </button>
                     </nav>
                   </td>
                 </tr>
-              
-             
               </tbody>
             </table>
           </div>
@@ -527,7 +529,20 @@ export default {
   mounted() {
     this.getSavedProject();
   },
-  computed: {},
+  computed: {
+    filteredNull() {
+      let result = [];
+      for (let i = 0; i < this.projects.length; i++) {
+        if (!this.projects[i].freelancer_ad_id) {
+          continue;
+        }
+
+        result.push(this.projects[i]);
+      }
+
+      return result;
+    },
+  },
 };
 </script>
 
