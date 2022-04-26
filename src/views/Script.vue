@@ -284,7 +284,6 @@
           class="input-table"
           v-model="selectedCampaign"
           :options="campaignOptions"
-          
         ></b-form-select>
       </b-form-group>
 
@@ -368,7 +367,11 @@ export default {
   methods: {
     saveToCampaign() {
       this.$bvModal.hide("modal-add-campaign");
-      this.editScript(this.activeScript.id, this.selectedCampaign, this.activeScript.text);
+      this.editScript(
+        this.activeScript.id,
+        this.activeScript.text,
+        this.selectedCampaign
+      );
     },
     getCampaign() {
       // this.$store.commit("updateLoadState", true);
@@ -448,12 +451,11 @@ export default {
         });
     },
 
-     exportAllScript(id) {
+    exportAllScript(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("exportAllScript", id)
         .then((res) => {
-          
           console.log(res);
 
           var a = document.createElement("a");
@@ -510,7 +512,7 @@ export default {
 
       // this.getCampaign();
     },
-    editScript(id, campaignId, txt) {
+    editScript(id, txt, campaignId) {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-edit-script");
       this.$store
