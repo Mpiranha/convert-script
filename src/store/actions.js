@@ -485,7 +485,21 @@ export default {
                 })
         })
     },
-
+    getAgencyCampaign({
+        // commit,
+        state
+    }, id) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/agency/${id}/campaign`)
+                .then(resp => {
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
     addCampaignToAgency({
         state
     }, { id, data }) {

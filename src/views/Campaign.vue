@@ -28,13 +28,16 @@
                 >
                   <img src="@/assets/icons/cancel.svg" alt="cancel icon" />
                 </button>
+
                 <b-form-group class="mb-0 mr-3" label-class="input-label">
                   <b-form-select
+                    @input="getClientsCampaign"
                     class="input-table manage-width"
                     v-model="selectedAgency"
                     :options="clientOptions"
                   ></b-form-select>
                 </b-form-group>
+
                 <button
                   @click="clearField"
                   class="btn btn-create"
@@ -60,19 +63,10 @@
                 />
               </div>
 
-              <!-- <div class="sort-wrap">
-              <div class="acct-desc">{{ campaignLength }} Campaign(s)</div>
-
-              <select class="sort-select" name="" id="">
-                <option value="none" selected>Sort</option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-              </select>
-            </div> -->
               <loader-modal
                 :loading-state="this.$store.state.loading"
               ></loader-modal>
+
               <div v-if="campaigns.length === 0" class="no-data-info">
                 Created campaigns will display here.
               </div>
@@ -190,7 +184,7 @@
                             v-b-modal.modal-add-client
                             link-class="drop-link"
                             href="#"
-                             @click="getCampaignId(campaign.id)"
+                            @click="getCampaignId(campaign.id)"
                           >
                             <img
                               class="drop-img-icon"
@@ -275,7 +269,9 @@
         <b-button @click="$bvModal.hide('modal-add-client')" class="close-modal"
           >Close</b-button
         >
-        <b-button @click="addToClient(campaignIdToAdd)" class="save-modal">Add</b-button>
+        <b-button @click="addToClient(campaignIdToAdd)" class="save-modal"
+          >Add</b-button
+        >
       </div>
     </b-modal>
   </div>
@@ -312,6 +308,7 @@ export default {
       editId: null,
       agencyOptions: [{ value: null, text: "Select a Client" }],
       selectedAgency: null,
+      clientCampaign: [],
     };
   },
   methods: {
@@ -496,6 +493,20 @@ export default {
     },
     resetFilter() {
       this.selectedAgency = null;
+      this.clientCampaign = [];
+    },
+    getClientsCampaign() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getAgencyCampaign", this.selectedAgency)
+        .then((res) => {
+          this.$store.commit("updateLoadState", false);
+          this.clientCampaign = res.data.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
     },
   },
 
@@ -511,9 +522,14 @@ export default {
       return this.orderSort(this.campaigns);
     },
     filteredCampaign() {
-      return this.campaigns.filter((cat) => {
-        return this.selectedAgency == cat.script_type_category;
-      });
+      if (this.selectedAgency) {
+        return this.clientCampaign;
+      }
+
+      return this.campaigns;
+      // return this.campaigns.filter((cat) => {
+      //   return this.selectedAgency == cat.script_type_category;
+      // });
     },
   },
 };
