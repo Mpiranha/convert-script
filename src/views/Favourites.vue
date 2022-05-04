@@ -587,7 +587,7 @@ export default {
         .dispatch("editScript", {
           id: id,
           data: campaignId
-            ? { campaign_id: 1, text: txt }
+            ? { campaign_id: campaignId, text: txt }
             : { text: this.content },
         })
         .then(() => {
