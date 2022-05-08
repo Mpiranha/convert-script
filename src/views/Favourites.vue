@@ -414,10 +414,18 @@ export default {
   methods: {
     saveToCampaign() {
       this.$bvModal.hide("modal-add-campaign");
+      if (!this.activeScript) {
+        this.makeToast("danger", "Not saved, Please select a copy");
+        return;
+      }
+      if (this.selectedCampaign == null) {
+        this.makeToast("danger", "Not saved, Please select a campaign");
+        return;
+      }
       this.editScript(
         this.activeScript.response.id,
-        this.selectedCampaign,
-        this.activeScript.response.text
+        this.activeScript.response.text,
+        this.selectedCampaign
       );
     },
     getCampaign() {
@@ -580,7 +588,7 @@ export default {
 
       // this.getCampaign();
     },
-    editScript(id, campaignId, txt) {
+    editScript(id, txt, campaignId) {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-edit-script");
       this.$store
@@ -604,7 +612,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error = error;
+          this.error = error.response.data.data.error;
           this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error;

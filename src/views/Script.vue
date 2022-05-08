@@ -69,50 +69,6 @@
                           v-for="result in searchResult"
                           :key="result.id"
                         >
-                          <td scope="row">
-                            <div class="control-order-tool">
-                              <button class="btn mb-2">
-                                <i
-                                  class="flaticon-up-arrow icons icon-order"
-                                ></i>
-                              </button>
-                              <button class="btn btn-down">
-                                <i
-                                  class="flaticon-up-arrow icons icon-order"
-                                ></i>
-                              </button>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="script-type">
-                              {{ result.scriptResponses[0].script_type }}
-                            </div>
-                            <div class="script-content">
-                              {{ abbrScript(result.scriptResponses[0].text) }}
-                            </div>
-                          </td>
-
-                          <td class="text-right">
-                            <dropdown-tool
-                              delete-what="Script"
-                              @edit-clicked="
-                                openEditModal(
-                                  result.id,
-                                  result.scriptResponses[0].text
-                                )
-                              "
-                              @delete-proceed="deleteScript(result.id)"
-                            >
-                            </dropdown-tool>
-                          </td>
-                        </tr>
-                      </tbody>
-                      <tbody v-else-if="scripts && searchKey.length < 1">
-                        <tr
-                          @click="setActiveScript(script)"
-                          v-for="script in scripts"
-                          :key="script.id"
-                        >
                           <!-- <td scope="row">
                             <div class="control-order-tool">
                               <button class="btn mb-2">
@@ -127,6 +83,33 @@
                               </button>
                             </div>
                           </td> -->
+                          <td>
+                            <div class="script-type">
+                              {{ result.script_type_name }}
+                            </div>
+                            <div class="script-content">
+                              {{ abbrScript(result.text) }}
+                            </div>
+                          </td>
+
+                          <td class="text-right">
+                            <dropdown-tool
+                              delete-what="Script"
+                              @edit-clicked="
+                                openEditModal(result.id, result.text)
+                              "
+                              @delete-proceed="deleteScript(result.id)"
+                            >
+                            </dropdown-tool>
+                          </td>
+                        </tr>
+                      </tbody>
+                      <tbody v-else-if="scripts && searchKey.length < 1">
+                        <tr
+                          @click="setActiveScript(script)"
+                          v-for="script in scripts"
+                          :key="script.id"
+                        >
                           <td>
                             <div class="script-type">
                               {{ script.script_type_name }}
@@ -367,6 +350,14 @@ export default {
   methods: {
     saveToCampaign() {
       this.$bvModal.hide("modal-add-campaign");
+      if (!this.activeScript) {
+        this.makeToast("danger", "Not saved, Please select a copy");
+        return;
+      }
+      if (this.selectedCampaign == null) {
+        this.makeToast("danger", "Not saved, Please select a campaign");
+        return;
+      }
       this.editScript(
         this.activeScript.id,
         this.activeScript.text,
@@ -536,7 +527,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error = error;
+          this.error = error.response.data.data.error;
           this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error;

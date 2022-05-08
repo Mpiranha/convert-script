@@ -705,6 +705,21 @@ export default {
                 })
         })
     },
+    exportAllGeneratedScripts({
+        // commit,
+        state
+    }, id) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/export/text/download/all-script-responses/${id}`)
+                .then(resp => {
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
     getAllFavorites({
         // commit,
         state

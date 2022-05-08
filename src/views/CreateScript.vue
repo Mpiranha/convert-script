@@ -154,16 +154,12 @@
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                        <a
-                          target="_blank"
-                          :href="
-                            generatedScript
-                              ? `https://api.onecopy.ai/api/v1/export/excel/model?model=User&type=User&export=ScriptResponsesExport`
-                              : '#'
-                          "
+                        <button
+                          @click="exportAllScripts()"
                           class="btn btn-export-all"
-                          >Export All</a
                         >
+                          Export All
+                        </button>
                       </div>
                     </div>
                     <div class="control-overflow">
@@ -592,6 +588,39 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("exportOneScript", id)
+        .then((res) => {
+          // this.users = res.data.data;
+          console.log(res);
+
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          //a.style = "display: none";
+          var url = res.config.url;
+
+          a.href = url;
+          a.download = true;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    exportAllScripts(id) {
+      if (this.generatedScript.length < 1) {
+        this.makeToast("danger", "No script to export");
+        return;
+      } else {
+        id = this.generatedScript[this.generatedScript.length - 1].id;
+      }
+
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("exportAllGeneratedScripts", id)
         .then((res) => {
           // this.users = res.data.data;
           console.log(res);
