@@ -534,6 +534,10 @@ export default {
         });
     },
     addRemoveScriptFavorite() {
+      if (!this.activeScript) {
+        this.makeToast("danger", "Failed, Select a copy first");
+        return;
+      }
       this.$store
         .dispatch("addRemoveFavorite", {
           script_response_id: this.activeScript.id,

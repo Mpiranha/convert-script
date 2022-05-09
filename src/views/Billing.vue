@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     getStatInfo() {
-      //  this.$store.commit("updateLoadState", true);
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getDashboardInfo")
         .then((res) => {
