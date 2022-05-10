@@ -1,10 +1,10 @@
 <template>
   <div class="col-4">
     <div class="box-wrap">
-      <img class="img-icon" :src="require(`@/assets/${imgUrl}`)" />
+      <img class="img-icon" :src="imgUrl" />
       <h6 class="title">{{ typeTitle }}</h6>
       <p class="desc">{{ desc }}</p>
-      <a :href="linkUrl">
+      <router-link :to="linkUrl">
         Get Started
         <span>
           <img
@@ -13,7 +13,7 @@
             alt=""
           />
         </span>
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
   props: {
     typeTitle: String,
     desc: String,
-    linkUrl: String,
+    linkUrl: Object,
     imgUrl: String,
   },
 };
@@ -37,10 +37,10 @@ export default {
   flex-direction: column;
   border-radius: 0.4rem;
   margin-bottom: 1rem;
-  padding: 1rem 5rem 1.6rem 0.7rem;
+  padding: 1rem 1rem 1rem 0.7rem;
   box-shadow: 2px 1px 2px #d9d2d2, -1px 2px 2px #d9d2d2;
-  height: 174px;
-  max-width: 284px;
+  height: 190px;
+  /* max-width: 284px; */
 }
 
 .box-wrap .img-icon {
@@ -49,18 +49,18 @@ export default {
 }
 
 .box-wrap .title {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: bold;
 }
 
 .box-wrap .desc {
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   color: #79869d;
 }
 .box-wrap a {
   color: #8338ec !important;
   margin-top: auto;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   text-decoration: none !important;
 }
 

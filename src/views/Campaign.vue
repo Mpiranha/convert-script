@@ -2,83 +2,199 @@
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
       <sidebar
-        :user-name="this.$store.state.user.name"
+        :user-name="this.$store.state.user.first_name"
         current-active="campaign"
       ></sidebar>
       <div class="content-section">
         <navbar></navbar>
-        <div class="container scroll-content">
-          <div
-            class="
-              dashboard-top
-              d-flex
-              justify-content-between
-              align-items-center
-              mb-5
-            "
-          >
-            <h6 class="title">All Campaign</h6>
-
-            <button
-              @click="clearField"
-              class="btn btn-create"
-              v-b-modal.modal-new-campaign
+        <div class="scroll-content">
+          <div class="container">
+            <div
+              class="
+                dashboard-top
+                d-flex
+                justify-content-between
+                align-items-center
+                mb-5
+              "
             >
-              <span>+</span>
-              New Campaigns
-            </button>
-          </div>
+              <h6 class="title">All Campaign</h6>
 
-          <div class="content-wrap set-min-h pt-4 pb-5">
-            <div class="search-form">
-              <button class="btn search-btn">
-                <i class="flaticon-loupe icons"></i>
-              </button>
-              <input
-                class="form-control no-shadow search-input"
-                type="text"
-                placeholder="Search"
-              />
-            </div>
+              <div class="d-flex align-items-center ml-auto">
+                <button
+                  @click="resetFilter"
+                  v-if="selectedAgency"
+                  class="btn btn-cancel-filters"
+                >
+                  <img src="@/assets/icons/cancel.svg" alt="cancel icon" />
+                </button>
 
-            <div class="sort-wrap">
-              <div class="acct-desc">{{ campaignLength }} Campaign(s)</div>
+                <b-form-group class="mb-0 mr-3" label-class="input-label">
+                  <b-form-select
+                    @input="getClientsCampaign"
+                    class="input-table manage-width"
+                    v-model="selectedAgency"
+                    :options="clientOptions"
+                  ></b-form-select>
+                </b-form-group>
 
-              <select class="sort-select" name="" id="">
-                <option value="none" selected>Sort</option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-              </select>
-            </div>
-            <div v-if="loading">
-              <div class="loader-modal">
-                <img
-                  class="loader-img"
-                  src="@/assets/image/loader.gif"
-                  alt=""
-                />
+                <button
+                  @click="clearField"
+                  class="btn btn-create"
+                  v-b-modal.modal-new-campaign
+                >
+                  <span>+</span>
+                  New Campaigns
+                </button>
               </div>
             </div>
-            <div v-else>
+
+            <div class="content-wrap set-min-h pt-4 pb-5">
+              <div class="search-form">
+                <button class="btn search-btn">
+                  <i class="flaticon-loupe icons"></i>
+                </button>
+                <input
+                  @input="searchKeyWord"
+                  v-model="searchKey"
+                  class="form-control no-shadow search-input"
+                  type="text"
+                  placeholder="Search"
+                />
+              </div>
+
+              <loader-modal
+                :loading-state="this.$store.state.loading"
+              ></loader-modal>
+
               <div v-if="campaigns.length === 0" class="no-data-info">
                 Created campaigns will display here.
               </div>
               <table v-else class="table table-custom">
-                <tbody>
-                  <tr v-for="campaign in orderedCampaign" :key="campaign.id">
-                    <td scope="row">{{ campaign.name }}</td>
-                    <td>5</td>
+                <tbody v-if="searchResult.length > 0">
+                  <tr v-for="result in searchResult" :key="result.id">
+                    <td scope="row">
+                      <router-link
+                        :to="{
+                          name: 'CampaignScript',
+                          params: { id: result.id },
+                        }"
+                      >
+                        {{ result.name }}
+                      </router-link>
+                    </td>
+                    <td>{{ result.scripts_count }}</td>
+                    <td>
+                      {{ formatDate(result.created_at) }}
+                    </td>
+                    <td>
+                      <dropdown-tool
+                        delete-what="Campaign"
+                        @edit-clicked="openEditModal(result.id, result.name)"
+                        @delete-proceed="deleteCampaign(result.id)"
+                      >
+                        <template v-slot:secondary>
+                          <b-dropdown-item
+                            v-b-modal.add-client
+                            link-class="drop-link"
+                            href="#"
+                            @click="getCampaignId(result.id)"
+                          >
+                            <img
+                              class="drop-img-icon"
+                              src="@/assets/icons/convert-icon/Add to client icon.svg"
+                              alt="add to client icon"
+                            />
+                            Add to Client
+                          </b-dropdown-item>
+                        </template>
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody v-else-if="selectedAgency">
+                  <tr v-for="campaign in filteredCampaign" :key="campaign.id">
+                    <td scope="row">
+                      <router-link
+                        :to="{
+                          name: 'CampaignScript',
+                          params: { id: campaign.id },
+                        }"
+                      >
+                        {{ campaign.name }}
+                      </router-link>
+                    </td>
+                    <td>{{ campaign.scripts_count }}</td>
                     <td>
                       {{ formatDate(campaign.created_at) }}
                     </td>
                     <td>
                       <dropdown-tool
+                        delete-what="Campaign"
                         @edit-clicked="
                           openEditModal(campaign.id, campaign.name)
                         "
                         @delete-proceed="deleteCampaign(campaign.id)"
-                      ></dropdown-tool>
+                      >
+                        <template v-slot:secondary>
+                          <b-dropdown-item
+                            v-b-modal.modal-add-client
+                            link-class="drop-link"
+                            href="#"
+                            @click="getCampaignId(campaign.id)"
+                          >
+                            <img
+                              class="drop-img-icon"
+                              src="@/assets/icons/convert-icon/Add to client icon.svg"
+                              alt="add to client icon"
+                            />
+                            Add to Client
+                          </b-dropdown-item>
+                        </template>
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody v-else-if="campaigns && searchKey.length < 1">
+                  <tr v-for="campaign in campaigns" :key="campaign.id">
+                    <td scope="row">
+                      <router-link
+                        :to="{
+                          name: 'CampaignScript',
+                          params: { id: campaign.id },
+                        }"
+                      >
+                        {{ campaign.name }}
+                      </router-link>
+                    </td>
+                    <td>{{ campaign.scripts_count }}</td>
+                    <td>
+                      {{ formatDate(campaign.created_at) }}
+                    </td>
+                    <td>
+                      <dropdown-tool
+                        delete-what="Campaign"
+                        @edit-clicked="
+                          openEditModal(campaign.id, campaign.name)
+                        "
+                        @delete-proceed="deleteCampaign(campaign.id)"
+                      >
+                        <template v-slot:secondary>
+                          <b-dropdown-item
+                            v-b-modal.modal-add-client
+                            link-class="drop-link"
+                            href="#"
+                            @click="getCampaignId(campaign.id)"
+                          >
+                            <img
+                              class="drop-img-icon"
+                              src="@/assets/icons/convert-icon/Add to client icon.svg"
+                              alt="add to client icon"
+                            />
+                            Add to Client
+                          </b-dropdown-item>
+                        </template>
+                      </dropdown-tool>
                     </td>
                   </tr>
                 </tbody>
@@ -128,6 +244,36 @@
         >
       </div>
     </b-modal>
+    <b-modal
+      :hide-header="true"
+      id="modal-add-client"
+      centered
+      size="md"
+      :hide-footer="true"
+      dialog-class="control-width"
+      content-class="modal-main"
+    >
+      <b-form-group
+        label="Add to Client"
+        label-for="pwd"
+        label-class="form-label"
+      >
+        <b-form-select
+          class="input-table"
+          v-model="client"
+          :options="clientOptions"
+        ></b-form-select>
+      </b-form-group>
+
+      <div class="d-flex justify-content-end">
+        <b-button @click="$bvModal.hide('modal-add-client')" class="close-modal"
+          >Close</b-button
+        >
+        <b-button @click="addToClient(campaignIdToAdd)" class="save-modal"
+          >Add</b-button
+        >
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -136,9 +282,11 @@
 import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
+import alertMixin from "@/mixins/alertMixin";
 
 export default {
   name: "Campaign",
+  mixins: [alertMixin],
   components: {
     Sidebar,
     Navbar,
@@ -146,6 +294,11 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
+      client: null,
+      campaignIdToAdd: null,
+      clientOptions: [{ value: null, text: "Select a Client" }],
       campaignName: "",
       accessOptions: [{ value: null, text: "Select Plans" }],
       campaigns: [],
@@ -153,27 +306,57 @@ export default {
       loading: true,
       triggerEdit: false,
       editId: null,
+      agencyOptions: [{ value: null, text: "Select a Client" }],
+      selectedAgency: null,
+      clientCampaign: [],
     };
   },
   methods: {
-    getCampaign() {
+    searchKeyWord() {
       this.$store
-        .dispatch("getCampaigns")
+        .dispatch("search", {
+          endpoint: "/api/v1/campaigns",
+          keyword: this.searchKey,
+        })
         .then((res) => {
-          this.campaigns = res.data.data;
-          console.log(res.data + "called now");
-          this.loading = false;
+          this.searchResult = res.data.data;
+
+          // console.log(res.data + "called now");
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
           // this.error = error.response.data.errors.root;
           // // this.error = error;
           console.log(error);
-          this.loading = false;
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    getCampaignId(id) {
+      this.campaignIdToAdd = id;
+    },
+    getCampaign() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getCampaigns")
+        .then((res) => {
+          this.campaigns = res.data.data.reverse();
+          console.log(res.data + "called now");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
         });
     },
     addCampaign() {
-      this.loading = true;
+      this.$store.commit("updateLoadState", true);
+
       this.$bvModal.hide("modal-new-campaign");
       this.$store
         .dispatch("addCampaign", { name: this.campaignName })
@@ -182,10 +365,14 @@ export default {
           console.log(res.data);
           // this.getCampaign();
           this.getCampaign();
-          this.loading = false;
+          this.makeToast("success", "Campaign added successfully");
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
+          this.error = error;
+          this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
           // this.error = error.response.data.errors.root;
           // this.error = error;
         });
@@ -195,7 +382,7 @@ export default {
       // this.$vm.$forceUpdate();
     },
     editCampaign(id) {
-      this.loading = true;
+      this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-campaign");
       this.$store
         .dispatch("editCampaign", { id: id, data: { name: this.campaignName } })
@@ -203,31 +390,87 @@ export default {
           this.error = null;
           console.log(res.data);
           this.getCampaign();
-          this.loading = false;
+          this.makeToast("success", "Campaign editted successfully");
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          // this.error = error.response.data.errors.root;
+          this.error = error;
+          this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
           // this.error = error;
         });
     },
     deleteCampaign(id) {
-      this.loading = true;
+      this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteCampaign", id)
         .then((res) => {
           this.error = null;
           this.getCampaign();
           console.log(res.data);
-          this.loading = false;
+          this.makeToast("success", "Campaign deleted successfully");
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-          // this.error = error.response.data.errors.root;
+          this.error = error;
+          this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
           // this.error = error;
         });
 
       // this.getCampaign();
+    },
+
+    addToClient(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modal-add-client");
+      this.$store
+        .dispatch("addCampaignToAgency", {
+          id: id,
+          data: { agency_id: this.client, campaign_id: id },
+        })
+        .then((res) => {
+          console.log(res);
+          this.error = null;
+          this.client = null;
+          this.makeToast("success", "Campaign Added successfully");
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+         
+          this.client = null;
+          this.error = error.response.data.data.error;
+         
+          this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
+          // this.error = error;
+        });
+    },
+
+    getAgency() {
+      this.$store
+        .dispatch("getAllAgency")
+        .then((res) => {
+          var data = res.data.data;
+
+          for (let index = 0; index < data.length; index++) {
+            this.clientOptions.push({
+              value: data[index].id,
+              text: data[index].name,
+            });
+          }
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
     },
 
     openEditModal(id, data) {
@@ -250,9 +493,27 @@ export default {
 
       return formatedDate.toLocaleDateString();
     },
+    resetFilter() {
+      this.selectedAgency = null;
+      this.clientCampaign = [];
+    },
+    getClientsCampaign() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getAgencyCampaign", this.selectedAgency)
+        .then((res) => {
+          this.$store.commit("updateLoadState", false);
+          this.clientCampaign = res.data.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
   },
 
   mounted() {
+    this.getAgency();
     this.getCampaign();
   },
   computed: {
@@ -262,73 +523,26 @@ export default {
     orderedCampaign() {
       return this.orderSort(this.campaigns);
     },
+    filteredCampaign() {
+      if (this.selectedAgency) {
+        return this.clientCampaign;
+      }
+
+      return this.campaigns;
+      // return this.campaigns.filter((cat) => {
+      //   return this.selectedAgency == cat.script_type_category;
+      // });
+    },
   },
 };
 </script>
 
 <style>
-.save-btn {
-  background-color: pink;
+.btn-cancel-filters img {
+  width: 1rem;
 }
 
-.modal-main {
-  border-radius: 0.5rem !important;
-}
-
-.drop-main-wrap {
-  min-width: 6rem !important;
-  font-size: 0.8rem !important;
-  box-shadow: -3px 3px 6px #eee;
-}
-
-.form-label {
-  font-size: 0.9rem;
-}
-
-.input-table {
-  border: 1px solid #c2c8d1 !important;
-  font-size: 0.9rem !important;
-  border-radius: 0.5rem !important;
-  width: 100%;
-  padding: 0.55rem 0.75rem;
-}
-
-.control-width {
-  max-width: 420px !important;
-}
-
-.form-group {
-  margin-bottom: 0.7rem;
-}
-
-.close-modal,
-.save-modal {
-  font-size: 0.8rem !important;
-  padding: 0.45rem 1.5rem !important;
-  border: none !important;
-  border-radius: 0.5rem !important;
-}
-
-.close-modal {
-  margin-right: 0.8rem;
-  color: #8338ec !important;
-  background-color: #fff !important;
-  border: 1px solid #8338ec !important;
-}
-
-.save-modal {
-  background-color: #8338ec !important;
-  color: #fff !important;
-}
-
-.modal-head .title {
-  font-size: 0.9rem;
-  font-weight: bold;
-  margin-bottom: 0;
-}
-
-.modal-head .desc {
-  font-size: 0.7rem;
-  color: #848688;
+.manage-width {
+  width: 200px !important;
 }
 </style>

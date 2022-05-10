@@ -19,3 +19,5 @@ export default new Vuex.Store({
   getters,
   mutations
 })
+
+//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

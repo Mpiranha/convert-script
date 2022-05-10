@@ -1,11 +1,6 @@
 <template>
   <div class="side-bar">
-    <img
-      class="side-logo"
-      src="@/assets/image/ConvertScript Logo.png"
-      alt="logo"
-      srcset=""
-    />
+    <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" srcset="" />
     <nav class="nav flex-column nav-wrap">
       <li class="nav-item">
         <router-link
@@ -26,7 +21,44 @@
           <span class="nav-text"> Dashboard </span>
         </router-link>
       </li>
-
+      <li class="nav-item">
+        <router-link
+          class="nav-link"
+          :class="currentActive == 'new-copy' ? 'active' : ''"
+          to="/script/select"
+        >
+          <img
+            class="main-icon"
+            src="@/assets/icons/convert-icon/New Copy.svg"
+            alt=""
+          />
+          <img
+            class="active-icon"
+            src="@/assets/icons/convert-icon/active-icons/New Copy Active.svg"
+            alt=""
+          />
+          <span class="nav-text"> New Copy </span>
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link
+          class="nav-link"
+          :class="currentActive == 'script' ? 'active' : ''"
+          to="/scripts"
+        >
+          <img
+            class="main-icon"
+            src="@/assets/icons/convert-icon/All script.svg"
+            alt=""
+          />
+          <img
+            class="active-icon"
+            src="@/assets/icons/convert-icon/active-icons/all script.svg"
+            alt=""
+          />
+          <span class="nav-text"> All Copy </span>
+        </router-link>
+      </li>
       <li class="nav-item">
         <router-link
           class="nav-link"
@@ -46,25 +78,7 @@
           <span class="nav-text"> Campaigns </span>
         </router-link>
       </li>
-      <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'script' ? 'active' : ''"
-          to="/scripts"
-        >
-          <img
-            class="main-icon"
-            src="@/assets/icons/convert-icon/All script.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/all script.svg"
-            alt=""
-          />
-          <span class="nav-text"> All Scripts </span>
-        </router-link>
-      </li>
+
       <li class="nav-item">
         <router-link
           class="nav-link"
@@ -84,7 +98,7 @@
           <span class="nav-text"> My Favourites </span>
         </router-link>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <router-link
           class="nav-link"
           :class="currentActive == 'presets' ? 'active' : ''"
@@ -102,9 +116,9 @@
           />
           <span class="nav-text"> Presets </span>
         </router-link>
-      </li>
+      </li> -->
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <router-link
           class="nav-link"
           :class="currentActive == 'integration' ? 'active' : ''"
@@ -122,7 +136,7 @@
           />
           <span class="nav-text"> Integration </span>
         </router-link>
-      </li>
+      </li> -->
 
       <li class="nav-item">
         <router-link
@@ -141,6 +155,25 @@
             alt=""
           />
           <span class="nav-text"> Settings </span>
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link
+          class="nav-link"
+          :class="currentActive == 'tutorials' ? 'active' : ''"
+          to="/tutorial"
+        >
+          <img
+            class="main-icon"
+            src="@/assets/icons/convert-icon/Tutotials.svg"
+            alt=""
+          />
+          <img
+            class="active-icon"
+            src="@/assets/icons/convert-icon/active-icons/Tutorials Active.svg"
+            alt=""
+          />
+          <span class="nav-text"> Tutorials </span>
         </router-link>
       </li>
     </nav>
@@ -211,18 +244,15 @@
             @click="toggleShow()"
             data-target=".user-drop"
           >
-            <img
-              class="user-img"
-              src="@/assets/icons/profile-user.svg"
-              alt=""
-            />
+            <div class="user-img">{{ getFirstLetter(userName) }}</div>
             <div class="name">{{ userName }}</div>
             <div v-if="isShowing" class="user-drop">
               <div class="setup-drop-inner">
                 <ul class="nav flex-column">
                   <li class="nav-item">
-                    <router-link class="nav-link" to="/account">
+                    <router-link class="nav-link" to="/settings">
                       <img
+                        rel="preload"
                         src="@/assets/icons/convert-icon/account.svg"
                         alt="icon"
                       />
@@ -232,6 +262,7 @@
                   <li class="nav-item">
                     <router-link class="nav-link" to="/bonus">
                       <img
+                        rel="preload"
                         src="@/assets/icons/convert-icon/bonus.svg"
                         alt="icon"
                       />
@@ -241,6 +272,7 @@
                   <li class="nav-item">
                     <router-link class="nav-link" to="/billing">
                       <img
+                        rel="preload"
                         src="@/assets/icons/convert-icon/billiing.svg"
                         alt="icon"
                       />
@@ -248,12 +280,9 @@
                     </router-link>
                   </li>
                   <li class="nav-item">
-                    <a
-                      @click="logout($event)"
-                      class="btn nav-link"
-                      href="#"
-                    >
+                    <a @click="logout($event)" class="btn nav-link" href="#">
                       <img
+                        rel="preload"
                         src="@/assets/icons/convert-icon/logout.svg"
                         alt="icon"
                       />
@@ -295,6 +324,18 @@ export default {
         this.$router.push("/login");
       });
     },
+    getFirstLetter(text) {
+      return text.toString().charAt(0);
+    },
+  },
+  mounted() {
+    document.addEventListener("click", function (e) {
+      if (this.isShowing) {
+        if (e.target.classList.hasClass("user-drop")) {
+          alert("hey");
+        }
+      }
+    });
   },
 };
 </script>
@@ -412,6 +453,13 @@ export default {
   height: 1.7rem;
   border-radius: 50%;
   margin-right: 0.5rem;
+  background-color: #6f6f6f;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: bolder;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 [data-target=".user-drop"] {
@@ -425,7 +473,27 @@ export default {
 
 .btn-drop .name {
   font-size: 0.8rem;
-  color: #000;
+  color: #393f46;
   margin-right: 0.5rem;
+}
+
+@media screen and (min-width: 1300px) {
+  .nav-wrap .nav-link {
+    font-size: 0.9rem;
+  }
+
+  .main-icon,
+  .active-icon {
+    width: 1.3rem;
+  }
+
+  .btn-drop .name {
+    font-size: 0.9rem;
+  }
+
+  .user-info .user-img {
+    width: 2rem;
+    height: 2rem;
+  }
 }
 </style>

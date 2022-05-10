@@ -26,7 +26,9 @@ export default {
   }) {
     state.user = user
   },
-  get_all_agencies_success(state, { agencies }) {
+  get_all_agencies_success(state, {
+    agencies
+  }) {
     state.allAgencies = agencies
   },
   auth_error(state) {
@@ -40,4 +42,14 @@ export default {
     state.token = ''
     state.user = ''
   },
+  triggerEdit(state, {
+    editStatus,
+    id
+  }) {
+    state.triggerEdit = editStatus
+    state.editId = id
+  },
+  updateLoadState(state, payload) {
+    state.loading = payload
+  }
 }

@@ -6,7 +6,7 @@
           <div class="d-flex justify-content-center mb-5">
             <img
               class="img-logo"
-              src="../assets/image/ConvertScript Logo.png"
+              src="../assets/image/Logo.svg"
               alt="Logo Image"
             />
           </div>
@@ -127,18 +127,20 @@ export default {
 
       this.$store
         .dispatch("login", this.user)
-        .then((res) => {
+        .then(() => {
           this.error = null;
-          this.$store.dispatch("getUser")
+          this.$store.dispatch("getUser");
           this.$router.push(this.$route.query.from || "/").catch(() => {
             // console.log(error);
           });
 
-          console.log(res.data);
+          //console.log(res.data);
         })
-        .catch((error) => {
+        .catch((errors) => {
           // console.log(error);
-          this.error = error.response.data.errors.root;
+          this.error = errors.response.data.errors.root;
+          
+          console.log();
           // this.error = error;
         });
       // const ( username, password ) = this

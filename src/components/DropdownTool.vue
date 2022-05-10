@@ -16,12 +16,19 @@
       <i class="flaticon-pencil icons table-drop-icon"></i>
       Edit
     </b-dropdown-item>
-    <b-dropdown-item v-b-modal.modal-delete link-class="drop-link" href="#">
+    <b-dropdown-item
+      @click="modalShow = !modalShow"
+      link-class="drop-link"
+      href="#"
+      v-if="!noDelete"
+    >
       <i class="flaticon-trash icons table-drop-icon"></i>
       Delete
     </b-dropdown-item>
+    <slot name="secondary"></slot>
 
     <b-modal
+      v-model="modalShow"
       :hide-header="true"
       id="modal-delete"
       centered
@@ -31,7 +38,9 @@
       content-class="modal-main py-3"
     >
       <div class="modal-head text-center mb-4">
-        <h3 class="title">Are You sure you want to delete this campaign?</h3>
+        <h3 class="title">
+          Are You sure you want to delete this {{ deleteWhat }}?
+        </h3>
       </div>
 
       <div class="d-flex justify-content-center">
@@ -49,7 +58,12 @@
 <script>
 export default {
   name: "DropdownTool",
-  props: [],
+  props: ["deleteWhat","noDelete"],
+  data() {
+    return {
+      modalShow: false,
+    };
+  },
   methods: {
     editAction() {
       this.$emit("edit-clicked");

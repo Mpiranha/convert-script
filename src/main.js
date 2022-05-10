@@ -7,6 +7,10 @@ import store from './store'
 import Vuelidate from 'vuelidate'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import Loader from '@/components/Loader'
+
+import VueApexCharts from 'vue-apexcharts'
+
 
 
 
@@ -27,6 +31,10 @@ Vue.use(IconsPlugin)
 Vue.use(Vuelidate)
 Vue.use(Vuex)
 Vue.use(VueAxios, axios)
+Vue.use(VueApexCharts)
+
+Vue.component('apexchart', VueApexCharts)
+Vue.component('loader-modal', Loader)
 
 Vue.config.productionTip = false
 

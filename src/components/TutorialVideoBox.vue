@@ -1,5 +1,5 @@
 <template>
-  <div class="col-4">
+  <div class="col-6">
     <div class="vid-wrap">
       <iframe
         :src="link"
@@ -55,20 +55,20 @@ export default {
 }
 
 .vid-wrap .vid-info .title {
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: #79869d;
   margin-bottom: 0.6rem;
 }
 
 .vid-wrap iframe {
   width: 100%;
-  height: 150px;
+  height: 300px;
   border-radius: 0.4rem 0.4rem 0 0;
 }
 
 .vid-info a {
   color: #8338ec;
-  font-size: 0.8rem;
+  font-size: 1rem;
   text-decoration: none !important;
 }
 

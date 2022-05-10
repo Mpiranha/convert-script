@@ -6,6 +6,9 @@ export default {
   token: localStorage.getItem('token') || '',
   status: '',
   loggedIn: false,
+  loading: true,
   passwordResetStatus: '',
-  allAgencies: {}
+  allAgencies: {},
+  triggerEdit: false,
+  editId: null,
 }
