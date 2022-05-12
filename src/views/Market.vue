@@ -367,33 +367,6 @@ export default {
       error: "",
       triggerEdit: false,
       editId: null,
-      dummy: {
-        id: 33125171,
-        title: "Typing job",
-        type: "Fixed",
-        short_description:
-          "I have a PDF that needs to be type in order to replace/edit some text. I will need 2 files edited an",
-        full_description:
-          "I have a PDF that needs to be type in order to replace/edit some text. I will need 2 files edited and i need it ASAP,",
-        date: 1646608311,
-        bids: 2,
-        status: "open",
-        bid_count: 2,
-        bid_avg: 375,
-        budget_type: "fixed",
-        budget_low: 250,
-        budget_high: 750,
-        url: "http://www.freelancer.com/projects/pdf/Typing-job-33125171",
-        currency_id: 1,
-        currency_code: "USD",
-        currency_sign: "$",
-        currency_name: "US Dollar",
-        currency_exchange_rate: 1,
-        currency_country: "US",
-        currency_is_escrowcom_supported: true,
-        hourly_commitment: null,
-        hourly_interval: null,
-      },
     };
   },
   methods: {

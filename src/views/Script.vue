@@ -15,7 +15,6 @@
                 mb-5
               ">
               <h6 class="title">All Copy</h6>
-
               <router-link class="btn btn-create" to="/script/select">
                 <span>+</span>
                 New Copy
@@ -28,7 +27,7 @@
                   <div class="section-head">
                     <div class="section-head-left">
                       <img class="section-head-icon" src="@/assets/icons/convert-icon/All script.svg" alt="" />
-                      {{ scripts.length }}
+                      {{ scriptLength }}
                     </div>
                     <div class="search-form mb-0">
                       <button class="btn search-btn">
@@ -43,7 +42,7 @@
                       </a>
                     </div>
                   </div>
-                  <div class="control-height">
+                  <div ref="scrollContent" class="control-height">
                     <table class="table table-section script-table">
                       <tbody v-if="searchResult.length > 0">
                         <tr @click="setActiveScript(result)" v-for="result in searchResult" :key="result.id">
@@ -117,7 +116,7 @@
                           <img v-if="isFavourite" class="fav-icon" src="@/assets/icons/convert-icon/star.png" alt="" />
                           <img v-else class="fav-icon" src="@/assets/icons/convert-icon/my Favourites.svg" alt="" />
                         </div>
-                        <!-- <select class="sort-select" name="" id="">
+                      <!-- <select class="sort-select" name="" id="">
                         <option value="none" selected>Export Script</option>
                         <option value=""></option>
                         <option value=""></option>
@@ -156,7 +155,7 @@
               </div>
             </div>
             <div class="d-flex justify-content-center">
-              <b-pagination v-model="currentPage" :total-rows="marketLength" :per-page="perPage"
+              <b-pagination v-model="currentPage" :total-rows="scriptLength" :per-page="perPage"
                 aria-controls="my-table" size="sm" :hide-goto-end-buttons="true" prev-text="<" next-text=">"
                 @change="handlePageChange"></b-pagination>
             </div>
@@ -228,6 +227,9 @@ export default {
       searchResult: [],
       triggerEdit: false,
       isFavourite: false,
+      perPage: 20,
+      currentPage: 1,
+      scriptLength: 0,
       scripts: [],
       content: "",
       editId: "",
@@ -378,9 +380,13 @@ export default {
     getScripts() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getGeneratedScripts")
+        .dispatch("getGeneratedScripts", {
+          number: this.currentPage,
+          perPage: this.perPage,
+        })
         .then((res) => {
           this.scripts = res.data.data;
+          this.scriptLength = res.data.meta.total;
 
           this.$store.commit("updateLoadState", false);
         })
@@ -443,7 +449,7 @@ export default {
     },
     addRemoveScriptFavorite() {
       if (!this.activeScript) {
-        this.makeToast("danger", "Failed, Select a copy first");
+          this.makeToast("danger", "Failed, Select a copy first");
         return;
       }
       this.$store
@@ -532,6 +538,14 @@ export default {
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
+    },
+    handlePageChange(value) {
+      this.$store.commit("updateLoadState", true);
+      this.currentPage = value;
+      this.getScripts();
+      this.activeScript = null;
+     this.$refs.scrollContent.scroll(0, 0);
+      console.log("Value: " + value);
     },
   },
   computed: {

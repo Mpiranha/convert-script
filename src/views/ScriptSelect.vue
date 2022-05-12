@@ -2,10 +2,7 @@
   <div class="container-fluid px-0">
     <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap">
-      <sidebar
-        :user-name="this.$store.state.user.first_name"
-        current-active="new-copy"
-      ></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name" current-active="new-copy"></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="scroll-content">
@@ -17,108 +14,78 @@
 
               <div class="select-script-forms">
                 <b-form-group label-class="input-label">
-                  <b-form-select
-                    class="input-table"
-                    v-model="category"
-                    :options="categoryOptions"
-                  ></b-form-select>
+                  <b-form-select class="input-table" v-model="category" :options="categoryOptions"></b-form-select>
                 </b-form-group>
                 <div class="search-form">
                   <button class="btn search-btn">
                     <i class="flaticon-loupe icons"></i>
                   </button>
-                  <input
-                    v-model="searchKey"
-                    @input="searchKeyWord"
-                    class="form-control no-shadow search-input"
-                    type="text"
-                    placeholder="Search"
-                  />
+                  <input v-model="searchKey" @input="searchKeyWord" class="form-control no-shadow search-input"
+                    type="text" placeholder="Search" />
                 </div>
               </div>
             </div>
 
             <div v-if="searchResult.length > 0" class="row">
-              <script-select-type-box
-                v-for="scriptType in searchResult"
-                :key="scriptType.id"
-                :img-url="
-                  scriptType.icon
-                    ? scriptType.icon
-                    : require(`@/assets/icons/convert-icon/Aweber.svg`)
-                "
-                :link-url="
-                  $route.params.id
-                    ? {
-                        name: 'CampaignCreateScript',
-                        params: {
-                          campaignId: $route.params.id,
-                          id: scriptType.id,
-                        },
-                      }
-                    : {
-                        name: 'CreateScript',
-                        params: { id: scriptType.id },
-                      }
-                "
-                :type-title="scriptType.name"
-                :desc="scriptType.description"
-              ></script-select-type-box>
+              <script-select-type-box v-for="scriptType in searchResult" :key="scriptType.id" :img-url="
+                scriptType.icon
+                  ? scriptType.icon
+                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
+              " :link-url="
+  $route.params.id
+    ? {
+      name: 'CampaignCreateScript',
+      params: {
+        campaignId: $route.params.id,
+        id: scriptType.id,
+      },
+    }
+    : {
+      name: 'CreateScript',
+      params: { id: scriptType.id },
+    }
+" :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
             </div>
 
             <div v-else-if="category" class="row">
-              <script-select-type-box
-                v-for="scriptType in filteredCategory"
-                :key="scriptType.id"
-                :img-url="
-                  scriptType.icon
-                    ? scriptType.icon
-                    : require(`@/assets/icons/convert-icon/Aweber.svg`)
-                "
-                :link-url="
-                  $route.params.id
-                    ? {
-                        name: 'CampaignCreateScript',
-                        params: {
-                          campaignId: $route.params.id,
-                          id: scriptType.id,
-                        },
-                      }
-                    : {
-                        name: 'CreateScript',
-                        params: { id: scriptType.id },
-                      }
-                "
-                :type-title="scriptType.name"
-                :desc="scriptType.description"
-              ></script-select-type-box>
+              <script-select-type-box v-for="scriptType in filteredCategory" :key="scriptType.id" :img-url="
+                scriptType.icon
+                  ? scriptType.icon
+                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
+              " :link-url="
+  $route.params.id
+    ? {
+      name: 'CampaignCreateScript',
+      params: {
+        campaignId: $route.params.id,
+        id: scriptType.id,
+      },
+    }
+    : {
+      name: 'CreateScript',
+      params: { id: scriptType.id },
+    }
+" :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
             </div>
             <div v-else-if="scriptTypes && searchKey.length < 1" class="row">
-              <script-select-type-box
-                v-for="scriptType in scriptTypes"
-                :key="scriptType.id"
-                :img-url="
-                  scriptType.icon
-                    ? scriptType.icon
-                    : require(`@/assets/icons/convert-icon/Aweber.svg`)
-                "
-                :link-url="
-                  $route.params.id
-                    ? {
-                        name: 'CampaignCreateScript',
-                        params: {
-                          campaignId: $route.params.id,
-                          id: scriptType.id,
-                        },
-                      }
-                    : {
-                        name: 'CreateScript',
-                        params: { id: scriptType.id },
-                      }
-                "
-                :type-title="scriptType.name"
-                :desc="scriptType.description"
-              ></script-select-type-box>
+              <script-select-type-box v-for="scriptType in scriptTypes" :key="scriptType.id" :img-url="
+                scriptType.icon
+                  ? scriptType.icon
+                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
+              " :link-url="
+  $route.params.id
+    ? {
+      name: 'CampaignCreateScript',
+      params: {
+        campaignId: $route.params.id,
+        id: scriptType.id,
+      },
+    }
+    : {
+      name: 'CreateScript',
+      params: { id: scriptType.id },
+    }
+" :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
             </div>
           </div>
         </div>
@@ -184,7 +151,10 @@ export default {
           this.scriptTypes = res.data.data;
 
           console.log(res.data);
-          this.$store.commit("updateLoadState", false);
+          setTimeout(() => {
+            this.$store.commit("updateLoadState", false);
+          }, 5000);
+
         })
         .catch((error) => {
           console.log(error);
@@ -211,12 +181,12 @@ export default {
             });
           }
 
-          this.$store.commit("updateLoadState", false);
+          //this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-          this.$store.commit("updateLoadState", false);
+          //this.$store.commit("updateLoadState", false);
         });
     },
   },

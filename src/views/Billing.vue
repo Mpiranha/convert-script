@@ -11,6 +11,9 @@
             </div>
 
             <div class="content-wrap pt-4 pb-5">
+              <loader-modal
+                :loading-state="this.$store.state.loading"
+              ></loader-modal>
               <table class="table table-custom">
                 <tbody>
                   <tr>
@@ -71,6 +74,7 @@ export default {
   },
   methods: {
     getStatInfo() {
+
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getDashboardInfo")
