@@ -1,93 +1,65 @@
 <template>
-  <div class="container-fluid px-0">
+<div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar
-        :user-name="this.$store.state.user.first_name"
-        current-active="roles"
-      ></sidebar>
-      <div class="content-section">
-        <navbar :remove-content="true"></navbar>
-        <div class="container scroll-content">
-          <div class="sec-padding">
-            <div
-              class="
+        <sidebar :user-name="this.$store.state.user.first_name" current-active="roles"></sidebar>
+        <div class="content-section">
+            <navbar :remove-content="true"></navbar>
+            <div class="container scroll-content">
+                <div class="sec-padding">
+                    <div class="
                 dashboard-top
                 d-flex
                 justify-content-between
                 align-items-center
                 mb-5
-              "
-            >
-              <h6 class="title mb-0">Set Permissions for {{ role.name }}</h6>
-              <div class="d-flex align-items-center">
-                <button
-                  @click="clearField"
-                  class="btn btn-create py-2"
-                  v-b-modal.modal-new-client
-                >
-                  Save
-                </button>
-              </div>
-            </div>
+              ">
+                        <h6 class="title mb-0">Set Permissions for {{ role.name }}</h6>
+                        <div class="d-flex align-items-center">
+                            <button @click="updatePermission($route.params.id)" class="btn btn-create py-2" v-b-modal.modal-new-client>
+                                Save
+                            </button>
+                        </div>
+                    </div>
 
-            <div class="content-wrap set-min-h pt-4 pb-5">
-              <div class="search-form mb-2">
-                <button class="btn search-btn">
-                  <i class="flaticon-loupe icons"></i>
-                </button>
-                <input
-                  class="form-control no-shadow search-input"
-                  type="text"
-                  placeholder="Search"
-                />
-              </div>
-              <loader-modal
-                :loading-state="this.$store.state.loading"
-              ></loader-modal>
-              <div v-if="permissions.length === 0" class="no-data-info">
-                Permissions will display here.
-              </div>
-              <table v-else class="table table-custom">
-                <thead>
-                  <tr>
-                    <td>Name</td>
-                    <td>ID</td>
-                    <td>Status</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="permission in permissions" :key="permission.id">
-                    <td class="">{{ permission.name }}</td>
-                    <td>{{ permission.id }}</td>
-                    <td>
-                      <label class="switch mb-0">
-                        <input
-                          :checked="isPermissionAvailable(permission.name)"
-                          type="checkbox"
-                        />
-                        <span class="slider round"></span>
-                      </label>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                    <div class="content-wrap set-min-h pt-4 pb-5">
+                        <div class="search-form mb-2">
+                            <button class="btn search-btn">
+                                <i class="flaticon-loupe icons"></i>
+                            </button>
+                            <input class="form-control no-shadow search-input" type="text" placeholder="Search" />
+                        </div>
+                        <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
+                        <div v-if="permissions.length === 0" class="no-data-info">
+                            Permissions will display here.
+                        </div>
+                        <table v-else class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>ID</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(permission, index) in permissions" :key="permission.id">
+                                    <td class="">{{ permission.name }}</td>
+                                    <td>{{ permission.id }}</td>
+                                    <td>
+                                        <label class="switch mb-0">
+                                            <input :value="permission.name" v-model="select[index].selected" :checked="isPermissionAvailable(permission.name, index)" type="checkbox" />
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <b-pagination v-model="currentPage" :total-rows="1" :per-page="perPage" aria-controls="my-table" size="sm" :hide-goto-end-buttons="true" prev-text="<" next-text=">" @change="handlePageChange"></b-pagination>
+                    </div>
+                </div>
             </div>
-            <div class="d-flex justify-content-center">
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="1"
-                :per-page="perPage"
-                aria-controls="my-table"
-                size="sm"
-                :hide-goto-end-buttons="true"
-                prev-text="<"
-                next-text=">"
-                 @change="handlePageChange"
-              ></b-pagination>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
     <!-- <b-modal
       :hide-header="true"
@@ -98,7 +70,6 @@
       dialog-class="control-width"
       content-class="modal-main"
     >
-
 
       <b-form-group label="Name">
         <b-form-input
@@ -142,7 +113,7 @@
         >
       </div>
     </b-modal> -->
-  </div>
+</div>
 </template>
 
 <script>
@@ -152,171 +123,132 @@ import Navbar from "@/components/TheNav.vue";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Permission",
-  mixins: [alertMixin],
-  components: {
-    Sidebar,
-    Navbar,
-  },
-  data() {
-    return {
-      perPage: 5,
-      currentPage: 1,
-      file: null,
-      permissions: [],
-      role: [],
-      error: "",
-      triggerEdit: false,
-      editId: null,
-    };
-  },
-  methods: {
-     handlePageChange(value) {
-      this.currentPage = value;
-      this.getAllPermissions();
-      console.log("Value: " + value);
+    name: "Permission",
+    mixins: [alertMixin],
+    components: {
+        Sidebar,
+        Navbar,
     },
-    getRole(id) {
-      this.$store
-        .dispatch("getOneRole", id)
-        .then((res) => {
-          this.role = res.data.data;
+    data() {
+        return {
+            perPage: 5,
+            currentPage: 1,
+            file: null,
+            permissions: [],
+            role: [],
+            error: "",
+            triggerEdit: false,
+            editId: null,
+            select: [],
+        };
+    },
+    methods: {
+        // updateSelected(permissions) {
+        //  for (var i = 0; i < permissions.length; i++) {
 
-           this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error);
-          //this.loading = false;
-           this.$store.commit("updateLoadState", false);
-        });
-    },
-    getAllPermissions() {
-       this.$store.commit("updateLoadState", true);
-      this.$store
-        .dispatch("getAllPermissions")
-        .then((res) => {
-          this.permissions = res.data.data;
-           this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error);
-           this.$store.commit("updateLoadState", false);
-        });
-    },
-    addAgency() {
-       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
+        //  }
+        // },
+        handlePageChange(value) {
+            this.currentPage = value;
+            this.getAllPermissions();
+            console.log("Value: " + value);
+        },
+        getRole(id) {
+            this.$store
+                .dispatch("getOneRole", id)
+                .then((res) => {
+                    this.role = res.data.data;
 
-      this.$store
-        .dispatch("addAgency", this.client)
-        .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          // this.getCampaign();
-          this.getAgency();
-           this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error.message);
-           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
-        });
+                    this.$store.commit("updateLoadState", false);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    //this.loading = false;
+                    this.$store.commit("updateLoadState", false);
+                });
+        },
+        getAllPermissions() {
+            this.$store.commit("updateLoadState", true);
+            this.$store
+                .dispatch("getAllPermissions")
+                .then((res) => {
+                    this.permissions = res.data.data;
+                    this.updateSelected(res.data.data);
+                    this.$store.commit("updateLoadState", false);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.$store.commit("updateLoadState", false);
+                });
+        },
+        updatePermission(id) {
+            this.$store.commit("updateLoadState", true);
+            this.$store
+                .dispatch("addPermissionsToRole", {
+                    id: id,
+                    data: {
+                        permissions: this.selectedPermissions
+                    },
+                })
+                .then(() => {
+                    this.makeToast("success", "Updated successfully");
+                    this.getRole(this.$route.params.id);
+                    this.getAllPermissions();
+                    this.$store.commit("updateLoadState", false);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.$store.commit("updateLoadState", false);
+                });
+        },
+        updateSelected(data) {
+            for (var i = 0; i < data.length; i++) {
+                this.select.push({
+                    name: data[i].name,
+                    selected: this.isPermissionAvailable(data[i].name)
+                });
+            }
+        },
+        isPermissionAvailable(elem) {
 
-      // this.getCampaign();
+            let found;
 
-      // this.$vm.$forceUpdate();
-    },
-    editAgency(id) {
-       this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-new-client");
-      this.$store
-        .dispatch("editAgency", { id: id, data: this.client })
-        .then((res) => {
-          this.error = null;
-          console.log(res.data);
-          this.getAgency();
-          //   this.loading = false;
-           this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
-           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
-        });
-    },
-    deleteAgency(id) {
-      //   this.loading = true;
-       this.$store.commit("updateLoadState", true);
-      this.$store
-        .dispatch("deleteAgency", id)
-        .then((res) => {
-          this.error = null;
-          this.getAgency();
-          console.log(res.data);
-          //   this.loading = false;
-           this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error.message);
-          //   this.loading = false;
-           this.$store.commit("updateLoadState", false);
-          // this.error = error.response.data.errors.root;
-          // this.error = error;
-        });
+            if (this.role.permissions) {
+                found = this.role.permissions.find((element) => element.name == elem);
+            }
 
-      // this.getCampaign();
+            if (found) {
+                return true;
+            } else {
+                return false;
+            }
+        },
     },
-
-    openEditModal(id, data) {
-      this.$bvModal.show("modal-new-client");
-      this.triggerEdit = true;
-      this.editId = id;
-      this.client.name = data.name;
-      this.client.email = data.email;
+    mounted() {
+        this.getRole(this.$route.params.id);
+        this.getAllPermissions();
     },
-    clearField() {
-      this.client = {
-        name: "",
-        email: "",
-      };
-      this.triggerEdit = false;
+    computed: {
+        selectedPermissions() {
+            return this.select
+                .filter(sel => sel.selected)
+                .map(sel => sel.name);
+        }
     },
-    isPermissionAvailable(elem) {
-  
-      let found;
-
-      if (this.role.permissions) {
-        found = this.role.permissions.find((element) => element.name == elem);
-      }
-
-      if (found) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-  },
-  mounted() {
-    this.getRole(this.$route.params.id);
-    this.getAllPermissions();
-  },
-  computed: {},
 };
 </script>
 
 <style>
 .control-width {
-  max-width: 500px !important;
+    max-width: 500px !important;
 }
+
 .plan-types {
-  padding-right: 0.4rem;
-  display: inline-flex;
+    padding-right: 0.4rem;
+    display: inline-flex;
 }
 
 .plan-types::after {
-  content: ",";
+    content: ",";
 }
 </style>
