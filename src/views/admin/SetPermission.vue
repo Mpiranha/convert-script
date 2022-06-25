@@ -46,7 +46,7 @@
                                     <td>{{ permission.id }}</td>
                                     <td>
                                         <label class="switch mb-0">
-                                            <input :value="permission.name" v-model="select[index].selected" :checked="isPermissionAvailable(permission.name, index)" type="checkbox" />
+                                            <input :value="permission.name" v-model="select[index].selected" type="checkbox" />
                                             <span class="slider round"></span>
                                         </label>
                                     </td>
@@ -202,6 +202,7 @@ export default {
                 });
         },
         updateSelected(data) {
+            this.select = [];
             for (var i = 0; i < data.length; i++) {
                 this.select.push({
                     name: data[i].name,
@@ -211,11 +212,22 @@ export default {
         },
         isPermissionAvailable(elem) {
 
+            console.log(elem);
+
             let found;
+
+            console.log("before 3 sec " + this.role.permissions);
 
             if (this.role.permissions) {
                 found = this.role.permissions.find((element) => element.name == elem);
+            } else {
+                setTimeout(() => {
+                    console.log("after 3 secs" + this.role.permissions)
+                    found = this.role.permissions.find((element) => element.name == elem);
+                }, 3000);
             }
+
+            console.log(found);
 
             if (found) {
                 return true;
