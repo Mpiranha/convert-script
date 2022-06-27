@@ -8,7 +8,7 @@
       <div class="content-section">
         <navbar :remove-content="false"></navbar>
         <div ref="scrollContent" class="scroll-content">
-          <upgrade-alert title="Market"></upgrade-alert>
+          <upgrade-alert title="Marketplace"></upgrade-alert>
           <div class="container">
             <div
               class="
