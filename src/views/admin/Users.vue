@@ -252,7 +252,7 @@
         ></b-form-select>
       </b-form-group>
 
-      <b-form-group label="Select Plan" v-slot="{ ariaDescribedby }">
+      <!-- <b-form-group label="Select Plan" v-slot="{ ariaDescribedby }">
         <b-form-checkbox-group
           id="checkbox-group-1"
           v-model="userData.plans"
@@ -260,7 +260,7 @@
           :aria-describedby="ariaDescribedby"
           name="flavour-1"
         ></b-form-checkbox-group>
-      </b-form-group>
+      </b-form-group> -->
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-user')" class="close-modal"
