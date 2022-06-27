@@ -1,53 +1,38 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar
-        :user-name="this.$store.state.user.first_name"
-        current-active="reseller"
-      ></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name" current-active="reseller"></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="scroll-content">
-        <div class="container">
-          <div
-            class="
+          <upgrade-alert title="Reseller"></upgrade-alert>
+          <div class="container">
+            <div class="
               dashboard-top
               d-flex
               justify-content-between
               align-items-center
               mb-5
-            "
-          >
-            <h6 class="title">Reseller</h6>
+            ">
+              <h6 class="title">Reseller</h6>
 
-            <button
-              @click="clearField"
-              class="btn btn-create"
-              v-b-modal.modalPopover
-            >
-              <span>+</span>
-              New Account
-            </button>
-          </div>
-
-          <div class="content-wrap set-min-h pt-4 pb-5">
-            <loader-modal
-              :loading-state="this.$store.state.loading"
-            ></loader-modal>
-            <div class="search-form">
-              <button class="btn search-btn">
-                <i class="flaticon-loupe icons"></i>
+              <button @click="clearField" class="btn btn-create" v-b-modal.modalPopover>
+                <span>+</span>
+                New Account
               </button>
-              <input
-                @input="searchKeyWord"
-                v-model="searchKey"
-                class="form-control no-shadow search-input"
-                type="text"
-                placeholder="Search"
-              />
             </div>
 
-            <!-- <div class="sort-wrap">
+            <div class="content-wrap set-min-h pt-4 pb-5">
+              <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
+              <div class="search-form">
+                <button class="btn search-btn">
+                  <i class="flaticon-loupe icons"></i>
+                </button>
+                <input @input="searchKeyWord" v-model="searchKey" class="form-control no-shadow search-input"
+                  type="text" placeholder="Search" />
+              </div>
+
+              <!-- <div class="sort-wrap">
               <div class="acct-desc">{{ resellers.length }} /50 Account</div>
 
               <select class="sort-select" name="" id="">
@@ -57,161 +42,92 @@
                 <option value=""></option>
               </select>
             </div> -->
-            <div v-if="resellers.length === 0" class="no-data-info">
-              No reseller created.
+              <div v-if="resellers.length === 0" class="no-data-info">
+                No reseller created.
+              </div>
+              <table v-else class="table table-custom">
+                <tbody v-if="searchResult.length > 0">
+                  <tr v-for="reseller in searchResult" :key="reseller.id">
+                    <td scope="row">{{ reseller.first_name }}</td>
+                    <td scope="row">{{ reseller.last_name }}</td>
+                    <td>{{ reseller.active }}</td>
+                    <td>{{ reseller.email }}</td>
+                    <td>{{ formatDate(reseller.created_at) }}</td>
+                    <td>
+                      <dropdown-tool delete-what="Reseller" @edit-clicked="openEditModal(reseller.id, reseller)"
+                        @delete-proceed="deleteReseller(reseller.id)">
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody v-else-if="resellers && searchKey.length < 1">
+                  <tr v-for="reseller in resellers" :key="reseller.id">
+                    <td scope="row">{{ reseller.first_name }}</td>
+                    <td scope="row">{{ reseller.last_name }}</td>
+                    <td>{{ reseller.active }}</td>
+                    <td>{{ reseller.email }}</td>
+                    <td>{{ formatDate(reseller.created_at) }}</td>
+                    <td>
+                      <dropdown-tool delete-what="Reseller" @edit-clicked="openEditModal(reseller.id, reseller)"
+                        @delete-proceed="deleteReseller(reseller.id)">
+                      </dropdown-tool>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <table v-else class="table table-custom">
-              <tbody v-if="searchResult.length > 0">
-                <tr v-for="reseller in searchResult" :key="reseller.id">
-                  <td scope="row">{{ reseller.first_name }}</td>
-                  <td scope="row">{{ reseller.last_name }}</td>
-                  <td>{{ reseller.active }}</td>
-                  <td>{{ reseller.email }}</td>
-                  <td>{{ formatDate(reseller.created_at) }}</td>
-                  <td>
-                    <dropdown-tool
-                      delete-what="Reseller"
-                      @edit-clicked="openEditModal(reseller.id, reseller)"
-                      @delete-proceed="deleteReseller(reseller.id)"
-                    >
-                    </dropdown-tool>
-                  </td>
-                </tr>
-              </tbody>
-              <tbody v-else-if="resellers && searchKey.length < 1">
-                <tr v-for="reseller in resellers" :key="reseller.id">
-                  <td scope="row">{{ reseller.first_name }}</td>
-                  <td scope="row">{{ reseller.last_name }}</td>
-                  <td>{{ reseller.active }}</td>
-                  <td>{{ reseller.email }}</td>
-                  <td>{{ formatDate(reseller.created_at) }}</td>
-                  <td>
-                    <dropdown-tool
-                      delete-what="Reseller"
-                      @edit-clicked="openEditModal(reseller.id, reseller)"
-                      @delete-proceed="deleteReseller(reseller.id)"
-                    >
-                    </dropdown-tool>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
           </div>
-        </div>
         </div>
       </div>
     </div>
 
-    <b-modal
-      :hide-header="true"
-      id="modalPopover"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
-      <b-form-group
-        label="First Name"
-        label-for="name"
-        label-class="form-label"
-      >
-        <b-form-input
-          id="name"
-          v-model="form.first_name"
-          type="text"
-          placeholder="first name"
-          class="input-table"
-          :class="{ 'is-invalid': submitted && $v.form.first_name.$error }"
-        >
+    <b-modal :hide-header="true" id="modalPopover" centered size="md" :hide-footer="true" dialog-class="control-width"
+      content-class="modal-main">
+      <b-form-group label="First Name" label-for="name" label-class="form-label">
+        <b-form-input id="name" v-model="form.first_name" type="text" placeholder="first name" class="input-table"
+          :class="{ 'is-invalid': submitted && $v.form.first_name.$error }">
         </b-form-input>
-        <div
-          v-if="submitted && !$v.form.first_name.required"
-          class="invalid-feedback"
-        >
+        <div v-if="submitted && !$v.form.first_name.required" class="invalid-feedback">
           * first name is required
         </div>
       </b-form-group>
       <b-form-group label="Last Name" label-for="name" label-class="form-label">
-        <b-form-input
-          id="name"
-          v-model="form.last_name"
-          type="text"
-          placeholder="last name"
-          class="input-table"
-          :class="{ 'is-invalid': submitted && $v.form.last_name.$error }"
-        >
+        <b-form-input id="name" v-model="form.last_name" type="text" placeholder="last name" class="input-table"
+          :class="{ 'is-invalid': submitted && $v.form.last_name.$error }">
         </b-form-input>
-        <div
-          v-if="submitted && !$v.form.last_name.required"
-          class="invalid-feedback"
-        >
+        <div v-if="submitted && !$v.form.last_name.required" class="invalid-feedback">
           * last name is required
         </div>
       </b-form-group>
 
       <b-form-group label="Email" label-for="email" label-class="form-label">
-        <b-form-input
-          id="email"
-          v-model="form.email"
-          type="text"
-          placeholder="user@domain.com"
-          class="input-table"
-          :class="{ 'is-invalid': submitted && $v.form.email.$error }"
-        >
+        <b-form-input id="email" v-model="form.email" type="text" placeholder="user@domain.com" class="input-table"
+          :class="{ 'is-invalid': submitted && $v.form.email.$error }">
         </b-form-input>
         <div v-if="submitted && $v.form.email.$error" class="invalid-feedback">
           <span v-if="!$v.form.email.required">* Email is required</span>
           <span v-if="!$v.form.email.email">* Email is invalid</span>
         </div>
       </b-form-group>
-      <b-form-group
-        v-if="!triggerEdit"
-        label="Password"
-        label-for="pwd"
-        label-class="form-label"
-      >
-        <b-form-input
-          id="password"
-          v-model="form.password"
-          type="password"
-          class="input-table"
-          :class="{ 'is-invalid': submitted && $v.form.password.$error }"
-        >
+      <b-form-group v-if="!triggerEdit" label="Password" label-for="pwd" label-class="form-label">
+        <b-form-input id="password" v-model="form.password" type="password" class="input-table"
+          :class="{ 'is-invalid': submitted && $v.form.password.$error }">
         </b-form-input>
-        <div
-          v-if="submitted && $v.form.password.$error"
-          class="invalid-feedback"
-        >
+        <div v-if="submitted && $v.form.password.$error" class="invalid-feedback">
           <span v-if="!$v.form.password.required">* Password is required</span>
-          <span v-if="!$v.form.password.minLength"
-            >* Password must be at least 6 characters</span
-          >
+          <span v-if="!$v.form.password.minLength">* Password must be at least 6 characters</span>
         </div>
       </b-form-group>
       <b-form-group label="Access" label-for="pwd" label-class="form-label">
-        <b-form-select
-          class="input-table"
-          v-model="form.plan"
-          :options="planOptions"
-          :class="{ 'is-invalid': submitted && $v.form.plan.$error }"
-        ></b-form-select>
-        <div
-          v-if="submitted && !$v.form.plan.required"
-          class="invalid-feedback"
-        >
+        <b-form-select class="input-table" v-model="form.plan" :options="planOptions"
+          :class="{ 'is-invalid': submitted && $v.form.plan.$error }"></b-form-select>
+        <div v-if="submitted && !$v.form.plan.required" class="invalid-feedback">
           * select suitable plan
         </div>
       </b-form-group>
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modalPopover')" class="close-modal"
-          >Close</b-button
-        >
-        <b-button
-          @click="triggerEdit ? editReseller() : addReseller()"
-          class="save-modal"
-          >Submit</b-button
-        >
+        <b-button @click="$bvModal.hide('modalPopover')" class="close-modal">Close</b-button>
+        <b-button @click="triggerEdit ? editReseller() : addReseller()" class="save-modal">Submit</b-button>
       </div>
     </b-modal>
   </div>
@@ -223,7 +139,12 @@ import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
-import { required, minLength, email } from "vuelidate/lib/validators";
+import UpgradeAlert from "../components/UpgradeAlert.vue";
+import {
+  required,
+  minLength,
+  email
+} from "vuelidate/lib/validators";
 
 export default {
   name: "Reseller",
@@ -237,6 +158,7 @@ export default {
     Sidebar,
     Navbar,
     DropdownTool,
+    UpgradeAlert
   },
   data() {
     return {
@@ -248,13 +170,14 @@ export default {
         role: "",
         email: "",
         password: "",
-        plan: [
-          {
-            plan_id: "",
-          },
-        ],
+        plan: [{
+          plan_id: "",
+        },],
       },
-      planOptions: [{ value: null, text: "Select Plans" }],
+      planOptions: [{
+        value: null,
+        text: "Select Plans"
+      }],
       resellers: [],
       triggerEdit: false,
       submitted: false,
@@ -314,11 +237,9 @@ export default {
         .then((res) => {
           for (let i = 0; i < res.data.data.length; i++) {
             this.planOptions.push({
-              value: [
-                {
-                  plan_id: res.data.data[i].id,
-                },
-              ],
+              value: [{
+                plan_id: res.data.data[i].id,
+              },],
               text: res.data.data[i].name,
             });
           }

@@ -8,6 +8,7 @@
       <div class="content-section">
         <navbar></navbar>
         <div class="scroll-content">
+          <upgrade-alert title="Agency"></upgrade-alert>
           <div class="container">
             <div
               class="
@@ -199,6 +200,7 @@ import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
+import UpgradeAlert from "../components/UpgradeAlert.vue";
 
 export default {
   name: "Agency",
@@ -207,6 +209,7 @@ export default {
     Sidebar,
     Navbar,
     DropdownTool,
+    UpgradeAlert
   },
   data() {
     return {

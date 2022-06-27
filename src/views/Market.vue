@@ -8,6 +8,7 @@
       <div class="content-section">
         <navbar :remove-content="false"></navbar>
         <div ref="scrollContent" class="scroll-content">
+          <upgrade-alert title="Market"></upgrade-alert>
           <div class="container">
             <div
               class="
@@ -329,6 +330,7 @@
 import Sidebar from "@/components/TheSidebar";
 import Navbar from "@/components/TheNav.vue";
 import alertMixin from "@/mixins/alertMixin";
+import UpgradeAlert from "../components/UpgradeAlert.vue";
 
 export default {
   name: "MarketPlace",
@@ -336,6 +338,7 @@ export default {
   components: {
     Sidebar,
     Navbar,
+    UpgradeAlert
   },
   data() {
     return {
