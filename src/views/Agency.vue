@@ -1,38 +1,25 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar
-        :user-name="this.$store.state.user.first_name"
-        current-active="agency"
-      ></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name" current-active="agency"></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="scroll-content">
           <upgrade-alert title="Agency"></upgrade-alert>
           <div class="container">
-            <div
-              class="
+            <div class="
                 dashboard-top
                 d-flex
                 justify-content-between
                 align-items-center
                 mb-5
-              "
-            >
+              ">
               <h6 class="title">Agency</h6>
               <div class="d-flex align-items-center">
-                <router-link
-                  @click="clearField"
-                  class="btn btn-border-secondary"
-                  to="/agency/setup"
-                >
+                <router-link @click="clearField" class="btn btn-border-secondary" to="/agency/setup">
                   Agency Setup
                 </router-link>
-                <button
-                  @click="clearField"
-                  class="btn btn-create"
-                  v-b-modal.modal-new-client
-                >
+                <button @click="clearField" class="btn btn-create" v-b-modal.modal-new-client>
                   <span>+</span>
                   New Client
                 </button>
@@ -44,13 +31,8 @@
                 <button class="btn search-btn">
                   <i class="flaticon-loupe icons"></i>
                 </button>
-                <input
-                  v-model="searchKey"
-                  @input="searchKeyWord"
-                  class="form-control no-shadow search-input"
-                  type="text"
-                  placeholder="Search"
-                />
+                <input v-model="searchKey" @input="searchKeyWord" class="form-control no-shadow search-input"
+                  type="text" placeholder="Search" />
               </div>
 
               <!-- <div class="sort-wrap">
@@ -63,9 +45,7 @@
                 <option value=""></option>
               </select>
             </div> -->
-              <loader-modal
-                :loading-state="this.$store.state.loading"
-              ></loader-modal>
+              <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
               <div v-if="agency.length === 0" class="no-data-info">
                 Created agency will display here.
               </div>
@@ -79,15 +59,12 @@
                       {{ formatDate(agency.created_at) }}
                     </td>
                     <td>
-                      <dropdown-tool
-                        @edit-clicked="
-                          openEditModal(agency.id, {
-                            name: agency.name,
-                            email: agency.email,
-                          })
-                        "
-                        @delete-proceed="deleteAgency(agency.id)"
-                      >
+                      <dropdown-tool @edit-clicked="
+                        openEditModal(agency.id, {
+                          name: agency.name,
+                          email: agency.email,
+                        })
+                      " @delete-proceed="deleteAgency(agency.id)">
                         <!-- <template v-slot:secondary>
                         <b-dropdown-item
                           v-b-modal.modal-campaign
@@ -112,83 +89,44 @@
       </div>
     </div>
 
-    <b-modal
-      :hide-header="true"
-      id="modal-new-client"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
+    <b-modal :hide-header="true" id="modal-new-client" centered size="md" :hide-footer="true"
+      dialog-class="control-width" content-class="modal-main">
       <!-- <div class="modal-head">
         <h3 class="title">Give your campaign a name</h3>
         <p class="desc">Only you can see this</p>
       </div> -->
 
       <b-form-group label="Name">
-        <b-form-input
-          id="name"
-          v-model="client.name"
-          type="text"
-          class="input-table"
-        >
+        <b-form-input id="name" v-model="client.name" type="text" class="input-table">
         </b-form-input>
       </b-form-group>
 
       <b-form-group label="Email">
-        <b-form-input
-          id="name"
-          v-model="client.email"
-          type="text"
-          class="input-table"
-        >
+        <b-form-input id="name" v-model="client.email" type="text" class="input-table">
         </b-form-input>
       </b-form-group>
 
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
-          >Close</b-button
-        >
-        <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
-          class="save-modal"
-          >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
-        >
+        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal">Close</b-button>
+        <b-button @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()" class="save-modal">{{
+            triggerEdit ? "Edit" : "Add Client"
+        }}</b-button>
       </div>
     </b-modal>
-    <b-modal
-      :hide-header="true"
-      id="modal-campaign"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
+    <b-modal :hide-header="true" id="modal-campaign" centered size="md" :hide-footer="true" dialog-class="control-width"
+      content-class="modal-main">
       <div class="modal-head mb-3">
         <h3 class="title">{{ this.client.name }}</h3>
       </div>
 
       <b-form-group v-slot="{ ariaDescribedby }">
-        <b-form-checkbox-group
-          id="checkbox-group-1"
-          v-model="selected"
-          :options="options"
-          :aria-describedby="ariaDescribedby"
-          name="flavour-1"
-        ></b-form-checkbox-group>
+        <b-form-checkbox-group id="checkbox-group-1" v-model="selected" :options="options"
+          :aria-describedby="ariaDescribedby" name="flavour-1"></b-form-checkbox-group>
       </b-form-group>
 
       <div class="d-flex justify-content-end mt-4">
-        <b-button @click="$bvModal.hide('modal-campaign')" class="close-modal"
-          >Close</b-button
-        >
-        <b-button
-          @click="triggerEdit ? editAgency(editId) : addAgency()"
-          class="save-modal"
-          >Save</b-button
-        >
+        <b-button @click="$bvModal.hide('modal-campaign')" class="close-modal">Close</b-button>
+        <b-button @click="triggerEdit ? editAgency(editId) : addAgency()" class="save-modal">Save</b-button>
       </div>
     </b-modal>
   </div>
@@ -213,6 +151,8 @@ export default {
   },
   data() {
     return {
+      searchKey: "",
+      searchResult: [],
       client: {
         name: "",
         email: "",
@@ -316,6 +256,25 @@ export default {
         });
 
       // this.getCampaign();
+    },
+     searchKeyWord() {
+      this.$store
+        .dispatch("search", {
+          endpoint: "/api/v1/admin/users",
+          keyword: this.searchKey,
+        })
+        .then((res) => {
+          this.searchResult = res.data.data;
+
+        
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+         
+          console.log(error);
+          
+          this.$store.commit("updateLoadState", false);
+        });
     },
 
     openEditModal(id, data) {
@@ -430,13 +389,13 @@ input[type="radio"] {
   background: no-repeat 50%/50% 50%;
 }
 
-.custom-control-input:checked ~ .custom-control-label::before {
+.custom-control-input:checked~.custom-control-label::before {
   color: #fff;
   border-color: #007bff;
   background-color: #007bff;
 }
 
-.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
+.custom-checkbox .custom-control-input:checked~.custom-control-label::after {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/%3E%3C/svg%3E");
 }
 </style>

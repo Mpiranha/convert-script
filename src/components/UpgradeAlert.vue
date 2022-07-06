@@ -45,7 +45,7 @@ export default {
     background-color: #fff;
     width: 100%;
     max-width: 550px;
-    min-height: 300px;
+    min-height: 260px;
     padding: 2rem 5rem 1rem 5rem;
     display: flex;
     flex-direction: column;
@@ -54,7 +54,7 @@ export default {
 
 .alert-main h1 {
     font-size: 2.3rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .alert-main .desc {

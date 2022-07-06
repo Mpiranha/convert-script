@@ -59,7 +59,8 @@
 
             <div class="login-info text-center mt-2">
               Don’t have an account?
-              <router-link to="/register">Sign Up</router-link>
+              <!-- <router-link to="/register">Sign Up</router-link> -->
+              <a href="https://onecopy.ai ">Sign Up</a>
             </div>
           </form>
         </div>

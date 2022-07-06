@@ -304,7 +304,7 @@ export default {
       userData: {
         first_name: "",
         last_name: "",
-        role: null,
+        role: "Free",
         email: "",
         password: "",
         plans: [],
@@ -312,8 +312,6 @@ export default {
       error: "",
       triggerEdit: false,
       editId: null,
-      selectedPlan: [], // Must be an array reference!
-      selectedRole: null,
       optionsRole: [
         { value: null, text: "Select a Role" },
         { value: "User", text: "User" },
@@ -321,7 +319,7 @@ export default {
       ],
 
       optionsPlan: [{ text: "", value: "" }],
-      plans: [],
+      roles: [],
     };
   },
   methods: {
@@ -372,10 +370,10 @@ export default {
     },
     getSharedPlans() {
       this.$store
-        .dispatch("getSharedPlan")
+        .dispatch("getAllRoles")
         .then((res) => {
-          this.plans = res.data.data;
-          this.filterPlans(this.plans);
+          this.roles = res.data.data;
+          this.filterRoles(this.roles);
           // console.log(res.data + "called now");
           //this.loading = false;
           this.$store.commit("updateLoadState", false);
@@ -389,11 +387,11 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    filterPlans(plans) {
-      plans.forEach((plan, index) => {
-        this.optionsPlan[index] = {
-          text: plan.name,
-          value: { plan_id: plan.id },
+    filterRoles(roles) {
+      roles.forEach((role, index) => {
+        this.optionsRole[index] = {
+          text: role.name.toUpperCase(),
+          value: role.name,
         };
       });
     },
@@ -450,7 +448,7 @@ export default {
           this.getAllUsers();
           this.userData = {
             name: "",
-            role: null,
+            role: "Free",
             email: "",
             password: "",
             plans: [],
@@ -478,7 +476,7 @@ export default {
           this.getAllUsers();
           this.userData = {
             name: "",
-            role: null,
+            role: "Free",
             email: "",
             password: "",
             plans: [],
@@ -534,7 +532,7 @@ export default {
     clearField() {
       this.userData = {
         name: "",
-        role: null,
+        role: "Free",
         email: "",
         password: "",
         plans: [],

@@ -270,7 +270,15 @@
                     </router-link>
                   </li>
                   <li class="nav-item">
-                    <router-link class="nav-link" to="/billing">
+                    <!-- <router-link class="nav-link" to="/billing">
+                      <img
+                        rel="preload"
+                        src="@/assets/icons/convert-icon/billiing.svg"
+                        alt="icon"
+                      />
+                      Billing
+                    </router-link> -->
+                     <router-link class="nav-link" to="/settings">
                       <img
                         rel="preload"
                         src="@/assets/icons/convert-icon/billiing.svg"

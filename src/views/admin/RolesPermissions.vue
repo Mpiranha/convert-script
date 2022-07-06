@@ -134,12 +134,24 @@
         </b-form-input>
       </b-form-group>
       <b-form-group label="Price">
-        <b-form-input id="price" v-model="rolesData.name" type="text" class="input-table">
+        <b-form-input id="price" v-model="rolesData.price" type="text" class="input-table">
         </b-form-input>
       </b-form-group>
+     
       <b-form-group label="Cycle" label-class="form-label">
-        <b-form-select class="input-table" v-model="rolesData.name" :options="cycleOptions"></b-form-select>
+        <b-form-select class="input-table" v-model="rolesData.cycle" :options="cycleOptions"></b-form-select>
       </b-form-group>
+
+       <b-form-group label="Words Allowed">
+        <b-form-input id="word" v-model="rolesData.wordLimit" type="text" class="input-table">
+        </b-form-input>
+      </b-form-group>
+
+       <b-form-group label="Link">
+        <b-form-input id="link" v-model="rolesData.link" type="url" class="input-table">
+        </b-form-input>
+      </b-form-group>
+
 
       <b-form-group label="" v-slot="{ ariaDescribedby }">
         <b-form-checkbox-group id="checkbox-group-1" :options="userPlan" :aria-describedby="ariaDescribedby"
@@ -180,6 +192,10 @@ export default {
       roles: [],
       rolesData: {
         name: "",
+        price: "",
+        cycle: "monthly",
+        wordLimit: "",
+        link: ""
       },
       cycleOptions: [{
         value: "monthly",
