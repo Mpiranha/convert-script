@@ -263,7 +263,7 @@ export default {
       this.$store
         .dispatch("getAllRoles")
         .then((res) => {
-          this.roles = res.data.data;
+          this.roles = res.data;
           // this.rolesLength = res.data.meta.total;
           console.log(res.data);
           console.log("Current Page: " + this.currentPage);

@@ -4,11 +4,7 @@
       <div class="form-section">
         <div class="login-form-wrap">
           <div class="d-flex justify-content-center mb-5">
-            <img
-              class="img-logo"
-              src="../assets/image/Logo.svg"
-              alt="Logo Image"
-            />
+            <img class="img-logo" src="../assets/image/Logo.svg" alt="Logo Image" />
           </div>
 
           <h1 class="title">Sign up</h1>
@@ -16,102 +12,58 @@
           <form action="#" method="post">
             <div class="form-group">
               <label for="my-input">First Name</label>
-              <input
-                id="my-input"
-                class="form-control input-signin"
-                type="text"
-                name=""
-                v-model="userData.first_name"
+              <input id="my-input" class="form-control input-signin" type="text" name="" v-model="userData.first_name"
                 :class="{
                   'is-invalid': submitted && $v.userData.first_name.$error,
-                }"
-              />
-              <div
-                v-if="submitted && !$v.userData.first_name.required"
-                class="invalid-feedback"
-              >
+                }" />
+              <div v-if="submitted && !$v.userData.first_name.required" class="invalid-feedback">
                 * First Name is required
               </div>
             </div>
             <div class="form-group">
               <label for="my-input">Last Name</label>
-              <input
-                id="my-input"
-                class="form-control input-signin"
-                type="text"
-                name=""
-                v-model="userData.last_name"
+              <input id="my-input" class="form-control input-signin" type="text" name="" v-model="userData.last_name"
                 :class="{
                   'is-invalid': submitted && $v.userData.last_name.$error,
-                }"
-              />
-              <div
-                v-if="submitted && !$v.userData.last_name.required"
-                class="invalid-feedback"
-              >
+                }" />
+              <div v-if="submitted && !$v.userData.last_name.required" class="invalid-feedback">
                 * Last Name is required
               </div>
             </div>
             <div class="form-group">
               <label for="my-input">Email</label>
-              <input
-                id="my-input"
-                class="form-control input-signin"
-                type="email"
-                name=""
-                v-model="userData.email"
-                :class="{ 'is-invalid': submitted && $v.userData.email.$error }"
-              />
-              <div
-                v-if="submitted && $v.userData.email.$error"
-                class="invalid-feedback"
-              >
-                <span v-if="!$v.userData.email.required"
-                  >* Email is required</span
-                >
+              <input id="my-input" class="form-control input-signin" type="email" name="" v-model="userData.email"
+                :class="{ 'is-invalid': submitted && $v.userData.email.$error }" />
+              <div v-if="submitted && $v.userData.email.$error" class="invalid-feedback">
+                <span v-if="!$v.userData.email.required">* Email is required</span>
                 <span v-if="!$v.userData.email.email">* Email is invalid</span>
               </div>
             </div>
 
-            <password-input
-              v-model="userData.password"
-              label="Password"
-              :class="{
-                'is-invalid': submitted && $v.userData.password.$error,
-              }"
-            ></password-input>
-            <div
-              v-if="submitted && $v.userData.password.$error"
-              class="invalid-feedback"
-            >
-              <span v-if="!$v.userData.password.required"
-                >* Password is required</span
-              >
-              <span v-if="!$v.userData.password.minLength"
-                >* Password must be at least 6 characters</span
-              >
+            <password-input v-model="userData.password" label="Password" :class="{
+              'is-invalid': submitted && $v.userData.password.$error,
+            }"></password-input>
+            <div v-if="submitted && $v.userData.password.$error" class="invalid-feedback">
+              <span v-if="!$v.userData.password.required">* Password is required</span>
+              <span v-if="!$v.userData.password.minLength">* Password must be at least 6 characters</span>
             </div>
 
-            <password-input
-              v-model="userData.confirmPassword"
-              label="Confirm Password"
-              :class="{
-                'is-invalid': submitted && $v.userData.confirmPassword.$error,
-              }"
-            ></password-input>
-            <div
-              v-if="submitted && $v.userData.confirmPassword.$error"
-              class="invalid-feedback"
-            >
-              <span v-if="!$v.userData.confirmPassword.required"
-                >* Confirm Password is required</span
-              >
-              <span v-else-if="!$v.userData.confirmPassword.sameAsPassword"
-                >* Passwords must match</span
-              >
+            <password-input v-model="userData.confirmPassword" label="Confirm Password" :class="{
+              'is-invalid': submitted && $v.userData.confirmPassword.$error,
+            }"></password-input>
+            <div v-if="submitted && $v.userData.confirmPassword.$error" class="invalid-feedback">
+              <span v-if="!$v.userData.confirmPassword.required">* Confirm Password is required</span>
+              <span v-else-if="!$v.userData.confirmPassword.sameAsPassword">* Passwords must match</span>
             </div>
-            <button @click="register($event)" class="btn btn-block btn-login">
-              Sign up
+             <div class="form-group">
+              <label for="my-input">Promo Code</label>
+              <input id="my-input" class="form-control input-signin" type="text" name="" v-model="userData.purchase_code" />
+            </div>
+            <button @click="register($event)" :disabled="disabledButton" class="btn btn-block btn-login">
+              <span>
+                Sign Up
+              </span>
+              <img class="spinner" src="../assets/image/Rolling-1s-64px.gif" alt="loading icon">
             </button>
             <div class="login-info text-center mt-2">
               Already have an account?
@@ -139,6 +91,7 @@ export default {
   },
   data() {
     return {
+      disabledButton: false,
       userData: {
         first_name: "",
         last_name: "",
@@ -146,6 +99,8 @@ export default {
         role: "User",
         password: "",
         confirmPassword: "",
+        purchase_code: "",
+
       },
       submitted: false,
       error: null,
@@ -188,12 +143,14 @@ export default {
         return;
       }
 
+      this.disabledButton = true;
       let user = {
         first_name: this.userData.first_name,
         last_name: this.userData.last_name,
         role: this.userData.role,
         email: this.userData.email,
         password: this.userData.password,
+        purchase_code: this.userData.purchase_code,
       };
 
       // console.log(user);
@@ -207,6 +164,7 @@ export default {
         })
         .catch((error) => {
           console.log(error.response.data.error);
+          this.disabledButton = false;
           this.error = error.response.data.error;
         });
     },

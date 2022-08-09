@@ -879,6 +879,19 @@ input:checked+.slider:before {
     transition: background 0.5s !important;
 }
 
+.btn-login .spinner {
+    width: 1.5rem;
+    display: none;
+}
+
+.btn-login[disabled="disabled"] span {
+    display: none;
+}
+
+.btn-login[disabled="disabled"] .spinner {
+    display: inline-block;
+}
+
 .btn-login:hover {
     background: linear-gradient(to right, #6126b9, #ca50f5) !important;
 }
