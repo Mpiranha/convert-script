@@ -49,6 +49,7 @@ import Projects from '@/views/Projects'
 import Language from '@/views/admin/Language'
 import Tone from '@/views/admin/Tone'
 import Keyword from '@/views/admin/Keyword'
+import PromoCode from '@/views/admin/PromoCode'
 
 
 
@@ -331,6 +332,16 @@ const routes = [{
   component: Users,
   meta: {
     title: 'OneCopy AI Writer Admin - All Users',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/promo-codes',
+  name: 'PromoCodes',
+  component: PromoCode,
+  meta: {
+    title: 'OneCopy AI Writer Admin - Promo Codes',
     requiresAuth: true,
     adminAuth: true
   }

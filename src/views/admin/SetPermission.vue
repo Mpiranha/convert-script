@@ -61,58 +61,6 @@
             </div>
         </div>
     </div>
-    <!-- <b-modal
-      :hide-header="true"
-      id="modal-new-client"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
-
-      <b-form-group label="Name">
-        <b-form-input
-          id="name"
-          v-model="userData.name"
-          type="text"
-          class="input-table"
-        >
-        </b-form-input>
-      </b-form-group>
-
-      <b-form-group label="Description">
-        <b-form-textarea
-          id="name"
-          v-model="userData.email"
-          type="text"
-          class="input-table"
-          rows="4"
-        >
-        </b-form-textarea>
-      </b-form-group>
-
-      <b-form-group label="Upload">
-        <b-form-file
-          v-model="file"
-          :state="Boolean(file)"
-          placeholder="Choose a file or drop it here..."
-          drop-placeholder="Drop file here..."
-        >
-        </b-form-file>
-      </b-form-group>
-
-      <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal"
-          >Close</b-button
-        >
-        <b-button
-          @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()"
-          class="save-modal"
-          >{{ triggerEdit ? "Edit" : "Add Client" }}</b-button
-        >
-      </div>
-    </b-modal> -->
 </div>
 </template>
 
@@ -143,11 +91,6 @@ export default {
         };
     },
     methods: {
-        // updateSelected(permissions) {
-        //  for (var i = 0; i < permissions.length; i++) {
-
-        //  }
-        // },
         handlePageChange(value) {
             this.currentPage = value;
             this.getAllPermissions();
@@ -157,7 +100,7 @@ export default {
             this.$store
                 .dispatch("getOneRole", id)
                 .then((res) => {
-                    this.role = res.data.data;
+                    this.role = res.data[0];
 
                     this.$store.commit("updateLoadState", false);
                 })
@@ -187,7 +130,8 @@ export default {
                 .dispatch("addPermissionsToRole", {
                     id: id,
                     data: {
-                        permissions: this.selectedPermissions
+                        permissions: this.selectedPermissions,
+                        cycle_id: this.role.cycle_id,
                     },
                 })
                 .then(() => {

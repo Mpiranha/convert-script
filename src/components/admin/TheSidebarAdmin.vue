@@ -49,6 +49,25 @@
       <li class="nav-item">
         <router-link
           class="nav-link"
+          :class="currentActive == 'promo-code' ? 'active' : ''"
+          to="/admin/promo-codes"
+        >
+          <!-- <img
+            class="main-icon"
+            src="@/assets/icons/admin/sidebar-icon/user.svg"
+            alt=""
+          />
+          <img
+            class="active-icon"
+            src="@/assets/icons/admin/sidebar-active/user.svg"
+            alt=""
+          /> -->
+          <span class="nav-text"> Promo Code </span>
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link
+          class="nav-link"
           :class="currentActive == 'transaction' ? 'active' : ''"
           to="/admin/transactions"
         >

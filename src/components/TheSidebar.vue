@@ -278,7 +278,7 @@
                       />
                       Billing
                     </router-link> -->
-                     <router-link class="nav-link" to="/settings">
+                     <router-link class="nav-link" to="/billing">
                       <img
                         rel="preload"
                         src="@/assets/icons/convert-icon/billiing.svg"

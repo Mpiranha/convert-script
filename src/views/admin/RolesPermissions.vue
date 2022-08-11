@@ -78,11 +78,17 @@
                   <tbody v-else-if="roles && searchKey.length < 1">
                     <tr v-for="role in roles" :key="role.id">
                       <td scope="row">{{ role.name }}</td>
-                      <!-- <td scope="row">Admin</td> -->
+
                       <td>
                         <dropdown-tool @edit-clicked="
                           openEditModal(role.id, {
                             name: role.name,
+                            price: role.price,
+                            cycle_id: role.cycle_id,
+                            words_allowed: role.words_allowed,
+                            success_url: role.success_url,
+                            cancel_url: role.cancel_url,
+                            set_as_user_plan: role.set_as_user_plan
                           })
                         " @delete-proceed="deleteRole(role.id)" delete-what="Role">
                           <template v-slot:secondary>
@@ -137,26 +143,33 @@
         <b-form-input id="price" v-model="rolesData.price" type="text" class="input-table">
         </b-form-input>
       </b-form-group>
-     
+
       <b-form-group label="Cycle" label-class="form-label">
         <b-form-select class="input-table" v-model="rolesData.cycle" :options="cycleOptions"></b-form-select>
       </b-form-group>
 
-       <b-form-group label="Words Allowed">
+      <b-form-group label="Words Allowed">
         <b-form-input id="word" v-model="rolesData.wordLimit" type="text" class="input-table">
         </b-form-input>
       </b-form-group>
 
-       <b-form-group label="Link">
-        <b-form-input id="link" v-model="rolesData.link" type="url" class="input-table">
+      <b-form-group label="Success Link">
+        <b-form-input id="link" v-model="rolesData.success_url" type="url" class="input-table">
+        </b-form-input>
+      </b-form-group>
+
+      <b-form-group label="Cancel Link">
+        <b-form-input id="link" v-model="rolesData.cancel_url" type="url" class="input-table">
         </b-form-input>
       </b-form-group>
 
 
-      <b-form-group label="" v-slot="{ ariaDescribedby }">
-        <b-form-checkbox-group id="checkbox-group-1" :options="userPlan" :aria-describedby="ariaDescribedby"
-          name="flavour-1"></b-form-checkbox-group>
+      <b-form-group label="">
+        <b-form-checkbox v-model="rolesData.set_as_user_plan" :value="true" :unchecked-value="false" name="flavour-1">
+          Make role a User Plan
+        </b-form-checkbox>
       </b-form-group>
+
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-role')" class="close-modal">Close</b-button>
         <b-button @click="triggerEdit ? editRole(editId, rolesData) : addRole()" class="save-modal">{{ triggerEdit ?
@@ -193,19 +206,15 @@ export default {
       rolesData: {
         name: "",
         price: "",
-        cycle: "monthly",
+        cycle: null,
         wordLimit: "",
-        link: ""
+        success_url: "",
+        cancel_url: "",
+        set_as_user_plan: false
       },
       cycleOptions: [{
-        value: "monthly",
-        text: "Monthly"
-      }, {
-        value: "yearly",
-        text: "Yearly"
-      }, {
-        value: "lifetime",
-        text: "Lifetime"
+        value: null,
+        text: "Select Cycle",
       }],
       error: "",
       triggerEdit: false,
@@ -226,7 +235,7 @@ export default {
       ],
       userPlan: [{
         text: "Make role a User Plan",
-        value: "false"
+        value: "true"
       }],
     };
   },
@@ -258,6 +267,26 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+    getRoleCycle() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getRoleCycle")
+        .then((res) => {
+          console.log(res.data);
+          res.data.data.forEach(cycle => {
+            this.cycleOptions.push({
+              value: cycle.id,
+              text: cycle.name.toUpperCase()
+            });
+          });
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     getAllRoles() {
       this.$store.commit("updateLoadState", true);
       this.$store
@@ -280,12 +309,26 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-role");
       this.$store
-        .dispatch("addRole", this.rolesData)
+        .dispatch("addRole", {
+          name: this.rolesData.name,
+          price: this.rolesData.price,
+          cycle_id: this.rolesData.cycle,
+          words_allowed: this.rolesData.wordLimit,
+          success_url: this.rolesData.success_url,
+          cancel_url: this.rolesData.cancel_url,
+          set_as_user_plan: this.rolesData.set_as_user_plan
+        })
         .then((res) => {
           console.log(res);
           this.getAllRoles();
           this.rolesData = {
             name: "",
+            price: "",
+            cycle: null,
+            wordLimit: "",
+            success_url: "",
+            cancel_url: "",
+            set_as_user_plan: false
           };
           this.makeToast("success", "Role added successfully");
           this.$store.commit("updateLoadState", false);
@@ -303,13 +346,27 @@ export default {
       this.$store
         .dispatch("editRole", {
           id: id,
-          data: this.rolesData,
+          data: {
+            name: this.rolesData.name,
+            price: this.rolesData.price,
+            cycle_id: this.rolesData.cycle,
+            words_allowed: this.rolesData.wordLimit,
+            success_url: this.rolesData.success_url,
+            cancel_url: this.rolesData.cancel_url,
+            set_as_user_plan: this.rolesData.set_as_user_plan
+          },
         })
         .then((res) => {
           console.log(res);
           this.getAllRoles();
           this.rolesData = {
             name: "",
+            price: "",
+            cycle: null,
+            wordLimit: "",
+            success_url: "",
+            cancel_url: "",
+            set_as_user_plan: false
           };
           this.makeToast("success", "Role edited successfully");
           this.$store.commit("updateLoadState", false);
@@ -343,11 +400,25 @@ export default {
       this.$bvModal.show("modal-new-role");
       this.triggerEdit = true;
       this.editId = id;
-      this.rolesData.name = data.name;
+      this.rolesData = {
+        name: data.name,
+        price: data.price,
+        cycle: data.cycle_id,
+        wordLimit: data.words_allowed,
+        success_url: data.success_url,
+        cancel_url: data.cancel_url,
+        set_as_user_plan: data.set_as_user_plan
+      }
     },
     clearField() {
       this.rolesData = {
         name: "",
+        price: "",
+        cycle: null,
+        wordLimit: "",
+        success_url: "",
+        cancel_url: "",
+        set_as_user_plan: false
       };
       this.triggerEdit = false;
     },
@@ -357,6 +428,7 @@ export default {
   },
 
   mounted() {
+    this.getRoleCycle();
     this.getAllRoles();
   },
 };
