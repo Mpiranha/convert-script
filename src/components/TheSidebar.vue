@@ -333,7 +333,10 @@ export default {
       });
     },
     getFirstLetter(text) {
+      if (text) {
       return text.toString().charAt(0);
+      }
+      return;
     },
   },
   mounted() {

@@ -11,9 +11,10 @@
             </div>
 
             <div class="content-wrap pt-4 pb-5">
+            <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
               <table class="table table-custom">
                 <tbody>
-                  <tr>
+                  <tr v-if="planDetail.active_plan.length > 0">
                     <td scope="row"> {{ planDetail.active_plan[0].name }} </td>
                     <td>{{ formatDate(planDetail.active_plan[0].created_at) }}</td>
                     <td>Active</td>
