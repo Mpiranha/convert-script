@@ -50,6 +50,7 @@ import Language from '@/views/admin/Language'
 import Tone from '@/views/admin/Tone'
 import Keyword from '@/views/admin/Keyword'
 import PromoCode from '@/views/admin/PromoCode'
+import UpgradeRedirect from '@/views/UpgradeRedirect'
 
 
 
@@ -245,6 +246,16 @@ const routes = [{
   component: Favourites,
   meta: {
     title: 'OneCopy AI Writer - Favorites',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/billing/plan/:id/upgrade',
+  name: 'UpgradeRedirect',
+  component: UpgradeRedirect,
+  meta: {
+    title: 'OneCopy AI Writer - Redirecting...',
     requiresAuth: true,
     adminAuth: false
   }

@@ -1,31 +1,22 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar
-        :user-name="this.$store.state.user.first_name"
-        current-active="marketplace"
-      ></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name" current-active="marketplace"></sidebar>
       <div class="content-section">
         <navbar :remove-content="false"></navbar>
         <div ref="scrollContent" class="scroll-content">
-          <upgrade-alert title="Marketplace"></upgrade-alert>
+          <upgrade-alert v-if="isRestricted" title="Marketplace"></upgrade-alert>
           <div class="container">
-            <div
-              class="
+            <div class="
                 dashboard-top
                 d-flex
                 justify-content-between
                 align-items-center
                 mb-5
-              "
-            >
+              ">
               <h6 class="title">MarketPlace</h6>
 
-              <router-link
-                @click="clearField"
-                class="btn btn-create py-2"
-                to="/projects"
-              >
+              <router-link @click="clearField" class="btn btn-create py-2" to="/projects">
                 Saved Projects
               </router-link>
             </div>
@@ -35,13 +26,8 @@
                 <button class="btn search-btn">
                   <i class="flaticon-loupe icons"></i>
                 </button>
-                <input
-                  @input="searchKeyWord"
-                  v-model="searchKey"
-                  class="form-control no-shadow search-input"
-                  type="text"
-                  placeholder="Search"
-                />
+                <input @input="searchKeyWord" v-model="searchKey" class="form-control no-shadow search-input"
+                  type="text" placeholder="Search" />
               </div>
 
               <!-- <div class="sort-wrap">
@@ -54,9 +40,7 @@
                 <option value=""></option>
               </select>
             </div> -->
-              <loader-modal
-                :loading-state="this.$store.state.loading"
-              ></loader-modal>
+              <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
               <div v-if="marketLength === 0" class="no-data-info">
                 No Active Project, Try Again Later.
               </div>
@@ -65,8 +49,7 @@
                   <tr v-for="project in searchResult" :key="project.id">
                     <td>
                       <div class="market-desc">
-                        <b>{{ project.title }}</b
-                        ><br />
+                        <b>{{ project.title }}</b><br />
                         {{ project.short_description }}
                       </div>
                     </td>
@@ -76,30 +59,27 @@
                       {{ project.bid_count > 1 ? "bids" : "bid" }}
                     </td>
                     <td>
-                      <img
-                        class="icon-location"
-                        src="@/assets/icons/convert-icon/Marketplace.svg"
-                        alt="location icon"
-                      />
+                      <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg"
+                        alt="location icon" />
 
                       {{
-                        project.city
-                          ? project.city
-                          : "NIL"
+                          project.city
+                            ? project.city
+                            : "NIL"
                       }},
                       {{
-                        project.currency_country
-                          ? project.currency_country
-                          : "NIL"
+                          project.currency_country
+                            ? project.currency_country
+                            : "NIL"
                       }}
                     </td>
                     <td>
                       <div class="price">
                         <div>
                           {{
-                            project.type == "Fixed"
-                              ? project.budget_high
-                              : project.budget_low + "-" + project.budget_high
+                              project.type == "Fixed"
+                                ? project.budget_high
+                                : project.budget_low + "-" + project.budget_high
                           }}
                           {{ project.currency_code }}
                         </div>
@@ -108,38 +88,29 @@
                     </td>
                     <td class="text-left">
                       <nav class="nav action-view">
-                        <button
-                          class="btn no-shadow nav-link"
-                          href="#"
-                          v-b-modal.modal-view-script
-                          @click="
-                            getCurrent({
-                              title: project.title,
-                              description: project.full_description,
-                              type: project.type,
-                              location: {
-                                city: project.city,
-                                country: project.currency_country,
-                              },
-                              budget: {
-                                min: project.budget_low,
-                                max: project.budget_high,
-                              },
-                              currency: { code: project.currency_code },
-                              bids: project.bids,
-                              time_updated: getProjectTime(project.updated_at),
-                              url: project.url,
-                            })
-                          "
-                        >
+                        <button class="btn no-shadow nav-link" href="#" v-b-modal.modal-view-script @click="
+                          getCurrent({
+                            title: project.title,
+                            description: project.full_description,
+                            type: project.type,
+                            location: {
+                              city: project.city,
+                              country: project.currency_country,
+                            },
+                            budget: {
+                              min: project.budget_low,
+                              max: project.budget_high,
+                            },
+                            currency: { code: project.currency_code },
+                            bids: project.bids,
+                            time_updated: getProjectTime(project.updated_at),
+                            url: project.url,
+                          })
+                        ">
                           View
                         </button>
                         <span>|</span>
-                        <button
-                          class="btn no-shadow nav-link"
-                          href="#"
-                          @click="saveProject(project.id)"
-                        >
+                        <button class="btn no-shadow nav-link" href="#" @click="saveProject(project.id)">
                           Save
                         </button>
                       </nav>
@@ -150,8 +121,7 @@
                   <tr v-for="project in market" :key="project.id">
                     <td>
                       <div class="market-desc">
-                        <b>{{ project.title }}</b
-                        ><br />
+                        <b>{{ project.title }}</b><br />
                         {{ project.short_description }}
                       </div>
                     </td>
@@ -161,30 +131,27 @@
                       {{ project.bid_count > 1 ? "bids" : "bid" }}
                     </td>
                     <td>
-                      <img
-                        class="icon-location"
-                        src="@/assets/icons/convert-icon/Marketplace.svg"
-                        alt="location icon"
-                      />
+                      <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg"
+                        alt="location icon" />
 
                       {{
-                        project.city
-                          ? project.city
-                          : "NIL"
+                          project.city
+                            ? project.city
+                            : "NIL"
                       }},
                       {{
-                        project.currency_country
-                          ? project.currency_country
-                          : "NIL"
+                          project.currency_country
+                            ? project.currency_country
+                            : "NIL"
                       }}
                     </td>
                     <td>
                       <div class="price">
                         <div>
                           {{
-                            project.type == "Fixed"
-                              ? project.budget_high
-                              : project.budget_low + "-" + project.budget_high
+                              project.type == "Fixed"
+                                ? project.budget_high
+                                : project.budget_low + "-" + project.budget_high
                           }}
                           {{ project.currency_code }}
                         </div>
@@ -193,38 +160,29 @@
                     </td>
                     <td class="text-left">
                       <nav class="nav action-view">
-                        <button
-                          class="btn no-shadow nav-link"
-                          href="#"
-                          v-b-modal.modal-view-script
-                          @click="
-                            getCurrent({
-                              title: project.title,
-                              description: project.full_description,
-                              type: project.type,
-                              location: {
-                                city: project.city,
-                                country: project.currency_country,
-                              },
-                              budget: {
-                                min: project.budget_low,
-                                max: project.budget_high,
-                              },
-                              currency: { code: project.currency_code },
-                              bids: project.bids,
-                              time_updated: getProjectTime(project.updated_at),
-                              url: project.url,
-                            })
-                          "
-                        >
+                        <button class="btn no-shadow nav-link" href="#" v-b-modal.modal-view-script @click="
+                          getCurrent({
+                            title: project.title,
+                            description: project.full_description,
+                            type: project.type,
+                            location: {
+                              city: project.city,
+                              country: project.currency_country,
+                            },
+                            budget: {
+                              min: project.budget_low,
+                              max: project.budget_high,
+                            },
+                            currency: { code: project.currency_code },
+                            bids: project.bids,
+                            time_updated: getProjectTime(project.updated_at),
+                            url: project.url,
+                          })
+                        ">
                           View
                         </button>
                         <span>|</span>
-                        <button
-                          class="btn no-shadow nav-link"
-                          href="#"
-                          @click="saveProject(project.id)"
-                        >
+                        <button class="btn no-shadow nav-link" href="#" @click="saveProject(project.id)">
                           Save
                         </button>
                       </nav>
@@ -233,23 +191,16 @@
                 </tbody>
               </table>
             </div>
-            <b-modal
-              :hide-header="true"
-              id="modal-view-script"
-              centered
-              size="md"
-              :hide-footer="true"
-              dialog-class="control-width"
-              content-class="modal-main"
-            >
+            <b-modal :hide-header="true" id="modal-view-script" centered size="md" :hide-footer="true"
+              dialog-class="control-width" content-class="modal-main">
               <div class="project-head">
                 <h1 class="title">Project Details</h1>
                 <div class="price">
                   <div>
                     {{
-                      activeMarketData.type == "Fixed"
-                        ? activeMarketData.budget.max
-                        : activeMarketData.budget.min +
+                        activeMarketData.type == "Fixed"
+                          ? activeMarketData.budget.max
+                          : activeMarketData.budget.min +
                           "-" +
                           activeMarketData.budget.max
                     }}
@@ -268,20 +219,16 @@
               <div class="d-flex align-items-center justify-content-end mt-5">
                 <div class="d-flex location--time flex-column mr-auto">
                   <div class="mb-1">
-                    <img
-                      class="icon-location"
-                      src="@/assets/icons/convert-icon/Marketplace.svg"
-                      alt="location icon"
-                    />
+                    <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg" alt="location icon" />
                     {{
-                      activeMarketData.location.city
-                        ? activeMarketData.location.city
-                        : "NIL"
+                        activeMarketData.location.city
+                          ? activeMarketData.location.city
+                          : "NIL"
                     }},
                     {{
-                      activeMarketData.location.country
-                        ? activeMarketData.location.country
-                        : "NIL"
+                        activeMarketData.location.country
+                          ? activeMarketData.location.country
+                          : "NIL"
                     }}
                   </div>
                   <div>
@@ -291,32 +238,15 @@
                   </div>
                 </div>
                 <div>
-                  <b-button
-                    @click="$bvModal.hide('modal-view-script')"
-                    class="close-modal"
-                    >Close</b-button
-                  >
-                  <a
-                    :href="activeMarketData.url"
-                    target="_blank"
-                    class="save-modal"
-                    >Open Project</a
-                  >
+                  <b-button @click="$bvModal.hide('modal-view-script')" class="close-modal">Close</b-button>
+                  <a :href="activeMarketData.url" target="_blank" class="save-modal">Open Project</a>
                 </div>
               </div>
             </b-modal>
             <div class="d-flex justify-content-center">
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="marketLength"
-                :per-page="perPage"
-                aria-controls="my-table"
-                size="sm"
-                :hide-goto-end-buttons="true"
-                prev-text="<"
-                next-text=">"
-                @change="handlePageChange"
-              ></b-pagination>
+              <b-pagination v-model="currentPage" :total-rows="marketLength" :per-page="perPage"
+                aria-controls="my-table" size="sm" :hide-goto-end-buttons="true" prev-text="<" next-text=">"
+                @change="handlePageChange"></b-pagination>
             </div>
           </div>
         </div>
@@ -370,33 +300,7 @@ export default {
       error: "",
       triggerEdit: false,
       editId: null,
-      dummy: {
-        id: 33125171,
-        title: "Typing job",
-        type: "Fixed",
-        short_description:
-          "I have a PDF that needs to be type in order to replace/edit some text. I will need 2 files edited an",
-        full_description:
-          "I have a PDF that needs to be type in order to replace/edit some text. I will need 2 files edited and i need it ASAP,",
-        date: 1646608311,
-        bids: 2,
-        status: "open",
-        bid_count: 2,
-        bid_avg: 375,
-        budget_type: "fixed",
-        budget_low: 250,
-        budget_high: 750,
-        url: "http://www.freelancer.com/projects/pdf/Typing-job-33125171",
-        currency_id: 1,
-        currency_code: "USD",
-        currency_sign: "$",
-        currency_name: "US Dollar",
-        currency_exchange_rate: 1,
-        currency_country: "US",
-        currency_is_escrowcom_supported: true,
-        hourly_commitment: null,
-        hourly_interval: null,
-      },
+      isRestricted: false,
     };
   },
   methods: {
@@ -426,7 +330,7 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.currentPage = value;
       this.getMarketData();
-     this.$refs.scrollContent.scroll(0, 0);
+      this.$refs.scrollContent.scroll(0, 0);
       console.log("Value: " + value);
     },
     getMarketData() {
@@ -437,10 +341,19 @@ export default {
           perPage: this.perPage,
         })
         .then((res) => {
+          if (res.data.data.length == 0) {
+            if (res.data.message == "Access to Market Place is restricted") {
+              this.isRestricted = true;
+               this.$store.commit("updateLoadState", false);
+              return;
+            }
+          }
           this.market = res.data.data;
           console.log(res);
           //this.marketLength = res.data.result.total_count;
-          this.marketLength = res.data.meta.total;
+          if (res.data.meta.total) {
+            this.marketLength = res.data.meta.total;
+          }
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {

@@ -11,7 +11,7 @@
           <div class="error">{{ error }}</div>
           <form action="#" method="post">
             <div class="form-group">
-              <label for="my-input">First Name</label>
+              <label for="my-input">First Name *</label>
               <input id="my-input" class="form-control input-signin" type="text" name="" v-model="userData.first_name"
                 :class="{
                   'is-invalid': submitted && $v.userData.first_name.$error,
@@ -21,7 +21,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="my-input">Last Name</label>
+              <label for="my-input">Last Name *</label>
               <input id="my-input" class="form-control input-signin" type="text" name="" v-model="userData.last_name"
                 :class="{
                   'is-invalid': submitted && $v.userData.last_name.$error,
@@ -31,7 +31,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="my-input">Email</label>
+              <label for="my-input">Email *</label>
               <input id="my-input" class="form-control input-signin" type="email" name="" v-model="userData.email"
                 :class="{ 'is-invalid': submitted && $v.userData.email.$error }" />
               <div v-if="submitted && $v.userData.email.$error" class="invalid-feedback">
@@ -55,9 +55,10 @@
               <span v-if="!$v.userData.confirmPassword.required">* Confirm Password is required</span>
               <span v-else-if="!$v.userData.confirmPassword.sameAsPassword">* Passwords must match</span>
             </div>
-             <div class="form-group">
-              <label for="my-input">Promo Code</label>
-              <input id="my-input" class="form-control input-signin" type="text" name="" v-model="userData.purchase_code" />
+            <div class="form-group">
+              <label for="my-input">Promo Code (Optional)</label>
+              <input id="my-input" class="form-control input-signin" type="text" name=""
+                v-model="userData.purchase_code" />
             </div>
             <button @click="register($event)" :disabled="disabledButton" class="btn btn-block btn-login">
               <span>
@@ -96,7 +97,6 @@ export default {
         first_name: "",
         last_name: "",
         email: "",
-        role: "User",
         password: "",
         confirmPassword: "",
         purchase_code: "",
@@ -144,14 +144,25 @@ export default {
       }
 
       this.disabledButton = true;
-      let user = {
-        first_name: this.userData.first_name,
-        last_name: this.userData.last_name,
-        role: this.userData.role,
-        email: this.userData.email,
-        password: this.userData.password,
-        purchase_code: this.userData.purchase_code,
-      };
+      let user = {};
+      if (this.userData.purchase_code.length > 0) {
+        user = {
+          first_name: this.userData.first_name,
+          last_name: this.userData.last_name,
+          role: this.userData.role,
+          email: this.userData.email,
+          password: this.userData.password,
+          purchase_code: this.userData.purchase_code,
+        };
+      } else {
+        user = {
+          first_name: this.userData.first_name,
+          last_name: this.userData.last_name,
+          role: this.userData.role,
+          email: this.userData.email,
+          password: this.userData.password,
+        };
+      }
 
       // console.log(user);
       this.$store

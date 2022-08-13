@@ -6,7 +6,7 @@
         <navbar :remove-content="true"></navbar>
         <div class="scroll-content">
           <div class="container">
-            <div class="sec-padding">
+            <div class="">
               <div class="
                 dashboard-top
                 d-flex
@@ -38,17 +38,32 @@
                   <thead>
                     <tr>
                       <th>Name</th>
+                      <th>Price</th>
+                      <th>Status</th>
+                      <th>Word Limit</th>
+                      <th>Success URL</th>
+                      <th>Cancel URl</th>
                       <th class="text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody v-if="searchResult.length > 0">
                     <tr v-for="result in searchResult" :key="result.id">
                       <td scope="row">{{ result.name }}</td>
-                      <!-- <td scope="row">Admin</td> -->
+                      <td>{{ result.price }}</td>
+                      <td>{{ result.set_as_user_plan }}</td>
+                      <td>{{ result.words_allowed }}</td>
+                      <td>{{ result.success_url ? result.success_url : "NIL" }}</td>
+                      <td>{{ result.cancel_url ? result.cancel_url : "NIL" }}</td>
                       <td>
                         <dropdown-tool @edit-clicked="
                           openEditModal(result.id, {
-                            name: result.name,
+                            name: role.name,
+                            price: role.price,
+                            cycle_id: role.cycle_id,
+                            words_allowed: role.words_allowed,
+                            success_url: role.success_url,
+                            cancel_url: role.cancel_url,
+                            set_as_user_plan: role.set_as_user_plan
                           })
                         " @delete-proceed="deleteRole(result.id)" delete-what="Role">
                           <template v-slot:secondary>
@@ -78,7 +93,11 @@
                   <tbody v-else-if="roles && searchKey.length < 1">
                     <tr v-for="role in roles" :key="role.id">
                       <td scope="row">{{ role.name }}</td>
-
+                      <td>{{ role.price }}</td>
+                      <td>{{ role.set_as_user_plan }}</td>
+                      <td>{{ role.words_allowed }}</td>
+                      <td>{{ role.success_url ? role.success_url : "NIL" }}</td>
+                      <td>{{ role.cancel_url ? role.cancel_url : "NIL"}}</td>
                       <td>
                         <dropdown-tool @edit-clicked="
                           openEditModal(role.id, {
@@ -130,11 +149,6 @@
 
     <b-modal :hide-header="true" id="modal-new-role" centered size="md" :hide-footer="true" dialog-class="control-width"
       content-class="modal-main">
-      <!-- <div class="modal-head">
-        <h3 class="title">Give your campaign a name</h3>
-        <p class="desc">Only you can see this</p>
-      </div> -->
-
       <b-form-group label="Name">
         <b-form-input id="name" v-model="rolesData.name" type="text" class="input-table">
         </b-form-input>
@@ -316,7 +330,7 @@ export default {
           words_allowed: this.rolesData.wordLimit,
           success_url: this.rolesData.success_url,
           cancel_url: this.rolesData.cancel_url,
-          set_as_user_plan: this.rolesData.set_as_user_plan
+          set_as_user_plan: this.rolesData.set_as_user_plan,
         })
         .then((res) => {
           console.log(res);
@@ -353,7 +367,8 @@ export default {
             words_allowed: this.rolesData.wordLimit,
             success_url: this.rolesData.success_url,
             cancel_url: this.rolesData.cancel_url,
-            set_as_user_plan: this.rolesData.set_as_user_plan
+            set_as_user_plan: this.rolesData.set_as_user_plan,
+            type: "role"
           },
         })
         .then((res) => {

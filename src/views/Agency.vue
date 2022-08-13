@@ -5,7 +5,7 @@
       <div class="content-section">
         <navbar></navbar>
         <div class="scroll-content">
-          <upgrade-alert title="Agency"></upgrade-alert>
+          <upgrade-alert v-if="isRestricted" title="Agency"></upgrade-alert>
           <div class="container">
             <div class="
                 dashboard-top
@@ -170,6 +170,7 @@ export default {
         { text: "Pineapple", value: "pineapple" },
         { text: "Grape", value: "grape" },
       ],
+      isRestricted: false,
     };
   },
   methods: {
@@ -178,8 +179,15 @@ export default {
       this.$store
         .dispatch("getAllAgency")
         .then((res) => {
+          
+          if (res.data.data.length == 0) {
+            if (res.data.message == "Access to Agency is restricted") {
+              this.isRestricted = true;
+              this.$store.commit("updateLoadState", false);
+              return;
+            }
+          }
           this.agency = res.data.data;
-          // console.log(res.data + "called now");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -257,7 +265,7 @@ export default {
 
       // this.getCampaign();
     },
-     searchKeyWord() {
+    searchKeyWord() {
       this.$store
         .dispatch("search", {
           endpoint: "/api/v1/admin/users",
@@ -266,13 +274,13 @@ export default {
         .then((res) => {
           this.searchResult = res.data.data;
 
-        
+
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-         
+
           console.log(error);
-          
+
           this.$store.commit("updateLoadState", false);
         });
     },

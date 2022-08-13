@@ -5,7 +5,7 @@
       <div class="content-section">
         <navbar></navbar>
         <div class="scroll-content">
-          <upgrade-alert title="Reseller"></upgrade-alert>
+          <upgrade-alert v-if="isRestricted" title="Reseller"></upgrade-alert>
           <div class="container">
             <div class="
               dashboard-top
@@ -182,6 +182,7 @@ export default {
       triggerEdit: false,
       submitted: false,
       error: null,
+      isRestricted: false,
     };
   },
   validations: {
@@ -254,6 +255,14 @@ export default {
       this.$store
         .dispatch("getAllReseller")
         .then((res) => {
+
+           if (res.data.data.length == 0) {
+            if (res.data.message == "Access to Reseller is restricted") {
+              this.isRestricted = true;
+               this.$store.commit("updateLoadState", false);
+              return;
+            }
+          }
           this.resellers = res.data.data;
           // console.log(res.data + "called now");
           this.$store.commit("updateLoadState", false);

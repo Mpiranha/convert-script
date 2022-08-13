@@ -13,7 +13,7 @@
           <form action="#" method="post">
             <div class="form-group">
               <label for="my-input">Email</label>
-              <input id="my-input" class="form-control input-signin" type="email" name="" v-model.trim="user.email"
+              <input class="form-control input-signin" type="email" name="" v-model.trim="user.email"
                 :class="{ 'is-invalid': submitted && $v.user.email.$error }" />
               <div v-if="submitted && $v.user.email.$error" class="invalid-feedback">
                 <span v-if="!$v.user.email.required">Email is required</span>

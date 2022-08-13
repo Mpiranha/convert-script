@@ -14,15 +14,20 @@
               <table class="table table-custom">
                 <tbody>
                   <tr>
-                    <td scope="row">Plan 1</td>
-                    <td>05/072021</td>
+                    <td scope="row"> {{ planDetail.active_plan[0].name }} </td>
+                    <td>{{ formatDate(planDetail.active_plan[0].created_at) }}</td>
                     <td>Active</td>
                   </tr>
-                  <tr>
-                    <td scope="row">Plan 2</td>
-                    <td></td>
+                  <tr v-for="plan in planDetail.all_plans" :key="plan.plan_id">
+                    <td scope="row">{{ plan.name }}</td>
+                    <td>${{ plan.price }}</td>
                     <td>
-                      <button class="btn btn-upgrade">Upgrade</button>
+                      <router-link class="btn btn-upgrade" :to="{
+                        name: 'UpgradeRedirect',
+                        params: { id: plan.plan_id },
+                      }">
+                       Upgrade
+                      </router-link>
                     </td>
                   </tr>
                 </tbody>
@@ -31,12 +36,8 @@
 
             <div class="content-wrap word-usage-stat">
               <div class="label">Word Usage Count</div>
-              <b-progress
-                :value="wordStat.script_words_generated"
-                :max="wordStat.limit"
-                animated
-                height="0.8rem"
-              ></b-progress>
+              <b-progress :value="wordStat.script_words_generated" :max="wordStat.limit" animated height="0.8rem">
+              </b-progress>
               <div class="value">
                 {{ wordStat.script_words_generated }} of {{ wordStat.limit }}
               </div>
@@ -63,6 +64,10 @@ export default {
     return {
       progressValue: 50,
       max: 100,
+      planDetail: {
+        active_plan: [],
+        all_plans: []
+      },
       wordStat: {
         limit: null,
         script_words_generated: null,
@@ -70,14 +75,30 @@ export default {
     };
   },
   methods: {
+    formatDate(date) {
+      var formatedDate = new Date(date);
+
+      return formatedDate.toLocaleDateString();
+    },
+    getUserPlanDetails() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getUserPlanDetails")
+        .then((res) => {
+          this.planDetail = res.data.data;
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     getStatInfo() {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getDashboardInfo")
         .then((res) => {
           this.wordStat = res.data.data.message;
-
-          console.log(res.data);
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -87,6 +108,7 @@ export default {
     },
   },
   mounted() {
+    this.getUserPlanDetails();
     this.getStatInfo();
   },
 };

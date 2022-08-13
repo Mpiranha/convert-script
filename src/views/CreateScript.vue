@@ -459,7 +459,12 @@ export default {
         .then((res) => {
           this.loading = false;
           console.log(res);
+
+          if (res.data.length > 0) {
           this.generatedScript.push(res.data.data);
+          } else {
+            this.makeToast("danger", res.data.message);
+          }
 
           this.$store.commit("updateLoadState", false);
         })

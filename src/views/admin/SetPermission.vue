@@ -131,7 +131,7 @@ export default {
                     id: id,
                     data: {
                         permissions: this.selectedPermissions,
-                        cycle_id: this.role.cycle_id,
+                        type: "permission"
                     },
                 })
                 .then(() => {

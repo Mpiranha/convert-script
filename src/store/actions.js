@@ -194,6 +194,43 @@ export default {
         })
     },
 
+    // Billing Page
+
+    getUserPlanDetails({
+       
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/plans`)
+                .then(resp => {
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
+    getPlanUpgradeLink({
+       
+        state
+    }, id) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/plan/${id}/upgrade`)
+                .then(resp => {
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
+
     // Tutorial
 
     getTutorialVideos({

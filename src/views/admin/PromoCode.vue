@@ -239,8 +239,8 @@ export default {
           perPage: this.perPage,
         })
         .then((res) => {
-          this.codes = res.data.data;
-          this.codeLength = res.data.meta.total;
+          this.codes = res.data.response.data;
+          this.codeLength = res.data.response.meta.total;
 
           this.$store.commit("updateLoadState", false);
         })
