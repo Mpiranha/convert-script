@@ -119,9 +119,9 @@
         </div>
       </b-form-group>
       <b-form-group label="Access" label-for="pwd" label-class="form-label">
-        <b-form-select class="input-table" v-model="form.plan" :options="planOptions"
-          :class="{ 'is-invalid': submitted && $v.form.plan.$error }"></b-form-select>
-        <div v-if="submitted && !$v.form.plan.required" class="invalid-feedback">
+        <b-form-select class="input-table" v-model="form.role" :options="planOptions"
+          :class="{ 'is-invalid': submitted && $v.form.role.$error }"></b-form-select>
+        <div v-if="submitted && !$v.form.role.required" class="invalid-feedback">
           * select suitable plan
         </div>
       </b-form-group>
@@ -170,9 +170,6 @@ export default {
         role: "",
         email: "",
         password: "",
-        plan: [{
-          plan_id: "",
-        },],
       },
       planOptions: [{
         value: null,
@@ -203,7 +200,7 @@ export default {
         required,
         minLength: minLength(6),
       },
-      plan: {
+      role: {
         required,
       },
     },
@@ -234,14 +231,12 @@ export default {
     getAllplans() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllPlans")
+        .dispatch("getUsersAllPlan")
         .then((res) => {
           for (let i = 0; i < res.data.data.length; i++) {
             this.planOptions.push({
-              value: [{
-                plan_id: res.data.data[i].id,
-              },],
-              text: res.data.data[i].name,
+              value: res.data.data[i].name,
+              text: res.data.data[i].name.toUpperCase(),
             });
           }
           this.$store.commit("updateLoadState", false);
@@ -290,10 +285,9 @@ export default {
         .dispatch("addReseller", {
           first_name: this.form.first_name,
           last_name: this.form.last_name,
-          role: "User",
+          role: this.form.role,
           email: this.form.email,
           password: this.form.password,
-          plan: this.form.plan,
         })
         .then((res) => {
           this.error = null;
@@ -303,10 +297,9 @@ export default {
           this.form = {
             first_name: "",
             last_name: "",
-            role: "",
+            role: null,
             email: "",
             password: "",
-            plan: null,
           };
           this.getReseller();
           this.$store.commit("updateLoadState", false);
@@ -340,9 +333,8 @@ export default {
           data: {
             first_name: this.form.first_name,
             last_name: this.form.last_name,
-            role: "User",
+            role: this.form.role,
             email: this.form.email,
-            plan: this.form.plan,
           },
         })
         .then((res) => {
@@ -351,10 +343,10 @@ export default {
           this.form = {
             first_name: "",
             last_name: "",
-            role: "",
+            role: null,
             email: "",
             password: "",
-            plan: null,
+           
           };
           this.getReseller();
           this.$store.commit("updateLoadState", false);
@@ -395,16 +387,16 @@ export default {
       this.form.last_name = data.last_name;
       this.form.role = data.role;
       this.form.email = data.email;
-      this.form.plan[0].plan_id = data.plans[0].id;
     },
     clearField() {
+      this.submitted = false;
       this.form = {
         first_name: "",
         last_name: "",
-        role: "",
+        role: null,
         email: "",
         password: "",
-        plan: null,
+       
       };
       this.triggerEdit = false;
     },

@@ -1961,6 +1961,22 @@ export default {
         })
     },
 
+    getUsersAllPlan({
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/plans?all=1`)
+                .then(resp => {
+
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
     // Transactions
 
     getAllTransactions({
