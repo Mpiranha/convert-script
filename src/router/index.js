@@ -50,6 +50,7 @@ import Language from '@/views/admin/Language'
 import Tone from '@/views/admin/Tone'
 import Keyword from '@/views/admin/Keyword'
 import PromoCode from '@/views/admin/PromoCode'
+import UsedCode from '@/views/admin/UsedCode'
 import UpgradeRedirect from '@/views/UpgradeRedirect'
 
 
@@ -353,6 +354,16 @@ const routes = [{
   component: PromoCode,
   meta: {
     title: 'OneCopy AI Writer Admin - Promo Codes',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/promo-codes/used',
+  name: 'PromoCodes',
+  component: UsedCode,
+  meta: {
+    title: 'OneCopy AI Writer Admin - Used Codes',
     requiresAuth: true,
     adminAuth: true
   }

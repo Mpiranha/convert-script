@@ -96,10 +96,11 @@
                     </td>
                     <td>
                       <span v-if="user.role.toLowerCase() === 'free'" class="badge badge-secondary">Free</span>
-                      <span v-else-if="user.role.toLowerCase() === 'basic'" class="badge badge-warning">Basic</span>
-                      <span v-else-if="user.role.toLowerCase() === 'monthly'" class="badge badge-primary">Monthly</span>
+                      <span v-else-if="user.role.toLowerCase() === 'basic (yearly)'" class="badge badge-warning">Basic (Yearly)</span>
+                      <span v-else-if="user.role.toLowerCase() === 'basic (monthly)'" class="badge badge-primary">Basic (Monthly)</span>
                       <span v-else-if="user.role.toLowerCase() === 'admin'" class="badge badge-success">Admin</span>
                        <span v-else-if="user.role.toLowerCase() === 'premium lifetime'" class="badge badge-danger">Premium Lifetime</span>
+                       <span v-else>{{user.role}}</span>
                     </td>
                     <td>
                       {{ formatDate(user.created_at) }}
@@ -443,12 +444,6 @@ export default {
       this.userData.role = data.role;
       this.userData.password = data.password;
       this.userData.email = data.email;
-
-      data.plans.forEach((plan, index) => {
-        this.userData.plans[index] = {
-          plan_id: plan.id,
-        };
-      });
 
       // this.userData.plans = data.plans;
     },

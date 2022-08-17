@@ -1573,6 +1573,25 @@ export default {
     },
 
 
+    // Used Code
+    getAllUsedCode({
+       
+        state
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
+            axios.get(`${baseUrl}/api/v1/admin/purchase-codes/used`)
+                .then(resp => {
+                  
+                    resolve(resp)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    },
+
+
     // Categories
 
     getAllCategories({
