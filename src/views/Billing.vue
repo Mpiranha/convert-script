@@ -11,15 +11,24 @@
             </div>
 
             <div class="content-wrap pt-4 pb-5">
-            <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
+              <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
               <table class="table table-custom">
+                <thead>
+                  <tr>
+                    <th>Plan</th>
+                    <th>Paid On</th>
+                    <th>End At</th>
+                    <th class="text-right">Status</th>
+                  </tr>
+                </thead>
                 <tbody>
                   <tr v-if="planDetail.active_plan.length > 0">
-                    <td scope="row"> {{ planDetail.active_plan[0].name }} </td>
-                    <td>{{ formatDate(planDetail.active_plan[0].created_at) }}</td>
-                    <td>Active</td>
+                    <td scope="row"> {{ planDetail.active_plan[0].name.toUpperCase() }} </td>
+                    <td class="text-left">{{ formatDate(planDetail.active_plan[0].created_at) }}</td>
+                    <td>NIL</td>
+                    <td><span class="badge badge-success">ACTIVE</span></td>
                   </tr>
-                  <tr v-for="plan in planDetail.all_plans" :key="plan.plan_id">
+                  <!-- <tr v-for="plan in planDetail.all_plans" :key="plan.plan_id">
                     <td scope="row">{{ plan.name }}</td>
                     <td>${{ plan.price }}</td>
                     <td>
@@ -30,9 +39,34 @@
                        Upgrade
                       </router-link>
                     </td>
+                  </tr> -->
+                </tbody>
+              </table>
+
+              <table v-if="planDetail.all_plans.length > 0" class="table table-custom">
+                <thead>
+                  <tr>
+                    <th>Plan</th>
+                    <th>Price</th>
+                    <th class="text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="plan in planDetail.all_plans" :key="plan.plan_id">
+                    <td scope="row">{{ plan.name.toUpperCase() }}</td>
+                    <td class="text-left">${{ plan.price }}</td>
+                    <td>
+                      <router-link class="btn btn-upgrade" :to="{
+                        name: 'UpgradeRedirect',
+                        params: { id: plan.plan_id },
+                      }">
+                        Upgrade
+                      </router-link>
+                    </td>
                   </tr>
                 </tbody>
               </table>
+
             </div>
 
             <div class="content-wrap word-usage-stat">
