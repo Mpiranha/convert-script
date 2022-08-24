@@ -16,7 +16,7 @@
                 <thead>
                   <tr>
                     <th>Plan</th>
-                    <th>Paid On</th>
+                    <th>Word</th>
                     <th>End At</th>
                     <th class="text-right">Status</th>
                   </tr>
@@ -24,9 +24,27 @@
                 <tbody>
                   <tr v-if="planDetail.active_plan.length > 0">
                     <td scope="row"> {{ planDetail.active_plan[0].name.toUpperCase() }} </td>
-                    <td class="text-left">{{ formatDate(planDetail.active_plan[0].created_at) }}</td>
-                    <td>NIL</td>
+                    <td class="text-left">{{ planDetail.active_plan[0].words.toLocaleString('en-US') }}</td>
+                    <td>{{ formatDate(planDetail.active_plan[0].end_date) }}</td>
+
                     <td><span class="badge badge-success">ACTIVE</span></td>
+                  </tr>
+                  <tr v-for="plan in planDetail.all_plans" :key="plan.plan_id">
+                    <td scope="row">{{ plan.name.toUpperCase() }}</td>
+                    <td class="text-left">{{ plan.words.toLocaleString('en-US') }}</td>
+                    <td>{{ new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD'
+                      }).format(plan.price)
+                    }}</td>
+                    <td>
+                      <router-link class="btn btn-upgrade" :to="{
+                        name: 'UpgradeRedirect',
+                        params: { id: plan.plan_id },
+                      }">
+                        Upgrade
+                      </router-link>
+                    </td>
                   </tr>
                   <!-- <tr v-for="plan in planDetail.all_plans" :key="plan.plan_id">
                     <td scope="row">{{ plan.name }}</td>
@@ -43,27 +61,9 @@
                 </tbody>
               </table>
 
-              <table v-if="planDetail.all_plans.length > 0" class="table table-custom">
-                <thead>
-                  <tr>
-                    <th>Plan</th>
-                    <th>Price</th>
-                    <th class="text-right">Action</th>
-                  </tr>
-                </thead>
+              <table class="table table-custom">
                 <tbody>
-                  <tr v-for="plan in planDetail.all_plans" :key="plan.plan_id">
-                    <td scope="row">{{ plan.name.toUpperCase() }}</td>
-                    <td class="text-left">${{ plan.price }}</td>
-                    <td>
-                      <router-link class="btn btn-upgrade" :to="{
-                        name: 'UpgradeRedirect',
-                        params: { id: plan.plan_id },
-                      }">
-                        Upgrade
-                      </router-link>
-                    </td>
-                  </tr>
+
                 </tbody>
               </table>
 
@@ -74,7 +74,7 @@
               <b-progress :value="wordStat.script_words_generated" :max="wordStat.limit" animated height="0.8rem">
               </b-progress>
               <div class="value">
-                {{ wordStat.script_words_generated }} of {{ wordStat.limit }}
+                {{ wordStat.script_words_generated.toLocaleString('en-US') }} of {{ wordStat.limit.toLocaleString('en-US') }}
               </div>
             </div>
           </div>
@@ -111,7 +111,11 @@ export default {
   },
   methods: {
     formatDate(date) {
+      if (!date) {
+        return "NULL";
+      }
       var formatedDate = new Date(date);
+
 
       return formatedDate.toLocaleDateString();
     },
