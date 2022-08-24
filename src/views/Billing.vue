@@ -46,18 +46,7 @@
                       </router-link>
                     </td>
                   </tr>
-                  <!-- <tr v-for="plan in planDetail.all_plans" :key="plan.plan_id">
-                    <td scope="row">{{ plan.name }}</td>
-                    <td>${{ plan.price }}</td>
-                    <td>
-                      <router-link class="btn btn-upgrade" :to="{
-                        name: 'UpgradeRedirect',
-                        params: { id: plan.plan_id },
-                      }">
-                       Upgrade
-                      </router-link>
-                    </td>
-                  </tr> -->
+                 
                 </tbody>
               </table>
 
@@ -74,7 +63,7 @@
               <b-progress :value="wordStat.script_words_generated" :max="wordStat.limit" animated height="0.8rem">
               </b-progress>
               <div class="value">
-                {{ wordStat.script_words_generated.toLocaleString('en-US') }} of {{ wordStat.limit.toLocaleString('en-US') }}
+                {{ wordStat.script_words_generated }} of {{ wordStat.limit }}
               </div>
             </div>
           </div>
