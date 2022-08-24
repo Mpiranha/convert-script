@@ -119,7 +119,7 @@
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-user')" class="close-modal">Close</b-button>
         <b-button @click="triggerEdit ? editPromoCode(editId) : addPromoCode()" class="save-modal">{{ triggerEdit ? "Edit" :
-            "AddUser"
+            "Add Purchase Code"
         }}</b-button>
       </div>
     </b-modal>

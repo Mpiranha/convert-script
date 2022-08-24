@@ -73,7 +73,10 @@
                     </div>
                   </div>
                   <div class="control-height">
-                    <table class="table table-section script-table">
+                  <div v-if="campaign.scripts.length === 0" class="no-data-info">
+                      Created Copies will display here.
+                    </div>
+                    <table v-else class="table table-section script-table">
                       <tbody>
                         <tr
                           @click="setActiveScript(script)"
