@@ -100,7 +100,7 @@
                       <span v-else-if="user.role.toLowerCase() === 'basic (monthly)'" class="badge badge-primary">Basic (Monthly)</span>
                       <span v-else-if="user.role.toLowerCase() === 'admin'" class="badge badge-success">Admin</span>
                        <span v-else-if="user.role.toLowerCase() === 'premium lifetime'" class="badge badge-danger">Premium Lifetime</span>
-                       <span v-else>{{user.role}}</span>
+                       <span v-else>{{user.role.toUpperCase()}}</span>
                     </td>
                     <td>
                       {{ formatDate(user.created_at) }}
