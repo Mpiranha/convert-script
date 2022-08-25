@@ -15,10 +15,9 @@
               ">
               <h6 class="title">Promo Code ({{ codeLength }})</h6>
               <div class="d-flex align-items-center">
-                <a href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=Admin&export=UsersExport"
-                  target="_blank" class="btn btn-border-secondary no-shadow" to="/agency/setup">
+                <router-link class="btn btn-border-secondary no-shadow" to="/admin/promo-codes/used">
                   Used Code
-                </a>
+                </router-link>
                 <button @click="clearField" class="btn btn-create" v-b-modal.modal-new-user>
                   <span>+</span>
                   New Codes
