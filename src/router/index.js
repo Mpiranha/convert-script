@@ -607,7 +607,7 @@ router.beforeEach((to, from, next) => {
 
         if (to.matched.some(record => record.meta.adminAuth)) {
 
-          if (role === "Admin") {
+          if (role.toLowerCase() === "admin") {
             next();
             return;
           } else {
@@ -642,59 +642,6 @@ router.beforeEach((to, from, next) => {
       }
     });
   }
-  // if (to.matched.some(record => record.meta.requiresAuth)) {
-  //   const loginpath = window.location.hash.split('#')[1]
-
-  //   if (to.matched.some(record => record.meta.adminAuth)) {
-  //     // alert("Admin Only")
-  //     // alert("User role: " + role)
-  //     if (role === "Admin") {
-  //       // alert("You're an Admin")
-  //       next()
-  //     } else {
-  //       next({
-  //         name: 'NotFound',
-  //         query: {
-  //           from: loginpath
-  //         }
-  //       })
-  //       return
-  //     }
-  //   }
-
-  //   if (store.getters.isAuthenticated) {
-  //     if (localStorage.token) {
-  //       const jwtPayload = parseJwt(localStorage.token);
-  //       if (jwtPayload.exp < Date.now() / 1000) {
-  //         // token expired
-  //         store.dispatch("logout");
-  //         next("/login");
-  //       }
-  //       next();
-  //     } else {
-  //       next("/");
-  //     }
-
-  //     store.dispatch("getUser")
-  //     next()
-
-  //     return
-  //   }
-
-
-
-  //   // next('/login')
-  //   console.log(loginpath)
-  //   next({
-  //     name: 'Login',
-  //     query: {
-  //       from: loginpath
-  //     }
-  //   })
-  // } else {
-  //   next()
-  // }
-
 
 })
 
