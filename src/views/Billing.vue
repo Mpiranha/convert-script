@@ -36,7 +36,7 @@
                         style: 'currency',
                         currency: 'USD'
                       }).format(plan.price)
-                    }}</td>
+                    }}/{{ capitaliseStr(plan.billing_cycle) }}</td>
                     <td>
                       <router-link class="btn btn-upgrade" :to="{
                         name: 'UpgradeRedirect',
