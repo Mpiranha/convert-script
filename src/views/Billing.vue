@@ -23,14 +23,14 @@
                 </thead>
                 <tbody>
                   <tr v-if="planDetail.active_plan.length > 0">
-                    <td scope="row"> {{ planDetail.active_plan[0].name }} </td>
+                    <td scope="row"> {{ capitaliseStr(planDetail.active_plan[0].name) }} </td>
                     <td class="text-left">{{ planDetail.active_plan[0].words.toLocaleString('en-US') }}</td>
                     <td>{{ formatDate(planDetail.active_plan[0].end_date) }}</td>
 
                     <td><span class="badge badge-success">ACTIVE</span></td>
                   </tr>
                   <tr v-for="plan in planDetail.all_plans" :key="plan.plan_id">
-                    <td scope="row">{{ plan.name.toUpperCase() }}</td>
+                    <td scope="row">{{ capitaliseStr(plan.name) }}</td>
                     <td class="text-left">{{ plan.words.toLocaleString('en-US') }}</td>
                     <td>{{ new Intl.NumberFormat('en-US', {
                         style: 'currency',
@@ -46,7 +46,7 @@
                       </router-link>
                     </td>
                   </tr>
-                 
+
                 </tbody>
               </table>
 
@@ -79,7 +79,7 @@ import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 
 export default {
-  name: "Dashboard",
+  name: "Billing",
   components: {
     Sidebar,
     Navbar,
@@ -134,6 +134,19 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+
+    capitaliseStr(text) {
+      var words = text.split(' ');
+      var CapitalizedWords = [];
+      words.forEach(element => {
+        if (element.indexOf('(') == 0) {
+          CapitalizedWords.push('(' + element[1].toUpperCase() + element.slice(2, element.length));
+        } else {
+          CapitalizedWords.push(element[0].toUpperCase() + element.slice(1, element.length));
+        }
+      });
+      return CapitalizedWords.join(' ');
+    }
   },
   mounted() {
     this.getUserPlanDetails();
