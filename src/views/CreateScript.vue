@@ -2,23 +2,18 @@
   <div class="container-fluid px-0">
     <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap">
-      <sidebar
-        :user-name="this.$store.state.user.first_name"
-        current-active="new-copy"
-      ></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name" current-active="new-copy"></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="scroll-content">
           <div class="container">
-            <div
-              class="
+            <div class="
                 dashboard-top
                 d-flex
                 justify-content-between
                 align-items-center
                 mb-3
-              "
-            >
+              ">
               <h6 class="title">
                 <img class="script-type-icon" :src="scriptType.icon" alt="" />
                 {{ scriptType.name }}
@@ -32,97 +27,51 @@
                     <div class="script-form-wrap">
                       <form action="#" method="GET" @submit.prevent="onSubmit">
                         <div class="script-form">
-                          <div
-                            v-for="(scriptInfo, index) in scriptData"
-                            :key="scriptInfo.id"
-                            class="form-group"
-                          >
+                          <div v-for="(scriptInfo, index) in scriptData" :key="scriptInfo.id" class="form-group">
                             <label for="">{{
-                              scriptInfo.question.label
+                                scriptInfo.question.label
                             }}</label>
-                            <textarea
-                              v-if="
-                                scriptInfo.question.field_type === 'textarea'
-                              "
-                              :class="{
-                                'is-invalid':
-                                  $v.scriptAnswers.$each[index].answer.$error,
-                              }"
-                              rows="3"
-                              cols="10"
-                              v-model="scriptAnswers[index].answer"
-                              :placeholder="scriptInfo.question.placeholder"
-                              class="form-control"
-                            ></textarea>
-                            <input
-                              v-else
-                              :type="scriptInfo.question.field_type"
-                              name=""
-                              :class="{
-                                'is-invalid':
-                                  $v.scriptAnswers.$each[index].answer.$error,
-                              }"
-                              id=""
-                              v-model="scriptAnswers[index].answer"
-                              class="form-control"
-                              :placeholder="scriptInfo.question.placeholder"
-                            />
+                            <textarea v-if="
+                              scriptInfo.question.field_type === 'textarea'
+                            " :class="{
+  'is-invalid':
+    $v.scriptAnswers.$each[index].answer.$error,
+}" rows="3" cols="10" v-model="scriptAnswers[index].answer"
+                              :placeholder="scriptInfo.question.placeholder" class="form-control"></textarea>
+                            <input v-else :type="scriptInfo.question.field_type" name="" :class="{
+                              'is-invalid':
+                                $v.scriptAnswers.$each[index].answer.$error,
+                            }" id="" v-model="scriptAnswers[index].answer" class="form-control"
+                              :placeholder="scriptInfo.question.placeholder" />
                             <div class="invalid-feedback">
-                              <div
-                                v-if="
-                                  !$v.scriptAnswers.$each[index].answer
-                                    .required && isSubmitted
-                                "
-                              >
+                              <div v-if="
+                                !$v.scriptAnswers.$each[index].answer
+                                  .required && isSubmitted
+                              ">
                                 Answer is required
                               </div>
                             </div>
                           </div>
 
-                          <b-form-group
-                            label="Choose a tone (Optional)"
-                            label-class="input-label"
-                            v-if="
-                              additional_content.script_type_tone
-                                .script_type_allowed_tone
-                            "
-                          >
-                            <b-form-select
-                              class="form-control"
-                              v-model="tone"
-                              :options="toneOptions"
-                            ></b-form-select>
+                          <b-form-group label="Choose a tone (Optional)" label-class="input-label" v-if="
+                            additional_content.script_type_tone.script_type_allowed_tone
+                          ">
+                            <b-form-select class="form-control" v-model="tone" :options="toneOptions"></b-form-select>
                           </b-form-group>
                           <div class="row">
-                            <b-form-group
-                              class="col-6"
-                              label="Input language (Optional)"
-                              label-class="input-label"
+                            <b-form-group class="col-6" label="Input language (Optional)" label-class="input-label"
                               v-if="
-                                additional_content.script_type_language
-                                  .script_type_allowed_tone
-                              "
-                            >
-                              <b-form-select
-                                class="form-control"
-                                v-model="languageInput"
-                                :options="languageOptions"
-                              ></b-form-select>
+                              additional_content.script_type_language.script_type_allowed_tone">
+                              <b-form-select class="form-control" v-model="languageInput" :options="languageOptions">
+                              </b-form-select>
                             </b-form-group>
-                            <b-form-group
-                              class="col-6"
-                              label="Output language (Optional)"
-                              label-class="input-label"
+                            <b-form-group class="col-6" label="Output language (Optional)" label-class="input-label"
                               v-if="
                                 additional_content.script_type_language
                                   .script_type_allowed_tone
-                              "
-                            >
-                              <b-form-select
-                                class="form-control"
-                                v-model="languageOutput"
-                                :options="languageOptions"
-                              ></b-form-select>
+                              ">
+                              <b-form-select class="form-control" v-model="languageOutput" :options="languageOptions">
+                              </b-form-select>
                             </b-form-group>
                           </div>
                         </div>
@@ -154,10 +103,7 @@
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                        <button
-                          @click="exportAllScripts()"
-                          class="btn btn-export-all"
-                        >
+                        <button @click="exportAllScripts()" class="btn btn-export-all">
                           Export All
                         </button>
                       </div>
@@ -165,22 +111,15 @@
                     <div class="control-overflow">
                       <div v-if="generatedScript.length > 0">
                         <div v-for="script in generatedScript" :key="script.id">
-                          <script-box
-                            @save-clicked="
-                              saveCampaign(response.id, response.text)
-                            "
-                            v-for="response in script.scriptResponses"
-                            :key="response.id"
-                            :script-content="formatScript(response.text)"
-                            :script-content-raw="response.text"
+                          <script-box @save-clicked="
+                            saveCampaign(response.id, response.text)
+                          " v-for="response in script.scriptResponses" :key="response.id"
+                            :script-content="formatScript(response.text)" :script-content-raw="response.text"
                             @favorite-clicked="
                               addRemoveScriptFavorite(response.id)
-                            "
-                            @edit-clicked="
-                              openEditModal(response.id, response.text)
-                            "
-                            @export-clicked="exportScript(response.id)"
-                          >
+                            " @edit-clicked="
+  openEditModal(response.id, response.text)
+" @export-clicked="exportScript(response.id)">
                           </script-box>
                         </div>
                       </div>
@@ -196,56 +135,23 @@
         </div>
       </div>
     </div>
-    <b-modal
-      :hide-header="true"
-      id="modal-edit-script"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-modal-width"
-      content-class="modal-main"
-    >
-      <quill-editor
-        ref="myQuillEditor"
-        class="mb-3"
-        v-model="content"
-        :options="editorOption"
-      />
+    <b-modal :hide-header="true" id="modal-edit-script" centered size="md" :hide-footer="true"
+      dialog-class="control-modal-width" content-class="modal-main">
+      <quill-editor ref="myQuillEditor" class="mb-3" v-model="content" :options="editorOption" />
 
       <div class="d-flex justify-content-end">
-        <b-button
-          @click="$bvModal.hide('modal-edit-script')"
-          class="close-modal"
-          >Go back</b-button
-        >
-        <b-button @click="editScript(editId, content)" class="save-modal"
-          >Edit</b-button
-        >
+        <b-button @click="$bvModal.hide('modal-edit-script')" class="close-modal">Go back</b-button>
+        <b-button @click="editScript(editId, content)" class="save-modal">Edit</b-button>
       </div>
     </b-modal>
-    <b-modal
-      :hide-header="true"
-      id="modal-add-campaign"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
+    <b-modal :hide-header="true" id="modal-add-campaign" centered size="md" :hide-footer="true"
+      dialog-class="control-width" content-class="modal-main">
       <b-form-group label="Add to Campaign" label-class="form-label">
-        <b-form-select
-          class="input-table"
-          v-model="selectedCampaign"
-          :options="campaignOptions"
-        ></b-form-select>
+        <b-form-select class="input-table" v-model="selectedCampaign" :options="campaignOptions"></b-form-select>
       </b-form-group>
 
       <div class="d-flex justify-content-end">
-        <b-button
-          @click="$bvModal.hide('modal-add-campaign')"
-          class="close-modal"
-          >Close</b-button
-        >
+        <b-button @click="$bvModal.hide('modal-add-campaign')" class="close-modal">Close</b-button>
         <b-button @click="saveToCampaign" class="save-modal">Add</b-button>
       </div>
     </b-modal>
@@ -410,6 +316,7 @@ export default {
         .dispatch("getOneScriptTypeSelect", id)
         .then((res) => {
           this.scriptData = res.data.data;
+          console.log(res.data.data);
           this.additional_content = res.data.additional_content;
           for (let i = 0; i < this.scriptData.length; i++) {
             this.scriptAnswers.push({ answer: "" });
@@ -459,9 +366,9 @@ export default {
         })
         .then((res) => {
           this.loading = false;
-        
+
           if (res.data.length > 0 || !$.isEmptyObject(res.data.data)) {
-          this.generatedScript.push(res.data.data);
+            this.generatedScript.push(res.data.data);
           } else {
             this.makeToast("danger", res.data.message);
           }
@@ -573,8 +480,8 @@ export default {
                   script_type_id: this.scriptType.id
                     ? this.scriptType.id
                     : setTimeout(() => {
-                        return this.scriptType.id;
-                      }, 3000),
+                      return this.scriptType.id;
+                    }, 3000),
                   user_id: this.$store.state.user.id,
                 },
               ],
@@ -664,8 +571,8 @@ export default {
                   script_type_id: this.scriptType.id
                     ? this.scriptType.id
                     : setTimeout(() => {
-                        return this.scriptType.id;
-                      }, 3000),
+                      return this.scriptType.id;
+                    }, 3000),
                   user_id: this.$store.state.user.id,
                 },
               ],
