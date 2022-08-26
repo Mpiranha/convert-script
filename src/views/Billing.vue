@@ -23,7 +23,7 @@
                 </thead>
                 <tbody>
                   <tr v-if="planDetail.active_plan.length > 0">
-                    <td scope="row"> {{ planDetail.active_plan[0].name.toUpperCase() }} </td>
+                    <td scope="row"> {{ planDetail.active_plan[0].name }} </td>
                     <td class="text-left">{{ planDetail.active_plan[0].words.toLocaleString('en-US') }}</td>
                     <td>{{ formatDate(planDetail.active_plan[0].end_date) }}</td>
 
