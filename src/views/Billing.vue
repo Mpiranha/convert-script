@@ -38,7 +38,7 @@
 
                     <td><span class="badge badge-success">ACTIVE</span></td>
                   </tr>
-                  <tr v-for="plan in filteredPlans" :key="plan.plan_id">
+                  <tr v-for="plan in sortedPlans" :key="plan.plan_id">
                     <td scope="row">{{ capitaliseStr(plan.name) }}</td>
                     <td class="text-left">{{ plan.words.toLocaleString('en-US') }}</td>
                     <td>{{ new Intl.NumberFormat('en-US', {
@@ -167,6 +167,11 @@ export default {
           return plan.billing_cycle.toLowerCase()  == 'month'
         }
       });
+    },
+    sortedPlans() {
+      let newArr = this.filteredPlans;
+
+      return newArr.sort(function(a, b){return a.price - b.price});
     }
   },
   mounted() {
