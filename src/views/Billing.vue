@@ -6,8 +6,17 @@
         <navbar></navbar>
         <div class="scroll-content">
           <div class="container">
-            <div class="dashboard-top mb-5">
-              <h6 class="title">Billing</h6>
+            <div class="dashboard-top d-flex align-items-center mb-5">
+              <h6 class="title mb-0">Billing</h6>
+
+              <div class="d-flex align-items-center ml-auto">
+                <h6 class="title mb-0 mr-3">Monthly</h6>
+                <label class="switch mb-0">
+                  <input v-model="isYearly" type="checkbox" />
+                  <span class="slider round"></span>
+                </label>
+                <h6 class="title mb-0 ml-3">Yearly</h6>
+              </div>
             </div>
 
             <div class="content-wrap pt-4 pb-5">
@@ -29,7 +38,7 @@
 
                     <td><span class="badge badge-success">ACTIVE</span></td>
                   </tr>
-                  <tr v-for="plan in planDetail.all_plans" :key="plan.plan_id">
+                  <tr v-for="plan in filteredPlans" :key="plan.plan_id">
                     <td scope="row">{{ capitaliseStr(plan.name) }}</td>
                     <td class="text-left">{{ plan.words.toLocaleString('en-US') }}</td>
                     <td>{{ new Intl.NumberFormat('en-US', {
@@ -96,6 +105,7 @@ export default {
         limit: null,
         script_words_generated: null,
       },
+      isYearly: false,
     };
   },
   methods: {
@@ -148,10 +158,22 @@ export default {
       return CapitalizedWords.join(' ');
     }
   },
+  computed: {
+    filteredPlans() {
+      return this.planDetail.all_plans.filter((plan) => {
+        if (this.isYearly) {
+          return plan.billing_cycle.toLowerCase()  == 'year'
+        } else {
+          return plan.billing_cycle.toLowerCase()  == 'month'
+        }
+      });
+    }
+  },
   mounted() {
     this.getUserPlanDetails();
     this.getStatInfo();
   },
+
 };
 </script>
 
