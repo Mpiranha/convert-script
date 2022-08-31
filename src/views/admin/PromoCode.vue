@@ -278,8 +278,8 @@ export default {
           id: id,
           data: this.codeData,
         })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          // console.log(res);
           this.getAllPromoCode();
           this.codeData = {
             role_id: null,
@@ -299,8 +299,8 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deletePromoCode", id)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          // console.log(res);
           this.getAllPromoCode();
           this.makeToast("success", "Code deleted successfully");
           this.$store.commit("updateLoadState", false);
@@ -340,7 +340,6 @@ export default {
     handlePageChange(value) {
       this.currentPage = value;
       this.getAllPromoCode();
-      console.log("Value: " + value);
     },
   },
 

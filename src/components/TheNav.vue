@@ -23,15 +23,8 @@
       </ul>
     </div>
 
-    <b-modal
-      :hide-header="true"
-      id="modal-suggest"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
+    <b-modal :hide-header="true" id="modal-suggest" centered size="md" :hide-footer="true" dialog-class="control-width"
+      content-class="modal-main">
       <div class="modal-head">
         <h3 class="title">Send Suggestion</h3>
         <p class="desc">
@@ -40,14 +33,12 @@
       </div>
 
       <b-form-group>
-        <b-form-textarea
-          id="name"
-          v-model="suggestion.message"
-          type="text"
-          class="input-table"
-          rows="10"
-        >
+        <b-form-textarea :class="{ 'is-invalid': submitted && $v.suggestion.message.$error }" id=""
+          v-model="suggestion.message" type="text" class="input-table" rows="10">
         </b-form-textarea>
+        <div v-if="submitted && $v.suggestion.message.$error" class="invalid-feedback">
+          <span v-if="!$v.suggestion.message.required">* Can't Send an Empty Message</span>
+        </div>
       </b-form-group>
       <p class="desc-message">
         This is not a support box. Messages from here goes to a no-reply email.
@@ -55,10 +46,8 @@
       </p>
 
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-suggest')" class="close-modal"
-          >Close</b-button
-        >
-        <b-button @click="addSuggestion" class="save-modal">Submit</b-button>
+        <b-button @click="$bvModal.hide('modal-suggest')" class="close-modal">Close</b-button>
+        <b-button @click="addSuggestion($event)" class="save-modal">Submit</b-button>
       </div>
     </b-modal>
   </div>
@@ -66,6 +55,7 @@
 
 <script>
 import alertMixin from "@/mixins/alertMixin";
+import { required } from "vuelidate/lib/validators";
 export default {
   mixins: [alertMixin],
   name: "Nav",
@@ -74,6 +64,13 @@ export default {
     currentActive: String,
     removeContent: Boolean,
   },
+  validations: {
+    suggestion: {
+      message: {
+        required,
+      },
+    },
+  },
   data() {
     return {
       widget: undefined,
@@ -81,16 +78,27 @@ export default {
         parent_id: 1,
         message: "",
       },
+      submitted: false,
     };
   },
   methods: {
-    addSuggestion() {
+    addSuggestion(event) {
+
+      event.preventDefault();
+
+      this.submitted = true;
+
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
+
       this.$store.commit("updateLoadState", true);
       // this.$bvModal.hide("modal-new-user");
       this.$store
         .dispatch("addSuggestion", this.suggestion)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+
 
           this.suggestion = {
             parent_id: 1,
@@ -185,9 +193,11 @@ export default {
 .fix-height {
   min-height: 60px;
 }
+
 .notification-icon {
   position: relative;
 }
+
 #HW_badge_cont {
   position: absolute !important;
   top: 0;
@@ -209,6 +219,7 @@ export default {
 .HW_frame_cont {
   top: 70px !important;
 }
+
 @media (min-width: 1367px) {
   .menu-section .nav-link {
     font-size: 0.9rem;

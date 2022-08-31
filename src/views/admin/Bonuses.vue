@@ -240,8 +240,8 @@ export default {
       this.$bvModal.hide("modal-new-bonus");
       this.$store
         .dispatch("addBonuses", this.bonusData)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          // console.log(res);
           this.getAllBonuses();
           this.bonusData = {
             name: "",
@@ -266,8 +266,8 @@ export default {
           id: id,
           data: this.bonusData,
         })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          
           this.getAllBonuses();
           this.bonusData = {
             name: "",
@@ -288,8 +288,8 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteBonuses", id)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          // console.log(res);
           this.getAllBonuses();
           this.makeToast("success", "Bonus deleted successfully");
           this.$store.commit("updateLoadState", false);

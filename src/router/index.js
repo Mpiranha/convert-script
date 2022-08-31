@@ -584,7 +584,7 @@ router.beforeEach((to, from, next) => {
 
 
       if (store.getters.isAuthenticated) {
-        console.log('authenticated');
+        // console.log('authenticated');
         if (localStorage.token) {
           const jwtPayload = parseJwt(localStorage.token);
           if (jwtPayload.exp < Date.now() / 1000) {
@@ -600,7 +600,7 @@ router.beforeEach((to, from, next) => {
 
         // store.dispatch("getUser");
         let role = store.state.user.role || JSON.parse(localStorage.getItem('user'));
-        console.log("Role " + role);
+        // console.log("Role " + role);
 
 
 
@@ -623,7 +623,7 @@ router.beforeEach((to, from, next) => {
 
         next();
       } else {
-        console.log("Not Authenticated");
+        // console.log("Not Authenticated");
         next({
           name: 'Login',
           query: {

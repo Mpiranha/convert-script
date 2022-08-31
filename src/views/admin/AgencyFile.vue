@@ -230,9 +230,6 @@ export default {
         .then((res) => {
           this.agencyFiles = res.data.data;
           this.agencyFileLength = res.data.meta.total;
-          console.log(res.data);
-          console.log("Current Page: " + this.currentPage);
-          console.log("Per Page: " + this.perPage);
 
           this.$store.commit("updateLoadState", false);
         })
@@ -246,8 +243,8 @@ export default {
       this.$bvModal.hide("modal-new-agency");
       this.$store
         .dispatch("addAgencyFile", this.agencyFileData)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          
           this.getAgency();
           this.agencyFileData = {
             name: "",
@@ -272,8 +269,8 @@ export default {
           id: id,
           data: this.agencyFileData,
         })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          
           this.getAgency();
           this.agencyFileData = {
             name: "",
@@ -294,8 +291,8 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteAgencyFile", id)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          
           this.getAgency();
           this.makeToast("success", "Agency File deleted successfully");
           this.$store.commit("updateLoadState", false);
@@ -311,7 +308,7 @@ export default {
     handlePageChange(value) {
       this.currentPage = value;
       this.getAgency();
-      console.log("Value: " + value);
+      
     },
 
     openEditModal(id, data) {

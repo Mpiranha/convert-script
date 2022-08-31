@@ -18,19 +18,19 @@
                 text="Total Word Count"
                 box-type="leads"
                 image-url="Campaigns boxes.svg"
-                :box-value="stat.script_words_generated"
+                :box-value="Number(stat.script_words_generated)"
               ></dashboard-box>
               <dashboard-box
                 text="Copy Created"
                 box-type="links"
                 image-url="script boxes.svg"
-                :box-value="stat.scripts"
+                :box-value="Number(stat.scripts)"
               ></dashboard-box>
               <dashboard-box
                 text="Clients"
                 box-type="campaign"
                 image-url="Published boxes.svg"
-                :box-value="stat.agencies"
+                :box-value="Number(stat.agencies)"
               ></dashboard-box>
             </div>
             <loader-modal
@@ -88,7 +88,7 @@ export default {
         .then((res) => {
           this.stat = res.data.data.message;
 
-          console.log(res.data);
+          // console.log(res.data);
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
