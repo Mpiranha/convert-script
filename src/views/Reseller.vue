@@ -48,11 +48,11 @@
               <table v-else class="table table-custom">
                 <tbody v-if="searchResult.length > 0">
                   <tr v-for="reseller in searchResult" :key="reseller.id">
-                    <td scope="row">{{ reseller.first_name }}</td>
-                    <td scope="row">{{ reseller.last_name }}</td>
-                    <td>{{ reseller.active }}</td>
-                    <td>{{ reseller.email }}</td>
-                    <td>{{ formatDate(reseller.created_at) }}</td>
+                    <td scope="row">{{  reseller.first_name  }}</td>
+                    <td scope="row">{{  reseller.last_name  }}</td>
+                    <td>{{  reseller.active  }}</td>
+                    <td>{{  reseller.email  }}</td>
+                    <td>{{  formatDate(reseller.created_at)  }}</td>
                     <td>
                       <dropdown-tool delete-what="Reseller" @edit-clicked="openEditModal(reseller.id, reseller)"
                         @delete-proceed="deleteReseller(reseller.id)">
@@ -62,11 +62,11 @@
                 </tbody>
                 <tbody v-else-if="resellers && searchKey.length < 1">
                   <tr v-for="reseller in resellers" :key="reseller.id">
-                    <td scope="row">{{ reseller.first_name }}</td>
-                    <td scope="row">{{ reseller.last_name }}</td>
-                    <td>{{ reseller.active }}</td>
-                    <td>{{ reseller.email }}</td>
-                    <td>{{ formatDate(reseller.created_at) }}</td>
+                    <td scope="row">{{  reseller.first_name  }}</td>
+                    <td scope="row">{{  reseller.last_name  }}</td>
+                    <td>{{  reseller.active  }}</td>
+                    <td>{{  reseller.email  }}</td>
+                    <td>{{  formatDate(reseller.created_at)  }}</td>
                     <td>
                       <dropdown-tool delete-what="Reseller" @edit-clicked="openEditModal(reseller.id, reseller)"
                         @delete-proceed="deleteReseller(reseller.id)">
@@ -90,6 +90,9 @@
         <div v-if="submitted && !$v.form.first_name.required" class="invalid-feedback">
           * first name is required
         </div>
+        <div v-if="submitted && !$v.form.first_name.minLength" class="invalid-feedback">
+          * Minimum of 3 Characters
+        </div>
       </b-form-group>
       <b-form-group label="Last Name" label-for="name" label-class="form-label">
         <b-form-input id="name" v-model="form.last_name" type="text" placeholder="last name" class="input-table"
@@ -98,6 +101,10 @@
         <div v-if="submitted && !$v.form.last_name.required" class="invalid-feedback">
           * last name is required
         </div>
+        <div v-if="submitted && !$v.form.last_name.minLength" class="invalid-feedback">
+          * Minimum of 3 Characters
+        </div>
+
       </b-form-group>
 
       <b-form-group label="Email" label-for="email" label-class="form-label">
@@ -251,10 +258,10 @@ export default {
         .dispatch("getAllReseller")
         .then((res) => {
 
-           if (res.data.data.length == 0) {
+          if (res.data.data.length == 0) {
             if (res.data.message == "Access to Reseller is restricted") {
               this.isRestricted = true;
-               this.$store.commit("updateLoadState", false);
+              this.$store.commit("updateLoadState", false);
               return;
             }
           }
@@ -346,7 +353,7 @@ export default {
             role: null,
             email: "",
             password: "",
-           
+
           };
           this.getReseller();
           this.$store.commit("updateLoadState", false);
@@ -396,7 +403,7 @@ export default {
         role: null,
         email: "",
         password: "",
-       
+
       };
       this.triggerEdit = false;
     },

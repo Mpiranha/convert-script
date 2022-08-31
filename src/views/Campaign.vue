@@ -1,48 +1,31 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar
-        :user-name="this.$store.state.user.first_name"
-        current-active="campaign"
-      ></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name" current-active="campaign"></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="scroll-content">
           <div class="container">
-            <div
-              class="
+            <div class="
                 dashboard-top
                 d-flex
                 justify-content-between
                 align-items-center
                 mb-5
-              "
-            >
+              ">
               <h6 class="title">All Campaign</h6>
 
               <div class="d-flex align-items-center ml-auto">
-                <button
-                  @click="resetFilter"
-                  v-if="selectedAgency"
-                  class="btn btn-cancel-filters"
-                >
+                <button @click="resetFilter" v-if="selectedAgency" class="btn btn-cancel-filters">
                   <img src="@/assets/icons/cancel.svg" alt="cancel icon" />
                 </button>
 
                 <b-form-group class="mb-0 mr-3" label-class="input-label">
-                  <b-form-select
-                    @input="getClientsCampaign"
-                    class="input-table manage-width"
-                    v-model="selectedAgency"
-                    :options="clientOptions"
-                  ></b-form-select>
+                  <b-form-select @input="getClientsCampaign" class="input-table manage-width" v-model="selectedAgency"
+                    :options="clientOptions"></b-form-select>
                 </b-form-group>
 
-                <button
-                  @click="clearField"
-                  class="btn btn-create"
-                  v-b-modal.modal-new-campaign
-                >
+                <button @click="clearField" class="btn btn-create" v-b-modal.modal-new-campaign>
                   <span>+</span>
                   New Campaigns
                 </button>
@@ -54,18 +37,11 @@
                 <button class="btn search-btn">
                   <i class="flaticon-loupe icons"></i>
                 </button>
-                <input
-                  @input="searchKeyWord"
-                  v-model="searchKey"
-                  class="form-control no-shadow search-input"
-                  type="text"
-                  placeholder="Search"
-                />
+                <input @input="searchKeyWord" v-model="searchKey" class="form-control no-shadow search-input"
+                  type="text" placeholder="Search" />
               </div>
 
-              <loader-modal
-                :loading-state="this.$store.state.loading"
-              ></loader-modal>
+              <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
 
               <div v-if="campaigns.length === 0" class="no-data-info">
                 Created campaigns will display here.
@@ -74,37 +50,25 @@
                 <tbody v-if="searchResult.length > 0">
                   <tr v-for="result in searchResult" :key="result.id">
                     <td scope="row">
-                      <router-link
-                        :to="{
-                          name: 'CampaignScript',
-                          params: { id: result.id },
-                        }"
-                      >
-                        {{ result.name }}
+                      <router-link :to="{
+                        name: 'CampaignScript',
+                        params: { id: result.id },
+                      }">
+                        {{  result.name  }}
                       </router-link>
                     </td>
-                    <td>{{ result.scripts_count }}</td>
+                    <td>{{  result.scripts_count  }}</td>
                     <td>
-                      {{ formatDate(result.created_at) }}
+                      {{  formatDate(result.created_at)  }}
                     </td>
                     <td>
-                      <dropdown-tool
-                        delete-what="Campaign"
-                        @edit-clicked="openEditModal(result.id, result.name)"
-                        @delete-proceed="deleteCampaign(result.id)"
-                      >
+                      <dropdown-tool delete-what="Campaign" @edit-clicked="openEditModal(result.id, result.name)"
+                        @delete-proceed="deleteCampaign(result.id)">
                         <template v-slot:secondary>
-                          <b-dropdown-item
-                            v-b-modal.add-client
-                            link-class="drop-link"
-                            href="#"
-                            @click="getCampaignId(result.id)"
-                          >
-                            <img
-                              class="drop-img-icon"
-                              src="@/assets/icons/convert-icon/Add to client icon.svg"
-                              alt="add to client icon"
-                            />
+                          <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#"
+                            @click="getCampaignId(result.id)">
+                            <img class="drop-img-icon" src="@/assets/icons/convert-icon/Add to client icon.svg"
+                              alt="add to client icon" />
                             Add to Client
                           </b-dropdown-item>
                         </template>
@@ -115,39 +79,26 @@
                 <tbody v-else-if="selectedAgency">
                   <tr v-for="campaign in filteredCampaign" :key="campaign.id">
                     <td scope="row">
-                      <router-link
-                        :to="{
-                          name: 'CampaignScript',
-                          params: { id: campaign.id },
-                        }"
-                      >
-                        {{ campaign.name }}
+                      <router-link :to="{
+                        name: 'CampaignScript',
+                        params: { id: campaign.id },
+                      }">
+                        {{  campaign.name  }}
                       </router-link>
                     </td>
-                    <td>{{ campaign.scripts_count }}</td>
+                    <td>{{  campaign.scripts_count  }}</td>
                     <td>
-                      {{ formatDate(campaign.created_at) }}
+                      {{  formatDate(campaign.created_at)  }}
                     </td>
                     <td>
-                      <dropdown-tool
-                        delete-what="Campaign"
-                        @edit-clicked="
-                          openEditModal(campaign.id, campaign.name)
-                        "
-                        @delete-proceed="deleteCampaign(campaign.id)"
-                      >
+                      <dropdown-tool delete-what="Campaign" @edit-clicked="
+                        openEditModal(campaign.id, campaign.name)
+                      " @delete-proceed="deleteCampaign(campaign.id)">
                         <template v-slot:secondary>
-                          <b-dropdown-item
-                            v-b-modal.modal-add-client
-                            link-class="drop-link"
-                            href="#"
-                            @click="getCampaignId(campaign.id)"
-                          >
-                            <img
-                              class="drop-img-icon"
-                              src="@/assets/icons/convert-icon/Add to client icon.svg"
-                              alt="add to client icon"
-                            />
+                          <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#"
+                            @click="getCampaignId(campaign.id)">
+                            <img class="drop-img-icon" src="@/assets/icons/convert-icon/Add to client icon.svg"
+                              alt="add to client icon" />
                             Add to Client
                           </b-dropdown-item>
                         </template>
@@ -158,39 +109,26 @@
                 <tbody v-else-if="campaigns && searchKey.length < 1">
                   <tr v-for="campaign in campaigns" :key="campaign.id">
                     <td scope="row">
-                      <router-link
-                        :to="{
-                          name: 'CampaignScript',
-                          params: { id: campaign.id },
-                        }"
-                      >
-                        {{ campaign.name }}
+                      <router-link :to="{
+                        name: 'CampaignScript',
+                        params: { id: campaign.id },
+                      }">
+                        {{  campaign.name  }}
                       </router-link>
                     </td>
-                    <td>{{ campaign.scripts_count }}</td>
+                    <td>{{  campaign.scripts_count  }}</td>
                     <td>
-                      {{ formatDate(campaign.created_at) }}
+                      {{  formatDate(campaign.created_at)  }}
                     </td>
                     <td>
-                      <dropdown-tool
-                        delete-what="Campaign"
-                        @edit-clicked="
-                          openEditModal(campaign.id, campaign.name)
-                        "
-                        @delete-proceed="deleteCampaign(campaign.id)"
-                      >
+                      <dropdown-tool delete-what="Campaign" @edit-clicked="
+                        openEditModal(campaign.id, campaign.name)
+                      " @delete-proceed="deleteCampaign(campaign.id)">
                         <template v-slot:secondary>
-                          <b-dropdown-item
-                            v-b-modal.modal-add-client
-                            link-class="drop-link"
-                            href="#"
-                            @click="getCampaignId(campaign.id)"
-                          >
-                            <img
-                              class="drop-img-icon"
-                              src="@/assets/icons/convert-icon/Add to client icon.svg"
-                              alt="add to client icon"
-                            />
+                          <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#"
+                            @click="getCampaignId(campaign.id)">
+                            <img class="drop-img-icon" src="@/assets/icons/convert-icon/Add to client icon.svg"
+                              alt="add to client icon" />
                             Add to Client
                           </b-dropdown-item>
                         </template>
@@ -205,73 +143,39 @@
       </div>
     </div>
 
-    <b-modal
-      :hide-header="true"
-      id="modal-new-campaign"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
+    <b-modal :hide-header="true" id="modal-new-campaign" centered size="md" :hide-footer="true"
+      dialog-class="control-width" content-class="modal-main">
       <div class="modal-head">
         <h3 class="title">Give your campaign a name</h3>
         <p class="desc">Only you can see this</p>
       </div>
 
       <b-form-group>
-        <b-form-input
-          id="name"
-          v-model="campaignName"
-          type="text"
-          class="input-table"
-        >
+        <b-form-input :class="{ 'is-invalid': submitted && $v.campaignName.$error }" id="name" v-model="campaignName"
+          type="text" class="input-table">
         </b-form-input>
+        <div v-if="submitted && $v.campaignName.$error" class="invalid-feedback">
+          <span v-if="!$v.campaignName.required">* Name is required <br /></span>
+          <span v-if="!$v.campaignName.minLength">* Minimum of 3 Characters</span>
+        </div>
       </b-form-group>
 
       <div class="d-flex justify-content-end">
-        <b-button
-          @click="$bvModal.hide('modal-new-campaign')"
-          class="close-modal"
-          >Close</b-button
-        >
-        <b-button
-          @click="
-            triggerEdit ? editCampaign(editId, campaignName) : addCampaign()
-          "
-          class="save-modal"
-          >{{ triggerEdit ? "Edit" : "Create" }}</b-button
-        >
+        <b-button @click="$bvModal.hide('modal-new-campaign')" class="close-modal">Close</b-button>
+        <b-button @click="
+          triggerEdit ? editCampaign(editId, $event) : addCampaign($event)
+        " class="save-modal">{{  triggerEdit ? "Edit" : "Create"  }}</b-button>
       </div>
     </b-modal>
-    <b-modal
-      :hide-header="true"
-      id="modal-add-client"
-      centered
-      size="md"
-      :hide-footer="true"
-      dialog-class="control-width"
-      content-class="modal-main"
-    >
-      <b-form-group
-        label="Add to Client"
-        label-for="pwd"
-        label-class="form-label"
-      >
-        <b-form-select
-          class="input-table"
-          v-model="client"
-          :options="clientOptions"
-        ></b-form-select>
+    <b-modal :hide-header="true" id="modal-add-client" centered size="md" :hide-footer="true"
+      dialog-class="control-width" content-class="modal-main">
+      <b-form-group label="Add to Client" label-for="pwd" label-class="form-label">
+        <b-form-select class="input-table" v-model="client" :options="clientOptions"></b-form-select>
       </b-form-group>
 
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-add-client')" class="close-modal"
-          >Close</b-button
-        >
-        <b-button @click="addToClient(campaignIdToAdd)" class="save-modal"
-          >Add</b-button
-        >
+        <b-button @click="$bvModal.hide('modal-add-client')" class="close-modal">Close</b-button>
+        <b-button @click="addToClient(campaignIdToAdd)" class="save-modal">Add</b-button>
       </div>
     </b-modal>
   </div>
@@ -283,6 +187,7 @@ import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
+import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   name: "Campaign",
@@ -291,6 +196,12 @@ export default {
     Sidebar,
     Navbar,
     DropdownTool,
+  },
+  validations: {
+    campaignName: {
+      required,
+      minLength: minLength(3),
+    },
   },
   data() {
     return {
@@ -309,6 +220,7 @@ export default {
       agencyOptions: [{ value: null, text: "Select a Client" }],
       selectedAgency: null,
       clientCampaign: [],
+      submitted: false,
     };
   },
   methods: {
@@ -354,7 +266,16 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    addCampaign() {
+    addCampaign(event) {
+
+      event.preventDefault();
+
+      this.submitted = true;
+
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
       this.$store.commit("updateLoadState", true);
 
       this.$bvModal.hide("modal-new-campaign");
@@ -381,7 +302,16 @@ export default {
 
       // this.$vm.$forceUpdate();
     },
-    editCampaign(id) {
+    editCampaign(id, event) {
+      event.preventDefault();
+
+      this.submitted = true;
+
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
+
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-campaign");
       this.$store
@@ -439,10 +369,10 @@ export default {
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-         
+
           this.client = null;
           this.error = error.response.data.data.error;
-         
+
           this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error;
@@ -482,6 +412,7 @@ export default {
     clearField() {
       this.campaignName = "";
       this.triggerEdit = false;
+      this.submitted = false;
     },
     orderSort(arr) {
       return arr.sort(function (a, b) {

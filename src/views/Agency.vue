@@ -52,11 +52,11 @@
               <table v-else class="table table-custom">
                 <tbody>
                   <tr v-for="agency in orderedAgency" :key="agency.id">
-                    <td scope="row">{{ agency.name }}</td>
-                    <td>{{ agency.id }}</td>
-                    <td>{{ agency.email }}</td>
+                    <td scope="row">{{  agency.name  }}</td>
+                    <td>{{  agency.id  }}</td>
+                    <td>{{  agency.email  }}</td>
                     <td>
-                      {{ formatDate(agency.created_at) }}
+                      {{  formatDate(agency.created_at)  }}
                     </td>
                     <td>
                       <dropdown-tool @edit-clicked="
@@ -97,26 +97,36 @@
       </div> -->
 
       <b-form-group label="Name">
-        <b-form-input id="name" v-model="client.name" type="text" class="input-table">
+        <b-form-input :class="{ 'is-invalid': submitted && $v.client.name.$error }" id="name"
+          v-model="client.name" type="text" class="input-table">
         </b-form-input>
+        <div v-if="submitted && $v.client.name.$error" class="invalid-feedback">
+          <span v-if="!$v.client.name.required">* Name is required</span>
+          <span v-if="!$v.client.name.minLength">* Minimum of 3 Characters</span>
+        </div>
       </b-form-group>
 
       <b-form-group label="Email">
-        <b-form-input id="name" v-model="client.email" type="text" class="input-table">
+        <b-form-input :class="{ 'is-invalid': submitted && $v.client.email.$error }" id="name"
+          v-model="client.email" type="email" class="input-table">
         </b-form-input>
+        <div v-if="submitted && $v.client.email.$error" class="invalid-feedback">
+          <span v-if="!$v.client.email.required">* Email is required</span>
+          <span v-if="!$v.client.email.email">* Enter a valid Email Address</span>
+        </div>
       </b-form-group>
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal">Close</b-button>
-        <b-button @click="triggerEdit ? editAgency(editId, campaignName) : addAgency()" class="save-modal">{{
-            triggerEdit ? "Edit" : "Add Client"
-        }}</b-button>
+        <b-button @click="triggerEdit ? editAgency(editId, $event) : addAgency($event)" class="save-modal">{{
+           triggerEdit ? "Edit" : "Add Client" 
+          }}</b-button>
       </div>
     </b-modal>
     <b-modal :hide-header="true" id="modal-campaign" centered size="md" :hide-footer="true" dialog-class="control-width"
       content-class="modal-main">
       <div class="modal-head mb-3">
-        <h3 class="title">{{ this.client.name }}</h3>
+        <h3 class="title">{{  this.client.name  }}</h3>
       </div>
 
       <b-form-group v-slot="{ ariaDescribedby }">
@@ -139,6 +149,7 @@ import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 import UpgradeAlert from "../components/UpgradeAlert.vue";
+import { required, minLength, email } from "vuelidate/lib/validators";
 
 export default {
   name: "Agency",
@@ -148,6 +159,18 @@ export default {
     Navbar,
     DropdownTool,
     UpgradeAlert
+  },
+  validations: {
+    client: {
+      name: {
+        required,
+        minLength: minLength(3),
+      },
+      email: {
+        required,
+        email
+      },
+    },
   },
   data() {
     return {
@@ -171,6 +194,7 @@ export default {
         { text: "Grape", value: "grape" },
       ],
       isRestricted: false,
+      submitted: false,
     };
   },
   methods: {
@@ -179,7 +203,7 @@ export default {
       this.$store
         .dispatch("getAllAgency")
         .then((res) => {
-          
+
           if (res.data.data.length == 0) {
             if (res.data.message == "Access to Agency is restricted") {
               this.isRestricted = true;
@@ -198,7 +222,15 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    addAgency() {
+    addAgency(event) {
+      event.preventDefault();
+
+      this.submitted = true;
+
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-client");
 
@@ -224,7 +256,16 @@ export default {
 
       // this.$vm.$forceUpdate();
     },
-    editAgency(id) {
+    editAgency(id, event) {
+
+      event.preventDefault();
+
+      this.submitted = true;
+
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-client");
       this.$store

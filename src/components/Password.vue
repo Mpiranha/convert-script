@@ -3,7 +3,6 @@
     <label :class="classLabel" for="my-input">{{ label }}</label>
     <div class="custom-pwd-box">
       <input
-        id="my-input"
         class="form-control no-shadow input-signin"
         :type="isText ? 'text' : 'password'"
         name=""

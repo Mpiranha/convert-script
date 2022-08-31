@@ -1,10 +1,7 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar
-        :user-name="this.$store.state.user.first_name"
-        current-active="settings"
-      ></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name" current-active="settings"></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="scroll-content">
@@ -15,73 +12,43 @@
                 <div class="desc">Edit your account information, here.</div>
               </div>
             </div>
-            <loader-modal
-              :loading-state="this.$store.state.loading"
-            ></loader-modal>
+            <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
 
             <div class="content-wrap extra-margin-left-wrap">
-              <b-form-group
-                label="First Name"
-                label-for="name"
-                label-class="form-label"
-              >
-                <b-form-input
-                  id="name"
-                  v-model="userDetails.first_name"
-                  type="text"
-                  class="input-table"
-                  :class="{
-                    'is-invalid':
-                      submittedDetails && $v.userDetails.first_name.$error,
-                  }"
-                >
+              <b-form-group label="First Name" label-for="name" label-class="form-label">
+                <b-form-input v-model="userDetails.first_name" type="text" class="input-table" :class="{
+                  'is-invalid':
+                    submittedDetails && $v.userDetails.first_name.$error,
+                }">
                 </b-form-input>
+                <div v-if="submittedDetails && !$v.userDetails.first_name.required" class="invalid-feedback">
+                  * First name is required
+                </div>
+                <div v-if="submittedDetails && !$v.userDetails.first_name.minLength" class="invalid-feedback">
+                  * Minimum of 3 Characters
+                </div>
               </b-form-group>
 
-              <div
-                v-if="submittedDetails && !$v.userDetails.first_name.required"
-                class="invalid-feedback"
-              >
-                * First name is required
-              </div>
+             
 
-              <b-form-group
-                label="Last Name"
-                label-for="name"
-                label-class="form-label"
-              >
-                <b-form-input
-                  id="name"
-                  v-model="userDetails.last_name"
-                  type="text"
-                  class="input-table"
-                  :class="{
-                    'is-invalid':
-                      submittedDetails && $v.userDetails.last_name.$error,
-                  }"
-                >
+              <b-form-group label="Last Name" label-for="name" label-class="form-label">
+                <b-form-input v-model="userDetails.last_name" type="text" class="input-table" :class="{
+                  'is-invalid':
+                    submittedDetails && $v.userDetails.last_name.$error,
+                }">
                 </b-form-input>
+                <div v-if="submittedDetails && !$v.userDetails.last_name.required" class="invalid-feedback">
+                  * Last name is required
+                </div>
+                <div v-if="submittedDetails && !$v.userDetails.last_name.minLength" class="invalid-feedback">
+                  * Minimum of 3 Characters
+                </div>
               </b-form-group>
 
-              <div
-                v-if="submittedDetails && !$v.userDetails.last_name.required"
-                class="invalid-feedback"
-              >
-                * Last name is required
-              </div>
+             
 
-              <b-form-group
-                label="Email"
-                label-for="email"
-                label-class="form-label"
-              >
-                <b-form-input
-                  readonly
-                  id="email"
-                  v-model="email"
-                  type="email"
-                  class="input-table"
-                >
+              <b-form-group label="Email" label-for="email" label-class="form-label">
+                <b-form-input readonly id="email" v-model="email" type="email" class="input-table">
                 </b-form-input>
               </b-form-group>
 
@@ -102,82 +69,39 @@
             </b-form-group> -->
 
               <div class="d-flex justify-content-end align-self-end mb-2">
-                <b-button
-                  @click="updateUserDetails()"
-                  class="save-modal px-4 py-2"
-                  >Save</b-button
-                >
+                <b-button @click="updateUserDetails($event)" class="save-modal px-4 py-2">Save</b-button>
               </div>
             </div>
 
             <div class="content-wrap extra-margin-left-wrap">
-              <password-input
-                label="Current Password"
-                v-model.trim="pwd.password"
-                class-label="form-label"
-                :class="{
-                  'is-invalid': submittedPwd && $v.pwd.password.$error,
-                }"
-              ></password-input>
-              <div
-                v-if="submittedPwd && $v.pwd.password.$error"
-                class="invalid-feedback"
-              >
-                <span v-if="!$v.pwd.password.required"
-                  >* Password is required</span
-                >
-                <span v-if="!$v.pwd.password.minLength"
-                  >* Password must be at least 6 characters</span
-                >
+              <password-input label="Current Password" v-model.trim="pwd.password" class-label="form-label" :class="{
+                'is-invalid': submittedPwd && $v.pwd.password.$error,
+              }"></password-input>
+              <div v-if="submittedPwd && $v.pwd.password.$error" class="invalid-feedback">
+                <span v-if="!$v.pwd.password.required">* Password is required</span>
+                <span v-if="!$v.pwd.password.minLength">* Password must be at least 6 characters</span>
               </div>
 
-              <password-input
-                label="New Password"
-                v-model.trim="pwd.newPassword"
-                class-label="form-label"
-                :class="{
-                  'is-invalid': submittedPwd && $v.pwd.newPassword.$error,
-                }"
-              ></password-input>
-              <div
-                v-if="submittedPwd && $v.pwd.newPassword.$error"
-                class="invalid-feedback"
-              >
-                <span v-if="!$v.pwd.newPassword.required"
-                  >* Password is required</span
-                >
-                <span v-if="!$v.pwd.newPassword.minLength"
-                  >* Password must be at least 6 characters</span
-                >
+              <password-input label="New Password" v-model.trim="pwd.newPassword" class-label="form-label" :class="{
+                'is-invalid': submittedPwd && $v.pwd.newPassword.$error,
+              }"></password-input>
+              <div v-if="submittedPwd && $v.pwd.newPassword.$error" class="invalid-feedback">
+                <span v-if="!$v.pwd.newPassword.required">* Password is required</span>
+                <span v-if="!$v.pwd.newPassword.minLength">* Password must be at least 6 characters</span>
               </div>
-              <password-input
-                label="Confirm New Password"
-                v-model.trim="pwd.confirmNewPassword"
-                class-label="form-label"
-                :class="{
+              <password-input label="Confirm New Password" v-model.trim="pwd.confirmNewPassword"
+                class-label="form-label" :class="{
                   'is-invalid':
                     submittedPwd && $v.pwd.confirmNewPassword.$error,
-                }"
-              ></password-input>
-              <div
-                v-if="submittedPwd && $v.pwd.confirmNewPassword.$error"
-                class="invalid-feedback"
-              >
-                <span v-if="!$v.pwd.confirmNewPassword.required"
-                  >* Password is required</span
-                >
-                <span v-if="!$v.pwd.confirmNewPassword.minLength"
-                  >* Password must be at least 6 characters</span
-                >
-                <span v-else-if="!$v.pwd.confirmNewPassword.sameAsPassword"
-                  >* Passwords must match</span
-                >
+                }"></password-input>
+              <div v-if="submittedPwd && $v.pwd.confirmNewPassword.$error" class="invalid-feedback">
+                <span v-if="!$v.pwd.confirmNewPassword.required">* Password is required</span>
+                <span v-if="!$v.pwd.confirmNewPassword.minLength">* Password must be at least 6 characters</span>
+                <span v-else-if="!$v.pwd.confirmNewPassword.sameAsPassword">* Passwords must match</span>
               </div>
 
               <div class="d-flex justify-content-end align-self-end mb-2">
-                <b-button @click="changePassword" class="save-modal px-4 py-2"
-                  >Save</b-button
-                >
+                <b-button @click="changePassword" class="save-modal px-4 py-2">Save</b-button>
               </div>
             </div>
           </div>
@@ -282,8 +206,9 @@ export default {
       this.email = this.userData.email;
     },
 
-    updateUserDetails() {
-      this.$store.commit("updateLoadState", true);
+    updateUserDetails(event) {
+  
+      event.preventDefault();
 
       this.submittedDetails = true;
 
@@ -291,6 +216,8 @@ export default {
       if (this.$v.userDetails.$invalid) {
         return;
       }
+
+      this.$store.commit("updateLoadState", true);
 
       this.$store
         .dispatch("updateUserDetails", {
