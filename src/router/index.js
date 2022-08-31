@@ -360,7 +360,7 @@ const routes = [{
 },
 {
   path: '/admin/promo-codes/used',
-  name: 'PromoCodes',
+  name: 'UsedCodes',
   component: UsedCode,
   meta: {
     title: 'OneCopy AI Writer Admin - Used Codes',

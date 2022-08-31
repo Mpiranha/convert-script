@@ -162,7 +162,7 @@ export default {
     filteredPlans() {
       return this.planDetail.all_plans.filter((plan) => {
         if (this.isYearly) {
-          return plan.billing_cycle.toLowerCase()  == 'year'
+          return plan.billing_cycle.toLowerCase()  == 'year' || plan.billing_cycle.toLowerCase()  == 'lifetime'
         } else {
           return plan.billing_cycle.toLowerCase()  == 'month'
         }

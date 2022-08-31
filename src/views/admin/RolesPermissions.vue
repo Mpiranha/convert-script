@@ -48,12 +48,12 @@
                   </thead>
                   <tbody v-if="searchResult.length > 0">
                     <tr v-for="result in searchResult" :key="result.id">
-                      <td scope="row">{{ result.name }}</td>
-                      <td>{{ result.price }}</td>
-                      <td>{{ result.set_as_user_plan }}</td>
-                      <td>{{ result.words_allowed }}</td>
-                      <td>{{ result.success_url ? result.success_url : "NIL" }}</td>
-                      <td>{{ result.cancel_url ? result.cancel_url : "NIL" }}</td>
+                      <td scope="row">{{  result.name  }}</td>
+                      <td>{{  result.price  }}</td>
+                      <td>{{  result.set_as_user_plan  }}</td>
+                      <td>{{  result.words_allowed  }}</td>
+                      <td>{{  result.success_url ? result.success_url : "NIL"  }}</td>
+                      <td>{{  result.cancel_url ? result.cancel_url : "NIL"  }}</td>
                       <td>
                         <dropdown-tool @edit-clicked="
                           openEditModal(result.id, {
@@ -92,12 +92,12 @@
                   </tbody>
                   <tbody v-else-if="roles && searchKey.length < 1">
                     <tr v-for="role in roles" :key="role.id">
-                      <td scope="row">{{ role.name }}</td>
-                      <td>{{ role.price }}</td>
-                      <td>{{ role.set_as_user_plan }}</td>
-                      <td>{{ role.words_allowed }}</td>
-                      <td>{{ role.success_url ? role.success_url : "NIL" }}</td>
-                      <td>{{ role.cancel_url ? role.cancel_url : "NIL"}}</td>
+                      <td scope="row">{{  role.name  }}</td>
+                      <td>{{  role.price  }}</td>
+                      <td>{{  role.set_as_user_plan  }}</td>
+                      <td>{{  role.words_allowed  }}</td>
+                      <td>{{  role.success_url ? role.success_url : "NIL"  }}</td>
+                      <td>{{  role.cancel_url ? role.cancel_url : "NIL"  }}</td>
                       <td>
                         <dropdown-tool @edit-clicked="
                           openEditModal(role.id, {
@@ -150,31 +150,60 @@
     <b-modal :hide-header="true" id="modal-new-role" centered size="md" :hide-footer="true" dialog-class="control-width"
       content-class="modal-main">
       <b-form-group label="Name">
-        <b-form-input id="name" v-model="rolesData.name" type="text" class="input-table">
+        <b-form-input :class="{ 'is-invalid': submitted && $v.rolesData.name.$error }" id="name" v-model="rolesData.name"
+          type="text" class="input-table">
         </b-form-input>
+        <div v-if="submitted && $v.rolesData.name.$error" class="invalid-feedback">
+          <span v-if="!$v.rolesData.name.required">* Name is required</span>
+          <span v-if="!$v.rolesData.name.minLength">* Name must be more than 3 characters</span>
+        </div>
       </b-form-group>
       <b-form-group label="Price">
-        <b-form-input id="price" v-model="rolesData.price" type="text" class="input-table">
+        <b-form-input :class="{ 'is-invalid': submitted && $v.rolesData.price.$error }" id="price"
+          v-model="rolesData.price" type="number" class="input-table">
         </b-form-input>
+        <div v-if="submitted && $v.rolesData.price.$error" class="invalid-feedback">
+          <span v-if="!$v.rolesData.price.required">* Price is required</span>
+          <span v-if="!$v.rolesData.price.decimal">* Price must be a Number</span>
+        </div>
       </b-form-group>
 
       <b-form-group label="Cycle" label-class="form-label">
-        <b-form-select class="input-table" v-model="rolesData.cycle" :options="cycleOptions"></b-form-select>
+        <b-form-select :class="{ 'is-invalid': submitted && $v.rolesData.cycle.$error }" class="input-table"
+          v-model="rolesData.cycle" :options="cycleOptions"></b-form-select>
+        <div v-if="submitted && $v.rolesData.cycle.$error" class="invalid-feedback">
+          <span v-if="!$v.rolesData.cycle.required">* Cycle is required</span>
+        </div>
       </b-form-group>
 
       <b-form-group label="Words Allowed">
-        <b-form-input id="word" v-model="rolesData.wordLimit" type="text" class="input-table">
+        <b-form-input :class="{ 'is-invalid': submitted && $v.rolesData.wordLimit.$error }" id="word"
+          v-model="rolesData.wordLimit" type="number" class="input-table">
         </b-form-input>
+        <div v-if="submitted && $v.rolesData.wordLimit.$error" class="invalid-feedback">
+          <span v-if="!$v.rolesData.wordLimit.required">* Word Count is required</span>
+          <span v-if="!$v.rolesData.wordLimit.numeric">* Word Count must be a Number</span>
+        </div>
       </b-form-group>
 
       <b-form-group label="Success Link">
-        <b-form-input id="link" v-model="rolesData.success_url" type="url" class="input-table">
+        <b-form-input :class="{ 'is-invalid': submitted && $v.rolesData.success_url.$error }" id="link"
+          v-model="rolesData.success_url" type="url" class="input-table">
         </b-form-input>
+        <div v-if="submitted && $v.rolesData.success_url.$error" class="invalid-feedback">
+          <span v-if="!$v.rolesData.success_url.required">* Success URL is required</span>
+          <span v-if="!$v.rolesData.success_url.url">* Enter a valid URL</span>
+        </div>
       </b-form-group>
 
       <b-form-group label="Cancel Link">
-        <b-form-input id="link" v-model="rolesData.cancel_url" type="url" class="input-table">
+        <b-form-input :class="{ 'is-invalid': submitted && $v.rolesData.cancel_url.$error }" id="link"
+          v-model="rolesData.cancel_url" type="url" class="input-table">
         </b-form-input>
+        <div v-if="submitted && $v.rolesData.cancel_url.$error" class="invalid-feedback">
+          <span v-if="!$v.rolesData.cancel_url.required">* Cancel URL is required</span>
+          <span v-if="!$v.rolesData.cancel_url.url">* Enter a valid url</span>
+        </div>
       </b-form-group>
 
 
@@ -186,9 +215,15 @@
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-role')" class="close-modal">Close</b-button>
-        <b-button @click="triggerEdit ? editRole(editId, rolesData) : addRole()" class="save-modal">{{ triggerEdit ?
-            "Edit" : "Save"
-        }}</b-button>
+        <b-button @click="triggerEdit ? editRole(editId, rolesData) : addRole($event)" class="save-modal">{{  triggerEdit
+        ?
+        "Edit" : "Save"
+
+
+
+
+
+          }}</b-button>
       </div>
     </b-modal>
   </div>
@@ -200,6 +235,7 @@ import Sidebar from "@/components/admin/TheSidebarAdmin.vue";
 import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
+import { required, minLength, url, decimal, numeric } from "vuelidate/lib/validators";
 
 export default {
   name: "RolesPermission",
@@ -208,6 +244,33 @@ export default {
     Sidebar,
     Navbar,
     DropdownTool,
+  },
+  validations: {
+    rolesData: {
+      name: {
+        required,
+        minLength: minLength(3),
+      },
+      price: {
+        required,
+        decimal
+      },
+      cycle: {
+        required,
+      },
+      wordLimit: {
+        required,
+        numeric
+      },
+      success_url: {
+        required,
+        url,
+      },
+      cancel_url: {
+        required,
+        url,
+      }
+    },
   },
   data() {
     return {
@@ -251,8 +314,10 @@ export default {
         text: "Make role a User Plan",
         value: "true"
       }],
+      submitted: false,
     };
   },
+
   methods: {
     handlePageChange(value) {
       this.currentPage = value;
@@ -319,7 +384,16 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    addRole() {
+    addRole(event) {
+      event.preventDefault();
+
+      this.submitted = true;
+
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
+
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-role");
       this.$store
