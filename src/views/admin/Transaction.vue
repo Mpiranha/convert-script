@@ -1,23 +1,18 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar
-        :user-name="this.$store.state.user.first_name"
-        current-active="transaction"
-      ></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name" current-active="transaction"></sidebar>
       <div class="content-section">
         <navbar :remove-content="true"></navbar>
         <div class="scroll-content">
           <div class="container">
-            <div
-              class="
+            <div class="
                 dashboard-top
                 d-flex
                 justify-content-between
                 align-items-center
                 mb-5
-              "
-            >
+              ">
               <h6 class="title">Transactions ({{ transactionsLength }})</h6>
             </div>
 
@@ -26,17 +21,10 @@
                 <button class="btn search-btn">
                   <i class="flaticon-loupe icons"></i>
                 </button>
-                <input
-                  v-model="searchKey"
-                  @input="searchKeyWord"
-                  class="form-control no-shadow search-input"
-                  type="text"
-                  placeholder="Search"
-                />
+                <input v-model="searchKey" @input="searchKeyWord" class="form-control no-shadow search-input"
+                  type="text" placeholder="Search" />
               </div>
-              <loader-modal
-                :loading-state="this.$store.state.loading"
-              ></loader-modal>
+              <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
               <div v-if="this.transactionsLength == 0" class="no-data-info">
                 No Transaction Yet
               </div>
@@ -62,37 +50,28 @@
 
                     <td class="text-left">
                       <label class="switch mb-0">
-                        <input
-                          v-model="status[index]"
-                          type="checkbox"
-                          @change="updateTransaction(result.id, status[index])"
-                        />
+                        <input v-model="status[index]" type="checkbox"
+                          @change="updateTransaction(result.id, status[index])" />
                         <span class="slider round"></span>
                       </label>
                     </td>
                   </tr>
                 </tbody>
                 <tbody v-else-if="transactions && searchKey.length < 1">
-                  <tr
-                    v-for="(transaction, index) in transactions"
-                    :key="transaction.id"
-                  >
+                  <tr v-for="(transaction, index) in transactions" :key="transaction.id">
                     <td scope="row">{{ transaction.transactionId }}</td>
                     <td class="text-left">
                       {{ formatDate(transaction.created_at) }}
                     </td>
-                    <td>{{ transaction.user.email }}</td>
-                    <td>{{ transaction.plan }}</td>
-
+                    <td v-if="transaction.user">{{ transaction.user.email }}</td>
+                    <td v-else>NULL</td>
+                    <td v-if="transaction.plan">{{ transaction.plan.name }}</td>
+                    <td v-else>NULL</td>
                     <td class="text-left">
                       <label class="switch mb-0">
-                        <input
-                          v-model="status[index]"
-                          type="checkbox"
-                          @change="
-                            updateTransaction(transaction.id, status[index])
-                          "
-                        />
+                        <input v-model="status[index]" type="checkbox" @change="
+                          updateTransaction(transaction.id, status[index])
+                        " />
                         <span class="slider round"></span>
                       </label>
                     </td>
@@ -101,17 +80,9 @@
               </table>
             </div>
             <div class="d-flex justify-content-center">
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="transactionsLength"
-                :per-page="perPage"
-                aria-controls="my-table"
-                size="sm"
-                :hide-goto-end-buttons="true"
-                prev-text="<"
-                next-text=">"
-                @change="handlePageChange"
-              ></b-pagination>
+              <b-pagination v-model="currentPage" :total-rows="transactionsLength" :per-page="perPage"
+                aria-controls="my-table" size="sm" :hide-goto-end-buttons="true" prev-text="<" next-text=">"
+                @change="handlePageChange"></b-pagination>
             </div>
           </div>
         </div>
