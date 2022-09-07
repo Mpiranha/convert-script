@@ -631,7 +631,7 @@ router.beforeEach((to, from, next) => {
         }
         }, 5000);
 
-        console.log(JSON.parse(localStorage.getItem('user')));
+       // console.log(JSON.parse(localStorage.getItem('user')));
         // if (Boolean(store.state.user.first_name) == false && Boolean(store.state.user.last_name) == false &&  to.name !== 'Settings') {
         //   // next('/settings');
         //   // next({
