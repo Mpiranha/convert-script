@@ -99,6 +99,7 @@ export default {
   },
   mounted() {
     this.getStatInfo();
+    
   },
 };
 </script>

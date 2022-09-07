@@ -183,6 +183,7 @@ export default {
   mounted() {
     // this.$store.dispatch("getUser");
     this.getUser();
+    this.submittedDetails = true;
   },
   methods: {
     getUser() {

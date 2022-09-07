@@ -557,15 +557,15 @@ const router = new VueRouter({
   routes
 })
 
-const parseJwt = (token) => {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(Buffer.from(base64, "base64").toString("ascii").split("").map(function (c) {
-    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
+// const parseJwt = (token) => {
+//   var base64Url = token.split('.')[1];
+//   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+//   var jsonPayload = decodeURIComponent(Buffer.from(base64, "base64").toString("ascii").split("").map(function (c) {
+//     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+//   }).join(''));
 
-  return JSON.parse(jsonPayload);
-};
+//   return JSON.parse(jsonPayload);
+// };
 
 
 router.beforeEach((to, from, next) => {
@@ -585,26 +585,21 @@ router.beforeEach((to, from, next) => {
 
       if (store.getters.isAuthenticated) {
         // console.log('authenticated');
-        if (localStorage.token) {
-          const jwtPayload = parseJwt(localStorage.token);
-          if (jwtPayload.exp < Date.now() / 1000) {
-            // token expired
-            store.dispatch("logout");
-            next("/login");
+        // if (localStorage.token) {
+        //   const jwtPayload = parseJwt(localStorage.token);
+        //   if (jwtPayload.exp < Date.now() / 1000) {
+        //     // token expired
+        //     store.dispatch("logout");
+        //     next("/login");
 
-            return;
-          }
-        }
+        //     return;
+        //   }
+        // }
 
+        // if (
+        //   )
 
-
-        // store.dispatch("getUser");
         let role = store.state.user.role || JSON.parse(localStorage.getItem('user'));
-        // console.log("Role " + role);
-
-
-
-
         if (to.matched.some(record => record.meta.adminAuth)) {
 
           if (role.toLowerCase() === "admin") {
@@ -618,10 +613,37 @@ router.beforeEach((to, from, next) => {
                 from: window.location.hash.split('#')[1]
               }
             });
+            return;
           }
         }
+        // next({
+        //      path: '/settings'
+        //  });
+        // console.log(store.state.user.first_name);
+        // console.log(store.state.user.last_name);
+        setTimeout(function () {
+          // console.log(store.state.user.first_name);
+          // console.log(store.state.user.last_name);
+           if (Boolean(store.state.user.first_name) === false && Boolean(store.state.user.last_name) === false &&  to.name !== 'Settings') {
+
+          next('/settings');
+          //console.log("yeah");
+        }
+        }, 5000);
+
+        console.log(JSON.parse(localStorage.getItem('user')));
+        // if (Boolean(store.state.user.first_name) == false && Boolean(store.state.user.last_name) == false &&  to.name !== 'Settings') {
+        //   // next('/settings');
+        //   // next({
+        //   //   path: '/settings'
+        //   // })
+        //   //return;
+        //   next('/settings');
+        //   //console.log("yeah");
+        // }
 
         next();
+        return;
       } else {
         // console.log("Not Authenticated");
         next({
