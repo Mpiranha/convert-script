@@ -621,17 +621,25 @@ router.beforeEach((to, from, next) => {
         //  });
         // console.log(store.state.user.first_name);
         // console.log(store.state.user.last_name);
-        setTimeout(function () {
-          // console.log(store.state.user.first_name);
-          // console.log(store.state.user.last_name);
-           if (Boolean(store.state.user.first_name) === false && Boolean(store.state.user.last_name) === false &&  to.name !== 'Settings') {
+        if (store.state.user) {
+          if (Boolean(store.state.user.first_name) === false && Boolean(store.state.user.last_name) === false && to.name !== 'Settings') {
 
-          next('/settings');
-          //console.log("yeah");
+            next('/settings');
+            //console.log("yeah");
+          }
+        } else {
+          setTimeout(function () {
+            // console.log(store.state.user.first_name);
+            // console.log(store.state.user.last_name);
+            if (Boolean(store.state.user.first_name) === false && Boolean(store.state.user.last_name) === false && to.name !== 'Settings') {
+
+              next('/settings');
+              //console.log("yeah");
+            }
+          }, 3000);
         }
-        }, 5000);
 
-       // console.log(JSON.parse(localStorage.getItem('user')));
+        // console.log(JSON.parse(localStorage.getItem('user')));
         // if (Boolean(store.state.user.first_name) == false && Boolean(store.state.user.last_name) == false &&  to.name !== 'Settings') {
         //   // next('/settings');
         //   // next({

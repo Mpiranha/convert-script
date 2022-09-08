@@ -6,10 +6,16 @@
         <navbar></navbar>
         <div class="scroll-content">
           <div class="container">
-            <div class="d-flex">
-              <div class="dashboard-top">
+            <div class="d-flex mb-4">
+              <div class="dashboard-top mb-0 mr-lg-3">
                 <h6 class="title">Account Details</h6>
                 <div class="desc">Edit your account information, here.</div>
+              </div>
+              <div class="flex-grow-1 align-self-end" v-if="!($store.state.user.first_name && $store.state.user.last_name)">
+                <div class="danger-alert">
+                  ⚠️
+                  Kindly fill out your first name and last name to get started. Click on ‘Save’ when done.
+                </div>
               </div>
             </div>
             <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
@@ -29,7 +35,7 @@
                 </div>
               </b-form-group>
 
-             
+
 
               <b-form-group label="Last Name" label-for="name" label-class="form-label">
                 <b-form-input v-model="userDetails.last_name" type="text" class="input-table" :class="{
@@ -45,7 +51,7 @@
                 </div>
               </b-form-group>
 
-             
+
 
               <b-form-group label="Email" label-for="email" label-class="form-label">
                 <b-form-input readonly id="email" v-model="email" type="email" class="input-table">
@@ -208,7 +214,7 @@ export default {
     },
 
     updateUserDetails(event) {
-  
+
       event.preventDefault();
 
       this.submittedDetails = true;
@@ -272,6 +278,14 @@ export default {
 </script>
 
 <style>
+.danger-alert {
+  background-color: red;
+  color: #fff;
+  padding: 0.35rem 1rem;
+  text-align: center;
+  border-radius: 0.5rem;
+}
+
 .ml-auto {
   margin-left: auto;
 }
