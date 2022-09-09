@@ -7,7 +7,7 @@
             <img class="img-logo" src="../assets/image/Logo.svg" alt="Logo Image" />
           </div>
 
-          <h1 class="title">Forgot Password</h1>
+          <h1 class="title">Password Reset</h1>
           <div class="error">{{ error }}</div>
 
           <form action="#" method="post">
