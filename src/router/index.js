@@ -9,6 +9,7 @@ import Dashboard from '../views/Dashboard.vue'
 import Login from '@/views/Login'
 import Signup from '@/views/Signup'
 import ForgotPassword from '@/views/ForgotPassword'
+import ResetPassword from '@/views/ResetPassword'
 import Tutorial from '@/views/Tutorial'
 import Billing from '@/views/Billing'
 import Bonus from '@/views/Bonus'
@@ -74,9 +75,17 @@ const routes = [{
   }
 },
 {
-  path: '/reset-password',
+  path: '/password/forgot',
   name: 'ForgotPassword',
   component: ForgotPassword,
+  meta: {
+    title: 'OneCopy AI Writer - Password Reset'
+  }
+},
+{
+  path: '/password/reset',
+  name: 'ResetPassword',
+  component: ResetPassword,
   meta: {
     title: 'OneCopy AI Writer - Password Reset'
   }

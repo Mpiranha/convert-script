@@ -27,7 +27,7 @@
               <span v-if="!$v.user.password.minLength">Password must be at least 6 characters</span>
             </div>
             <div class="login-info">
-              <router-link to="/reset-password">Forgot Password?</router-link>
+              <router-link to="/password/forgot">Forgot Password?</router-link>
             </div>
 
             <button @click="login($event)" :disabled="disabledButton" class="btn btn-block btn-login">
