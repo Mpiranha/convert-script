@@ -11,13 +11,6 @@
           <div class="error">{{ error }}</div>
 
           <form action="#" method="post">
-
-            <password-input label="Current Password" v-model.trim="user.password"
-              :class="{ 'is-invalid': submitted && $v.user.password.$error }"></password-input>
-            <div v-if="submitted && $v.user.password.$error" class="invalid-feedback">
-              <span v-if="!$v.user.password.required">Old Password is required</span>
-              <span v-if="!$v.user.password.minLength">Password must be at least 6 characters</span>
-            </div>
             <password-input label="New Password" v-model.trim="user.new_password"
               :class="{ 'is-invalid': submitted && $v.user.new_password.$error }"></password-input>
             <div v-if="submitted && $v.user.new_password.$error" class="invalid-feedback">
@@ -65,7 +58,6 @@ export default {
       // isText: false,
       disabledButton: false,
       user: {
-        password: "",
         new_password: "",
         same_as_new_password: "",
       },
@@ -80,10 +72,6 @@ export default {
   },
   validations: {
     user: {
-      password: {
-        required,
-        minLength: minLength(6),
-      },
       new_password: {
         required,
         minLength: minLength(6),
