@@ -4,11 +4,7 @@
       <div class="form-section">
         <div class="login-form-wrap">
           <div class="d-flex justify-content-center mb-5">
-            <img
-              class="img-logo"
-              src="../assets/image/Logo.svg"
-              alt="Logo Image"
-            />
+            <img class="img-logo" src="../assets/image/Logo.svg" alt="Logo Image" />
           </div>
 
           <h1 class="title">Forgot Password</h1>
@@ -22,27 +18,21 @@
           <form action="#" method="post">
             <div class="form-group">
               <label for="my-input">Email</label>
-              <input
-                id="my-input"
-                class="form-control input-signin"
-                type="email"
-                name=""
-                v-model="email"
-              />
+              <input id="my-input" class="form-control input-signin" type="email" name="" v-model="email" />
               <div v-if="submitted && $v.email.$error" class="invalid-feedback">
                 <span v-if="!$v.email.required">Email is required</span>
                 <span v-if="!$v.email.email">Email is invalid</span>
               </div>
             </div>
 
-            <button
-              @click="resetPassword($event)"
-              class="btn btn-block btn-login"
-            >
-              Reset Password
+            <button @click="resetPassword($event)" class="btn btn-block btn-login" :disabled="disabledButton">
+              <span>
+                Reset Password
+              </span>
+              <img class="spinner" src="../assets/image/Rolling-1s-64px.gif" alt="loading icon">
             </button>
             <div class="login-info text-center mt-2">
-              Back to 
+              Back to
               <router-link to="/login">Login</router-link>
             </div>
           </form>
@@ -63,6 +53,7 @@ export default {
   },
   data() {
     return {
+      disabledButton: false,
       // isText: false,
       email: "",
       error: null,
@@ -71,7 +62,7 @@ export default {
     };
   },
   mounted: function () {
-     if (this.$store.getters.isAuthenticated) {
+    if (this.$store.getters.isAuthenticated) {
       this.$router.push("/");
     }
   },
@@ -91,6 +82,8 @@ export default {
         return;
       }
 
+      this.disabledButton = true;
+
       let data = {
         email: this.email,
       }
@@ -99,17 +92,17 @@ export default {
         .dispatch("resetPassword", data)
         .then((res) => {
           this.error = null;
-          this.message = res.data.message;
-          // this.$router.push("/").catch(() => {
-          //   // console.log(error);
-          // });
+          this.message = res.data.data;
+          this.disabledButton = false;
+
 
           console.log(res.data.message);
         })
         .catch((error) => {
           // console.log(error);
           this.message = null;
-          this.error = error.response.data.error;
+          this.error = error.response.data.error.message_sending_failed[0];
+          this.disabledButton = false;
           // this.error = error;
         });
       // const ( username, password ) = this
@@ -122,4 +115,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

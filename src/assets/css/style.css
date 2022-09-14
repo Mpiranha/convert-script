@@ -530,7 +530,7 @@ body {
 .error {
     color: #fb0909;
     text-align: center;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .invalid-feedback {
@@ -539,7 +539,7 @@ body {
 
 .success {
     color: #4df809;
-    font-size: 0.8rem;
+    font-size: 1rem;
     text-align: center;
 }
 

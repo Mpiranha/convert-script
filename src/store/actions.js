@@ -103,12 +103,51 @@ export default {
                 })
         })
     },
+    verifyToken({
+        commit
+    }, token) {
+        return new Promise((resolve, reject) => {
+
+            axios.get(`${baseUrl}/api/v1/user/password/verify-password-token/${token}`)
+                .then(resp => {
+
+                    commit('reset_password_success', resp)
+                    resolve(resp)
+                }).catch(err => {
+
+                    commit('reset_password_error', err)
+                    reject(err)
+                })
+        })
+    },
     changePassword({
         commit
     }, data) {
         return new Promise((resolve, reject) => {
 
             axios.post(`${baseUrl}/api/v1/user/change/password`, data, {})
+                .then(resp => {
+                    // const token = resp.data.token
+                    // const data = resp.user
+                    // localStorage.setItem('token', token)
+                    //axios.defaults.headers.common['Authorization'] = token
+
+                    commit('reset_password_success', resp)
+                    resolve(resp)
+                }).catch(err => {
+                    // commit('auth_error', err)
+                    // localStorage.removeItem('token')
+                    commit('reset_password_error', err)
+                    reject(err)
+                })
+        })
+    },
+    resetUserPassword({
+        commit
+    }, data) {
+        return new Promise((resolve, reject) => {
+
+            axios.post(`${baseUrl}/api/v1/user/password/reset`, data, {})
                 .then(resp => {
                     // const token = resp.data.token
                     // const data = resp.user
@@ -197,7 +236,7 @@ export default {
     // Billing Page
 
     getUserPlanDetails({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -214,7 +253,7 @@ export default {
     },
 
     getPlanUpgradeLink({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -234,7 +273,7 @@ export default {
     // Tutorial
 
     getTutorialVideos({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -271,7 +310,7 @@ export default {
     // Agency
 
     getAllAgency({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -338,7 +377,7 @@ export default {
     // Reseller 
 
     getAllReseller({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -404,7 +443,7 @@ export default {
     // Campaigns
 
     getCampaigns({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -420,7 +459,7 @@ export default {
         })
     },
     getOneCampaign({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -484,7 +523,7 @@ export default {
         })
     },
     getAgencyCampaign({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -539,7 +578,7 @@ export default {
 
 
     getGeneratedScripts({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -556,7 +595,7 @@ export default {
     },
 
     getScriptTypes({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -573,7 +612,7 @@ export default {
     },
 
     getOneScriptType({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -589,7 +628,7 @@ export default {
         })
     },
     getOneScriptTypeSelect({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -653,7 +692,7 @@ export default {
         })
     },
     exportAllFavorites({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -668,7 +707,7 @@ export default {
         })
     },
     exportAllCampaignScripts({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -683,7 +722,7 @@ export default {
         })
     },
     exportAllGeneratedScripts({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -698,7 +737,7 @@ export default {
         })
     },
     getAllFavorites({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -730,7 +769,7 @@ export default {
         })
     },
     exportOneScript({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -747,7 +786,7 @@ export default {
     },
 
     exportAllScript({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -782,7 +821,7 @@ export default {
     // Bonuses
 
     getBonues({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -801,7 +840,7 @@ export default {
     // Agency Files
 
     getAgencyFilesUser({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -820,7 +859,7 @@ export default {
     // Market
 
     getMarket({
-       
+
         state
     }, page) {
         return new Promise((resolve, reject) => {
@@ -837,7 +876,7 @@ export default {
     },
 
     getSavedProject({
-       
+
         state
     }, page) {
         if (page) {
@@ -915,7 +954,7 @@ export default {
     // 
 
     exportUsers({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -931,7 +970,7 @@ export default {
         })
     },
     getAllUsers({
-       
+
         state
     }, page) {
         return new Promise((resolve, reject) => {
@@ -947,7 +986,7 @@ export default {
         })
     },
     getOneUser({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -1013,7 +1052,7 @@ export default {
 
     // Script Type
     getOneScript({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -1028,7 +1067,7 @@ export default {
         })
     },
     getAllScriptType({
-       
+
         state
     }, page) {
         return new Promise((resolve, reject) => {
@@ -1095,7 +1134,7 @@ export default {
     // Keywords
 
     getKeywords({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -1180,7 +1219,7 @@ export default {
 
     // Tutorials
     getAllVideos({
-       
+
         state
     }, page) {
         return new Promise((resolve, reject) => {
@@ -1246,7 +1285,7 @@ export default {
 
     // Agency Files
     getAllAgencyFiles({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -1312,7 +1351,7 @@ export default {
 
     // Bonuses
     getAllBonuses({
-       
+
         state
     }, page) {
         return new Promise((resolve, reject) => {
@@ -1397,7 +1436,7 @@ export default {
     // Roles And Permission
     // Role Cycle 
     getRoleCycle({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -1412,7 +1451,7 @@ export default {
         })
     },
     getAllRoles({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -1428,7 +1467,7 @@ export default {
         })
     },
     getOneRole({
-       
+
         state
     }, id) {
         return new Promise((resolve, reject) => {
@@ -1508,17 +1547,17 @@ export default {
                 })
         })
     },
-    
-     // Promo Code
-     getAllPromoCodes({
-       
+
+    // Promo Code
+    getAllPromoCodes({
+
         state
     }) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.get(`${baseUrl}/api/v1/admin/purchase-codes`)
                 .then(resp => {
-                  
+
                     resolve(resp)
                 })
                 .catch(err => {
@@ -1575,14 +1614,14 @@ export default {
 
     // Used Code
     getAllUsedCode({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
             axios.defaults.headers.common['Authorization'] = "Bearer " + state.token
             axios.get(`${baseUrl}/api/v1/admin/purchase-codes/used`)
                 .then(resp => {
-                  
+
                     resolve(resp)
                 })
                 .catch(err => {
@@ -1595,7 +1634,7 @@ export default {
     // Categories
 
     getAllCategories({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -1662,7 +1701,7 @@ export default {
     // Languages
 
     getAllLanguages({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -1729,7 +1768,7 @@ export default {
     // Tones
 
     getAllTones({
-       
+
         state
     }) {
         return new Promise((resolve, reject) => {
@@ -1796,7 +1835,7 @@ export default {
 
     // Permissions
     getAllPermissions({
-       
+
         state
     }, page) {
         return new Promise((resolve, reject) => {
@@ -1832,7 +1871,7 @@ export default {
 
     // Plans
     getAllPlans({
-       
+
         state
     }, page) {
         return new Promise((resolve, reject) => {
@@ -1999,7 +2038,7 @@ export default {
     // Transactions
 
     getAllTransactions({
-       
+
         state
     }, page) {
         return new Promise((resolve, reject) => {
@@ -2056,7 +2095,7 @@ export default {
     // Third Party Platform Integration
 
     getAllPlatformIntegration({
-       
+
         state
     }, page) {
         return new Promise((resolve, reject) => {
