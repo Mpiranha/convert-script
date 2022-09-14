@@ -13,20 +13,20 @@
 
           <form action="#" method="post">
             <div v-if="!success">
-            <password-input label="New Password" v-model.trim="user.new_password"
-              :class="{ 'is-invalid': submitted && $v.user.new_password.$error }">
-            </password-input>
-            <div v-if="submitted && $v.user.new_password.$error" class="invalid-feedback">
-              <span v-if="!$v.user.new_password.required">New Password is required</span>
-              <span v-if="!$v.user.new_password.minLength">Password must be at least 6 characters</span>
+              <password-input label="New Password" v-model.trim="user.new_password"
+                :class="{ 'is-invalid': submitted && $v.user.new_password.$error }">
+              </password-input>
+              <div v-if="submitted && $v.user.new_password.$error" class="invalid-feedback">
+                <span v-if="!$v.user.new_password.required">New Password is required</span>
+                <span v-if="!$v.user.new_password.minLength">Password must be at least 6 characters</span>
+              </div>
+              <password-input label="Confirm Password" v-model.trim="user.same_as_new_password"
+                :class="{ 'is-invalid': submitted && $v.user.same_as_new_password.$error }"></password-input>
+              <div v-if="submitted && $v.user.same_as_new_password.$error" class="invalid-feedback">
+                <span v-if="!$v.user.same_as_new_password.required">Confirm Password is required</span>
+                <span v-else-if="!$v.user.same_as_new_password.sameAsPassword">* Passwords must match</span>
+              </div>
             </div>
-            <password-input label="Confirm Password" v-model.trim="user.same_as_new_password"
-              :class="{ 'is-invalid': submitted && $v.user.same_as_new_password.$error }"></password-input>
-            <div v-if="submitted && $v.user.same_as_new_password.$error" class="invalid-feedback">
-              <span v-if="!$v.user.same_as_new_password.required">Confirm Password is required</span>
-              <span v-else-if="!$v.user.same_as_new_password.sameAsPassword">* Passwords must match</span>
-            </div>
-          </div>
             <router-link v-if="success" to="/login" class="btn btn-block btn-login">
               Login
             </router-link>
@@ -93,6 +93,7 @@ export default {
         })
         .catch((errors) => {
 
+
           this.error = errors.response.data.errors.root;
 
           console.log(this.error);
@@ -143,6 +144,7 @@ export default {
         })
         .catch((errors) => {
           // console.log(error);
+          this.message = null;
           this.disabledButton = false;
           this.error = errors.response.data.errors.root;
 
