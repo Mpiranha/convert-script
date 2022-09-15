@@ -587,6 +587,8 @@ router.beforeEach((to, from, next) => {
     document.title = nearestWithTitle.meta.title;
   }
 
+  
+
   if (to.matched.length > 0) {
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -625,27 +627,19 @@ router.beforeEach((to, from, next) => {
             return;
           }
         }
-        // next({
-        //      path: '/settings'
-        //  });
-        // console.log(store.state.user.first_name);
-        // console.log(store.state.user.last_name);
+        
         if (store.state.user) {
           if (Boolean(store.state.user.first_name) === false && Boolean(store.state.user.last_name) === false && to.name !== 'Settings') {
-
             next('/settings');
-            //console.log("yeah");
           }
         } else {
           setTimeout(function () {
             // console.log(store.state.user.first_name);
             // console.log(store.state.user.last_name);
             if (Boolean(store.state.user.first_name) === false && Boolean(store.state.user.last_name) === false && to.name !== 'Settings') {
-
               next('/settings');
-              //console.log("yeah");
             }
-          }, 3000);
+          }, 5000);
         }
 
         // console.log(JSON.parse(localStorage.getItem('user')));
