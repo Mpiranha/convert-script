@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid px-0">
+  <div class="container-fluid px-md-0">
     <div class="flex-main-wrap justify-content-center">
       <div class="form-section">
         <div class="login-form-wrap">

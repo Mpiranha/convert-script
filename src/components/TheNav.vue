@@ -1,14 +1,23 @@
 <template>
   <div class="content-head" :class="removeContent ? 'fix-height' : ''">
+    <div class="sidebar-toggler">
+      <button @click="openSidebar" class="navbar-toggler" type="button" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" />
+
+    </div>
     <div class="menu-section">
       <ul class="nav" :class="removeContent ? 'hide-content' : ''">
-        <li class="nav-item">
+        <li class="nav-item d-none-mobile">
           <a class="nav-link" v-b-modal.modal-suggest href="#">
             Suggest Feature
           </a>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item d-none-mobile">
           <a class="nav-link" href="https://support.onecopy.ai" target="_blank">
             Support
           </a>
@@ -19,6 +28,27 @@
             <i class="flaticon-bell icons head-icon"></i>
             <div class="nofi-anchor"></div>
           </a>
+        </li>
+        <li class="nav-item">
+          <button class="btn no-shadow btn-toggle-dropdown" @click="toggleNav">
+            <span class="dropdown-toggler-icon"></span>
+            <Transition name="fade">
+              <ul v-if="isToggled" class="nav close-click-outside nav-drop-mobile">
+                <li class="nav-item">
+                  <a class="nav-link" v-b-modal.modal-suggest href="#">
+                    Suggest Feature
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="https://support.onecopy.ai" target="_blank">
+                    Support
+                  </a>
+                </li>
+              </ul>
+            </Transition>
+
+          </button>
         </li>
       </ul>
     </div>
@@ -55,6 +85,7 @@
 
 <script>
 import alertMixin from "@/mixins/alertMixin";
+import $ from 'jquery';
 import { required } from "vuelidate/lib/validators";
 export default {
   mixins: [alertMixin],
@@ -74,6 +105,7 @@ export default {
   data() {
     return {
       widget: undefined,
+      isToggled: false,
       suggestion: {
         parent_id: 1,
         message: "",
@@ -82,6 +114,9 @@ export default {
     };
   },
   methods: {
+    toggleNav() {
+      this.isToggled = !this.isToggled;
+    },
     addSuggestion(event) {
 
       event.preventDefault();
@@ -115,8 +150,12 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+    openSidebar() {
+      this.$store.commit("updateSidebarState", true);
+    }
   },
   mounted() {
+    let $vm = this;
     let notificationWidget = document.createElement("script");
     notificationWidget.setAttribute(
       "src",
@@ -144,6 +183,21 @@ export default {
       }
     };
     waitForHeadway();
+
+    document.addEventListener('mouseup', function (e) {
+     
+        var container = $(".close-click-outside");
+
+      
+        if ($vm.isToggled) {
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                //container.removeClass('show-visible');
+                $vm.isToggled = false;
+            }
+        }
+    });
   },
 };
 </script>
@@ -220,9 +274,67 @@ export default {
   top: 70px !important;
 }
 
+.navbar-toggler-icon {
+  padding: 0rem 0.75rem;
+  background-image: url('https://mdbootstrap.com/img/svg/hamburger6.svg?color=000') !important;
+}
+
+.dropdown-toggler-icon {
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: middle;
+  content: "";
+  background-image: url('https://mdbootstrap.com/img/svg/hamburger8.svg?color=000');
+}
+
+.btn-toggle-dropdown {
+  position: relative;
+}
+
+.sidebar-toggler {
+  display: none;
+}
+
+.sidebar-toggler .side-logo {
+  width: 8rem;
+}
+
+.nav-drop-mobile {
+  position: absolute;
+  background-color: #ffffff;
+  right: 13px;
+  top: 140%;
+  width: 9rem;
+  box-shadow: -2px 2px 5px #0e0d0d38;
+  padding: 0.5rem 0.9rem;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 @media (min-width: 1367px) {
   .menu-section .nav-link {
     font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .sidebar-toggler {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .d-none-mobile {
+    display: none;
   }
 }
 </style>

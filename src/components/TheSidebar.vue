@@ -1,100 +1,43 @@
 <template>
-  <div class="side-bar">
-    <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" srcset="" />
+  <div class="side-bar close-click-outside" :class="$store.state.isSidebarOpen ? 'active' : ''">
+    <button @click="dismissSidebar" class="btn btn-dismiss-sidebar">
+      <img src="@/assets/icons/sidebar/delete.png" alt="dismiss icon" />
+    </button>
+    <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" />
     <nav class="nav flex-column nav-wrap">
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'dashboard' ? 'active' : ''"
-          to="/"
-        >
-          <img
-            class="main-icon"
-            src="@/assets/icons/sidebar/dashboard.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/dashboard 1.svg"
-            alt=""
-          />
+        <router-link class="nav-link" :class="currentActive == 'dashboard' ? 'active' : ''" to="/">
+          <img class="main-icon" src="@/assets/icons/sidebar/dashboard.svg" alt="" />
+          <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/dashboard 1.svg" alt="" />
           <span class="nav-text"> Dashboard </span>
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'new-copy' ? 'active' : ''"
-          to="/script/select"
-        >
-          <img
-            class="main-icon"
-            src="@/assets/icons/convert-icon/New Copy.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/New Copy Active.svg"
-            alt=""
-          />
+        <router-link class="nav-link" :class="currentActive == 'new-copy' ? 'active' : ''" to="/script/select">
+          <img class="main-icon" src="@/assets/icons/convert-icon/New Copy.svg" alt="" />
+          <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/New Copy Active.svg" alt="" />
           <span class="nav-text"> New Copy </span>
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'script' ? 'active' : ''"
-          to="/scripts"
-        >
-          <img
-            class="main-icon"
-            src="@/assets/icons/convert-icon/All script.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/all script.svg"
-            alt=""
-          />
+        <router-link class="nav-link" :class="currentActive == 'script' ? 'active' : ''" to="/scripts">
+          <img class="main-icon" src="@/assets/icons/convert-icon/All script.svg" alt="" />
+          <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/all script.svg" alt="" />
           <span class="nav-text"> All Copy </span>
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'campaign' ? 'active' : ''"
-          to="/campaign"
-        >
-          <img
-            class="main-icon"
-            src="@/assets/icons/convert-icon/Campaign.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/Campaigns.svg"
-            alt=""
-          />
+        <router-link class="nav-link" :class="currentActive == 'campaign' ? 'active' : ''" to="/campaign">
+          <img class="main-icon" src="@/assets/icons/convert-icon/Campaign.svg" alt="" />
+          <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Campaigns.svg" alt="" />
           <span class="nav-text"> Campaigns </span>
         </router-link>
       </li>
 
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'favourites' ? 'active' : ''"
-          to="/favourites"
-        >
-          <img
-            class="main-icon"
-            src="@/assets/icons/convert-icon/my Favourites.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/My Favourites.svg"
-            alt=""
-          />
+        <router-link class="nav-link" :class="currentActive == 'favourites' ? 'active' : ''" to="/favourites">
+          <img class="main-icon" src="@/assets/icons/convert-icon/my Favourites.svg" alt="" />
+          <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/My Favourites.svg" alt="" />
           <span class="nav-text"> My Favourites </span>
         </router-link>
       </li>
@@ -139,111 +82,46 @@
       </li> -->
 
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'settings' ? 'active' : ''"
-          to="/settings"
-        >
-          <img
-            class="main-icon"
-            src="@/assets/icons/convert-icon/settings.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/Settings.svg"
-            alt=""
-          />
+        <router-link class="nav-link" :class="currentActive == 'settings' ? 'active' : ''" to="/settings">
+          <img class="main-icon" src="@/assets/icons/convert-icon/settings.svg" alt="" />
+          <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Settings.svg" alt="" />
           <span class="nav-text"> Settings </span>
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'tutorials' ? 'active' : ''"
-          to="/tutorial"
-        >
-          <img
-            class="main-icon"
-            src="@/assets/icons/convert-icon/Tutotials.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/Tutorials Active.svg"
-            alt=""
-          />
+        <router-link class="nav-link" :class="currentActive == 'tutorials' ? 'active' : ''" to="/tutorial">
+          <img class="main-icon" src="@/assets/icons/convert-icon/Tutotials.svg" alt="" />
+          <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Tutorials Active.svg" alt="" />
           <span class="nav-text"> Tutorials </span>
         </router-link>
       </li>
     </nav>
     <nav class="nav flex-column nav-wrap mt-auto">
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'marketplace' ? 'active' : ''"
-          to="/market"
-        >
-          <img
-            class="main-icon"
-            src="@/assets/icons/convert-icon/Marketplace.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/Marketplace.svg"
-            alt=""
-          />
+        <router-link class="nav-link" :class="currentActive == 'marketplace' ? 'active' : ''" to="/market">
+          <img class="main-icon" src="@/assets/icons/convert-icon/Marketplace.svg" alt="" />
+          <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Marketplace.svg" alt="" />
           <span class="nav-text"> Marketplace </span>
         </router-link>
       </li>
 
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'agency' ? 'active' : ''"
-          to="/agency"
-        >
-          <img
-            class="main-icon"
-            src="@/assets/icons/convert-icon/Agency.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/Agent.svg"
-            alt=""
-          />
+        <router-link class="nav-link" :class="currentActive == 'agency' ? 'active' : ''" to="/agency">
+          <img class="main-icon" src="@/assets/icons/convert-icon/Agency.svg" alt="" />
+          <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Agent.svg" alt="" />
           <span class="nav-text"> Agency </span>
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'reseller' ? 'active' : ''"
-          to="/reseller"
-        >
-          <img
-            class="main-icon"
-            src="@/assets/icons/convert-icon/Reseller.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/Reseller.svg"
-            alt=""
-          />
+        <router-link class="nav-link" :class="currentActive == 'reseller' ? 'active' : ''" to="/reseller">
+          <img class="main-icon" src="@/assets/icons/convert-icon/Reseller.svg" alt="" />
+          <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Reseller.svg" alt="" />
           <span class="nav-text"> Reseller </span>
         </router-link>
       </li>
       <li class="nav-item">
         <div class="user-info">
-          <div
-            class="btn-drop"
-            to="#"
-            @click="toggleShow()"
-            data-target=".user-drop"
-          >
+          <div class="btn-drop" to="#" @click="toggleShow()" data-target=".user-drop">
             <div class="user-img">{{ getFirstLetter(userName) }}</div>
             <div class="name">{{ userName }}</div>
             <div v-if="isShowing" class="user-drop">
@@ -251,21 +129,13 @@
                 <ul class="nav flex-column">
                   <li class="nav-item">
                     <router-link class="nav-link" to="/settings">
-                      <img
-                        rel="preload"
-                        src="@/assets/icons/convert-icon/account.svg"
-                        alt="icon"
-                      />
+                      <img rel="preload" src="@/assets/icons/convert-icon/account.svg" alt="icon" />
                       Account
                     </router-link>
                   </li>
                   <li class="nav-item">
                     <router-link class="nav-link" to="/bonus">
-                      <img
-                        rel="preload"
-                        src="@/assets/icons/convert-icon/bonus.svg"
-                        alt="icon"
-                      />
+                      <img rel="preload" src="@/assets/icons/convert-icon/bonus.svg" alt="icon" />
                       Bonuses
                     </router-link>
                   </li>
@@ -278,22 +148,14 @@
                       />
                       Billing
                     </router-link> -->
-                     <router-link class="nav-link" to="/billing">
-                      <img
-                        rel="preload"
-                        src="@/assets/icons/convert-icon/billiing.svg"
-                        alt="icon"
-                      />
+                    <router-link class="nav-link" to="/billing">
+                      <img rel="preload" src="@/assets/icons/convert-icon/billiing.svg" alt="icon" />
                       Billing
                     </router-link>
                   </li>
                   <li class="nav-item">
                     <a @click="logout($event)" class="btn nav-link" href="#">
-                      <img
-                        rel="preload"
-                        src="@/assets/icons/convert-icon/logout.svg"
-                        alt="icon"
-                      />
+                      <img rel="preload" src="@/assets/icons/convert-icon/logout.svg" alt="icon" />
                       Logout
                     </a>
                   </li>
@@ -308,6 +170,7 @@
 </template>
 
 <script>
+  import $ from 'jquery';
 export default {
   name: "Sidebar",
   props: {
@@ -334,12 +197,16 @@ export default {
     },
     getFirstLetter(text) {
       if (text) {
-      return text.toString().charAt(0);
+        return text.toString().charAt(0);
       }
       return;
     },
+    dismissSidebar() {
+      this.$store.commit("updateSidebarState", false);
+    }
   },
   mounted() {
+    let $vm = this;
     document.addEventListener("click", function (e) {
       if (this.isShowing) {
         if (e.target.classList.hasClass("user-drop")) {
@@ -347,6 +214,21 @@ export default {
         }
       }
     });
+
+    document.addEventListener('mouseup', function (e) {
+     
+     var container = $(".close-click-outside");
+
+   
+     if ($vm.$store.state.isSidebarOpen) {
+
+         // if the target of the click isn't the container nor a descendant of the container
+         if (!container.is(e.target) && container.has(e.target).length === 0) {
+             //container.removeClass('show-visible');
+             $vm.$store.commit("updateSidebarState", false);
+         }
+     }
+ });
   },
 };
 </script>
@@ -362,11 +244,12 @@ export default {
   flex-direction: column;
   overflow-y: auto;
   background-color: #ffffff;
+  transition: all 0.5s linear;
 }
 
 .nav-wrap .nav-link {
   color: #393f46;
-  font-size: 0.85rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   padding: 0.7rem 1.5rem;
@@ -483,9 +366,25 @@ export default {
 }
 
 .btn-drop .name {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #393f46;
   margin-right: 0.5rem;
+}
+
+.side-bar.active {
+  min-width: 215px;
+  width: 215px;
+}
+
+.btn-dismiss-sidebar {
+  position: absolute;
+  right: 5px;
+  top: 13px;
+  display: none;
+}
+
+.btn-dismiss-sidebar img {
+  width: 1rem;
 }
 
 @media screen and (min-width: 1300px) {
@@ -505,6 +404,19 @@ export default {
   .user-info .user-img {
     width: 2rem;
     height: 2rem;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .side-bar {
+    position: fixed;
+    z-index: 99;
+    min-width: 0;
+    width: 0;
+  }
+
+  .btn-dismiss-sidebar {
+    display: inline-block;
   }
 }
 </style>

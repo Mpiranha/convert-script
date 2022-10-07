@@ -11,4 +11,5 @@ export default {
   allAgencies: {},
   triggerEdit: false,
   editId: null,
+  isSidebarOpen: false,
 }

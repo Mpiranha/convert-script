@@ -51,5 +51,8 @@ export default {
   },
   updateLoadState(state, payload) {
     state.loading = payload
+  },
+  updateSidebarState(state, payload) {
+    state.isSidebarOpen = payload
   }
 }

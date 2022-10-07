@@ -1,5 +1,5 @@
 <template>
-  <div class="col-3">
+  <div class="col-12 col-md-6 col-lg-3">
     <div class="stat-box" :class="boxType">
       <div class="title">{{text}}</div>
       <div class="stat-details">
@@ -32,6 +32,7 @@ export default {
   border-radius: 0.6rem;
   /* max-width: 215px; */
   box-shadow: 0px 3px 6px #99949482;
+  margin-bottom: 1rem;
 }
 
 .stat-box .title {
