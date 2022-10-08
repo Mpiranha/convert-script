@@ -207,6 +207,7 @@ export default {
   },
   mounted() {
     let $vm = this;
+    $vm.$store.commit("updateSidebarState", false);
     document.addEventListener("click", function (e) {
       if (this.isShowing) {
         if (e.target.classList.hasClass("user-drop")) {
@@ -244,7 +245,7 @@ export default {
   flex-direction: column;
   overflow-y: auto;
   background-color: #ffffff;
-  transition: all 0.5s linear;
+  transition: all 0.2s linear;
 }
 
 .nav-wrap .nav-link {
@@ -413,6 +414,10 @@ export default {
     z-index: 99;
     min-width: 0;
     width: 0;
+  }
+
+  .side-logo {
+    display: none;
   }
 
   .btn-dismiss-sidebar {

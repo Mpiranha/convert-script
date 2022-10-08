@@ -1385,17 +1385,20 @@ input:checked+.slider:before {
 .select-script-forms {
     display: flex;
     align-items: center;
+    flex-wrap: wrap-reverse;
     margin-left: auto;
 }
 
 .select-script-forms .form-group {
-    margin-bottom: 0 !important;
+    margin-bottom: 1rem !important;
+    margin-right: 1rem;
 }
 
 .select-script-forms .search-form {
     margin: 0;
     min-width: 250px;
-    margin-left: 1rem;
+    /* margin-left: 1rem; */
+    margin-bottom: 1rem;
 }
 
 .select-script-forms .search-form input:focus {
@@ -1477,6 +1480,14 @@ input:checked+.slider:before {
     .form-section {
         width: 60%;
         padding: 0;
+    }
+
+    .select-script-forms {
+        margin-left: 0;
+    }
+
+    .select-script-forms .search-form {
+        margin-left: 0;
     }
 }
 

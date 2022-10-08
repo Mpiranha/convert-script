@@ -10,7 +10,7 @@
         <navbar></navbar>
         <div class="scroll-content">
           <div class="container">
-            <div class="d-flex">
+            <div class="d-flex flex-wrap">
               <div class="dashboard-top">
                 <h6 class="title">Select Template</h6>
               </div>

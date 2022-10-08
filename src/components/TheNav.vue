@@ -3,8 +3,10 @@
     <div class="sidebar-toggler">
       <button @click="openSidebar" class="navbar-toggler" type="button" aria-expanded="false"
         aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <!-- <span class="navbar-toggler-icon"></span> -->
+        <div class="aux-burger aux-lite-small"><span class="mid-line"></span></div>
       </button>
+     
 
       <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" />
 
@@ -29,7 +31,7 @@
             <div class="nofi-anchor"></div>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item mobile-toggler-right">
           <button class="btn no-shadow btn-toggle-dropdown" @click="toggleNav">
             <span class="dropdown-toggler-icon"></span>
             <Transition name="fade">
@@ -292,6 +294,10 @@ export default {
   position: relative;
 }
 
+.mobile-toggler-right {
+  display: none;
+}
+
 .sidebar-toggler {
   display: none;
 }
@@ -320,6 +326,50 @@ export default {
   opacity: 0;
 }
 
+.aux-burger {
+  position: relative;
+  cursor: pointer;
+}
+
+.aux-burger[class*="small"] {
+  width: 20px;
+}
+
+.aux-burger .mid-line {
+  border-color: #222534 !important;
+}
+
+.aux-burger[class*="lite"] .mid-line, .aux-burger[class*="lite"]::before, .aux-burger[class*="lite"]::after {
+  border-width: 1px;
+}
+
+.aux-burger::before {
+  /*border-top: solid;*/
+  border-bottom: none;
+  border-color: #222;
+  transform-origin: 0 0%;
+}
+
+.aux-burger .mid-line, .aux-burger::before, .aux-burger::after {
+  width: 100%;
+  content: "";
+  display: block;
+  border-bottom: solid;
+  box-sizing: border-box;
+  border-color: #222;
+  transition: all 300ms;
+}
+
+.aux-burger.aux-lite-small .mid-line {
+  margin: 8.5px 0;
+}
+
+.aux-burger[class*="lite"] .mid-line, .aux-burger[class*="lite"]::before, .aux-burger[class*="lite"]::after {
+  border-width: 1px;
+}
+
+
+
 @media (min-width: 1367px) {
   .menu-section .nav-link {
     font-size: 0.9rem;
@@ -335,6 +385,10 @@ export default {
 @media screen and (max-width: 480px) {
   .d-none-mobile {
     display: none;
+  }
+
+  .mobile-toggler-right {
+    display: inline-block;
   }
 }
 </style>
