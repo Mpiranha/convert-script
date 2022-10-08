@@ -1,5 +1,5 @@
 <template>
-  <div class="col-6">
+  <div class="col-12 col-lg-6">
     <div class="vid-wrap">
       <iframe
         :src="link"

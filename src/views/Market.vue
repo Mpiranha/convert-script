@@ -44,152 +44,154 @@
               <div v-if="marketLength === 0" class="no-data-info">
                 No Active Project, Try Again Later.
               </div>
-              <table v-else class="table table-custom table-market">
-                <tbody v-if="searchResult.length > 0">
-                  <tr v-for="project in searchResult" :key="project.id">
-                    <td>
-                      <div class="market-desc">
-                        <b>{{ project.title }}</b><br />
-                        {{ project.short_description }}
-                      </div>
-                    </td>
-                    <td>
-                      {{ getProjectTime(project.updated_at) }} with
-                      {{ project.bid_count }}
-                      {{ project.bid_count > 1 ? "bids" : "bid" }}
-                    </td>
-                    <td>
-                      <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg"
-                        alt="location icon" />
-
-                      {{
-                          project.city
-                            ? project.city
-                            : "NIL"
-                      }},
-                      {{
-                          project.currency_country
-                            ? project.currency_country
-                            : "NIL"
-                      }}
-                    </td>
-                    <td>
-                      <div class="price">
-                        <div>
-                          {{
-                              project.type == "Fixed"
-                                ? project.budget_high
-                                : project.budget_low + "-" + project.budget_high
-                          }}
-                          {{ project.currency_code }}
+              <div v-else class="table-responsive">
+                <table class="table table-custom table-market">
+                  <tbody v-if="searchResult.length > 0">
+                    <tr v-for="project in searchResult" :key="project.id">
+                      <td>
+                        <div class="market-desc">
+                          <b>{{ project.title }}</b><br />
+                          {{ project.short_description }}
                         </div>
-                        {{ project.type }}
-                      </div>
-                    </td>
-                    <td class="text-left">
-                      <nav class="nav action-view">
-                        <button class="btn no-shadow nav-link" href="#" v-b-modal.modal-view-script @click="
-                          getCurrent({
-                            title: project.title,
-                            description: project.full_description,
-                            type: project.type,
-                            location: {
-                              city: project.city,
-                              country: project.currency_country,
-                            },
-                            budget: {
-                              min: project.budget_low,
-                              max: project.budget_high,
-                            },
-                            currency: { code: project.currency_code },
-                            bids: project.bids,
-                            time_updated: getProjectTime(project.updated_at),
-                            url: project.url,
-                          })
-                        ">
-                          View
-                        </button>
-                        <span>|</span>
-                        <button class="btn no-shadow nav-link" href="#" @click="saveProject(project.id)">
-                          Save
-                        </button>
-                      </nav>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody v-else-if="market && searchKey.length < 1">
-                  <tr v-for="project in market" :key="project.id">
-                    <td>
-                      <div class="market-desc">
-                        <b>{{ project.title }}</b><br />
-                        {{ project.short_description }}
-                      </div>
-                    </td>
-                    <td>
-                      {{ getProjectTime(project.updated_at) }} with
-                      {{ project.bid_count }}
-                      {{ project.bid_count > 1 ? "bids" : "bid" }}
-                    </td>
-                    <td>
-                      <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg"
-                        alt="location icon" />
+                      </td>
+                      <td>
+                        {{ getProjectTime(project.updated_at) }} with
+                        {{ project.bid_count }}
+                        {{ project.bid_count > 1 ? "bids" : "bid" }}
+                      </td>
+                      <td>
+                        <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg"
+                          alt="location icon" />
 
-                      {{
-                          project.city
-                            ? project.city
-                            : "NIL"
-                      }},
-                      {{
-                          project.currency_country
-                            ? project.currency_country
-                            : "NIL"
-                      }}
-                    </td>
-                    <td>
-                      <div class="price">
-                        <div>
-                          {{
-                              project.type == "Fixed"
-                                ? project.budget_high
-                                : project.budget_low + "-" + project.budget_high
-                          }}
-                          {{ project.currency_code }}
+                        {{
+                        project.city
+                        ? project.city
+                        : "NIL"
+                        }},
+                        {{
+                        project.currency_country
+                        ? project.currency_country
+                        : "NIL"
+                        }}
+                      </td>
+                      <td>
+                        <div class="price">
+                          <div>
+                            {{
+                            project.type == "Fixed"
+                            ? project.budget_high
+                            : project.budget_low + "-" + project.budget_high
+                            }}
+                            {{ project.currency_code }}
+                          </div>
+                          {{ project.type }}
                         </div>
-                        {{ project.type }}
-                      </div>
-                    </td>
-                    <td class="text-left">
-                      <nav class="nav action-view">
-                        <button class="btn no-shadow nav-link" href="#" v-b-modal.modal-view-script @click="
-                          getCurrent({
-                            title: project.title,
-                            description: project.full_description,
-                            type: project.type,
-                            location: {
-                              city: project.city,
-                              country: project.currency_country,
-                            },
-                            budget: {
-                              min: project.budget_low,
-                              max: project.budget_high,
-                            },
-                            currency: { code: project.currency_code },
-                            bids: project.bids,
-                            time_updated: getProjectTime(project.updated_at),
-                            url: project.url,
-                          })
-                        ">
-                          View
-                        </button>
-                        <span>|</span>
-                        <button class="btn no-shadow nav-link" href="#" @click="saveProject(project.id)">
-                          Save
-                        </button>
-                      </nav>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      </td>
+                      <td class="text-left">
+                        <nav class="nav action-view">
+                          <button class="btn no-shadow nav-link" href="#" v-b-modal.modal-view-script @click="
+                            getCurrent({
+                              title: project.title,
+                              description: project.full_description,
+                              type: project.type,
+                              location: {
+                                city: project.city,
+                                country: project.currency_country,
+                              },
+                              budget: {
+                                min: project.budget_low,
+                                max: project.budget_high,
+                              },
+                              currency: { code: project.currency_code },
+                              bids: project.bids,
+                              time_updated: getProjectTime(project.updated_at),
+                              url: project.url,
+                            })
+                          ">
+                            View
+                          </button>
+                          <span>|</span>
+                          <button class="btn no-shadow nav-link" href="#" @click="saveProject(project.id)">
+                            Save
+                          </button>
+                        </nav>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tbody v-else-if="market && searchKey.length < 1">
+                    <tr v-for="project in market" :key="project.id">
+                      <td>
+                        <div class="market-desc">
+                          <b>{{ project.title }}</b><br />
+                          {{ project.short_description }}
+                        </div>
+                      </td>
+                      <td>
+                        {{ getProjectTime(project.updated_at) }} with
+                        {{ project.bid_count }}
+                        {{ project.bid_count > 1 ? "bids" : "bid" }}
+                      </td>
+                      <td>
+                        <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg"
+                          alt="location icon" />
+
+                        {{
+                        project.city
+                        ? project.city
+                        : "NIL"
+                        }},
+                        {{
+                        project.currency_country
+                        ? project.currency_country
+                        : "NIL"
+                        }}
+                      </td>
+                      <td>
+                        <div class="price">
+                          <div>
+                            {{
+                            project.type == "Fixed"
+                            ? project.budget_high
+                            : project.budget_low + "-" + project.budget_high
+                            }}
+                            {{ project.currency_code }}
+                          </div>
+                          {{ project.type }}
+                        </div>
+                      </td>
+                      <td class="text-left">
+                        <nav class="nav action-view">
+                          <button class="btn no-shadow nav-link" href="#" v-b-modal.modal-view-script @click="
+                            getCurrent({
+                              title: project.title,
+                              description: project.full_description,
+                              type: project.type,
+                              location: {
+                                city: project.city,
+                                country: project.currency_country,
+                              },
+                              budget: {
+                                min: project.budget_low,
+                                max: project.budget_high,
+                              },
+                              currency: { code: project.currency_code },
+                              bids: project.bids,
+                              time_updated: getProjectTime(project.updated_at),
+                              url: project.url,
+                            })
+                          ">
+                            View
+                          </button>
+                          <span>|</span>
+                          <button class="btn no-shadow nav-link" href="#" @click="saveProject(project.id)">
+                            Save
+                          </button>
+                        </nav>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <b-modal :hide-header="true" id="modal-view-script" centered size="md" :hide-footer="true"
               dialog-class="control-width" content-class="modal-main">
@@ -198,11 +200,11 @@
                 <div class="price">
                   <div>
                     {{
-                        activeMarketData.type == "Fixed"
-                          ? activeMarketData.budget.max
-                          : activeMarketData.budget.min +
-                          "-" +
-                          activeMarketData.budget.max
+                    activeMarketData.type == "Fixed"
+                    ? activeMarketData.budget.max
+                    : activeMarketData.budget.min +
+                    "-" +
+                    activeMarketData.budget.max
                     }}
                     {{ activeMarketData.currency.code }}
                   </div>
@@ -221,14 +223,14 @@
                   <div class="mb-1">
                     <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg" alt="location icon" />
                     {{
-                        activeMarketData.location.city
-                          ? activeMarketData.location.city
-                          : "NIL"
+                    activeMarketData.location.city
+                    ? activeMarketData.location.city
+                    : "NIL"
                     }},
                     {{
-                        activeMarketData.location.country
-                          ? activeMarketData.location.country
-                          : "NIL"
+                    activeMarketData.location.country
+                    ? activeMarketData.location.country
+                    : "NIL"
                     }}
                   </div>
                   <div>
@@ -344,7 +346,7 @@ export default {
           if (res.data.data.length == 0) {
             if (res.data.message == "Access to Market Place is restricted") {
               this.isRestricted = true;
-               this.$store.commit("updateLoadState", false);
+              this.$store.commit("updateLoadState", false);
               return;
             }
           }

@@ -319,4 +319,16 @@ export default {
 .extra-margin-left-wrap .input-table {
   font-size: 0.9rem;
 }
+
+@media screen and (max-width: 768px) {
+  .extra-margin-left-wrap {
+    margin-left: 5rem;
+  }
+}
+
+@media screen and (max-width: 480px) { 
+  .extra-margin-left-wrap {
+    margin-left: 0;
+  }
+}
 </style>

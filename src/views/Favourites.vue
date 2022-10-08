@@ -126,7 +126,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-6 d-none d-lg-block">
                   <div class="d-flex flex-column h-100">
                     <div class="section-head">
                       <button v-b-modal.modal-add-campaign class="

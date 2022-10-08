@@ -17,10 +17,6 @@
         /* iOS 4.1- */
 }
 
-html,
-body {
-    overflow-y: hidden;
-}
 
 body {
 
@@ -1497,6 +1493,27 @@ input:checked+.slider:before {
 
     .select-script-forms .search-form {
         margin-left: 0;
+    }
+
+    .scroll-content {
+        padding: 0 2rem !important;
+    }
+
+    .flex-main-wrap .content-section { 
+        overflow-y: initial;
+    }
+
+    .scroll-content { 
+        height: initial;
+        overflow-y: initial;
+        margin-top: 100px;
+    }
+
+    .content-head {
+        position: fixed !important;
+        width: 100%;
+        top: 0;
+        left: 0;
     }
 }
 
