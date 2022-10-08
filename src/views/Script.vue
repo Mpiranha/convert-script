@@ -24,7 +24,7 @@
 
             <div class="content-wrap script-custom-height">
               <div class="row h-100">
-                <div class="col-6 h-100 bordered-right pr-0">
+                <div class="col-12 col-lg-6 h-100 bordered-right pr-lg-0">
                   <div class="section-head">
                     <div class="section-head-left">
                       <img class="section-head-icon" src="@/assets/icons/convert-icon/All script.svg" alt="" />
@@ -47,50 +47,52 @@
                     <div v-if="scripts.length === 0" class="no-data-info">
                       Created Copies will display here.
                     </div>
-                    <table v-else class="table table-section script-table">
-                      <tbody v-if="searchResult.length > 0">
-                        <tr @click="setActiveScript(result)" v-for="result in searchResult" :key="result.id">
+                    <div v-else class="responsive-table">
+                      <table class="table table-section script-table">
+                        <tbody v-if="searchResult.length > 0">
+                          <tr v-for="result in searchResult" :key="result.id">
 
-                          <td>
-                            <div class="script-type">
-                              {{ result.script_type_name }}
-                            </div>
-                            <div class="script-content">
-                              {{ abbrScript(result.text) }}
-                            </div>
-                          </td>
+                            <td @click="setActiveScript(result)">
+                              <div class="script-type">
+                                {{ result.script_type_name }}
+                              </div>
+                              <div class="script-content">
+                                {{ abbrScript(result.text) }}
+                              </div>
+                            </td>
 
-                          <td class="text-right">
-                            <dropdown-tool delete-what="Script" @edit-clicked="
-                              openEditModal(result.id, result.text)
-                            " @delete-proceed="deleteScript(result.id)">
-                            </dropdown-tool>
-                          </td>
-                        </tr>
-                      </tbody>
-                      <tbody v-else-if="scripts && searchKey.length < 1">
-                        <tr @click="setActiveScript(script)" v-for="script in scripts" :key="script.id">
-                          <td>
-                            <div class="script-type">
-                              {{ script.script_type_name }}
-                            </div>
-                            <div class="script-content">
-                              {{ abbrScript(script.text) }}
-                            </div>
-                          </td>
+                            <td class="text-right">
+                              <dropdown-tool delete-what="Script" @edit-clicked="
+                                openEditModal(result.id, result.text)
+                              " @delete-proceed="deleteScript(result.id)">
+                              </dropdown-tool>
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tbody v-else-if="scripts && searchKey.length < 1">
+                          <tr v-for="script in scripts" :key="script.id">
+                            <td @click="setActiveScript(script)">
+                              <div class="script-type">
+                                {{ script.script_type_name }}
+                              </div>
+                              <div class="script-content">
+                                {{ abbrScript(script.text) }}
+                              </div>
+                            </td>
 
-                          <td class="text-right">
-                            <dropdown-tool delete-what="Script" @edit-clicked="
-                              openEditModal(script.id, script.text)
-                            " @delete-proceed="deleteScript(script.id)">
-                            </dropdown-tool>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                            <td class="text-right">
+                              <dropdown-tool delete-what="Script" @edit-clicked="
+                                openEditModal(script.id, script.text)
+                              " @delete-proceed="deleteScript(script.id)">
+                              </dropdown-tool>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
-                <div class="col-6 h-100">
+                <div class="col-lg-6 d-none d-lg-block h-100">
                   <div class="d-flex flex-column h-100">
                     <div class="section-head">
                       <button v-b-modal.modal-add-campaign class="
@@ -172,6 +174,70 @@
         <b-button @click="saveToCampaign" class="save-modal">Add</b-button>
       </div>
     </b-modal>
+
+    <b-modal :hide-header="true" id="modal-view-script" centered size="md" :hide-footer="true"
+      content-class="modal-main">
+      <div class="row">
+        <div class="col-12 h-100">
+          <div class="d-flex flex-column m-min-height">
+            <div class="section-head">
+              <button v-b-modal.modal-add-campaign class="
+                d-flex
+                align-items-center
+                no-shadow
+                btn btn-save-to
+              ">
+                <img src="@/assets/icons/convert-icon/save 1.svg" alt="" class="icon-save mr-2" /><span> Save to
+                </span>
+              </button>
+              <div class="section-head-right d-flex align-items-center">
+                <div class="fav-star" @click="toggleFavourite">
+                  <img v-if="isFavourite" class="fav-icon" src="@/assets/icons/convert-icon/star.png" alt="" />
+                  <img v-else class="fav-icon" src="@/assets/icons/convert-icon/my Favourites.svg" alt="" />
+                </div>
+                <!-- <select class="sort-select" name="" id="">
+              <option value="none" selected>Export Script</option>
+              <option value=""></option>
+              <option value=""></option>
+              <option value=""></option>
+            </select> -->
+                <button @click="exportScript(activeScript.id)" target="_blank" class="btn btn-export-all">
+                  Export
+                </button>
+              </div>
+            </div>
+            <div class="content-display" v-if="activeScript">
+              <div v-html="formatScript(activeScript.text)"></div>
+            </div>
+            <div v-else class="no-select">
+              Select a Script to Preview
+            </div>
+            <div class="section-footer">
+              <!-- <button
+              class="btn no-shadow btn-share"
+              v-b-modal.modal-send-script
+            >
+              <img
+                class="foot-icons"
+                src="@/assets/icons/convert-icon/send.svg"
+                alt=""
+              />
+            </button> -->
+              <button @click="copyText" class="btn no-shadow btn-copy">
+                <img class="foot-icons" src="@/assets/icons/convert-icon/copy.svg" alt="" />
+                Copy to clipboard
+              </button>
+              <textarea type="hidden" id="text--copy" :value="activeScript ? activeScript.text : ''"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-start">
+        <b-button @click="$bvModal.hide('modal-view-script')" class="close-modal">Close</b-button>
+      </div>
+    </b-modal>
+
   </div>
 </template>
 
@@ -480,6 +546,10 @@ export default {
       }
     },
     setActiveScript(data) {
+      const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
+      if (width <= 991) {
+        this.$bvModal.show("modal-view-script");
+      }
       this.activeScript = data;
       this.isFavourite = data.favorite;
     },
@@ -527,6 +597,7 @@ export default {
   mounted() {
     this.getCampaign();
     this.getScripts();
+
   },
 };
 </script>
@@ -538,5 +609,9 @@ export default {
 
 .control-modal-width {
   max-width: 598px !important;
+}
+
+.m-min-height {
+  min-height: 500px;
 }
 </style>

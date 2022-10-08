@@ -17,8 +17,13 @@
         /* iOS 4.1- */
 }
 
+html,
+body {
+    overflow-y: hidden;
+}
 
 body {
+
     font-family: jost, Roboto !important;
     scrollbar-color: #8338ec #f1f1f1;
     scrollbar-width: 10px;
@@ -1434,6 +1439,10 @@ input:checked+.slider:before {
 
 .icon-save {
     width: 1.2rem;
+}
+
+.responsive-table {
+    overflow-x: auto;
 }
 
 @media screen and (min-width: 1367px) {

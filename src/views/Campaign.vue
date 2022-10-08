@@ -9,23 +9,24 @@
             <div class="
                 dashboard-top
                 d-flex
+                flex-wrap
                 justify-content-between
                 align-items-center
                 mb-5
               ">
               <h6 class="title">All Campaign</h6>
 
-              <div class="d-flex align-items-center ml-auto">
+              <div class="d-flex flex-wrap align-items-center ml-md-auto">
                 <button @click="resetFilter" v-if="selectedAgency" class="btn btn-cancel-filters">
                   <img src="@/assets/icons/cancel.svg" alt="cancel icon" />
                 </button>
 
-                <b-form-group class="mb-0 mr-3" label-class="input-label">
+                <b-form-group class="mb-3 mr-3" label-class="input-label">
                   <b-form-select @input="getClientsCampaign" class="input-table manage-width" v-model="selectedAgency"
                     :options="clientOptions"></b-form-select>
                 </b-form-group>
 
-                <button @click="clearField" class="btn btn-create" v-b-modal.modal-new-campaign>
+                <button @click="clearField" class="btn btn-create mb-3" v-b-modal.modal-new-campaign>
                   <span>+</span>
                   New Campaigns
                 </button>
@@ -46,7 +47,8 @@
               <div v-if="campaigns.length === 0" class="no-data-info">
                 Created campaigns will display here.
               </div>
-              <table v-else class="table table-custom">
+              <div v-else class="responsive-table">
+              <table class="table table-custom">
                 <tbody v-if="searchResult.length > 0">
                   <tr v-for="result in searchResult" :key="result.id">
                     <td scope="row">
@@ -137,6 +139,7 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
             </div>
           </div>
         </div>
