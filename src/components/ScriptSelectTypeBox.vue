@@ -1,5 +1,5 @@
 <template>
-  <div class="col-4">
+  <div class="col-12 col-md-6 col-lg-4">
     <div class="box-wrap">
       <img class="img-icon" :src="imgUrl" />
       <h6 class="title">{{ typeTitle }}</h6>
