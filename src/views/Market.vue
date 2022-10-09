@@ -44,7 +44,7 @@
               <div v-if="marketLength === 0" class="no-data-info">
                 No Active Project, Try Again Later.
               </div>
-              <div v-else class="table-responsive">
+              <div v-else>
                 <table class="table table-custom table-market">
                   <tbody v-if="searchResult.length > 0">
                     <tr v-for="project in searchResult" :key="project.id">
@@ -191,6 +191,166 @@
                     </tr>
                   </tbody>
                 </table>
+
+                <div class="m-market-list" v-if="searchResult.length > 0">
+                  <div class="m-market-item" v-for="project in searchResult" :key="project.id">
+                    <div class="mb-3">
+                      <div class="m-market-title">{{ project.title }}</div>
+                      <div class="m-market-desc">{{ project.short_description }}</div>
+                    </div>
+                    <div class="m-market-details">
+                      <div class="price d-flex text-left mr-3">
+                        <div class="mr-2">
+                          {{
+                          project.type == "Fixed"
+                          ? project.budget_high
+                          : project.budget_low + "-" + project.budget_high
+                          }}
+                          {{ project.currency_code }}
+                        </div>
+                        {{ project.type }}
+                      </div>
+
+
+
+                      <div class="text-left ml-auto">
+                        <nav class="nav action-view">
+                          <button class="btn no-shadow nav-link" href="#" v-b-modal.modal-view-script @click="
+                            getCurrent({
+                              title: project.title,
+                              description: project.full_description,
+                              type: project.type,
+                              location: {
+                                city: project.city,
+                                country: project.currency_country,
+                              },
+                              budget: {
+                                min: project.budget_low,
+                                max: project.budget_high,
+                              },
+                              currency: { code: project.currency_code },
+                              bids: project.bids,
+                              time_updated: getProjectTime(project.updated_at),
+                              url: project.url,
+                            })
+                          ">
+                            View
+                          </button>
+                          <span>|</span>
+                          <button class="btn no-shadow nav-link pr-0" href="#" @click="saveProject(project.id)">
+                            Save
+                          </button>
+                        </nav>
+                      </div>
+
+                    </div>
+                    <div class="m-market-action">
+                      <div >
+                        <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg"
+                          alt="location icon" />
+
+                        {{
+                        project.city
+                        ? project.city
+                        : "NIL"
+                        }},
+                        {{
+                        project.currency_country
+                        ? project.currency_country
+                        : "NIL"
+                        }}
+                      </div>
+                      <div class="ml-auto">
+                        {{ getProjectTime(project.updated_at) }} with
+                        {{ project.bid_count }}
+                        {{ project.bid_count > 1 ? "bids" : "bid" }}
+                      </div>
+                      
+
+
+                    </div>
+                  </div>
+                </div>
+                <div class="m-market-list" v-else-if="market && searchKey.length < 1">
+                  <div class="m-market-item" v-for="project in market" :key="project.id">
+                    <div class="mb-3">
+                      <div class="m-market-title">{{ project.title }}</div>
+                      <div class="m-market-desc">{{ project.short_description }}</div>
+                    </div>
+                    <div class="m-market-details">
+                      <div class="price d-flex text-left mr-3">
+                        <div class="mr-2">
+                          {{
+                          project.type == "Fixed"
+                          ? project.budget_high
+                          : project.budget_low + "-" + project.budget_high
+                          }}
+                          {{ project.currency_code }}
+                        </div>
+                        {{ project.type }}
+                      </div>
+
+
+
+                      <div class="text-left ml-auto">
+                        <nav class="nav action-view">
+                          <button class="btn no-shadow nav-link" href="#" v-b-modal.modal-view-script @click="
+                            getCurrent({
+                              title: project.title,
+                              description: project.full_description,
+                              type: project.type,
+                              location: {
+                                city: project.city,
+                                country: project.currency_country,
+                              },
+                              budget: {
+                                min: project.budget_low,
+                                max: project.budget_high,
+                              },
+                              currency: { code: project.currency_code },
+                              bids: project.bids,
+                              time_updated: getProjectTime(project.updated_at),
+                              url: project.url,
+                            })
+                          ">
+                            View
+                          </button>
+                          <span>|</span>
+                          <button class="btn no-shadow nav-link pr-0" href="#" @click="saveProject(project.id)">
+                            Save
+                          </button>
+                        </nav>
+                      </div>
+
+                    </div>
+                    <div class="m-market-action">
+                      <div >
+                        <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg"
+                          alt="location icon" />
+
+                        {{
+                        project.city
+                        ? project.city
+                        : "NIL"
+                        }},
+                        {{
+                        project.currency_country
+                        ? project.currency_country
+                        : "NIL"
+                        }}
+                      </div>
+                      <div class="ml-auto">
+                        {{ getProjectTime(project.updated_at) }} with
+                        {{ project.bid_count }}
+                        {{ project.bid_count > 1 ? "bids" : "bid" }}
+                      </div>
+                      
+
+
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
             <b-modal :hide-header="true" id="modal-view-script" centered size="md" :hide-footer="true"
@@ -333,7 +493,7 @@ export default {
       this.currentPage = value;
       this.getMarketData();
       this.$refs.scrollContent.scroll(0, 0);
-      console.log("Value: " + value);
+
     },
     getMarketData() {
       this.$store.commit("updateLoadState", true);
@@ -351,7 +511,7 @@ export default {
             }
           }
           this.market = res.data.data;
-          console.log(res);
+         
           //this.marketLength = res.data.result.total_count;
           if (res.data.meta.total) {
             this.marketLength = res.data.meta.total;
@@ -385,7 +545,7 @@ export default {
       }
       var mil = new Date(time);
 
-      console.log(mil.getTime());
+   
 
       var diff = Date.now() - mil.getTime();
 

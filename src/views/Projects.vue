@@ -370,7 +370,7 @@ export default {
     handlePageChange(value) {
       this.currentPage = value;
       this.getSavedProject();
-      console.log("Value: " + value);
+    
     },
     getSavedProject() {
       this.$store.commit("updateLoadState", true);
@@ -378,7 +378,7 @@ export default {
         .dispatch("getSavedProject")
         .then((res) => {
           this.projects = res.data.data;
-          console.log(res);
+        
           // this.marketLength = res.data.result.total_count;
           this.$store.commit("updateLoadState", false);
         })
@@ -392,8 +392,8 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteSavedProject", id)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+        
           this.getSavedProject();
           this.makeToast("success", "project removed successfully");
           this.$store.commit("updateLoadState", false);

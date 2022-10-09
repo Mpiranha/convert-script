@@ -25,7 +25,7 @@
                       <img class="section-head-icon" src="@/assets/icons/convert-icon/All script.svg" alt="" />
                       {{ scripts.length }}
                     </div>
-                    <div class="search-form mb-0">
+                    <div class="search-form">
                       <button class="btn search-btn">
                         <i class="flaticon-loupe icons"></i>
                       </button>
@@ -225,7 +225,7 @@
                 <img src="@/assets/icons/convert-icon/save 1.svg" alt="" class="icon-save mr-2" /><span> Save to
                 </span>
               </button>
-              <div class="section-head-right d-flex align-items-center">
+              <div class="ml-auto d-flex align-items-center">
                 <div class="fav-star" @click="toggleFavourite">
                   <img v-if="isFavourite" class="fav-icon" src="@/assets/icons/convert-icon/star.png" alt="" />
                   <img v-else class="fav-icon" src="@/assets/icons/convert-icon/my Favourites.svg" alt="" />

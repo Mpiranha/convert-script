@@ -35,7 +35,7 @@
 
             <div class="content-wrap script-custom-height">
               <div class="row h-100">
-                <div class="col-6 h-100 bordered-right pr-0">
+                <div class="col-12 col-lg-6 h-100 bordered-right pr-lg-0">
                   <div class="section-head">
                     <div class="section-head-left">
                       <img
@@ -45,7 +45,7 @@
                       />
                       {{ campaign.scripts_count }}
                     </div>
-                    <div class="search-form mb-0">
+                    <div class="search-form">
                       <button class="btn search-btn">
                         <i class="flaticon-loupe icons"></i>
                       </button>
@@ -58,12 +58,7 @@
                       />
                     </div>
                     <div class="section-head-right">
-                      <!-- <select class="sort-select" name="" id="">
-                      <option value="none" selected>Export All</option>
-                      <option value=""></option>
-                      <option value=""></option>
-                      <option value=""></option>
-                    </select> -->
+                     
                       <a
                         @click="exportAllScripts($store.state.user.id)"
                         class="btn btn-export-all"
@@ -73,30 +68,18 @@
                     </div>
                   </div>
                   <div class="control-height">
-                  <div v-if="campaign.scripts.length === 0" class="no-data-info">
+                  <div v-if="campaign.scripts_count === 0" class="no-data-info">
                       Created Copies will display here.
                     </div>
-                    <table v-else class="table table-section script-table">
+                    <div v-else class="responsive-table">
+                    <table class="table table-section script-table">
                       <tbody>
                         <tr
                           @click="setActiveScript(script)"
                           v-for="script in campaign.scripts"
                           :key="script.id"
                         >
-                          <!-- <td scope="row">
-                            <div class="control-order-tool">
-                              <button class="btn mb-2">
-                                <i
-                                  class="flaticon-up-arrow icons icon-order"
-                                ></i>
-                              </button>
-                              <button class="btn btn-down">
-                                <i
-                                  class="flaticon-up-arrow icons icon-order"
-                                ></i>
-                              </button>
-                            </div>
-                          </td> -->
+                         
                           <td>
                             <div class="script-type">
                               {{ script.script_type_name }}
@@ -118,9 +101,10 @@
                         </tr>
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 </div>
-                <div class="col-6 h-100">
+                <div class="col-lg-6 d-none d-lg-block h-100">
                   <div class="d-flex flex-column h-100">
                     <div class="section-head">
                       <button
@@ -139,12 +123,7 @@
                         /><span> Save to </span>
                       </button>
                       <div class="section-head-right">
-                        <!-- <select class="sort-select" name="" id="">
-                        <option value="none" selected>Export Script</option>
-                        <option value=""></option>
-                        <option value=""></option>
-                        <option value=""></option>
-                      </select> -->
+                       
                         <button
                           @click="exportScript(activeScript.id)"
                           class="btn btn-export-all"
@@ -160,16 +139,7 @@
                       Select a Script to Preview
                     </div>
                     <div class="section-footer">
-                      <!-- <button
-                        class="btn no-shadow btn-share"
-                        v-b-modal.modal-send-script
-                      >
-                        <img
-                          class="foot-icons"
-                          src="@/assets/icons/convert-icon/send.svg"
-                          alt=""
-                        />
-                      </button> -->
+                    
                       <button @click="copyText" class="btn no-shadow btn-copy">
                         <img
                           class="foot-icons"
@@ -249,6 +219,51 @@
         <b-button @click="saveToCampaign" class="save-modal">Add</b-button>
       </div>
     </b-modal>
+
+    <b-modal :hide-header="true" id="modal-view-script" centered size="md" :hide-footer="true"
+    content-class="modal-main">
+    <div class="row">
+      <div class="col-12 h-100">
+        <div class="d-flex flex-column m-min-height">
+          <div class="section-head">
+            <button v-b-modal.modal-add-campaign class="
+              d-flex
+              align-items-center
+              no-shadow
+              btn btn-save-to
+            ">
+              <img src="@/assets/icons/convert-icon/save 1.svg" alt="" class="icon-save mr-2" /><span> Save to
+              </span>
+            </button>
+            <div class="ml-auto d-flex align-items-center">
+            
+              <button @click="exportScript(activeScript.id)" target="_blank" class="btn btn-export-all">
+                Export
+              </button>
+            </div>
+          </div>
+          <div class="content-display" v-if="activeScript">
+            <div v-html="formatScript(activeScript.text)"></div>
+          </div>
+          <div v-else class="no-select">
+            Select a Script to Preview
+          </div>
+          <div class="section-footer">
+            
+            <button @click="copyText" class="btn no-shadow btn-copy">
+              <img class="foot-icons" src="@/assets/icons/convert-icon/copy.svg" alt="" />
+              Copy to clipboard
+            </button>
+            <textarea type="hidden" id="text--copy" :value="activeScript ? activeScript.text : ''"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-start">
+      <b-button @click="$bvModal.hide('modal-view-script')" class="close-modal">Close</b-button>
+    </div>
+  </b-modal>
   </div>
 </template>
 
@@ -488,6 +503,10 @@ export default {
         });
     },
     setActiveScript(data) {
+      const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
+      if (width <= 991) {
+        this.$bvModal.show("modal-view-script");
+      }
       this.activeScript = data;
     },
     openEditModal(id, data) {

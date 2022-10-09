@@ -49,23 +49,24 @@
               <div v-if="agency.length === 0" class="no-data-info">
                 Created agency will display here.
               </div>
-              <table v-else class="table table-custom">
-                <tbody>
-                  <tr v-for="agency in orderedAgency" :key="agency.id">
-                    <td scope="row">{{  agency.name  }}</td>
-                    <td>{{  agency.id  }}</td>
-                    <td>{{  agency.email  }}</td>
-                    <td>
-                      {{  formatDate(agency.created_at)  }}
-                    </td>
-                    <td>
-                      <dropdown-tool @edit-clicked="
-                        openEditModal(agency.id, {
-                          name: agency.name,
-                          email: agency.email,
-                        })
-                      " @delete-proceed="deleteAgency(agency.id)">
-                        <!-- <template v-slot:secondary>
+              <div v-else class="responsive-table">
+                <table class="table table-custom">
+                  <tbody>
+                    <tr v-for="agency in orderedAgency" :key="agency.id">
+                      <td scope="row">{{ agency.name }}</td>
+                      <td>{{ agency.id }}</td>
+                      <td>{{ agency.email }}</td>
+                      <td>
+                        {{ formatDate(agency.created_at) }}
+                      </td>
+                      <td>
+                        <dropdown-tool @edit-clicked="
+                          openEditModal(agency.id, {
+                            name: agency.name,
+                            email: agency.email,
+                          })
+                        " @delete-proceed="deleteAgency(agency.id)">
+                          <!-- <template v-slot:secondary>
                         <b-dropdown-item
                           v-b-modal.modal-campaign
                           @click="getCurrent(agency.name)"
@@ -78,11 +79,12 @@
                           Campaign
                         </b-dropdown-item>
                       </template> -->
-                      </dropdown-tool>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                        </dropdown-tool>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -97,8 +99,8 @@
       </div> -->
 
       <b-form-group label="Name">
-        <b-form-input :class="{ 'is-invalid': submitted && $v.client.name.$error }" id="name"
-          v-model="client.name" type="text" class="input-table">
+        <b-form-input :class="{ 'is-invalid': submitted && $v.client.name.$error }" id="name" v-model="client.name"
+          type="text" class="input-table">
         </b-form-input>
         <div v-if="submitted && $v.client.name.$error" class="invalid-feedback">
           <span v-if="!$v.client.name.required">* Name is required</span>
@@ -107,8 +109,8 @@
       </b-form-group>
 
       <b-form-group label="Email">
-        <b-form-input :class="{ 'is-invalid': submitted && $v.client.email.$error }" id="name"
-          v-model="client.email" type="email" class="input-table">
+        <b-form-input :class="{ 'is-invalid': submitted && $v.client.email.$error }" id="name" v-model="client.email"
+          type="email" class="input-table">
         </b-form-input>
         <div v-if="submitted && $v.client.email.$error" class="invalid-feedback">
           <span v-if="!$v.client.email.required">* Email is required</span>
@@ -119,14 +121,14 @@
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-client')" class="close-modal">Close</b-button>
         <b-button @click="triggerEdit ? editAgency(editId, $event) : addAgency($event)" class="save-modal">{{
-           triggerEdit ? "Edit" : "Add Client" 
-          }}</b-button>
+        triggerEdit ? "Edit" : "Add Client"
+        }}</b-button>
       </div>
     </b-modal>
     <b-modal :hide-header="true" id="modal-campaign" centered size="md" :hide-footer="true" dialog-class="control-width"
       content-class="modal-main">
       <div class="modal-head mb-3">
-        <h3 class="title">{{  this.client.name  }}</h3>
+        <h3 class="title">{{ this.client.name }}</h3>
       </div>
 
       <b-form-group v-slot="{ ariaDescribedby }">
