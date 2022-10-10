@@ -3,7 +3,9 @@
     <button @click="dismissSidebar" class="btn btn-dismiss-sidebar">
       <img src="@/assets/icons/sidebar/delete.png" alt="dismiss icon" />
     </button>
-    <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" />
+    <router-link to="/">
+      <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" />
+    </router-link>
     <nav class="nav flex-column nav-wrap">
       <li class="nav-item">
         <router-link class="nav-link" :class="currentActive == 'dashboard' ? 'active' : ''" to="/">

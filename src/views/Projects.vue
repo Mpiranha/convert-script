@@ -44,16 +44,16 @@
                   <tr v-for="project in searchResult" :key="project.freelancer_ad_id.id">
                     <td>
                       <div class="market-desc">
-                        <b>{{  project.freelancer_ad_id.title  }}</b><br />
-                        {{  project.freelancer_ad_id.short_description  }}
+                        <b>{{ project.freelancer_ad_id.title }}</b><br />
+                        {{ project.freelancer_ad_id.short_description }}
                       </div>
                     </td>
                     <td>
-                      {{  getProjectTime(project.freelancer_ad_id.updated_at)  }}
+                      {{ getProjectTime(project.freelancer_ad_id.updated_at) }}
                       with
-                      {{  project.freelancer_ad_id.bid_count  }}
+                      {{ project.freelancer_ad_id.bid_count }}
                       {{
-                       project.freelancer_ad_id.bid_count > 1 ? "bids" : "bid" 
+                      project.freelancer_ad_id.bid_count > 1 ? "bids" : "bid"
                       }}
                     </td>
                     <td>
@@ -61,16 +61,16 @@
                         alt="location icon" />
 
                       {{
-                       project.freelancer_ad_id.city
-                       ? project.freelancer_ad_id.city
-                       : "NIL"
+                      project.freelancer_ad_id.city
+                      ? project.freelancer_ad_id.city
+                      : "NIL"
 
 
                       }},
                       {{
-                       project.freelancer_ad_id.currency_country
-                       ? project.freelancer_ad_id.currency_country
-                       : "NIL"
+                      project.freelancer_ad_id.currency_country
+                      ? project.freelancer_ad_id.currency_country
+                      : "NIL"
 
 
                       }}
@@ -79,17 +79,17 @@
                       <div class="price">
                         <div>
                           {{
-                           project.freelancer_ad_id.type == "Fixed"
-                           ? project.freelancer_ad_id.budget_high
-                           : project.freelancer_ad_id.budget_low +
-                           "-" +
-                           project.freelancer_ad_id.budget_high
+                          project.freelancer_ad_id.type == "Fixed"
+                          ? project.freelancer_ad_id.budget_high
+                          : project.freelancer_ad_id.budget_low +
+                          "-" +
+                          project.freelancer_ad_id.budget_high
 
 
                           }}
-                          {{  project.freelancer_ad_id.currency_code  }}
+                          {{ project.freelancer_ad_id.currency_code }}
                         </div>
-                        {{  project.freelancer_ad_id.type  }}
+                        {{ project.freelancer_ad_id.type }}
                       </div>
                     </td>
                     <td class="text-left">
@@ -134,16 +134,16 @@
                   <tr v-for="project in filteredNull" :key="project.freelancer_ad_id.id">
                     <td>
                       <div class="market-desc">
-                        <b>{{  project.freelancer_ad_id.title  }}</b><br />
-                        {{  project.freelancer_ad_id.short_description  }}
+                        <b>{{ project.freelancer_ad_id.title }}</b><br />
+                        {{ project.freelancer_ad_id.short_description }}
                       </div>
                     </td>
                     <td>
-                      {{  getProjectTime(project.freelancer_ad_id.updated_at)  }}
+                      {{ getProjectTime(project.freelancer_ad_id.updated_at) }}
                       with
-                      {{  project.freelancer_ad_id.bid_count  }}
+                      {{ project.freelancer_ad_id.bid_count }}
                       {{
-                       project.freelancer_ad_id.bid_count > 1 ? "bids" : "bid" 
+                      project.freelancer_ad_id.bid_count > 1 ? "bids" : "bid"
                       }}
                     </td>
                     <td>
@@ -151,16 +151,16 @@
                         alt="location icon" />
 
                       {{
-                       project.freelancer_ad_id.city
-                       ? project.freelancer_ad_id.city
-                       : "NIL"
+                      project.freelancer_ad_id.city
+                      ? project.freelancer_ad_id.city
+                      : "NIL"
 
 
                       }},
                       {{
-                       project.freelancer_ad_id.currency_country
-                       ? project.freelancer_ad_id.currency_country
-                       : "NIL"
+                      project.freelancer_ad_id.currency_country
+                      ? project.freelancer_ad_id.currency_country
+                      : "NIL"
 
 
                       }}
@@ -169,17 +169,17 @@
                       <div class="price">
                         <div>
                           {{
-                           project.freelancer_ad_id.type == "Fixed"
-                           ? project.freelancer_ad_id.budget_high
-                           : project.freelancer_ad_id.budget_low +
-                           "-" +
-                           project.freelancer_ad_id.budget_high
+                          project.freelancer_ad_id.type == "Fixed"
+                          ? project.freelancer_ad_id.budget_high
+                          : project.freelancer_ad_id.budget_low +
+                          "-" +
+                          project.freelancer_ad_id.budget_high
 
 
                           }}
-                          {{  project.freelancer_ad_id.currency_code  }}
+                          {{ project.freelancer_ad_id.currency_code }}
                         </div>
-                        {{  project.freelancer_ad_id.type  }}
+                        {{ project.freelancer_ad_id.type }}
                       </div>
                     </td>
                     <td class="text-left">
@@ -219,7 +219,166 @@
                     </td>
                   </tr>
                 </tbody>
+
+
               </table>
+              <div class="m-market-list" v-if="searchResult.length > 0">
+                <div class="m-market-item" v-for="project in searchResult" :key="project.freelancer_ad_id.id">
+                  <div class="mb-3">
+                    <div class="m-market-title">{{ project.freelancer_ad_id.title }}</div>
+                    <div class="m-market-desc">{{ project.freelancer_ad_id.short_description }}</div>
+                  </div>
+                  <div class="m-market-details">
+                    <div class="price d-flex text-left mr-3">
+                      <div class="mr-2">
+                        {{
+                        project.freelancer_ad_id.type == "Fixed"
+                        ? project.freelancer_ad_id.budget_high
+                        : project.freelancer_ad_id.budget_low + "-" + project.freelancer_ad_id.budget_high
+                        }}
+                        {{ project.freelancer_ad_id.currency_code }}
+                      </div>
+                      {{ project.freelancer_ad_id.type }}
+                    </div>
+
+
+
+                    <div class="text-left ml-auto">
+                      <nav class="nav action-view">
+                        <button class="btn no-shadow nav-link" href="#" v-b-modal.modal-view-script @click="
+                          getCurrent({
+                            title: project.freelancer_ad_id.title,
+                            description: project.freelancer_ad_id.full_description,
+                            type: project.freelancer_ad_id.type,
+                            location: {
+                              city: project.freelancer_ad_id.city,
+                              country: project.freelancer_ad_id.currency_country,
+                            },
+                            budget: {
+                              min: project.freelancer_ad_id.budget_low,
+                              max: project.freelancer_ad_id.budget_high,
+                            },
+                            currency: { code: project.freelancer_ad_id.currency_code },
+                            bids: project.freelancer_ad_id.bids,
+                            time_updated: getProjectTime(project.freelancer_ad_id.updated_at),
+                            url: project.freelancer_ad_id.url,
+                          })
+                        ">
+                          View
+                        </button>
+                        <span>|</span>
+                        <button @click="deleteSavedProject(project.freelancer_ad_id.id)" class="btn no-shadow nav-link"
+                          href="#">
+                          Remove
+                        </button>
+                      </nav>
+                    </div>
+
+                  </div>
+                  <div class="m-market-action">
+                    <div>
+                      <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg"
+                        alt="location icon" />
+
+                      {{
+                      project.freelancer_ad_id.city
+                      ? project.freelancer_ad_id.city
+                      : "NIL"
+                      }},
+                      {{
+                      project.freelancer_ad_id.currency_country
+                      ? project.freelancer_ad_id.currency_country
+                      : "NIL"
+                      }}
+                    </div>
+                    <div class="ml-auto">
+                      {{ getProjectTime(project.freelancer_ad_id.updated_at) }} with
+                      {{ project.freelancer_ad_id.bid_count }}
+                      {{ project.freelancer_ad_id.bid_count > 1 ? "bids" : "bid" }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="m-market-list" v-else-if="projects && searchKey.length < 1">
+                <div class="m-market-item" v-for="project in filteredNull" :key="project.freelancer_ad_id.id">
+                  <div class="mb-3">
+                    <div class="m-market-title">{{ project.freelancer_ad_id.title }}</div>
+                    <div class="m-market-desc">{{ project.freelancer_ad_id.short_description }}</div>
+                  </div>
+                  <div class="m-market-details">
+                    <div class="price d-flex text-left mr-3">
+                      <div class="mr-2">
+                        {{
+                        project.freelancer_ad_id.type == "Fixed"
+                        ? project.freelancer_ad_id.budget_high
+                        : project.freelancer_ad_id.budget_low + "-" + project.freelancer_ad_id.budget_high
+                        }}
+                        {{ project.freelancer_ad_id.currency_code }}
+                      </div>
+                      {{ project.freelancer_ad_id.type }}
+                    </div>
+
+
+
+                    <div class="text-left ml-auto">
+                      <nav class="nav action-view">
+                        <button class="btn no-shadow nav-link" href="#" v-b-modal.modal-view-script @click="
+                          getCurrent({
+                            title: project.freelancer_ad_id.title,
+                            description: project.freelancer_ad_id.full_description,
+                            type: project.freelancer_ad_id.type,
+                            location: {
+                              city: project.freelancer_ad_id.city,
+                              country: project.freelancer_ad_id.currency_country,
+                            },
+                            budget: {
+                              min: project.freelancer_ad_id.budget_low,
+                              max: project.freelancer_ad_id.budget_high,
+                            },
+                            currency: { code: project.freelancer_ad_id.currency_code },
+                            bids: project.freelancer_ad_id.bids,
+                            time_updated: getProjectTime(project.freelancer_ad_id.updated_at),
+                            url: project.freelancer_ad_id.url,
+                          })
+                        ">
+                          View
+                        </button>
+                        <span>|</span>
+                        <button @click="deleteSavedProject(project.freelancer_ad_id.id)" class="btn no-shadow nav-link"
+                          href="#">
+                          Remove
+                        </button>
+                      </nav>
+                    </div>
+
+                  </div>
+                  <div class="m-market-action">
+                    <div>
+                      <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg"
+                        alt="location icon" />
+
+                      {{
+                      project.freelancer_ad_id.city
+                      ? project.freelancer_ad_id.city
+                      : "NIL"
+                      }},
+                      {{
+                      project.freelancer_ad_id.currency_country
+                      ? project.freelancer_ad_id.currency_country
+                      : "NIL"
+                      }}
+                    </div>
+                    <div class="ml-auto">
+                      {{ getProjectTime(project.freelancer_ad_id.updated_at) }} with
+                      {{ project.freelancer_ad_id.bid_count }}
+                      {{ project.freelancer_ad_id.bid_count > 1 ? "bids" : "bid" }}
+                    </div>
+
+
+
+                  </div>
+                </div>
+              </div>
             </div>
             <b-modal :hide-header="true" id="modal-view-script" centered size="md" :hide-footer="true"
               dialog-class="control-width" content-class="modal-main">
@@ -228,23 +387,23 @@
                 <div class="price">
                   <div>
                     {{
-                     activeMarketData.type == "Fixed"
-                     ? activeMarketData.budget.max
-                     : activeMarketData.budget.min +
-                     "-" +
-                     activeMarketData.budget.max
+                    activeMarketData.type == "Fixed"
+                    ? activeMarketData.budget.max
+                    : activeMarketData.budget.min +
+                    "-" +
+                    activeMarketData.budget.max
 
 
                     }}
-                    {{  activeMarketData.currency.code  }}
+                    {{ activeMarketData.currency.code }}
                   </div>
-                  {{  activeMarketData.type  }}
+                  {{ activeMarketData.type }}
                 </div>
               </div>
               <div>
-                <h6 class="project-title">{{  activeMarketData.title  }}</h6>
+                <h6 class="project-title">{{ activeMarketData.title }}</h6>
                 <p>
-                  {{  activeMarketData.description  }}
+                  {{ activeMarketData.description }}
                 </p>
               </div>
 
@@ -253,24 +412,24 @@
                   <div class="mb-1">
                     <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg" alt="location icon" />
                     {{
-                     activeMarketData.location.city
-                     ? activeMarketData.location.city
-                     : "NIL"
+                    activeMarketData.location.city
+                    ? activeMarketData.location.city
+                    : "NIL"
 
 
                     }},
                     {{
-                     activeMarketData.location.country
-                     ? activeMarketData.location.country
-                     : "NIL"
+                    activeMarketData.location.country
+                    ? activeMarketData.location.country
+                    : "NIL"
 
 
                     }}
                   </div>
                   <div>
-                    {{  activeMarketData.time_updated  }} with
-                    {{  activeMarketData.bids  }}
-                    {{  activeMarketData.bids > 1 ? "bids" : "bid"  }}
+                    {{ activeMarketData.time_updated }} with
+                    {{ activeMarketData.bids }}
+                    {{ activeMarketData.bids > 1 ? "bids" : "bid" }}
                   </div>
                 </div>
                 <div>
@@ -370,7 +529,7 @@ export default {
     handlePageChange(value) {
       this.currentPage = value;
       this.getSavedProject();
-    
+
     },
     getSavedProject() {
       this.$store.commit("updateLoadState", true);
@@ -378,7 +537,7 @@ export default {
         .dispatch("getSavedProject")
         .then((res) => {
           this.projects = res.data.data;
-        
+
           // this.marketLength = res.data.result.total_count;
           this.$store.commit("updateLoadState", false);
         })
@@ -393,7 +552,7 @@ export default {
       this.$store
         .dispatch("deleteSavedProject", id)
         .then(() => {
-        
+
           this.getSavedProject();
           this.makeToast("success", "project removed successfully");
           this.$store.commit("updateLoadState", false);

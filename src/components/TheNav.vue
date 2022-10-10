@@ -7,8 +7,9 @@
         <div class="aux-burger aux-lite-small"><span class="mid-line"></span></div>
       </button>
 
-
-      <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" />
+      <router-link to="/">
+        <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" />
+      </router-link>
 
     </div>
     <div class="menu-section">
