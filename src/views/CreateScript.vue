@@ -103,7 +103,7 @@
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                        <button @click="exportAllScripts()" class="btn btn-export-all">
+                        <button v-if="generatedScript.length > 0" @click="exportAllScripts()" class="btn btn-export-all mb-0">
                           Export All
                         </button>
                       </div>

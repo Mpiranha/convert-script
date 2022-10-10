@@ -94,7 +94,7 @@
                 </div>
                 <div class="col-lg-6 d-none d-lg-block h-100">
                   <div class="d-flex flex-column h-100">
-                    <div class="section-head">
+                    <div class="section-head" v-if="activeScript">
                       <button v-b-modal.modal-add-campaign class="
                           d-flex
                           align-items-center
@@ -137,7 +137,7 @@
                           alt=""
                         />
                       </button> -->
-                      <button @click="copyText" class="btn no-shadow btn-copy">
+                      <button v-if="activeScript" @click="copyText" class="btn no-shadow btn-copy">
                         <img class="foot-icons" src="@/assets/icons/convert-icon/copy.svg" alt="" />
                         Copy to clipboard
                       </button>
