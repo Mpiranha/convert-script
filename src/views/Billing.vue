@@ -21,49 +21,47 @@
 
             <div class="content-wrap pt-4 pb-5">
               <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
-              <table class="table table-custom">
-                <thead>
-                  <tr>
-                    <th>Plan</th>
-                    <th>Word</th>
-                    <th>End At</th>
-                    <th class="text-right">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-if="planDetail.active_plan.length > 0">
-                    <td scope="row"> {{ capitaliseStr(planDetail.active_plan[0].name) }} </td>
-                    <td class="text-left">{{ planDetail.active_plan[0].words.toLocaleString('en-US') }}</td>
-                    <td>{{ formatDate(planDetail.active_plan[0].end_date) }}</td>
+              <div class="responsive-table">
+                <table class="table table-custom">
+                  <thead>
+                    <tr>
+                      <th>Plan</th>
+                      <th>Word</th>
+                      <th>End At</th>
+                      <th class="text-right">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-if="planDetail.active_plan.length > 0">
+                      <td scope="row"> {{ capitaliseStr(planDetail.active_plan[0].name) }} </td>
+                      <td class="text-left">{{ planDetail.active_plan[0].words.toLocaleString('en-US') }}</td>
+                      <td>{{ formatDate(planDetail.active_plan[0].end_date) }}</td>
 
-                    <td><span class="badge badge-success">ACTIVE</span></td>
-                  </tr>
-                  <tr v-for="plan in sortedPlans" :key="plan.plan_id">
-                    <td scope="row">{{ capitaliseStr(plan.name) }}</td>
-                    <td class="text-left">{{ plan.words.toLocaleString('en-US') }}</td>
-                    <td>{{ new Intl.NumberFormat('en-US', {
-                        style: 'currency',
-                        currency: 'USD'
+                      <td><span class="badge badge-success">ACTIVE</span></td>
+                    </tr>
+                    <tr v-for="plan in sortedPlans" :key="plan.plan_id">
+                      <td scope="row">{{ capitaliseStr(plan.name) }}</td>
+                      <td class="text-left">{{ plan.words.toLocaleString('en-US') }}</td>
+                      <td>{{ new Intl.NumberFormat('en-US', {
+                      style: 'currency',
+                      currency: 'USD'
                       }).format(plan.price)
-                    }}/{{ capitaliseStr(plan.billing_cycle) }}</td>
-                    <td>
-                      <router-link class="btn btn-upgrade" :to="{
-                        name: 'UpgradeRedirect',
-                        params: { id: plan.plan_id },
-                      }">
-                        Upgrade
-                      </router-link>
-                    </td>
-                  </tr>
+                      }}/{{ capitaliseStr(plan.billing_cycle) }}</td>
+                      <td>
+                        <router-link class="btn btn-upgrade" :to="{
+                          name: 'UpgradeRedirect',
+                          params: { id: plan.plan_id },
+                        }">
+                          Upgrade
+                        </router-link>
+                      </td>
+                    </tr>
 
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
 
-              <table class="table table-custom">
-                <tbody>
-
-                </tbody>
-              </table>
+            
 
             </div>
 
@@ -162,16 +160,16 @@ export default {
     filteredPlans() {
       return this.planDetail.all_plans.filter((plan) => {
         if (this.isYearly) {
-          return plan.billing_cycle.toLowerCase()  == 'year' || plan.billing_cycle.toLowerCase()  == 'lifetime'
+          return plan.billing_cycle.toLowerCase() == 'year' || plan.billing_cycle.toLowerCase() == 'lifetime'
         } else {
-          return plan.billing_cycle.toLowerCase()  == 'month'
+          return plan.billing_cycle.toLowerCase() == 'month'
         }
       });
     },
     sortedPlans() {
       let newArr = this.filteredPlans;
 
-      return newArr.sort(function(a, b){return a.price - b.price});
+      return newArr.sort(function (a, b) { return a.price - b.price });
     }
   },
   mounted() {
@@ -205,5 +203,19 @@ export default {
 
 .word-usage-stat .progress .progress-bar {
   background-color: #8338ec;
+}
+
+@media screen and (max-width: 480px) {
+  .word-usage-stat {
+    flex-direction: column;
+  }
+
+  .word-usage-stat .progress {
+    width: 100%;
+  }
+
+  .word-usage-stat .label {
+    margin-bottom: 1rem;
+  }
 }
 </style>

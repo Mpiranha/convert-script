@@ -22,21 +22,21 @@
 
             <div class="content-wrap script-custom-height">
               <div class="row h-100">
-                <div class="col-6 no-gutter-right">
-                  <div class="bordered-right h-100">
+                <div class="col-12 col-lg-6 pr-lg-0">
+                  <div class="bordered-right h-100 md-bordered-bottom">
                     <div class="script-form-wrap">
                       <form action="#" method="GET" @submit.prevent="onSubmit">
                         <div class="script-form">
                           <div v-for="(scriptInfo, index) in scriptData" :key="scriptInfo.id" class="form-group">
                             <label for="">{{
-                                scriptInfo.question.label
+                            scriptInfo.question.label
                             }}</label>
                             <textarea v-if="
                               scriptInfo.question.field_type === 'textarea'
                             " :class="{
-  'is-invalid':
-    $v.scriptAnswers.$each[index].answer.$error,
-}" rows="3" cols="10" v-model="scriptAnswers[index].answer"
+                              'is-invalid':
+                                $v.scriptAnswers.$each[index].answer.$error,
+                            }" rows="3" cols="10" v-model="scriptAnswers[index].answer"
                               :placeholder="scriptInfo.question.placeholder" class="form-control"></textarea>
                             <input v-else :type="scriptInfo.question.field_type" name="" :class="{
                               'is-invalid':
@@ -59,14 +59,14 @@
                             <b-form-select class="form-control" v-model="tone" :options="toneOptions"></b-form-select>
                           </b-form-group>
                           <div class="row">
-                            <b-form-group class="col-6" label="Input language (Optional)" label-class="input-label"
-                              v-if="
+                            <b-form-group class="col-12 col-md-6" label="Input language (Optional)"
+                              label-class="input-label" v-if="
                               additional_content.script_type_language.script_type_allowed_tone">
                               <b-form-select class="form-control" v-model="languageInput" :options="languageOptions">
                               </b-form-select>
                             </b-form-group>
-                            <b-form-group class="col-6" label="Output language (Optional)" label-class="input-label"
-                              v-if="
+                            <b-form-group class="col-12 col-md-6" label="Output language (Optional)"
+                              label-class="input-label" v-if="
                                 additional_content.script_type_language
                                   .script_type_allowed_tone
                               ">
@@ -93,7 +93,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-6 no-gutter-left">
+                <div class="col-12 col-lg-6 pl-lg-0">
                   <div class="d-flex flex-column h-100">
                     <div class="section-head bordered-bottom">
                       <div class="section-head-right">
@@ -118,8 +118,8 @@
                             @favorite-clicked="
                               addRemoveScriptFavorite(response.id)
                             " @edit-clicked="
-  openEditModal(response.id, response.text)
-" @export-clicked="exportScript(response.id)">
+                              openEditModal(response.id, response.text)
+                            " @export-clicked="exportScript(response.id)">
                           </script-box>
                         </div>
                       </div>
@@ -664,5 +664,11 @@ export default {
 .title .script-type-icon {
   width: 2.5rem;
   margin-right: 0.7rem;
+}
+
+@media screen and (max-width: 768px) {
+  .script-form-wrap {
+    height: auto !important;
+  }
 }
 </style>

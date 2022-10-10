@@ -1520,6 +1520,11 @@ input:checked+.slider:before {
         width: 100%;
         left: 0;
     }
+
+
+    .script-custom-height {
+        height: auto;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -1572,6 +1577,10 @@ input:checked+.slider:before {
 
     .m-market-list {
         display: block;
+    }
+
+    .md-bordered-bottom {
+        border-bottom: 2px solid #d7d1d1;
     }
 }
 
