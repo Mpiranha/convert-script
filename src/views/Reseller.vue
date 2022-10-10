@@ -45,36 +45,38 @@
               <div v-if="resellers.length === 0" class="no-data-info">
                 No reseller created.
               </div>
-              <table v-else class="table table-custom">
-                <tbody v-if="searchResult.length > 0">
-                  <tr v-for="reseller in searchResult" :key="reseller.id">
-                    <td scope="row">{{  reseller.first_name  }}</td>
-                    <td scope="row">{{  reseller.last_name  }}</td>
-                    <td>{{  reseller.active  }}</td>
-                    <td>{{  reseller.email  }}</td>
-                    <td>{{  formatDate(reseller.created_at)  }}</td>
-                    <td>
-                      <dropdown-tool delete-what="Reseller" @edit-clicked="openEditModal(reseller.id, reseller)"
-                        @delete-proceed="deleteReseller(reseller.id)">
-                      </dropdown-tool>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody v-else-if="resellers && searchKey.length < 1">
-                  <tr v-for="reseller in resellers" :key="reseller.id">
-                    <td scope="row">{{  reseller.first_name  }}</td>
-                    <td scope="row">{{  reseller.last_name  }}</td>
-                    <td>{{  reseller.active  }}</td>
-                    <td>{{  reseller.email  }}</td>
-                    <td>{{  formatDate(reseller.created_at)  }}</td>
-                    <td>
-                      <dropdown-tool delete-what="Reseller" @edit-clicked="openEditModal(reseller.id, reseller)"
-                        @delete-proceed="deleteReseller(reseller.id)">
-                      </dropdown-tool>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div v-else class="responsive-table">
+                <table class="table table-custom">
+                  <tbody v-if="searchResult.length > 0">
+                    <tr v-for="reseller in searchResult" :key="reseller.id">
+                      <td scope="row">{{ reseller.first_name }}</td>
+                      <td scope="row">{{ reseller.last_name }}</td>
+                      <td>{{ reseller.active }}</td>
+                      <td>{{ reseller.email }}</td>
+                      <td>{{ formatDate(reseller.created_at) }}</td>
+                      <td>
+                        <dropdown-tool delete-what="Reseller" @edit-clicked="openEditModal(reseller.id, reseller)"
+                          @delete-proceed="deleteReseller(reseller.id)">
+                        </dropdown-tool>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tbody v-else-if="resellers && searchKey.length < 1">
+                    <tr v-for="reseller in resellers" :key="reseller.id">
+                      <td scope="row">{{ reseller.first_name }}</td>
+                      <td scope="row">{{ reseller.last_name }}</td>
+                      <td>{{ reseller.active }}</td>
+                      <td>{{ reseller.email }}</td>
+                      <td>{{ formatDate(reseller.created_at) }}</td>
+                      <td>
+                        <dropdown-tool delete-what="Reseller" @edit-clicked="openEditModal(reseller.id, reseller)"
+                          @delete-proceed="deleteReseller(reseller.id)">
+                        </dropdown-tool>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
