@@ -6,7 +6,7 @@
         <!-- <span class="navbar-toggler-icon"></span> -->
         <div class="aux-burger aux-lite-small"><span class="mid-line"></span></div>
       </button>
-     
+
 
       <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" />
 
@@ -187,18 +187,22 @@ export default {
     waitForHeadway();
 
     document.addEventListener('mouseup', function (e) {
-     
-        var container = $(".close-click-outside");
 
-      
-        if ($vm.isToggled) {
+      var container = $(".close-click-outside");
 
-            // if the target of the click isn't the container nor a descendant of the container
-            if (!container.is(e.target) && container.has(e.target).length === 0) {
-                //container.removeClass('show-visible');
-                $vm.isToggled = false;
-            }
+
+      if ($vm.isToggled) {
+
+        if ($('.btn-toggle-dropdown').has(e.target).length > 0 || $('.btn-toggle-dropdown').is(e.target)) {
+          return;
         }
+
+        // if the target of the click isn't the container nor a descendant of the container
+        if (!container.is(e.target) && container.has(e.target).length === 0) {
+          //container.removeClass('show-visible');
+          $vm.isToggled = false;
+        }
+      }
     });
   },
 };
@@ -339,7 +343,9 @@ export default {
   border-color: #222534 !important;
 }
 
-.aux-burger[class*="lite"] .mid-line, .aux-burger[class*="lite"]::before, .aux-burger[class*="lite"]::after {
+.aux-burger[class*="lite"] .mid-line,
+.aux-burger[class*="lite"]::before,
+.aux-burger[class*="lite"]::after {
   border-width: 1px;
 }
 
@@ -350,7 +356,9 @@ export default {
   transform-origin: 0 0%;
 }
 
-.aux-burger .mid-line, .aux-burger::before, .aux-burger::after {
+.aux-burger .mid-line,
+.aux-burger::before,
+.aux-burger::after {
   width: 100%;
   content: "";
   display: block;
@@ -364,7 +372,9 @@ export default {
   margin: 8.5px 0;
 }
 
-.aux-burger[class*="lite"] .mid-line, .aux-burger[class*="lite"]::before, .aux-burger[class*="lite"]::after {
+.aux-burger[class*="lite"] .mid-line,
+.aux-burger[class*="lite"]::before,
+.aux-burger[class*="lite"]::after {
   border-width: 1px;
 }
 

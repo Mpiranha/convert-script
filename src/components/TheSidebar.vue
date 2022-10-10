@@ -170,7 +170,7 @@
 </template>
 
 <script>
-  import $ from 'jquery';
+import $ from 'jquery';
 export default {
   name: "Sidebar",
   props: {
@@ -217,19 +217,28 @@ export default {
     });
 
     document.addEventListener('mouseup', function (e) {
-     
-     var container = $(".close-click-outside");
 
-   
-     if ($vm.$store.state.isSidebarOpen) {
+      var container = $(".close-click-outside");
 
-         // if the target of the click isn't the container nor a descendant of the container
-         if (!container.is(e.target) && container.has(e.target).length === 0) {
-             //container.removeClass('show-visible');
-             $vm.$store.commit("updateSidebarState", false);
-         }
-     }
- });
+
+      if ($vm.$store.state.isSidebarOpen) {
+        // if the target of the click isn't the container nor a descendant of the container
+        if (!container.is(e.target) && container.has(e.target).length === 0) {
+          //container.removeClass('show-visible');
+          $vm.$store.commit("updateSidebarState", false);
+        }
+      }
+
+      if ($vm.isShowing) {
+        if ($('.btn-drop').has(e.target).length > 0 || $('.btn-drop').is(e.target)) {
+          return;
+        }
+        if (!$('.user-drop').is(e.target) && $('.user-drop').has(e.target).length === 0) {
+          //container.removeClass('show-visible');
+          $vm.isShowing = false;
+        }
+      }
+    });
   },
 };
 </script>
@@ -373,8 +382,7 @@ export default {
 }
 
 .side-bar.active {
-  min-width: 215px;
-  width: 215px;
+  left: 0;
 }
 
 .btn-dismiss-sidebar {
@@ -412,8 +420,9 @@ export default {
   .side-bar {
     position: fixed;
     z-index: 99;
-    min-width: 0;
-    width: 0;
+    min-width: 215px;
+    width: 215px;
+    left: -215px;
   }
 
   .side-logo {
