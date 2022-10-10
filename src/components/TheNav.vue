@@ -13,7 +13,7 @@
 
     </div>
     <div class="menu-section">
-      <ul class="nav" :class="removeContent ? 'hide-content' : ''">
+      <ul class="nav align-items-center" :class="removeContent ? 'hide-content' : ''">
         <li class="nav-item d-none-mobile">
           <a class="nav-link" v-b-modal.modal-suggest href="#">
             Suggest Feature
@@ -237,9 +237,11 @@ export default {
 }
 
 .menu-section .nav-link .head-icon::before {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: bold;
   color: #000;
+  display: inline-table;
+  vertical-align: bottom;
 }
 
 .desc-message {
@@ -288,8 +290,8 @@ export default {
 
 .dropdown-toggler-icon {
   display: inline-block;
-  width: 1.5em;
-  height: 1.5em;
+  width: 1.7em;
+  height: 1.7em;
   vertical-align: middle;
   content: "";
   background-image: url('https://mdbootstrap.com/img/svg/hamburger8.svg?color=000');
