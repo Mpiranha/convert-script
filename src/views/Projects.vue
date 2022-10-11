@@ -407,7 +407,7 @@
                 </p>
               </div>
 
-              <div class="d-flex align-items-center justify-content-end mt-5">
+              <div class="d-flex flex-wrap align-items-center justify-content-end mt-5">
                 <div class="d-flex location--time flex-column mr-auto">
                   <div class="mb-1">
                     <img class="icon-location" src="@/assets/icons/convert-icon/Marketplace.svg" alt="location icon" />

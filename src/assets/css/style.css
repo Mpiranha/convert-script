@@ -1482,6 +1482,10 @@ input:checked+.slider:before {
     color: #909bae;
 }
 
+.coming-soon-text {
+    
+}
+
 @media screen and (min-width: 1367px) {
     .section-head-left {
         font-size: 0.9rem;
