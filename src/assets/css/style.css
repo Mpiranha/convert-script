@@ -1490,18 +1490,8 @@ input:checked+.slider:before {
     border-radius: 0.5rem;
     position: absolute;
     right: 10px;
-    animation: grow 1s infinite linear;
 }
 
-@keyframes grow {
-    from {
-        transform: scale(1);
-    }
-
-    to {
-        transform: scale(1.1);
-    }
-}
 
 @media screen and (min-width: 1367px) {
     .section-head-left {
