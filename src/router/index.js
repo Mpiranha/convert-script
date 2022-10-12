@@ -628,7 +628,9 @@ router.beforeEach((to, from, next) => {
           }
         }
         
+        console.log("before" + store.state.user);
         if (store.state.user) {
+        console.log("after" + store.state.user);
           if (Boolean(store.state.user.first_name) === false && Boolean(store.state.user.last_name) === false && to.name !== 'Settings') {
             next('/settings');
           }
@@ -636,6 +638,8 @@ router.beforeEach((to, from, next) => {
           setTimeout(function () {
             // console.log(store.state.user.first_name);
             // console.log(store.state.user.last_name);
+
+            console.log("after timer" + store.state.user);
             if (Boolean(store.state.user.first_name) === false && Boolean(store.state.user.last_name) === false && to.name !== 'Settings') {
               next('/settings');
             }
