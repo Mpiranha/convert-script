@@ -37,20 +37,38 @@
               :loading-state="this.$store.state.loading"
             ></loader-modal>
             <div class="dashboard-top">
-              <h6 class="title">Welcome Video</h6>
+              <h6 class="title">Recently Used Templates</h6>
             </div>
 
-            <div class="row mb-4">
-              <div class="col-12">
-                <div class="vid-box">
-                  <iframe
-                    :src="stat.video.link"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen=""
-                    frameborder="0"
-                  ></iframe>
-                </div>
-              </div>
+            <div class="row" v-if="stat.recent_templates">
+              <script-select-type-box
+                v-for="scriptType in stat.recent_templates"
+                :key="scriptType.id"
+                :img-url="
+                  scriptType.icon
+                    ? scriptType.icon
+                    : require(`@/assets/icons/convert-icon/Aweber.svg`)
+                "
+                :link-url="
+                  $route.params.id
+                    ? {
+                        name: 'CampaignCreateScript',
+                        params: {
+                          campaignId: $route.params.id,
+                          id: scriptType.id,
+                        },
+                      }
+                    : {
+                        name: 'CreateScript',
+                        params: { id: scriptType.id },
+                      }
+                "
+                :type-title="scriptType.name"
+                :desc="scriptType.description"
+              ></script-select-type-box>
+            </div>
+            <div class="empty-templates">
+              Most recently Used Template will Show here
             </div>
           </div>
         </div>
@@ -63,6 +81,7 @@
 // @ is an alias to /src
 import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
+import ScriptSelectTypeBox from "@/components/ScriptSelectTypeBox";
 import DashboardBox from "@/components/DashboardBox";
 
 export default {
@@ -71,6 +90,7 @@ export default {
     Sidebar,
     Navbar,
     DashboardBox,
+    ScriptSelectTypeBox
   },
   data() {
     return {
@@ -107,4 +127,12 @@ export default {
 
 
 <style scoped>
+
+.empty-templates {
+  min-height: calc(100vh - 355px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 </style>

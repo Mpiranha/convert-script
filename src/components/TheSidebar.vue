@@ -431,7 +431,7 @@ export default {
 @media screen and (max-width: 1024px) {
   .side-bar {
     position: fixed;
-    z-index: 99;
+    z-index: 9999999;
     min-width: 215px;
     width: 215px;
     left: -215px;

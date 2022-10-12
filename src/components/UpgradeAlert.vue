@@ -1,17 +1,17 @@
 <template>
-<div class="alert-wrap-fixed">
-    <div class="alert-main">
-        <h1>Your access to {{ title }} is restricted.</h1>
-        <div class="desc">
-            Upgrade your account to unlock this feature
-        </div>
-        <div class="d-flex justify-content-center mt-auto">
-            <router-link class="btn btn-upgrade" to="/billing">
-                Upgrade
-            </router-link>
+    <div class="alert-wrap-fixed">
+        <div class="alert-main">
+            <h1>Your access to {{ title }} is restricted.</h1>
+            <div class="desc">
+                Upgrade your account to unlock this feature
+            </div>
+            <div class="d-flex justify-content-center mt-auto">
+                <router-link class="btn btn-upgrade" to="/billing">
+                    Upgrade
+                </router-link>
+            </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
@@ -39,6 +39,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0 0.5rem;
 }
 
 .alert-main {
@@ -65,5 +66,12 @@ export default {
 .alert-main .btn-upgrade {
     font-size: 1.2rem !important;
     padding: 0.35rem 1rem;
+}
+
+@media screen and (max-width: 1024px) {
+    .alert-wrap-fixed {
+        left: 0 !important;
+        width: 100% !important;
+    }
 }
 </style>
