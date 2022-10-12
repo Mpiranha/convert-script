@@ -37,10 +37,10 @@
               :loading-state="this.$store.state.loading"
             ></loader-modal>
             <div class="dashboard-top">
-              <h6 class="title">Recently Used Templates</h6>
+              <h6 class="title">Recently used</h6>
             </div>
 
-            <div class="row" v-if="stat.recent_templates">
+            <div class="row" v-if="stat.recent_templates.length > 0">
               <script-select-type-box
                 v-for="scriptType in stat.recent_templates"
                 :key="scriptType.id"
@@ -95,7 +95,7 @@ export default {
   data() {
     return {
       stat: {
-        video: {},
+        recent_templates: [],
       },
     };
   },
@@ -133,6 +133,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #f6f8f9;
 }
 
 </style>

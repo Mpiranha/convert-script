@@ -122,7 +122,7 @@
                           View
                         </button>
                         <span>|</span>
-                        <button @click="deleteSavedProject(project.freelancer_ad_id.id)" class="btn no-shadow nav-link"
+                        <button @click="deleteSavedProject(project.saved_project_id)" class="btn no-shadow nav-link"
                           href="#">
                           Remove
                         </button>
@@ -212,7 +212,7 @@
                           View
                         </button>
                         <span>|</span>
-                        <button @click="deleteSavedProject(project.freelancer_ad_id.id)" class="btn no-shadow nav-link">
+                        <button @click="deleteSavedProject(project.saved_project_id)" class="btn no-shadow nav-link">
                           Remove
                         </button>
                       </nav>
@@ -267,7 +267,7 @@
                           View
                         </button>
                         <span>|</span>
-                        <button @click="deleteSavedProject(project.freelancer_ad_id.id)" class="btn no-shadow nav-link"
+                        <button @click="deleteSavedProject(project.saved_project_id)" class="btn no-shadow nav-link"
                           href="#">
                           Remove
                         </button>
@@ -344,7 +344,7 @@
                           View
                         </button>
                         <span>|</span>
-                        <button @click="deleteSavedProject(project.freelancer_ad_id.id)" class="btn no-shadow nav-link"
+                        <button @click="deleteSavedProject(project.saved_project_id)" class="btn no-shadow nav-link"
                           href="#">
                           Remove
                         </button>
