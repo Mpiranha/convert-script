@@ -628,10 +628,12 @@ router.beforeEach((to, from, next) => {
           }
         }
         
-        console.log("before" + store.state.user);
-        if (store.state.user) {
-        console.log("after" + store.state.user);
-          if (Boolean(store.state.user.first_name) === false && Boolean(store.state.user.last_name) === false && to.name !== 'Settings') {
+        console.log("before check");
+        console.log(store.getters.user);
+        if (store.getters.user) {
+        console.log("after check");
+        console.log(store.getters.user);
+          if (Boolean(store.getters.user.first_name) === false && Boolean(store.getters.user.last_name) === false && to.name !== 'Settings') {
             next('/settings');
           }
         } else {
@@ -639,8 +641,9 @@ router.beforeEach((to, from, next) => {
             // console.log(store.state.user.first_name);
             // console.log(store.state.user.last_name);
 
-            console.log("after timer" + store.state.user);
-            if (Boolean(store.state.user.first_name) === false && Boolean(store.state.user.last_name) === false && to.name !== 'Settings') {
+            console.log("after timer");
+            console.log(store.getters.user);
+            if (Boolean(store.getters.user.first_name) === false && Boolean(store.getters.user.last_name) === false && to.name !== 'Settings') {
               next('/settings');
             }
           }, 5000);

@@ -5,7 +5,7 @@ export default {
   reset_password_success(state) {
     state.passwordResetStatus = 'success'
   },
-  reset_password_error(state, ) {
+  reset_password_error(state,) {
     state.passwordResetStatus = 'failed'
   },
   auth_request(state) {
@@ -24,7 +24,8 @@ export default {
   get_user_success(state, {
     user
   }) {
-    state.user = user
+    state.user = user;
+    // this.$emit('stored');
   },
   get_all_agencies_success(state, {
     agencies

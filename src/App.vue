@@ -47,9 +47,22 @@ export default {
       supportChat.setAttribute("async", "true");
       document.head.appendChild(supportChat);
     }
+
+
+
+
   },
+  computed: {
+    userFirstName() {
+      return this.$store.state.user.first_name;
+    },
+    userLastName() {
+      return this.$store.state.user.last_name;
+    }
+  }
 };
 </script>
 
 <style src="@/assets/css/style.css">
+
 </style>
