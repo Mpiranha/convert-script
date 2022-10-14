@@ -98,7 +98,7 @@ const routes = [{
     title: 'OneCopy AI Writer - Verify',
     requiresAuth: true,
     adminAuth: false
-  }
+  },
 },
 {
   path: '/',
@@ -108,7 +108,7 @@ const routes = [{
     title: 'OneCopy AI Writer - Dashboard',
     requiresAuth: true,
     adminAuth: false
-  }
+  },
 },
 {
   path: '/tutorial',
@@ -577,7 +577,7 @@ const router = new VueRouter({
 // };
 
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
 
   const loginpath = window.location.hash.split('#')[1];
 
@@ -610,6 +610,7 @@ router.beforeEach((to, from, next) => {
         // if (
         //   )
 
+        let user = await JSON.parse(localStorage.getItem('user'));
         let role = store.state.user.role || JSON.parse(localStorage.getItem('user'));
         if (to.matched.some(record => record.meta.adminAuth)) {
 
@@ -629,24 +630,24 @@ router.beforeEach((to, from, next) => {
         }
         
         console.log("before check");
-        console.log(store.getters.user);
-        if (store.getters.user) {
+        console.log(user);
+        if (user) {
         console.log("after check");
-        console.log(store.getters.user);
-          if (Boolean(store.getters.user.first_name) === false && Boolean(store.getters.user.last_name) === false && to.name !== 'Settings') {
+        console.log(user);
+          if (Boolean(user.first_name) === false && Boolean(user.last_name) === false && to.name !== 'Settings') {
             next('/settings');
           }
         } else {
-          setTimeout(function () {
-            // console.log(store.state.user.first_name);
-            // console.log(store.state.user.last_name);
+          // setTimeout(function () {
+          //   // console.log(user.first_name);
+          //   // console.log(user.last_name);
 
-            console.log("after timer");
-            console.log(store.getters.user);
-            if (Boolean(store.getters.user.first_name) === false && Boolean(store.getters.user.last_name) === false && to.name !== 'Settings') {
-              next('/settings');
-            }
-          }, 5000);
+          //   console.log("after timer");
+          //   console.log(user);
+          //   if (Boolean(user.first_name) === false && Boolean(user.last_name) === false && to.name !== 'Settings') {
+          //     next('/settings');
+          //   }
+          // }, 5000);
         }
 
         // console.log(JSON.parse(localStorage.getItem('user')));
@@ -684,6 +685,7 @@ router.beforeEach((to, from, next) => {
   }
 
 })
+
 
 
 

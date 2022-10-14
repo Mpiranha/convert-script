@@ -183,7 +183,7 @@ export default {
           });
           this.scriptTypes = res.data.data;
 
-          console.log(res.data);
+          // console.log(res.data);
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {

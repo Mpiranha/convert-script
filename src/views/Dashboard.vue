@@ -68,7 +68,7 @@
               ></script-select-type-box>
             </div>
             <div v-else class="empty-templates">
-              Most recently Used Template will Show here
+              Most recently used template will show here
             </div>
           </div>
         </div>
