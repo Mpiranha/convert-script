@@ -587,7 +587,7 @@ router.beforeEach(async (to, from, next) => {
     document.title = nearestWithTitle.meta.title;
   }
 
-  
+
 
   if (to.matched.length > 0) {
 
@@ -610,7 +610,7 @@ router.beforeEach(async (to, from, next) => {
         // if (
         //   )
 
-        let user = await JSON.parse(localStorage.getItem('user'));
+        let user = store.state.user;
         let role = store.state.user.role || JSON.parse(localStorage.getItem('user'));
         if (to.matched.some(record => record.meta.adminAuth)) {
 
@@ -628,26 +628,13 @@ router.beforeEach(async (to, from, next) => {
             return;
           }
         }
-        
-        console.log("before check");
-        console.log(user);
-        if (user) {
-        console.log("after check");
-        console.log(user);
-          if (Boolean(user.first_name) === false && Boolean(user.last_name) === false && to.name !== 'Settings') {
+
+
+        if (Object.keys(user).length > 0) {
+
+          if ((user.first_name == "" || user.last_name == "") && to.name !== 'Settings') {
             next('/settings');
           }
-        } else {
-          // setTimeout(function () {
-          //   // console.log(user.first_name);
-          //   // console.log(user.last_name);
-
-          //   console.log("after timer");
-          //   console.log(user);
-          //   if (Boolean(user.first_name) === false && Boolean(user.last_name) === false && to.name !== 'Settings') {
-          //     next('/settings');
-          //   }
-          // }, 5000);
         }
 
         // console.log(JSON.parse(localStorage.getItem('user')));

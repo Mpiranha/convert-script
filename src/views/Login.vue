@@ -101,6 +101,7 @@ export default {
     login: function (event) {
       event.preventDefault();
       this.submitted = true;
+      
 
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -112,12 +113,22 @@ export default {
         .dispatch("login", this.user)
         .then(() => {
           this.error = null;
-          this.$store.dispatch("getUser");
-          this.$router.push(this.$route.query.from || "/").catch(() => {
-            // console.log(error);
-          });
+          this.$store.dispatch("getUser").then((res) => {
+            console.log(res.data.data);
 
-          //console.log(res.data);
+            if (res.data.data.first_name == "" || res.data.data.last_name == "") {
+              this.$router.push("/settings");
+
+              return;
+            }
+          });
+          
+         
+        
+            this.$router.push(this.$route.query.from || "/").catch(() => {
+              
+            });
+         
         })
         .catch((errors) => {
           // console.log(error);
