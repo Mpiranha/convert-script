@@ -1533,9 +1533,9 @@ input:checked+.slider:before {
     }
 
 
-    .script-custom-height {
+    /* .script-custom-height {
         height: auto;
-    }
+    } */
 }
 
 @media screen and (max-width: 768px) {
