@@ -22,7 +22,8 @@
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link class="nav-link position-relative" :class="currentActive == 'long-copy' ? 'active' : ''" to="" :disabled="true">
+        <router-link class="nav-link position-relative" :class="currentActive == 'long-copy' ? 'active' : ''" to=""
+          :disabled="true">
           <img class="main-icon" src="@/assets/icons/convert-icon/long-form.svg" alt="" />
           <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/New Copy Active.svg" alt="" />
           <span class="nav-text"> Long-Form </span>
@@ -136,7 +137,7 @@
           <div class="btn-drop" to="#" @click="toggleShow()" data-target=".user-drop">
             <div class="user-img">{{ getFirstLetter(userName) }}</div>
             <div class="name">{{ userName }}</div>
-            <div v-if="isShowing" class="user-drop">
+            <div class="user-drop" :class="isShowing ? 'active' : ''">
               <div class="setup-drop-inner">
                 <ul class="nav flex-column">
                   <li class="nav-item">
@@ -362,6 +363,11 @@ export default {
 .user-drop {
   bottom: 57px;
   right: 13px;
+  display: none;
+}
+
+.user-drop.active {
+  display: block;
 }
 
 .user-info .user-img {
