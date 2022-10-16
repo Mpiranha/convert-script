@@ -38,19 +38,6 @@ Vue.component('loader-modal', Loader)
 
 Vue.config.productionTip = false
 
-// Check that service workers are supported
-// if ('serviceWorker' in navigator) {
-//   // Use the window load event to keep the page load performant
-//   window.addEventListener('load', () => {
-//     navigator.serviceWorker.register('/sw.js').then(
-//       () => {
-//         // console.log('Service worker registration succeeded:', registration);
-//       }, /*catch*/(error) => {
-//         console.error(`Service worker registration failed: ${error}`);
-//       });
-//   });
-// }
-
 new Vue({
   router,
   store,

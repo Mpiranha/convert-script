@@ -97,7 +97,6 @@ body {
 
 .content-wrap {
     background-color: #ffffff;
-    /* min-height: calc(100% - 70px); */
     border-radius: 0.3rem;
     box-shadow: 2px 3px 4px #d2cccc;
     margin-bottom: 2rem;
@@ -167,16 +166,6 @@ body {
     color: #5f6f7f !important;
 }
 
-/* .verilead-table {
-    border-spacing: 0 0.8rem;
-    border-collapse: separate;
-} */
-
-/* .drop-toogle-btn {
-    background-color: transparent !important;
-    color: #000;
-    border: none;
-} */
 
 .drop-link {
     text-decoration: none !important;
@@ -717,7 +706,6 @@ input:checked+.slider:before {
     height: 375px;
     border-radius: 0.6rem;
     box-shadow: 0px 3px 6px #99949482;
-    /* padding: 0.7rem 0.7rem; */
 }
 
 .vid-box iframe {
@@ -1085,7 +1073,6 @@ input:checked+.slider:before {
 .content-display {
     font-size: 1.1rem;
     padding: 1.3rem 1.5rem 0 0;
-    /* text-align: justify; */
     text-align: left;
     line-height: 1.6;
     min-height: 100px;
@@ -1116,12 +1103,6 @@ input:checked+.slider:before {
     border-radius: 15px;
 }
 
-/* ::-webkit-scrollbar-button {
-   background-color: #8338ec;
-   display: block;
-   background-size: 10px;
-   background-repeat: no-repeat;
-} */
 
 .no-select {
     color: #b3abab;
@@ -1403,7 +1384,6 @@ input:checked+.slider:before {
 .select-script-forms .search-form {
     margin: 0;
     min-width: 250px;
-    /* margin-left: 1rem; */
     margin-bottom: 1rem;
 }
 
@@ -1533,9 +1513,6 @@ input:checked+.slider:before {
     }
 
 
-    /* .script-custom-height {
-        height: auto;
-    } */
 }
 
 @media screen and (max-width: 768px) {

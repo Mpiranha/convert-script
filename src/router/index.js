@@ -566,59 +566,23 @@ const router = new VueRouter({
   routes
 })
 
-// const parseJwt = (token) => {
-//   var base64Url = token.split('.')[1];
-//   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-//   var jsonPayload = decodeURIComponent(Buffer.from(base64, "base64").toString("ascii").split("").map(function (c) {
-//     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-//   }).join(''));
-
-//   return JSON.parse(jsonPayload);
-// };
-
-
 router.beforeEach(async (to, from, next) => {
-
   const loginpath = window.location.hash.split('#')[1];
-
   const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
-
   if (nearestWithTitle) {
     document.title = nearestWithTitle.meta.title;
   }
-
-
-
   if (to.matched.length > 0) {
-
     if (to.matched.some(record => record.meta.requiresAuth)) {
-
-
       if (store.getters.isAuthenticated) {
-        // console.log('authenticated');
-        // if (localStorage.token) {
-        //   const jwtPayload = parseJwt(localStorage.token);
-        //   if (jwtPayload.exp < Date.now() / 1000) {
-        //     // token expired
-        //     store.dispatch("logout");
-        //     next("/login");
-
-        //     return;
-        //   }
-        // }
-
-        // if (
-        //   )
-
         let user = store.state.user;
-        let role = store.state.user.role || JSON.parse(localStorage.getItem('user'));
+        let role = user.role || JSON.parse(localStorage.getItem('user'));
         if (to.matched.some(record => record.meta.adminAuth)) {
 
           if (role.toLowerCase() === "admin") {
             next();
             return;
           } else {
-
             next({
               name: "NotFound",
               query: {
@@ -628,26 +592,12 @@ router.beforeEach(async (to, from, next) => {
             return;
           }
         }
-
-
+        // Check if user has first and last name
         if (Object.keys(user).length > 0) {
-
           if ((user.first_name == "" || user.last_name == "") && to.name !== 'Settings') {
             next('/settings');
           }
         }
-
-        // console.log(JSON.parse(localStorage.getItem('user')));
-        // if (Boolean(store.state.user.first_name) == false && Boolean(store.state.user.last_name) == false &&  to.name !== 'Settings') {
-        //   // next('/settings');
-        //   // next({
-        //   //   path: '/settings'
-        //   // })
-        //   //return;
-        //   next('/settings');
-        //   //console.log("yeah");
-        // }
-
         next();
         return;
       } else {
@@ -670,7 +620,6 @@ router.beforeEach(async (to, from, next) => {
       }
     });
   }
-
 })
 
 
