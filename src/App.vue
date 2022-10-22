@@ -23,10 +23,6 @@ export default {
   //     this.$store.dispatch("getUser");
   //   }
   // },
-  beforeRouteEnter(to, from, next) {
-    console.log(to, from, next);
-   
-  },
   mounted: function () {
     if (!this.$route.meta.adminAuth) {
       let supportChat = document.createElement("script");

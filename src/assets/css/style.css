@@ -1322,7 +1322,7 @@ input:checked+.slider:before {
 }
 
 .control-height {
-    height: calc(100% - 59px);
+    height: calc(100% - 81px);
     overflow-y: auto;
 }
 
