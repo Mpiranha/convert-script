@@ -594,7 +594,7 @@ router.beforeEach(async (to, from, next) => {
         }
         // Check if user has first and last name
         if (Object.keys(user).length > 0) {
-          if ((user.first_name == "" || user.last_name == "") && to.name !== 'Settings') {
+          if ((Boolean(user.first_name) == false || Boolean(user.last_name) == false) && to.name !== 'Settings') {
             next('/settings');
           }
         }
