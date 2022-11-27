@@ -101,7 +101,7 @@ export default {
     login: function (event) {
       event.preventDefault();
       this.submitted = true;
-      
+
 
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -114,21 +114,26 @@ export default {
         .then(() => {
           this.error = null;
           this.$store.dispatch("getUser").then((res) => {
-            console.log(res.data.data);
+            // console.log(res.data.data);
 
-            if (res.data.data.first_name == "" || res.data.data.last_name == "") {
+            // console.log('First Name');
+            // console.log(Boolean(res.data.data.first_name));
+            // console.log('Last Name');
+            // console.log(Boolean(res.data.data.last_name));
+
+            if (Boolean(res.data.data.first_name) == false || Boolean(res.data.data.last_name) == false) {
               this.$router.push("/settings");
 
               return;
             }
           });
-          
-         
-        
-            this.$router.push(this.$route.query.from || "/").catch(() => {
-              
-            });
-         
+
+
+
+          this.$router.push(this.$route.query.from || "/").catch(() => {
+
+          });
+
         })
         .catch((errors) => {
           // console.log(error);
