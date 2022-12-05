@@ -12,7 +12,7 @@
         <p class="title">
           {{ title }}
         </p>
-        <a :href="link" target="_blank">
+        <!-- <a :href="link" target="_blank">
           Watch video
           <span>
             <img
@@ -21,7 +21,7 @@
               alt=""
             />
           </span>
-        </a>
+        </a> -->
       </div>
     </div>
   </div>
