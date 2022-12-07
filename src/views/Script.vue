@@ -529,7 +529,7 @@ export default {
       //   editStatus: true,
       //   id: id,
       // });
-      this.content = data;
+      this.content = this.formatScript(data);
       // this.editId = id;
       // this.campaignName = data;
     },

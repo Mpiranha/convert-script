@@ -139,8 +139,7 @@
 
     <b-modal :hide-header="true" id="modal-edit-script" centered size="md" :hide-footer="true"
       dialog-class="control-modal-width" content-class="modal-main">
-      <quill-editor ref="myQuillEditor" class="mb-3" v-model="content" :options="editorOption"
-        @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+      <quill-editor ref="myQuillEditor" class="mb-3" v-model="content" :options="editorOption" />
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-edit-script')" class="close-modal">Go back</b-button>
@@ -455,7 +454,7 @@ export default {
         editStatus: true,
         id: id,
       });
-      this.content = data;
+      this.content = this.formatScript(data);
       // this.editId = id;
       // this.campaignName = data;
     },
