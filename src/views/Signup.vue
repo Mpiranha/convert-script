@@ -106,6 +106,11 @@ export default {
       error: null,
     };
   },
+  mounted: function () {
+    if (this.$store.getters.isAuthenticated) {
+      this.$router.push("/");
+    }
+  },
   validations: {
     userData: {
       first_name: {
@@ -184,4 +189,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>>
