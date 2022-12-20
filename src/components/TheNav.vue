@@ -1,15 +1,27 @@
 <template>
   <div class="content-head" :class="removeContent ? 'fix-height' : ''">
-    <div class="sidebar-toggler">
+    <div class="sidebar-toggler" :class="toggleClass">
       <button @click="openSidebar" class="navbar-toggler" type="button" aria-expanded="false"
         aria-label="Toggle navigation">
         <!-- <span class="navbar-toggler-icon"></span> -->
         <div class="aux-burger aux-lite-small"><span class="mid-line"></span></div>
       </button>
 
-      <router-link to="/">
+      <router-link to="/" :class="logoLinkClass">
         <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" />
       </router-link>
+      <div class="
+      dashboard-top
+      d-flex
+      justify-content-between
+      align-items-center
+      my-0
+    ">
+        <h6 class="title mb-0">
+          <img class="script-type-icon" :src="scriptTypeIcon" alt="" />
+          {{ scriptTypeName }}
+        </h6>
+      </div>
 
     </div>
     <div class="menu-section">
@@ -97,6 +109,10 @@ export default {
     // msg: String
     currentActive: String,
     removeContent: Boolean,
+    toggleClass: String,
+    scriptTypeIcon: String,
+    scriptTypeName: String,
+    logoLinkClass: String
   },
   validations: {
     suggestion: {

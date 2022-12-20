@@ -1,10 +1,10 @@
 <template>
   <div class="side-bar close-click-outside" :class="$store.state.isSidebarOpen ? 'active' : ''">
-    <button @click="dismissSidebar" class="btn btn-dismiss-sidebar">
+    <button @click="dismissSidebar" class="btn btn-dismiss-sidebar" :class="dismissClass">
       <img src="@/assets/icons/sidebar/delete.png" alt="dismiss icon" />
     </button>
     <router-link to="/">
-      <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" />
+      <img class="side-logo" :class="logoClass" src="@/assets/image/Logo.svg" alt="logo" />
     </router-link>
     <nav class="nav flex-column nav-wrap">
       <li class="nav-item">
@@ -189,6 +189,8 @@ export default {
   props: {
     // msg: String
     currentActive: String,
+    logoClass: String,
+    dismissClass: String,
     userName: {
       type: String,
     },

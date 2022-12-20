@@ -1,13 +1,15 @@
 <template>
   <div class="container-fluid px-0">
-    <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
+    <loader-modal :loading-state="this.$store.state.loading" class="fullscreen-loader"></loader-modal>
     <div class="flex-main-wrap">
-      <sidebar :user-name="this.$store.state.user.first_name" current-active="new-copy"></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name" logo-class="permanent-logo"
+        dismiss-class="permanent-dismiss" current-active="new-copy" class="always-hidden"></sidebar>
       <div class="content-section">
-        <navbar></navbar>
+        <navbar :script-type-icon="scriptType.icon" :script-type-name="scriptType.name" logo-link-class="hide-logo"
+          toggle-class="permanent-toggler"></navbar>
         <div class="scroll-content">
-          <div class="container">
-            <div class="
+          <div class="container-fluid pt-4">
+            <!-- <div class="
                 dashboard-top
                 d-flex
                 justify-content-between
@@ -18,26 +20,26 @@
                 <img class="script-type-icon" :src="scriptType.icon" alt="" />
                 {{ scriptType.name }}
               </h6>
-            </div>
+            </div> -->
 
             <div class="content-wrap script-custom-height">
               <div class="row h-100">
-                <div class="col-12 col-lg-6 pr-lg-0">
+                <div class="col-12 col-lg-4 pr-lg-0">
                   <div class="bordered-right h-100 md-bordered-bottom">
                     <div class="script-form-wrap">
                       <form action="#" method="GET" @submit.prevent="onSubmit">
                         <div class="script-form">
                           <div v-for="(scriptInfo, index) in scriptData" :key="scriptInfo.id" class="form-group">
                             <label for="">{{
-                            scriptInfo.question.label
+                                scriptInfo.question.label
                             }}</label>
                             <textarea v-if="
                               scriptInfo.question.field_type === 'textarea'
                             " :class="{
-                              'is-invalid':
-                                $v.scriptAnswers.$each[index].answer.$error,
-                            }" rows="3" cols="10" v-model="scriptAnswers[index].answer"
-                              :placeholder="scriptInfo.question.placeholder" class="form-control"></textarea>
+  'is-invalid':
+    $v.scriptAnswers.$each[index].answer.$error,
+}" rows="3" cols="10" v-model="scriptAnswers[index].answer" :placeholder="scriptInfo.question.placeholder"
+                              class="form-control"></textarea>
                             <input v-else :type="scriptInfo.question.field_type" name="" :class="{
                               'is-invalid':
                                 $v.scriptAnswers.$each[index].answer.$error,
@@ -93,7 +95,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-12 col-lg-6 pl-lg-0">
+                <div class="col-12 col-lg-8 pl-lg-0">
                   <div class="d-flex flex-column h-100">
                     <div class="section-head bordered-bottom">
                       <div class="section-head-right">
@@ -103,7 +105,8 @@
                         <option value=""></option>
                         <option value=""></option>
                       </select> -->
-                        <button v-if="generatedScript.length > 0" @click="exportAllScripts()" class="btn btn-export-all mb-0">
+                        <button v-if="generatedScript.length > 0" @click="exportAllScripts()"
+                          class="btn btn-export-all mb-0">
                           Export All
                         </button>
                       </div>
@@ -111,15 +114,16 @@
                     <div class="control-overflow">
                       <div v-if="generatedScript.length > 0">
                         <div v-for="script in generatedScript" :key="script.id">
-                          <script-box @save-clicked="
-                            saveCampaign(response.id, response.text)
-                          " v-for="response in script.scriptResponses" :key="response.id"
+                          <script-box @script-edited="(newText) => { response.text = newText }"
+                            :content="formatScript(response.text)" :id="response.id" @save-clicked="
+                              saveCampaign(response.id, response.text)
+                            " v-for="response in script.scriptResponses" :key="response.id"
                             :script-content="formatScript(response.text)" :script-content-raw="response.text"
                             @favorite-clicked="
                               addRemoveScriptFavorite(response.id)
                             " @edit-clicked="
-                              openEditModal(response.id, response.text)
-                            " @export-clicked="exportScript(response.id)">
+  openEditModal(response.id, response.text)
+" @export-clicked="exportScript(response.id)">
                           </script-box>
                         </div>
                       </div>
@@ -239,6 +243,7 @@ export default {
     },
   },
   methods: {
+
     saveToCampaign() {
       this.$bvModal.hide("modal-add-campaign");
       this.editScript(
@@ -416,7 +421,7 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    editScript(id, campaignId, txt) {
+    editScript(id, txt, campaignId) {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-edit-script");
       this.$store
@@ -666,9 +671,50 @@ export default {
   margin-right: 0.7rem;
 }
 
+.always-hidden {
+  position: fixed;
+  z-index: 9999999;
+  min-width: 215px;
+  width: 215px;
+  left: -215px;
+}
+
+.permanent-toggler {
+  display: flex !important;
+}
+
+.permanent-logo {
+  display: inline !important;
+}
+
+.permanent-dismiss {
+  display: inline-block !important;
+}
+
+.hide-logo {
+  display: none;
+}
+
+.fullscreen-loader {
+  top: 0;
+  width: 100%;
+  left: 0;
+  height: 100%;
+}
+
 @media screen and (max-width: 768px) {
   .script-form-wrap {
     height: auto !important;
   }
+}
+</style>
+
+<style scoped>
+.script-custom-height {
+  height: 80vh;
+}
+
+.control-overflow {
+  height: 72vh;
 }
 </style>
