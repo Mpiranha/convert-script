@@ -696,10 +696,10 @@ export default {
 }
 
 .fullscreen-loader {
-  top: 0;
-  width: 100%;
-  left: 0;
-  height: 100%;
+  top: 0 !important;
+  width: 100% !important;
+  left: 0 !important;
+  height: 100% !important;
 }
 
 @media screen and (max-width: 768px) {
