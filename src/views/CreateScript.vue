@@ -8,7 +8,7 @@
         <navbar :script-type-icon="scriptType.icon" :script-type-name="scriptType.name" logo-link-class="hide-logo"
           toggle-class="permanent-toggler"></navbar>
         <div class="scroll-content">
-          <div class="container-fluid pt-4">
+          <div class="container-fluid pt-5">
             <!-- <div class="
                 dashboard-top
                 d-flex
@@ -26,7 +26,7 @@
               <div class="row h-100">
                 <div class="col-12 col-lg-4 pr-lg-0">
                   <div class="bordered-right h-100 md-bordered-bottom">
-                    <div class="script-form-wrap">
+                    <div class="script-form-wrap pb-0">
                       <form action="#" method="GET" @submit.prevent="onSubmit">
                         <div class="script-form">
                           <div v-for="(scriptInfo, index) in scriptData" :key="scriptInfo.id" class="form-group">
