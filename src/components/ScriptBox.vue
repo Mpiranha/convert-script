@@ -1,16 +1,19 @@
 <template>
   <div v-if="isEdit">
+    
     <div class="editor-outter">
-      <quill-editor ref="myQuillEditor" class="mb-3" v-model="content" :options="editorOption">
+      <loader-modal :loading-state="loading" class="script-loader"></loader-modal>
+      <quill-editor ref="myQuillEditor" class="mb-3 script-editor" v-model="content" :options="editorOption">
 
       </quill-editor>
       <div class="d-flex justify-content-end px-3 py-4">
-        <b-button class="close-modal" @click="closeEdit">Go back</b-button>
+        <b-button class="close-modal" @click="closeEdit">Close</b-button>
         <b-button class="save-modal" @click="editScript(id, content)">Save</b-button>
       </div>
     </div>
   </div>
   <div v-else class="script-content-wrap">
+   
     <div class="box-head">
       <div class="left-section">
         <button @click="saveAction" class="d-flex align-items-center no-shadow btn btn-save-to">
@@ -50,15 +53,15 @@
 
 <script>
 import alertMixin from "@/mixins/alertMixin";
-import Quill from 'quill';
+// import Quill from 'quill';
 import { quillEditor } from "vue-quill-editor";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
-import * as Emoji from "quill-emoji";
-import 'quill-emoji/dist/quill-emoji.css'
+// import * as Emoji from "quill-emoji";
+// import 'quill-emoji/dist/quill-emoji.css'
 
-Quill.register("modules/emoji", Emoji);
+// Quill.register("modules/emoji", Emoji);
 export default {
   name: "ScriptBox",
   mixins: [alertMixin],
@@ -97,6 +100,7 @@ export default {
     return {
       isFavourite: false,
       isEdit: false,
+      loading: false,
       content: '',
       editorOption: {
         // Some Quill options...
@@ -104,20 +108,12 @@ export default {
         modules: {
           toolbar: {
             container: [
-              [{ header: [1, 2, 3, 4, 5, 6, false] }],
-              ["bold", "italic", "underline", "strike"], // toggled buttons
+              ["bold", "italic", "underline"], // toggled buttons
               [{ list: "ordered" }, { list: "bullet" }],
-              [{ script: "sub" }, { script: "super" }], // superscript/subscript
-              [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-              [{ align: [] }],
-              ["link", "video", "image"],
+              [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
 
-              ["clean"],
             ],
           },
-          "emoji-toolbar": true,
-          "emoji-textarea": true,
-          "emoji-shortname": true,
         },
       },
     };
@@ -128,7 +124,7 @@ export default {
       this.isEdit = false;
     },
     editScript(id, txt, campaignId) {
-      this.$store.commit("updateLoadState", true);
+      this.loading = true;
 
       this.$store
         .dispatch("editScript", {
@@ -149,12 +145,12 @@ export default {
             this.$emit("script-edited", this.content);
             this.makeToast("success", "Script edited successfully");
           }
-          this.$store.commit("updateLoadState", false);
+          this.loading = false;
         })
         .catch((error) => {
           console.log(error);
           this.error = error;
-          this.$store.commit("updateLoadState", false);
+          this.loading = false;
           this.makeToast("danger", this.error);
           // this.error = error;
         });
@@ -205,6 +201,7 @@ export default {
 
 <style>
 .editor-outter {
+  position: relative;
   border-bottom: 1px solid #ccc;
   border-right: 1px solid #ccc;
   border-left: 1px solid #ccc;
@@ -215,10 +212,27 @@ export default {
   border-right: 0;
   border-left: 0;
 }
+
+.script-loader {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+}
+
+.script-loader .loader-img {
+  width: 2rem;
+}
+
+.script-editor .ql-container {
+  height: 200px;
+}
 </style>
 
 <style scoped>
 .script-content-wrap {
+  position: relative;
   color: #5f6f7f;
   /* border-top: 2px solid #f6f8f9; */
   /* border-left: 2px solid #f6f8f9; */
