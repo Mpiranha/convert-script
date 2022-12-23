@@ -715,6 +715,6 @@ export default {
 }
 
 .control-overflow {
-  height: 72vh;
+  height: 70vh;
 }
 </style>

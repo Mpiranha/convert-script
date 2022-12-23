@@ -1,9 +1,9 @@
 <template>
   <div v-if="isEdit">
-    
+
     <div class="editor-outter">
       <loader-modal :loading-state="loading" class="script-loader"></loader-modal>
-      <quill-editor ref="myQuillEditor" class="mb-3 script-editor" v-model="content" :options="editorOption">
+      <quill-editor ref="myQuillEditor" class="mb-3 script-editor" v-model="content" :options="editorOption" @ready="onReadyFocus">
 
       </quill-editor>
       <div class="d-flex justify-content-end px-3 py-4">
@@ -13,7 +13,7 @@
     </div>
   </div>
   <div v-else class="script-content-wrap">
-   
+
     <div class="box-head">
       <div class="left-section">
         <button @click="saveAction" class="d-flex align-items-center no-shadow btn btn-save-to">
@@ -39,10 +39,10 @@
 
     <div class="script-footer">
       <button @click="toggleEdit" class="btn no-shadow btn-share">
-        <img class="foot-icons" src="@/assets/icons/convert-icon/draw.svg" alt="" />
+        <img class="foot-icons" src="@/assets/icons/convert-icon/draw.svg" alt="edit icon" />
       </button>
       <button @click="copyText" class="btn no-shadow ml-auto btn-copy">
-        <img class="foot-icons" src="@/assets/icons/convert-icon/copy.svg" alt="" />
+        <img class="foot-icons" src="@/assets/icons/convert-icon/copy.svg" alt="copy icon" />
       </button>
       <textarea ref="input" type="hidden" id="text--copy" class="text--copy"
         :value="scriptContentRaw ? scriptContentRaw : ''"></textarea>
@@ -194,6 +194,9 @@ export default {
     toggleEdit() {
       this.isEdit = true;
       this.content = this.scriptContent;
+    },
+    onReadyFocus(editor) {
+      editor.container.scrollIntoView();
     }
   },
 };
@@ -219,10 +222,11 @@ export default {
   width: 100% !important;
   height: 100% !important;
   top: 0 !important;
+  background: #fff !important;
 }
 
 .script-loader .loader-img {
-  width: 2rem;
+  width: 2rem !important;
 }
 
 .script-editor .ql-container {
