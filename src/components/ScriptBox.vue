@@ -3,10 +3,11 @@
 
     <div class="editor-outter">
       <loader-modal :loading-state="loading" class="script-loader"></loader-modal>
-      <quill-editor ref="myQuillEditor" class="mb-3 script-editor" v-model="content" :options="editorOption" @ready="onReadyFocus">
+      <quill-editor ref="myQuillEditor" class="mb-3 script-editor" v-model="content" :options="editorOption"
+        @ready="onReadyFocus">
 
       </quill-editor>
-      <div class="d-flex justify-content-end px-3 py-4">
+      <div class="d-flex justify-content-end px-3 pt-1 pb-4">
         <b-button class="close-modal" @click="closeEdit">Close</b-button>
         <b-button class="save-modal" @click="editScript(id, content)">Save</b-button>
       </div>
@@ -205,9 +206,13 @@ export default {
 <style>
 .editor-outter {
   position: relative;
-  border-bottom: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-  border-left: 1px solid #ccc;
+  border-bottom: 1px solid #f6f6f6;
+  border-right: 1px solid #f6f6f6;
+  border-left: 1px solid #f6f6f6;
+}
+
+.ql-toolbar.ql-snow {
+  border: 1px solid #f6f6f6;
 }
 
 .ql-container.ql-snow {
@@ -230,7 +235,7 @@ export default {
 }
 
 .script-editor .ql-container {
-  height: 200px;
+  height: 200px !important;
 }
 </style>
 
