@@ -74,6 +74,11 @@ body {
     position: relative;
 }
 
+.script-content-fs {
+    padding: 0 0rem !important;
+}
+
+
 .btn-create {
     color: #fff !important;
     background-color: #8338ec !important;
@@ -1125,7 +1130,7 @@ input:checked+.slider:before {
 }
 
 .script-custom-height {
-    height: 73vh;
+    height: 90vh !important;
     overflow: hidden;
 }
 
@@ -1540,7 +1545,7 @@ input:checked+.slider:before {
     .scroll-content {
         height: initial;
         overflow-y: initial;
-        margin-top: 100px;
+        margin-top: 60px;
     }
 
     .content-head {
@@ -1556,7 +1561,7 @@ input:checked+.slider:before {
     }
 
     .script-custom-height {
-        height: auto;
+        height: auto !important;
     }
 
     .table-market {

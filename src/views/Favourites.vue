@@ -57,14 +57,14 @@
                               </div>
                             </td>
                             <td>
-                              {{ abbrScript(script.response.text) }}
+                              {{ removeTags(abbrScript(script.response.text)) }}
                             </td>
                             <td>
                               <div class="script-type">
                                 {{
-                                script.response.script_type
-                                ? script.response.script_type
-                                : "NIL"
+                                    script.response.script_type
+                                      ? script.response.script_type
+                                      : "NIL"
                                 }}
                               </div>
                             </td>
@@ -95,13 +95,13 @@
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
                                 {{
-                                script.response.script_type_name
-                                ? script.response.script_type_name
-                                : "NIL"
+                                    script.response.script_type_name
+                                      ? script.response.script_type_name
+                                      : "NIL"
                                 }}
                               </div>
                               <div class="script-content">
-                                {{ abbrScript(script.response.text) }}
+                                {{ removeTags(abbrScript(script.response.text)) }}
                               </div>
                             </td>
 
@@ -432,6 +432,17 @@ export default {
     },
     abbrScript(text) {
       return text.slice(0, 125) + "...";
+    },
+    removeTags(str) {
+      if ((str === null) || (str === ''))
+        return false;
+      else
+        str = str.toString();
+
+      // Regular expression to identify HTML tags in 
+      // the input string. Replacing the identified 
+      // HTML tag with a null string.
+      return str.replace(/(<([^>]+)>)/ig, '');
     },
     exportScript(id) {
       this.$store.commit("updateLoadState", true);

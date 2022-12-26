@@ -61,7 +61,7 @@
                                 {{ script.script_type_name }}
                               </div>
                               <div class="script-content">
-                                {{ abbrScript(script.text) }}
+                                {{ removeTags(abbrScript(script.text)) }}
                               </div>
                             </td>
                             <td class="text-right">
@@ -80,7 +80,7 @@
                                 {{ script.script_type_name }}
                               </div>
                               <div class="script-content">
-                                {{ abbrScript(script.text) }}
+                                {{ removeTags(abbrScript(script.text)) }}
                               </div>
                             </td>
                             <td class="text-right">
@@ -321,6 +321,17 @@ export default {
     },
     abbrScript(text) {
       return text.slice(0, 125) + "...";
+    },
+    removeTags(str) {
+      if ((str === null) || (str === ''))
+        return false;
+      else
+        str = str.toString();
+
+      // Regular expression to identify HTML tags in 
+      // the input string. Replacing the identified 
+      // HTML tag with a null string.
+      return str.replace(/(<([^>]+)>)/ig, '');
     },
     exportAllScripts(id) {
       this.$store.commit("updateLoadState", true);

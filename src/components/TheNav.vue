@@ -412,12 +412,27 @@ export default {
 }
 
 @media screen and (max-width: 480px) {
+
+
+
   .d-none-mobile {
     display: none;
   }
 
   .mobile-toggler-right {
     display: inline-block;
+  }
+}
+</style>
+
+<style scoped>
+@media screen and (max-width: 520px) {
+  .title .script-type-icon {
+    width: 1.3rem !important;
+  }
+
+  .dashboard-top .title {
+    font-size: 0.8rem !important;
   }
 }
 </style>
