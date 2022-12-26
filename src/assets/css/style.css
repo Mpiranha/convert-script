@@ -1130,7 +1130,7 @@ input:checked+.slider:before {
 }
 
 .script-custom-height {
-    height: 90vh !important;
+    height: 89vh !important;
     overflow: hidden;
 }
 
