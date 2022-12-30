@@ -1,30 +1,24 @@
 <template>
   <div class="container-fluid px-0">
-    <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
+    <loader-modal :loading-state="this.$store.state.loading" class="fullscreen-loader"></loader-modal>
     <div class="flex-main-wrap">
-      <sidebar :user-name="this.$store.state.user.first_name" current-active="script"></sidebar>
+      <sidebar class="always-hidden" dismiss-class="permanent-dismiss" :user-name="this.$store.state.user.first_name"
+        current-active="script"></sidebar>
       <div class="content-section">
-        <navbar></navbar>
-        <div class="scroll-content">
-          <div class="container">
-            <div class="
-                dashboard-top
-                d-flex
-                justify-content-between
-                align-items-center
-                mb-5
-              ">
-              <h6 class="title">All Copy</h6>
-
-              <router-link class="btn btn-create" to="/script/select">
-                <span>+</span>
-                New Copy
-              </router-link>
-            </div>
+        <navbar script-type-name="All Copy" logo-link-class="hide-logo" toggle-class="permanent-toggler">
+          <template v-slot:create-btn>
+            <router-link class="btn btn-create mr-2" to="/script/select">
+              <span>+</span>
+              New Copy
+            </router-link>
+          </template>
+        </navbar>
+        <div class="scroll-content script-content-fs">
+          <div class="container-fluid pt-3">
 
             <div class="content-wrap script-custom-height">
               <div class="row h-100">
-                <div class="col-12 col-lg-6 h-100 bordered-right pr-lg-0">
+                <div class="col-12 col-lg-4 h-100 bordered-right pr-lg-0">
                   <div class="section-head">
                     <div class="section-head-left">
                       <img class="section-head-icon" src="@/assets/icons/convert-icon/All script.svg" alt="" />
@@ -63,8 +57,8 @@
 
                             <td class="text-right">
                               <dropdown-tool delete-what="Script" @edit-clicked="
-                                openEditModal(result.id, result.text)
-                              " @delete-proceed="deleteScript(result.id)">
+  openEditModal(result.id, result.text)
+" @delete-proceed="deleteScript(result.id)">
                               </dropdown-tool>
                             </td>
                           </tr>
@@ -82,8 +76,8 @@
 
                             <td class="text-right">
                               <dropdown-tool delete-what="Script" @edit-clicked="
-                                openEditModal(script.id, script.text)
-                              " @delete-proceed="deleteScript(script.id)">
+  openEditModal(script.id, script.text)
+" @delete-proceed="deleteScript(script.id)">
                               </dropdown-tool>
                             </td>
                           </tr>
@@ -92,8 +86,22 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-6 d-none d-lg-block h-100">
-                  <div class="d-flex flex-column h-100">
+                <div class="col-lg-8 d-none d-lg-block h-100">
+                  <div v-if="isEdit" class="h-100">
+
+                    <div class="editor-outter h-100">
+                      <!-- <loader-modal :loading-state="loading" class="script-loader"></loader-modal> -->
+                      <quill-editor ref="myQuillEditor" class="mb-3 script-editor-bg" v-model="content"
+                        :options="editorOption">
+
+                      </quill-editor>
+                      <div class="d-flex justify-content-end px-3 pt-1 pb-4">
+                        <b-button class="close-modal" @click="closeEdit">Close</b-button>
+                        <b-button class="save-modal" @click="editScript(editId, content)">Save</b-button>
+                      </div>
+                    </div>
+                  </div>
+                  <div v-else class="d-flex flex-column h-100">
                     <div class="section-head" v-if="activeScript">
                       <button v-b-modal.modal-add-campaign class="
                           d-flex
@@ -109,12 +117,7 @@
                           <img v-if="isFavourite" class="fav-icon" src="@/assets/icons/convert-icon/star.png" alt="" />
                           <img v-else class="fav-icon" src="@/assets/icons/convert-icon/my Favourites.svg" alt="" />
                         </div>
-                        <!-- <select class="sort-select" name="" id="">
-                        <option value="none" selected>Export Script</option>
-                        <option value=""></option>
-                        <option value=""></option>
-                        <option value=""></option>
-                      </select> -->
+
                         <button @click="exportScript(activeScript.id)" target="_blank" class="btn btn-export-all">
                           Export
                         </button>
@@ -127,16 +130,10 @@
                       Select a Script to Preview
                     </div>
                     <div class="section-footer">
-                      <!-- <button
-                        class="btn no-shadow btn-share"
-                        v-b-modal.modal-send-script
-                      >
-                        <img
-                          class="foot-icons"
-                          src="@/assets/icons/convert-icon/send.svg"
-                          alt=""
-                        />
-                      </button> -->
+                      <button v-if="activeScript" @click="toggleEdit(activeScript.id, formatScript(activeScript.text))"
+                        class="btn no-shadow btn-share">
+                        <img class="foot-icons" src="@/assets/icons/convert-icon/draw.svg" alt="edit icon" />
+                      </button>
                       <button v-if="activeScript" @click="copyText" class="btn no-shadow btn-copy">
                         <img class="foot-icons" src="@/assets/icons/convert-icon/copy.svg" alt="" />
                         Copy to clipboard
@@ -268,6 +265,8 @@ export default {
   },
   data() {
     return {
+      // loading: false,
+      isEdit: false,
       selectedCampaign: null,
       campaignOptions: [{ value: null, text: "Select a Campaign" }],
       searchKey: "",
@@ -286,14 +285,9 @@ export default {
         modules: {
           toolbar: {
             container: [
-              [{ header: [1, 2, 3, 4, 5, 6, false] }],
-              ["bold", "italic", "underline", "strike"], // toggled buttons
+              ["bold", "italic", "underline"], // toggled buttons
               [{ list: "ordered" }, { list: "bullet" }],
-              [{ script: "sub" }, { script: "super" }], // superscript/subscript
-              [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-              [{ align: [] }],
-
-              ["clean"],
+              [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
             ],
           },
         },
@@ -302,6 +296,14 @@ export default {
   },
 
   methods: {
+    closeEdit() {
+      this.isEdit = false;
+    },
+    toggleEdit(id, data) {
+      this.isEdit = true;
+      this.editId = id;
+      this.content = data;
+    },
     saveToCampaign() {
       this.$bvModal.hide("modal-add-campaign");
       if (!this.activeScript) {
@@ -469,6 +471,7 @@ export default {
       // this.getCampaign();
     },
     editScript(id, txt, campaignId) {
+      // this.loading = true;
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-edit-script");
       this.$store
@@ -488,11 +491,13 @@ export default {
           } else {
             this.makeToast("success", "Script edited successfully");
           }
+          // this.loading = false;
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.data.error;
+          // this.loading = false;
           this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error;
@@ -552,6 +557,14 @@ export default {
       }
     },
     setActiveScript(data) {
+      if (this.isEdit) {
+        let ans = confirm("Unsaved data will be lost!");
+
+        if (!ans) {
+          return
+        }
+      }
+      this.isEdit = false;
       const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
       if (width <= 991) {
         this.$bvModal.show("modal-view-script");

@@ -18,13 +18,14 @@
       my-0
     ">
         <h6 class="title mb-0">
-          <img class="script-type-icon" :src="scriptTypeIcon" alt="" />
+          <img v-if="scriptTypeIcon" class="script-type-icon" :src="scriptTypeIcon" alt="" />
           {{ scriptTypeName }}
         </h6>
       </div>
 
     </div>
     <div class="menu-section">
+      <slot name="create-btn"></slot>
       <ul class="nav align-items-center" :class="removeContent ? 'hide-content' : ''">
         <li class="nav-item d-none-mobile">
           <a class="nav-link" v-b-modal.modal-suggest href="#">

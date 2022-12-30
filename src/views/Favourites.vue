@@ -1,25 +1,23 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar :user-name="this.$store.state.user.first_name" current-active="favourites"></sidebar>
+      <sidebar class="always-hidden" dismiss-class="permanent-dismiss" :user-name="this.$store.state.user.first_name"
+        current-active="favourites"></sidebar>
       <div class="content-section">
-        <navbar></navbar>
-        <div class="scroll-content">
-          <div class="container">
-            <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
-            <div class="
-                dashboard-top
-                d-flex
-                justify-content-between
-                align-items-center
-                mb-5
-              ">
-              <h6 class="title">My Favourites</h6>
-            </div>
-
+        <navbar script-type-name="My Favourites" logo-link-class="hide-logo" toggle-class="permanent-toggler">
+          <template v-slot:create-btn>
+            <router-link class="btn btn-create mr-2" to="/script/select">
+              <span>+</span>
+              New Copy
+            </router-link>
+          </template>
+        </navbar>
+        <div class="scroll-content script-content-fs">
+          <div class="container-fluid pt-3">
+            <loader-modal :loading-state="this.$store.state.loading" class="fullscreen-loader"></loader-modal>
             <div class="content-wrap script-custom-height">
               <div class="row h-100">
-                <div class="col-12 col-lg-6 h-100 bordered-right pr-lg-0">
+                <div class="col-12 col-lg-4 h-100 bordered-right pr-lg-0">
                   <div class="section-head">
                     <div class="section-head-left">
                       <img class="section-head-icon" src="@/assets/icons/convert-icon/All script.svg" alt="" />
@@ -46,59 +44,13 @@
                       <table class="table table-section script-table">
                         <tbody v-if="searchResult.length > 0">
                           <tr v-for="script in searchResult" :key="script.id">
-                            <td @click="setActiveScript(script)" scope="row">
-                              <div class="control-order-tool">
-                                <button class="btn mb-2">
-                                  <i class="flaticon-up-arrow icons icon-order"></i>
-                                </button>
-                                <button class="btn btn-down">
-                                  <i class="flaticon-up-arrow icons icon-order"></i>
-                                </button>
-                              </div>
-                            </td>
-                            <td>
-                              {{ removeTags(abbrScript(script.response.text)) }}
-                            </td>
-                            <td>
-                              <div class="script-type">
-                                {{
-                                    script.response.script_type
-                                      ? script.response.script_type
-                                      : "NIL"
-                                }}
-                              </div>
-                            </td>
-                            <td class="text-right">
-                              <dropdown-tool delete-what="Script" @edit-clicked="
-                                openEditModal(script.id, script.response.text)
-                              " @delete-proceed="deleteScript(script.response.id)">
-                              </dropdown-tool>
-                            </td>
-                          </tr>
-                        </tbody>
-                        <tbody v-else-if="scripts && searchKey.length < 1">
-                          <tr v-for="script in scripts" :key="script.id">
-                            <!-- <td scope="row">
-                            <div class="control-order-tool">
-                              <button class="btn mb-2">
-                                <i
-                                  class="flaticon-up-arrow icons icon-order"
-                                ></i>
-                              </button>
-                              <button class="btn btn-down">
-                                <i
-                                  class="flaticon-up-arrow icons icon-order"
-                                ></i>
-                              </button>
-                            </div>
-                          </td> -->
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
                                 {{
-                                    script.response.script_type_name
-                                      ? script.response.script_type_name
-                                      : "NIL"
-                                }}
+    script.response.script_type_name
+      ? script.response.script_type_name
+      : "NIL"
+}}
                               </div>
                               <div class="script-content">
                                 {{ removeTags(abbrScript(script.response.text)) }}
@@ -107,12 +59,45 @@
 
                             <td class="text-right">
                               <dropdown-tool delete-what="Script" @edit-clicked="
-                                openEditModal(script.id, script.response.text)
-                              " :no-delete="true" @delete-proceed="deleteScript(script.response.id)">
+  openEditModal(script.id, script.response.text)
+" :no-delete="true" @delete-proceed="deleteScript(script.response.id)">
                                 <template v-slot:secondary>
                                   <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#" @click="
-                                    addRemoveScriptFavorite(script.response.id)
-                                  ">
+  addRemoveScriptFavorite(script.response.id)
+">
+                                    <img class="drop-img-icon" src="@/assets/icons/convert-icon/my Favourites.svg"
+                                      alt="remove from favorite icon" />
+                                    Remove from favorite
+                                  </b-dropdown-item>
+                                </template>
+                              </dropdown-tool>
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tbody v-else-if="scripts && searchKey.length < 1">
+                          <tr v-for="script in scripts" :key="script.id">
+
+                            <td @click="setActiveScript(script)">
+                              <div class="script-type">
+                                {{
+    script.response.script_type_name
+      ? script.response.script_type_name
+      : "NIL"
+}}
+                              </div>
+                              <div class="script-content">
+                                {{ removeTags(abbrScript(script.response.text)) }}
+                              </div>
+                            </td>
+
+                            <td class="text-right">
+                              <dropdown-tool delete-what="Script" @edit-clicked="
+  openEditModal(script.id, script.response.text)
+" :no-delete="true" @delete-proceed="deleteScript(script.response.id)">
+                                <template v-slot:secondary>
+                                  <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#" @click="
+  addRemoveScriptFavorite(script.response.id)
+">
                                     <img class="drop-img-icon" src="@/assets/icons/convert-icon/my Favourites.svg"
                                       alt="remove from favorite icon" />
                                     Remove from favorite
@@ -126,8 +111,22 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-6 d-none d-lg-block">
-                  <div class="d-flex flex-column h-100">
+                <div class="col-8 d-none d-lg-block h-100">
+                  <div v-if="isEdit" class="h-100">
+
+                    <div class="editor-outter h-100">
+                      <loader-modal :loading-state="loading" class="script-loader"></loader-modal>
+                      <quill-editor ref="myQuillEditor" class="mb-3 script-editor-bg" v-model="content"
+                        :options="editorOption">
+
+                      </quill-editor>
+                      <div class="d-flex justify-content-end px-3 pt-1 pb-4">
+                        <b-button class="close-modal" @click="closeEdit">Close</b-button>
+                        <b-button class="save-modal" @click="editScript(editId, content)">Save</b-button>
+                      </div>
+                    </div>
+                  </div>
+                  <div v-else class="d-flex flex-column h-100">
                     <div class="section-head" v-if="activeScript">
                       <button v-b-modal.modal-add-campaign class="
                           d-flex
@@ -143,12 +142,7 @@
                           <img v-if="isFavourite" class="fav-icon" src="@/assets/icons/convert-icon/star.png" alt="" />
                           <img v-else class="fav-icon" src="@/assets/icons/convert-icon/my Favourites.svg" alt="" />
                         </div>
-                        <!-- <select class="sort-select" name="" id="">
-                        <option value="none" selected>Export Script</option>
-                        <option value=""></option>
-                        <option value=""></option>
-                        <option value=""></option>
-                      </select> -->
+
                         <button @click="exportScript(activeScript.response.id)" class="btn btn-export-all">
                           Export
                         </button>
@@ -161,16 +155,11 @@
                       Select a Script to Preview
                     </div>
                     <div class="section-footer">
-                      <!-- <button
-                        class="btn no-shadow btn-share"
-                        v-b-modal.modal-send-script
-                      >
-                        <img
-                          class="foot-icons"
-                          src="@/assets/icons/convert-icon/send.svg"
-                          alt=""
-                        />
-                      </button> -->
+                      <button v-if="activeScript"
+                        @click="toggleEdit(activeScript.response.id, formatScript(activeScript.response.text))"
+                        class="btn no-shadow btn-share">
+                        <img class="foot-icons" src="@/assets/icons/convert-icon/draw.svg" alt="edit icon" />
+                      </button>
                       <button v-if="activeScript" @click="copyText" class="btn no-shadow btn-copy">
                         <img class="foot-icons" src="@/assets/icons/convert-icon/copy.svg" alt="" />
                         Copy to clipboard
@@ -308,6 +297,8 @@ export default {
   },
   data() {
     return {
+      isEdit: false,
+      loading: false,
       selectedCampaign: null,
       campaignOptions: [{ value: null, text: "Select a Campaign" }],
       searchKey: "",
@@ -324,43 +315,9 @@ export default {
         modules: {
           toolbar: {
             container: [
-              [
-                {
-                  header: [1, 2, 3, 4, 5, 6, false],
-                },
-              ],
-              ["bold", "italic", "underline", "strike"], // toggled buttons
-              [
-                {
-                  list: "ordered",
-                },
-                {
-                  list: "bullet",
-                },
-              ],
-              [
-                {
-                  script: "sub",
-                },
-                {
-                  script: "super",
-                },
-              ], // superscript/subscript
-              [
-                {
-                  color: [],
-                },
-                {
-                  background: [],
-                },
-              ], // dropdown with defaults from theme
-              [
-                {
-                  align: [],
-                },
-              ],
-
-              ["clean"],
+              ["bold", "italic", "underline"], // toggled buttons
+              [{ list: "ordered" }, { list: "bullet" }],
+              [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
             ],
           },
         },
@@ -369,6 +326,14 @@ export default {
   },
 
   methods: {
+    closeEdit() {
+      this.isEdit = false;
+    },
+    toggleEdit(id, data) {
+      this.isEdit = true;
+      this.editId = id;
+      this.content = data;
+    },
     saveToCampaign() {
       this.$bvModal.hide("modal-add-campaign");
       if (!this.activeScript) {
@@ -605,11 +570,12 @@ export default {
     },
     openEditModal(id, data) {
       this.$bvModal.show("modal-edit-script");
+      this.editId = id;
       // this.triggerEdit = true;
-      this.$store.commit("triggerEdit", {
-        editStatus: true,
-        id: id,
-      });
+      // this.$store.commit("triggerEdit", {
+      //   editStatus: true,
+      //   id: id,
+      // });
       this.content = data;
       // this.editId = id;
       // this.campaignName = data;
@@ -622,6 +588,14 @@ export default {
       }
     },
     setActiveScript(data) {
+      if (this.isEdit) {
+        let ans = confirm("Unsaved data will be lost!");
+
+        if (!ans) {
+          return
+        }
+      }
+      this.isEdit = false;
       const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
       if (width <= 991) {
         this.$bvModal.show("modal-view-script");

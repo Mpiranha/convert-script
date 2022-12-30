@@ -1069,10 +1069,14 @@ input:checked+.slider:before {
 }
 
 .script-type {
-    color: #000;
-    font-weight: bolder;
+    color: #fff;
+    background-color: rgb(131 57 236);
+    font-weight: 500;
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
+    display: inline-block;
+    border-radius: 0.9rem;
+    padding: 0.1rem 0.5rem;
 }
 
 .content-display {
@@ -1121,7 +1125,7 @@ input:checked+.slider:before {
     margin-top: auto;
     display: flex;
     align-items: center;
-    padding: 0 0.7rem 0.5rem 0;
+    padding: 0 0.7rem 1rem 0;
 }
 
 .section-footer .foot-icons {
@@ -1476,6 +1480,15 @@ input:checked+.slider:before {
     position: absolute;
     right: 10px;
 }
+
+.script-editor-bg {
+    height: 90%;
+}
+
+.script-editor-bg .ql-container {
+    height: 95% !important;
+}
+
 
 
 @media screen and (min-width: 1367px) {
