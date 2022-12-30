@@ -92,7 +92,7 @@
                   <div v-if="isEdit" class="h-100">
 
                     <div class="editor-outter h-100">
-                      <!-- <loader-modal :loading-state="loading" class="script-loader"></loader-modal> -->
+                      <loader-modal :loading-state="loading" class="script-loader"></loader-modal>
                       <quill-editor ref="myQuillEditor" class="mb-3 script-editor-bg" v-model="content"
                         :options="editorOption">
 
@@ -239,6 +239,7 @@ export default {
   data() {
     return {
       isEdit: false,
+      loading: false,
       selectedCampaign: null,
       campaignOptions: [{ value: null, text: "Select a Campaign" }],
       searchKey: "",
@@ -373,8 +374,10 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    getCampaignData(id) {
-      this.$store.commit("updateLoadState", true);
+    getCampaignData(id, noload) {
+      if (!noload) {
+        this.$store.commit("updateLoadState", true);
+      }
       this.$store
         .dispatch("getOneCampaign", id)
         .then((res) => {
@@ -410,7 +413,7 @@ export default {
       // this.getCampaign();
     },
     editScript(id, txt, campaignId) {
-      this.$store.commit("updateLoadState", true);
+      this.loading = true;
       this.$bvModal.hide("modal-edit-script");
       this.$store
         .dispatch("editScript", {
@@ -421,20 +424,21 @@ export default {
         })
         .then(() => {
           this.error = null;
-          this.activeScript = null;
-          this.getCampaignData(this.$route.params.id);
+          this.isEdit = false;
+          this.activeScript.text = txt;
+          this.getCampaignData(this.$route.params.id, true);
           if (campaignId) {
             this.selectedCampaign = null;
             this.makeToast("success", "Script added to campaign successfully");
           } else {
             this.makeToast("success", "Script edited successfully");
           }
-          this.$store.commit("updateLoadState", false);
+          this.loading = false;
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.data.error;
-          this.$store.commit("updateLoadState", false);
+          this.loading = false;
           this.makeToast("danger", this.error);
           // this.error = error;
         });

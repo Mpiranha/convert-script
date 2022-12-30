@@ -80,11 +80,12 @@ body {
 
 
 .btn-create {
+    position: relative;
     color: #fff !important;
     background-color: #8338ec !important;
     font-size: 0.7rem !important;
     font-weight: bold !important;
-    padding: 0rem 0.7rem !important;
+    padding: 0.5rem 1rem 0.5rem 2rem !important;
     display: flex !important;
     align-items: center !important;
 }
@@ -97,6 +98,9 @@ body {
 .btn-create span {
     font-size: 1.3rem;
     margin-right: 0.3rem;
+    position: absolute;
+    left: 7px;
+    top: -3px;
 }
 
 
@@ -1080,14 +1084,14 @@ input:checked+.slider:before {
 }
 
 .content-display {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     padding: 1.3rem 1.5rem 0 0;
     text-align: left;
     line-height: 1.6;
     min-height: 100px;
     height: calc(100% - (59px + 34px));
     overflow-y: auto;
-    color: #5f6f7f;
+    color: #000000;
 
 }
 

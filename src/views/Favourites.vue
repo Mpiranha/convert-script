@@ -461,8 +461,10 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    getFavorites() {
-      this.$store.commit("updateLoadState", true);
+    getFavorites(noload) {
+      if (!noload) {
+        this.$store.commit("updateLoadState", true);
+      }
       this.$store
         .dispatch("getAllFavorites")
         .then((res) => {
@@ -526,7 +528,7 @@ export default {
       // this.getCampaign();
     },
     editScript(id, txt, campaignId) {
-      this.$store.commit("updateLoadState", true);
+      this.loading = true;
       this.$bvModal.hide("modal-edit-script");
       this.$store
         .dispatch("editScript", {
@@ -537,20 +539,21 @@ export default {
         })
         .then(() => {
           this.error = null;
-          this.activeScript = null;
-          this.getFavorites();
+          this.isEdit = false;
+          this.activeScript.text = txt;
+          this.getFavorites(true);
           if (campaignId) {
             this.selectedCampaign = null;
             this.makeToast("success", "Script added to campaign successfully");
           } else {
             this.makeToast("success", "Script edited successfully");
           }
-          this.$store.commit("updateLoadState", false);
+          this.loading = false;
         })
         .catch((error) => {
           console.log(error);
           this.error = error.response.data.data.error;
-          this.$store.commit("updateLoadState", false);
+          this.loading = false;
           this.makeToast("danger", this.error);
           // this.error = error;
         });
