@@ -1072,7 +1072,7 @@ input:checked+.slider:before {
     color: #fff;
     background-color: rgb(131 57 236);
     font-weight: 500;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     margin-bottom: 0.5rem;
     display: inline-block;
     border-radius: 0.9rem;
