@@ -234,7 +234,7 @@ export default {
   padding: 0.7rem 0.7rem;
   /*box-shadow: 1px 1px 3px #a69f9f; */
   border-bottom: 1px solid #e8e9e9;
-  z-index: 999999;
+  z-index: 1022;
   position: relative;
 }
 

@@ -1178,7 +1178,7 @@ input:checked+.slider:before {
     align-items: center;
     justify-content: center;
     background-color: #f6f8f9;
-    z-index: 99999;
+    z-index: 1020;
     transition: all 0.2s linear;
 }
 
