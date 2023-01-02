@@ -59,7 +59,7 @@
                             </td>
 
                             <td class="text-right">
-                              <dropdown-tool :no-edit="true" delete-what="Script"
+                              <dropdown-tool :no-edit="true" :no-delete="true" delete-what="Script"
                                 @delete-proceed="deleteScript(script.response.id)">
                                 <template v-slot:secondary>
                                   <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#" @click="
@@ -91,7 +91,7 @@
                             </td>
 
                             <td class="text-right">
-                              <dropdown-tool :no-edit="true" delete-what="Script"
+                              <dropdown-tool :no-edit="true" :no-delete="true" delete-what="Script"
                                 @delete-proceed="deleteScript(script.response.id)">
                                 <template v-slot:secondary>
                                   <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#"
