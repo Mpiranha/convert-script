@@ -232,8 +232,9 @@ export default {
   display: flex;
   align-items: center;
   padding: 0.7rem 0.7rem;
-  box-shadow: 1px 1px 3px #a69f9f;
-  z-index: 1;
+  /*box-shadow: 1px 1px 3px #a69f9f; */
+  border-bottom: 1px solid #e8e9e9;
+  z-index: 999999;
   position: relative;
 }
 
@@ -432,6 +433,7 @@ export default {
     font-size: 0.8rem;
   }
 }
+
 @media screen and (max-width: 520px) {
   .title .script-type-icon {
     width: 1.3rem !important;

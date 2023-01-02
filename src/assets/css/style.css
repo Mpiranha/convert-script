@@ -179,6 +179,8 @@ body {
 .drop-link {
     text-decoration: none !important;
     color: #22262a;
+    display: flex !important;
+    align-items: center;
 }
 
 .drop-link img {
@@ -1146,17 +1148,20 @@ input:checked+.slider:before {
     display: flex !important;
     align-items: center;
     margin-right: 1.5rem;
-    font-size: 1rem;
+    font-size: 0.9rem;
+    color: #5f6f7f !important;
 }
 
 .btn-share .foot-icons {
     width: 0.9rem;
+    margin-bottom: 0.2rem;
 }
 
 .section-footer .btn-copy {
-    font-size: 1rem;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
+    color: #5f6f7f !important;
 }
 
 .section-footer .btn {
@@ -1350,6 +1355,10 @@ input:checked+.slider:before {
 
 .script-table tr {
     cursor: pointer;
+}
+
+.script-table tr.active {
+    background-color: #f0f2f5;
 }
 
 .script-table tbody tr td:nth-child(1) {

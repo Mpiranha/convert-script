@@ -44,7 +44,8 @@
                     <div v-else class="responsive-table">
                       <table class="table table-section script-table">
                         <tbody v-if="searchResult.length > 0">
-                          <tr v-for="result in searchResult" :key="result.id">
+                          <tr v-for="result in searchResult" :key="result.id"
+                            :class="activeScript ? result.id == activeScript.id ? 'active' : '' : ''">
 
                             <td @click="setActiveScript(result)">
                               <div class="script-type">
@@ -63,7 +64,8 @@
                           </tr>
                         </tbody>
                         <tbody v-else-if="scripts && searchKey.length < 1">
-                          <tr v-for="script in scripts" :key="script.id">
+                          <tr v-for="script in scripts" :key="script.id"
+                            :class="activeScript ? script.id == activeScript.id ? 'active' : '' : ''">
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
                                 {{ script.script_type_name }}

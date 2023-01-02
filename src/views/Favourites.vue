@@ -43,7 +43,8 @@
                     <div v-else class="responsive-table">
                       <table class="table table-section script-table">
                         <tbody v-if="searchResult.length > 0">
-                          <tr v-for="script in searchResult" :key="script.id">
+                          <tr v-for="script in searchResult" :key="script.id"
+                            :class="activeScript ? script.response.id == activeScript.response.id ? 'active' : '' : ''">
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
                                 {{
@@ -58,7 +59,7 @@
                             </td>
 
                             <td class="text-right">
-                              <dropdown-tool :no-edit="true" delete-what="Script" :no-delete="true"
+                              <dropdown-tool :no-edit="true" delete-what="Script"
                                 @delete-proceed="deleteScript(script.response.id)">
                                 <template v-slot:secondary>
                                   <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#" @click="
@@ -74,8 +75,8 @@
                           </tr>
                         </tbody>
                         <tbody v-else-if="scripts && searchKey.length < 1">
-                          <tr v-for="script in scripts" :key="script.id">
-
+                          <tr v-for="script in scripts" :key="script.id"
+                            :class="activeScript ? script.response.id == activeScript.response.id ? 'active' : '' : ''">
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
                                 {{
@@ -90,7 +91,7 @@
                             </td>
 
                             <td class="text-right">
-                              <dropdown-tool :no-edit="true" delete-what="Script" :no-delete="true"
+                              <dropdown-tool :no-edit="true" delete-what="Script"
                                 @delete-proceed="deleteScript(script.response.id)">
                                 <template v-slot:secondary>
                                   <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#"
