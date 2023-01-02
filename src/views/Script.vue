@@ -56,9 +56,8 @@
                             </td>
 
                             <td class="text-right">
-                              <dropdown-tool delete-what="Script" @edit-clicked="
-  openEditModal(result.id, result.text)
-" @delete-proceed="deleteScript(result.id)">
+                              <dropdown-tool :no-edit="true" delete-what="Script"
+                                @delete-proceed="deleteScript(result.id)">
                               </dropdown-tool>
                             </td>
                           </tr>
@@ -75,9 +74,8 @@
                             </td>
 
                             <td class="text-right">
-                              <dropdown-tool delete-what="Script" @edit-clicked="
-  openEditModal(script.id, script.text)
-" @delete-proceed="deleteScript(script.id)">
+                              <dropdown-tool :no-edit="true" delete-what="Script"
+                                @delete-proceed="deleteScript(script.id)">
                               </dropdown-tool>
                             </td>
                           </tr>
@@ -95,7 +93,7 @@
                         :options="editorOption">
 
                       </quill-editor>
-                      <div class="d-flex justify-content-end px-3 pt-1 pb-4">
+                      <div class="d-flex justify-content-start px-3 pt-1 pb-4">
                         <b-button class="close-modal" @click="closeEdit">Close</b-button>
                         <b-button class="save-modal" @click="editScript(editId, content)">Save</b-button>
                       </div>
@@ -133,6 +131,7 @@
                       <button v-if="activeScript" @click="toggleEdit(activeScript.id, formatScript(activeScript.text))"
                         class="btn no-shadow btn-share">
                         <img class="foot-icons" src="@/assets/icons/convert-icon/draw.svg" alt="edit icon" />
+                        Edit
                       </button>
                       <button v-if="activeScript" @click="copyText" class="btn no-shadow btn-copy">
                         <img class="foot-icons" src="@/assets/icons/convert-icon/copy.svg" alt="" />
@@ -174,7 +173,20 @@
 
     <b-modal :hide-header="true" id="modal-view-script" centered size="md" :hide-footer="true"
       content-class="modal-main">
-      <div class="row">
+      <div v-if="isEdit" class="h-100">
+
+        <div class="editor-outter h-100">
+          <loader-modal :loading-state="loading" class="script-loader"></loader-modal>
+          <quill-editor ref="myQuillEditor" class="mb-3 script-editor-bg" v-model="content" :options="editorOption">
+
+          </quill-editor>
+          <div class="d-flex justify-content-start px-3 pt-1 pb-4">
+            <b-button class="close-modal" @click="closeEdit">Close</b-button>
+            <b-button class="save-modal" @click="editScript(editId, content)">Save</b-button>
+          </div>
+        </div>
+      </div>
+      <div v-else class="row">
         <div class="col-12 h-100">
           <div class="d-flex flex-column m-min-height">
             <div class="section-head">
@@ -205,29 +217,24 @@
               Select a Script to Preview
             </div>
             <div class="section-footer">
-              <!-- <button
-              class="btn no-shadow btn-share"
-              v-b-modal.modal-send-script
-            >
-              <img
-                class="foot-icons"
-                src="@/assets/icons/convert-icon/send.svg"
-                alt=""
-              />
-            </button> -->
+
+              <button v-if="activeScript" @click="toggleEdit(activeScript.id, formatScript(activeScript.text))"
+                class="btn no-shadow btn-share">
+                <img class="foot-icons" src="@/assets/icons/convert-icon/draw.svg" alt="edit icon" />
+                Edit
+              </button>
               <button @click="copyText" class="btn no-shadow btn-copy">
                 <img class="foot-icons" src="@/assets/icons/convert-icon/copy.svg" alt="" />
                 Copy to clipboard
               </button>
+              <b-button @click="$bvModal.hide('modal-view-script')" class="close-modal ml-auto">Close</b-button>
               <textarea type="hidden" id="text--copy" :value="activeScript ? activeScript.text : ''"></textarea>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="d-flex justify-content-start">
-        <b-button @click="$bvModal.hide('modal-view-script')" class="close-modal">Close</b-button>
-      </div>
+
     </b-modal>
 
   </div>
@@ -383,7 +390,7 @@ export default {
       return str.replace(/(<([^>]+)>)/ig, '');
     },
     exportScript(id) {
-      this.$store.commit("updateLoadState", true);
+
       this.$store
         .dispatch("exportOneScript", id)
         .then((res) => {
@@ -401,16 +408,16 @@ export default {
           window.URL.revokeObjectURL(url);
           document.body.removeChild(a);
 
-          this.$store.commit("updateLoadState", false);
+
         })
         .catch((error) => {
           console.log(error);
-          this.$store.commit("updateLoadState", false);
+
         });
     },
 
     exportAllScript(id) {
-      this.$store.commit("updateLoadState", true);
+
       this.$store
         .dispatch("exportAllScript", id)
         .then((res) => {
@@ -427,11 +434,11 @@ export default {
           window.URL.revokeObjectURL(url);
           document.body.removeChild(a);
 
-          this.$store.commit("updateLoadState", false);
+
         })
         .catch((error) => {
           console.log(error);
-          this.$store.commit("updateLoadState", false);
+
         });
     },
     getScripts(noload) {

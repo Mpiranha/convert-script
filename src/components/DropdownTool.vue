@@ -12,7 +12,7 @@
     <!-- <router-link class="nav-link" :to="{ path: '/campaign', params: { id: 1 } }">
       Account
     </router-link> -->
-    <b-dropdown-item @click="editAction" link-class="drop-link" href="#">
+    <b-dropdown-item @click="editAction" link-class="drop-link" href="#" v-if="!noEdit">
       <i class="flaticon-pencil icons table-drop-icon"></i>
       Edit
     </b-dropdown-item>
@@ -58,7 +58,7 @@
 <script>
 export default {
   name: "DropdownTool",
-  props: ["deleteWhat","noDelete"],
+  props: ["deleteWhat","noDelete", "noEdit"],
   data() {
     return {
       modalShow: false,

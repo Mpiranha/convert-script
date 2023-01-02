@@ -100,7 +100,7 @@ body {
     margin-right: 0.3rem;
     position: absolute;
     left: 7px;
-    top: -3px;
+    top: -2px;
 }
 
 
@@ -1097,7 +1097,7 @@ input:checked+.slider:before {
 
 
 .ql-container {
-    font-size: 1.1rem !important;
+    font-size: 1.3rem !important;
     font-family: jost, Roboto !important;
 }
 
@@ -1142,13 +1142,21 @@ input:checked+.slider:before {
     overflow: hidden;
 }
 
+.section-footer .btn-share {
+    display: flex !important;
+    align-items: center;
+    margin-right: 1.5rem;
+    font-size: 1rem;
+}
+
 .btn-share .foot-icons {
-    width: 1.2rem;
+    width: 0.9rem;
 }
 
 .section-footer .btn-copy {
-    font-size: 0.8rem;
-    margin-left: auto;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
 }
 
 .section-footer .btn {
@@ -1166,6 +1174,7 @@ input:checked+.slider:before {
     justify-content: center;
     background-color: #f6f8f9;
     z-index: 99999;
+    transition: all 0.2s linear;
 }
 
 .loader-modal .loader-img {
@@ -1538,6 +1547,14 @@ input:checked+.slider:before {
 }
 
 @media screen and (max-width: 768px) {
+    .content-display {
+        font-size: 0.9rem;
+    }
+
+    .btn-create span {
+        top: 0;
+    }
+
     .form-section {
         width: 60%;
         padding: 0;
@@ -1556,13 +1573,13 @@ input:checked+.slider:before {
     }
 
     .flex-main-wrap .content-section {
-        overflow-y: initial;
+        overflow-y: auto;
     }
 
     .scroll-content {
         height: initial;
         overflow-y: initial;
-        margin-top: 60px;
+        margin-top: 64px;
     }
 
     .content-head {
@@ -1574,6 +1591,7 @@ input:checked+.slider:before {
 
     .control-height {
         height: auto;
+        min-height: 75vh;
         overflow-y: initial;
     }
 

@@ -427,6 +427,11 @@ export default {
 </style>
 
 <style scoped>
+@media screen and (max-width: 768px) {
+  .dashboard-top .title {
+    font-size: 0.8rem;
+  }
+}
 @media screen and (max-width: 520px) {
   .title .script-type-icon {
     width: 1.3rem !important;
@@ -434,6 +439,10 @@ export default {
 
   .dashboard-top .title {
     font-size: 0.8rem !important;
+    white-space: nowrap;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 </style>

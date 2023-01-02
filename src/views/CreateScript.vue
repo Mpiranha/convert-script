@@ -696,7 +696,7 @@ export default {
 }
 
 .fullscreen-loader {
-  top: 0 !important;
+  top: 61px !important;
   width: 100% !important;
   left: 0 !important;
   height: 100% !important;
