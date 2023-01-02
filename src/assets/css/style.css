@@ -1033,7 +1033,7 @@ input:checked+.slider:before {
     border: none;
     border-bottom: 2px solid #f6f8f9;
     vertical-align: middle;
-    font-size: 0.9rem;
+    font-size: 1rem;
     padding: 0.7rem 0.5rem 0.7rem 1rem;
 }
 
@@ -1536,7 +1536,7 @@ input:checked+.slider:before {
     }
 
     .table-section tr td {
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
 }
 
