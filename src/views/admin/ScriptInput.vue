@@ -417,6 +417,10 @@ export default {
           text: "davinci-instruct-beta",
         },
         {
+          value: "text-davinci-003",
+          text: "text-davinci-003",
+        },
+        {
           value: "text-davinci-002",
           text: "text-davinci-002",
         },
