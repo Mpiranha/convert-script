@@ -9,7 +9,7 @@
         v-model="password"
         @input="$emit('input', password)"
       />
-      <a data-toggle="pwd" href="#">
+      <a data-toggle="pwd" href="#" tabindex="-1">
         <img
           @click="toggleText()"
           :src="

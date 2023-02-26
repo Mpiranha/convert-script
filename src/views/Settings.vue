@@ -11,7 +11,8 @@
                 <h6 class="title">Account Details</h6>
                 <div class="desc">Edit your account information, here.</div>
               </div>
-              <div class="flex-grow-1 align-self-end" v-if="!($store.state.user.first_name && $store.state.user.last_name)">
+              <div class="flex-grow-1 align-self-end"
+                v-if="!($store.state.user.first_name && $store.state.user.last_name)">
                 <div class="danger-alert">
                   ⚠️
                   Kindly fill out your first name and last name to get started. Click on ‘Save’ when done.
@@ -80,22 +81,24 @@
             </div>
 
             <div class="content-wrap extra-margin-left-wrap">
-              <password-input label="Current Password" v-model.trim="pwd.password" class-label="form-label" :class="{
-                'is-invalid': submittedPwd && $v.pwd.password.$error,
-              }"></password-input>
+              <password-input ref="old-pwd" label="Current Password" v-model.trim="pwd.password"
+                class-label="form-label" :class="{
+                  'is-invalid': submittedPwd && $v.pwd.password.$error,
+                }"></password-input>
               <div v-if="submittedPwd && $v.pwd.password.$error" class="invalid-feedback">
                 <span v-if="!$v.pwd.password.required">* Password is required</span>
                 <span v-if="!$v.pwd.password.minLength">* Password must be at least 6 characters</span>
               </div>
 
-              <password-input label="New Password" v-model.trim="pwd.newPassword" class-label="form-label" :class="{
-                'is-invalid': submittedPwd && $v.pwd.newPassword.$error,
-              }"></password-input>
+              <password-input ref="new-pwd" label="New Password" v-model.trim="pwd.newPassword" class-label="form-label"
+                :class="{
+                  'is-invalid': submittedPwd && $v.pwd.newPassword.$error,
+                }"></password-input>
               <div v-if="submittedPwd && $v.pwd.newPassword.$error" class="invalid-feedback">
                 <span v-if="!$v.pwd.newPassword.required">* Password is required</span>
                 <span v-if="!$v.pwd.newPassword.minLength">* Password must be at least 6 characters</span>
               </div>
-              <password-input label="Confirm New Password" v-model.trim="pwd.confirmNewPassword"
+              <password-input ref="confirm-pwd" label="Confirm New Password" v-model.trim="pwd.confirmNewPassword"
                 class-label="form-label" :class="{
                   'is-invalid':
                     submittedPwd && $v.pwd.confirmNewPassword.$error,
@@ -107,7 +110,10 @@
               </div>
 
               <div class="d-flex justify-content-end align-self-end mb-2">
-                <b-button @click="changePassword" class="save-modal px-4 py-2">Save</b-button>
+                <b-button @click="changePassword" class="save-modal px-4 py-2" :disabled="disabledButton">
+                  <span>Save</span>
+                  <img class="spinner" src="../assets/image/Rolling-1s-64px.gif" alt="loading icon">
+                </b-button>
               </div>
             </div>
           </div>
@@ -141,6 +147,7 @@ export default {
   },
   data() {
     return {
+      disabledButton: false,
       userDetails: {
         first_name: "",
         last_name: "",
@@ -254,6 +261,7 @@ export default {
         return;
       }
 
+      this.disabledButton = true;
       let data = {
         current_password: this.pwd.password,
         password: this.pwd.newPassword,
@@ -264,12 +272,23 @@ export default {
         .then((res) => {
           this.error = null;
 
-          this.makeToast("success", res.data.message);
+
+          this.makeToast("success", res.data.data.message);
+          this.submittedPwd = false;
+          this.pwd.password = "";
+          this.pwd.newPassword = "";
+          this.pwd.confirmNewPassword = "";
+          this.$refs["old-pwd"].$el.children[1].children[0].value = "";
+          this.$refs["old-pwd"].$el.children[1].children[0].dispatchEvent(new Event("input"));
+          this.$refs["new-pwd"].$el.children[1].children[0].value = "";
+          this.$refs["new-pwd"].$el.children[1].children[0].dispatchEvent(new Event("input"));
+          this.$refs["confirm-pwd"].$el.children[1].children[0].value = "";
+          this.$refs["confirm-pwd"].$el.children[1].children[0].dispatchEvent(new Event("input"));
+          this.disabledButton = false;
         })
         .catch((error) => {
-          // console.log(error);
-
-          this.error = error;
+          this.disabledButton = false;
+          this.error = error.response.data.errors.current_password[0];
           this.makeToast("danger", this.error);
         });
     },
@@ -326,7 +345,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 480px) { 
+@media screen and (max-width: 480px) {
   .extra-margin-left-wrap {
     margin-left: 0;
   }
