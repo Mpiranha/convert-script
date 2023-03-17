@@ -3,9 +3,9 @@
     <loader-modal :loading-state="this.$store.state.loading" class="fullscreen-loader"></loader-modal>
     <div class="flex-main-wrap">
       <sidebar :user-name="this.$store.state.user.first_name" logo-class="permanent-logo"
-        dismiss-class="permanent-dismiss" current-active="new-copy" class="always-hidden"></sidebar>
+        dismiss-class="permanent-dismiss" current-active="ai-image" class="always-hidden"></sidebar>
       <div class="content-section">
-        <navbar :script-type-icon="scriptType.icon" :script-type-name="scriptType.name" logo-link-class="hide-logo"
+        <navbar script-type-icon="/img/ai-tool.7ea5d7e9.svg" script-type-name="Image Creator" logo-link-class="hide-logo"
           toggle-class="permanent-toggler"></navbar>
         <div class="scroll-content script-content-fs">
           <div class="container-fluid pt-3">
@@ -88,7 +88,7 @@
                           <loader-modal :loading-state="loading"></loader-modal>
 
                           <button class="btn btn-create py-2 btn-script">
-                            Create Copy
+                            Generate
                           </button>
                         </div>
                       </form>
@@ -128,7 +128,7 @@
                         </div>
                       </div>
                       <div v-else class="empty-script">
-                        Generated Script will display here.
+                        Generated content will display here.
                       </div>
                     </div>
                   </div>

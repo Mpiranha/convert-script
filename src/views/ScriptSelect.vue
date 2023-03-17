@@ -2,10 +2,7 @@
   <div class="container-fluid px-0">
     <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap">
-      <sidebar
-        :user-name="this.$store.state.user.first_name"
-        current-active="new-copy"
-      ></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name" current-active="new-copy"></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="scroll-content">
@@ -16,109 +13,92 @@
               </div>
 
               <div class="select-script-forms">
-                <b-form-group label-class="input-label">
+                <!-- <b-form-group label-class="input-label">
                   <b-form-select
                     class="input-table"
                     v-model="category"
                     :options="categoryOptions"
                   ></b-form-select>
-                </b-form-group>
+                </b-form-group> -->
                 <div class="search-form">
                   <button class="btn search-btn">
                     <i class="flaticon-loupe icons"></i>
                   </button>
-                  <input
-                    v-model="searchKey"
-                    @input="searchKeyWord"
-                    class="form-control no-shadow search-input"
-                    type="text"
-                    placeholder="Search"
-                  />
+                  <input v-model="searchKey" @input="searchKeyWord" class="form-control no-shadow search-input"
+                    type="text" placeholder="Search" />
                 </div>
+              </div>
+            </div>
+            <div class="template-categories-wrap">
+              <div class="category-item" :class="category == null ? 'active' : ''" @click="resetCategory">
+                All Categories ({{ totalScripts }})
+              </div>
+              <div v-for="cat in categories" :key="cat.id" class="category-item"
+                :class="category == cat.id ? 'active' : ''" @click="setActiveCategory(cat.id)">
+                {{ cat.name }} ({{ cat.scripts }})
               </div>
             </div>
 
             <div v-if="searchResult.length > 0" class="row">
-              <script-select-type-box
-                v-for="scriptType in searchResult"
-                :key="scriptType.id"
-                :img-url="
-                  scriptType.icon
-                    ? scriptType.icon
-                    : require(`@/assets/icons/convert-icon/Aweber.svg`)
-                "
-                :link-url="
-                  $route.params.id
-                    ? {
-                        name: 'CampaignCreateScript',
-                        params: {
-                          campaignId: $route.params.id,
-                          id: scriptType.id,
-                        },
-                      }
-                    : {
-                        name: 'CreateScript',
-                        params: { id: scriptType.id },
-                      }
-                "
-                :type-title="scriptType.name"
-                :desc="scriptType.description"
-              ></script-select-type-box>
+              <script-select-type-box v-for="scriptType in searchResult" :key="scriptType.id" :img-url="
+                scriptType.icon
+                  ? scriptType.icon
+                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
+              " :link-url="
+  $route.params.id
+    ? {
+      name: 'CampaignCreateScript',
+      params: {
+        campaignId: $route.params.id,
+        id: scriptType.id,
+      },
+    }
+    : {
+      name: 'CreateScript',
+      params: { id: scriptType.id },
+    }
+" :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
             </div>
 
             <div v-else-if="category" class="row">
-              <script-select-type-box
-                v-for="scriptType in filteredCategory"
-                :key="scriptType.id"
-                :img-url="
-                  scriptType.icon
-                    ? scriptType.icon
-                    : require(`@/assets/icons/convert-icon/Aweber.svg`)
-                "
-                :link-url="
-                  $route.params.id
-                    ? {
-                        name: 'CampaignCreateScript',
-                        params: {
-                          campaignId: $route.params.id,
-                          id: scriptType.id,
-                        },
-                      }
-                    : {
-                        name: 'CreateScript',
-                        params: { id: scriptType.id },
-                      }
-                "
-                :type-title="scriptType.name"
-                :desc="scriptType.description"
-              ></script-select-type-box>
+              <script-select-type-box v-for="scriptType in filteredCategory" :key="scriptType.id" :img-url="
+                scriptType.icon
+                  ? scriptType.icon
+                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
+              " :link-url="
+  $route.params.id
+    ? {
+      name: 'CampaignCreateScript',
+      params: {
+        campaignId: $route.params.id,
+        id: scriptType.id,
+      },
+    }
+    : {
+      name: 'CreateScript',
+      params: { id: scriptType.id },
+    }
+" :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
             </div>
             <div v-else-if="scriptTypes && searchKey.length < 1" class="row">
-              <script-select-type-box
-                v-for="scriptType in scriptTypes"
-                :key="scriptType.id"
-                :img-url="
-                  scriptType.icon
-                    ? scriptType.icon
-                    : require(`@/assets/icons/convert-icon/Aweber.svg`)
-                "
-                :link-url="
-                  $route.params.id
-                    ? {
-                        name: 'CampaignCreateScript',
-                        params: {
-                          campaignId: $route.params.id,
-                          id: scriptType.id,
-                        },
-                      }
-                    : {
-                        name: 'CreateScript',
-                        params: { id: scriptType.id },
-                      }
-                "
-                :type-title="scriptType.name"
-                :desc="scriptType.description"
-              ></script-select-type-box>
+              <script-select-type-box v-for="scriptType in scriptTypes" :key="scriptType.id" :img-url="
+                scriptType.icon
+                  ? scriptType.icon
+                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
+              " :link-url="
+  $route.params.id
+    ? {
+      name: 'CampaignCreateScript',
+      params: {
+        campaignId: $route.params.id,
+        id: scriptType.id,
+      },
+    }
+    : {
+      name: 'CreateScript',
+      params: { id: scriptType.id },
+    }
+" :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
             </div>
           </div>
         </div>
@@ -146,7 +126,9 @@ export default {
       searchResult: [],
       scriptTypes: [],
       categoryOptions: [{ value: null, text: "All Categories (0)" }],
+      categories: [],
       category: null,
+      totalScripts: 0,
     };
   },
   methods: {
@@ -177,10 +159,11 @@ export default {
       this.$store
         .dispatch("getScriptTypes")
         .then((res) => {
-          this.$set(this.categoryOptions, 0, {
-            value: null,
-            text: "All Categories (" + res.data.data.length + ")",
-          });
+          // this.$set(this.categoryOptions, 0, {
+          //   value: null,
+          //   text: "All Categories (" + res.data.data.length + ")",
+          // });
+          this.totalScripts = res.data.data.length;
           this.scriptTypes = res.data.data;
 
           // console.log(res.data);
@@ -197,19 +180,21 @@ export default {
         .then((res) => {
           //this.categoryOptions = res.data.data;
 
-          let cat = res.data.data.reverse();
+          this.categories = res.data.data.reverse();
 
           // cat.forEach(function (data) {
           //   console.log( "cat data " + data);
           //   this.categoryOptions.push({ value: data.id, text: data.name });
           // });
 
-          for (let index = 0; index < cat.length; index++) {
-            this.categoryOptions.push({
-              value: cat[index].id,
-              text: cat[index].name + " (" + cat[index].scripts + ")",
-            });
-          }
+          // for (let index = 0; index < this.categories.length; index++) {
+          //   this.categoryOptions.push({
+          //     value: this.categories[index].id,
+          //     text: this.categories[index].name + " (" + this.categories[index].scripts + ")",
+          //   });
+          // }
+
+
 
           this.$store.commit("updateLoadState", false);
         })
@@ -219,6 +204,12 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+    setActiveCategory(cat) {
+      this.category = cat;
+    },
+    resetCategory() {
+      this.category = null;
+    }
   },
   computed: {
     filteredCategory() {
@@ -235,4 +226,29 @@ export default {
 </script>
 
 <style scoped>
+.template-categories-wrap {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.category-item {
+  border: 1px solid #566677;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.2rem 0.75rem;
+  margin: 0 1rem 1rem 0;
+  font-weight: 500;
+  border-radius: 1rem;
+  transition: all 0.5s;
+}
+
+
+.category-item:hover,
+.category-item.active {
+  border-color: rgb(131 56 236);
+  background-color: rgb(131 56 236);
+  color: #fff;
+}
 </style>

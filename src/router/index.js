@@ -53,6 +53,7 @@ import Keyword from '@/views/admin/Keyword'
 import PromoCode from '@/views/admin/PromoCode'
 import UsedCode from '@/views/admin/UsedCode'
 import UpgradeRedirect from '@/views/UpgradeRedirect'
+import ImageCreator from '@/views/ImageCreator'
 
 
 
@@ -313,6 +314,16 @@ const routes = [{
   component: Settings,
   meta: {
     title: 'OneCopy AI Writer - Account Settings',
+    requiresAuth: true,
+    adminAuth: false
+  }
+},
+{
+  path: '/tools/image-creator',
+  name: 'ImageCreator',
+  component: ImageCreator,
+  meta: {
+    title: 'OneCopy AI Writer - Image Creator',
     requiresAuth: true,
     adminAuth: false
   }

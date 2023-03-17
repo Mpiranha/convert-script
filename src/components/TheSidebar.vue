@@ -95,6 +95,28 @@
       </li> -->
 
       <li class="nav-item">
+        <button class="btn no-shadow nav-link" @click="toggleCollapse">
+          <img class="main-icon" src="@/assets/icons/ai-tool.svg" alt="" />
+          <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Settings.svg" alt="" />
+          <span class="nav-text"> AI Tools </span>
+          <img class="collapse-icon" :class="isCollapse ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
+        </button>
+      </li>
+      <li class="nav-item collapsible" :class="isCollapse ? 'open' : ''">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'ai-image' ? 'active' : ''" to="/tools/image-creator">
+              <span class="nav-text"> AI Image Creator </span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'ai-speech' ? 'active' : ''" to="/settings">
+              <span class="nav-text"> AI Text to Speech </span>
+            </router-link>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item">
         <router-link class="nav-link" :class="currentActive == 'settings' ? 'active' : ''" to="/settings">
           <img class="main-icon" src="@/assets/icons/convert-icon/settings.svg" alt="" />
           <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Settings.svg" alt="" />
@@ -198,6 +220,7 @@ export default {
   data() {
     return {
       isShowing: false,
+      isCollapse: false,
     };
   },
   methods: {
@@ -218,6 +241,9 @@ export default {
     },
     dismissSidebar() {
       this.$store.commit("updateSidebarState", false);
+    },
+    toggleCollapse() {
+      this.isCollapse = !this.isCollapse;
     }
   },
   mounted() {
@@ -414,6 +440,27 @@ export default {
 
 .btn-dismiss-sidebar img {
   width: 1rem;
+}
+
+.collapse-icon {
+  width: 1.5rem;
+  margin-left: 0.5rem;
+  transition: all 0.5s;
+}
+
+.collapsible {
+  height: 0;
+  overflow: hidden;
+  padding-left: 2rem;
+  transition: all 0.5s linear;
+}
+
+.collapsible.open {
+  height: 95px !important;
+}
+
+.collapse-icon.open {
+  transform: rotate(180deg);
 }
 
 @media screen and (min-width: 1300px) {

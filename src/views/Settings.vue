@@ -59,6 +59,17 @@
                 </b-form-input>
               </b-form-group>
 
+              <div class="row">
+                <b-form-group class="col-12 col-md-6" label="Default Input language" label-class="input-label">
+                  <b-form-select class="form-control" v-model="defaultLanguageInput" :options="languageOptions">
+                  </b-form-select>
+                </b-form-group>
+                <b-form-group class="col-12 col-md-6" label="Default Output language" label-class="input-label">
+                  <b-form-select class="form-control" v-model="defaultLanguageOutput" :options="languageOptions">
+                  </b-form-select>
+                </b-form-group>
+              </div>
+
               <!-- <b-form-group label="My Profile" label-class="form-label">
               <div class="d-flex user-img-wrap-setting">
                 <img
@@ -81,8 +92,8 @@
             </div>
 
             <div class="content-wrap extra-margin-left-wrap">
-              <password-input ref="old-pwd" label="Current Password" v-model.trim="pwd.password"
-                class-label="form-label" :class="{
+              <password-input ref="old-pwd" label="Current Password" v-model.trim="pwd.password" class-label="form-label"
+                :class="{
                   'is-invalid': submittedPwd && $v.pwd.password.$error,
                 }"></password-input>
               <div v-if="submittedPwd && $v.pwd.password.$error" class="invalid-feedback">
@@ -147,6 +158,9 @@ export default {
   },
   data() {
     return {
+      defaultLanguageInput: null,
+      defaultLanguageOutput: null,
+      languageOptions: [{ value: null, text: "Select Language" }],
       disabledButton: false,
       userDetails: {
         first_name: "",
@@ -196,9 +210,47 @@ export default {
   mounted() {
     // this.$store.dispatch("getUser");
     this.getUser();
+    this.getAllLanguages();
     this.submittedDetails = true;
   },
   methods: {
+    getAllLanguages() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getAllLanguages")
+        .then((res) => {
+         
+          var languages = res.data.data.sort(function (a, b) {
+            if (a.name < b.name) {
+              return -1;
+            }
+            if (a.name > b.name) {
+              return 1;
+            }
+            return 0;
+          });
+
+        
+
+          for (let i = 0; i < languages.length; i++) {
+            this.languageOptions.push({
+              value: [
+                {
+                  language_id: languages[i].id,
+                  user_id: this.$store.state.user.id,
+                },
+              ],
+              text: languages[i].name,
+            });
+          }
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     getUser() {
       this.$store.commit("updateLoadState", true);
       this.$store

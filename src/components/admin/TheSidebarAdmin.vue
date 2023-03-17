@@ -1,201 +1,81 @@
 <template>
   <div class="side-bar">
-    <img
-      class="side-logo"
-      src="@/assets/image/Logo.svg"
-      alt="logo"
-      srcset=""
-    />
+    <img class="side-logo" src="@/assets/image/Logo.svg" alt="logo" srcset="" />
     <nav class="nav flex-column nav-wrap">
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'stat' ? 'active' : ''"
-          to="/admin"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/sidebar/dashboard.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/convert-icon/active-icons/dashboard 1.svg"
-            alt=""
-          /> -->
+        <router-link class="nav-link" :class="currentActive == 'stat' ? 'active' : ''" to="/admin">
+
           <span class="nav-text"> Stat </span>
         </router-link>
       </li>
 
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'users' ? 'active' : ''"
-          to="/admin/users"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/user.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/user.svg"
-            alt=""
-          /> -->
+        <router-link class="nav-link" :class="currentActive == 'users' ? 'active' : ''" to="/admin/users">
+
           <span class="nav-text"> Users </span>
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'promo-code' ? 'active' : ''"
-          to="/admin/promo-codes"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/user.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/user.svg"
-            alt=""
-          /> -->
-          <span class="nav-text"> Promo Code </span>
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'transaction' ? 'active' : ''"
-          to="/admin/transactions"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/transaction.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/transaction.svg"
-            alt=""
-          /> -->
+        <router-link class="nav-link" :class="currentActive == 'transaction' ? 'active' : ''" to="/admin/transactions">
           <span class="nav-text"> Transactions </span>
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'script-type' ? 'active' : ''"
-          to="/admin/script/type"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/scripts-type.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/scripts-type.svg"
-            alt=""
-          /> -->
-          <span class="nav-text"> Script Type </span>
-        </router-link>
+        <button class="btn no-shadow nav-link" @click="toggleCollapse">
+          <span class="nav-text"> Text </span>
+          <img class="collapse-icon" :class="isCollapse ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
+        </button>
       </li>
-      <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'category' ? 'active' : ''"
-          to="/admin/category"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/category icon - grey.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/category active.svg"
-            alt=""
-          /> -->
-          <span class="nav-text"> Category </span>
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'language' ? 'active' : ''"
-          to="/admin/languages"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/language.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/language-active.svg"
-            alt=""
-          /> -->
-          <span class="nav-text"> Language </span>
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'tone' ? 'active' : ''"
-          to="/admin/tone"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/Tone.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/Tone-active.svg"
-            alt=""
-          /> -->
-          <span class="nav-text"> Tone </span>
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'flagged-script' ? 'active' : ''"
-          to="/admin/scripts/flagged"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/flagged-script.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/flagged-script.svg"
-            alt=""
-          /> -->
-          <span class="nav-text"> Flagged Script </span>
-        </router-link>
-      </li>
+      <li class="nav-item collapsible" :class="isCollapse ? 'open' : ''">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'script-type' ? 'active' : ''" to="/admin/script/type">
+              <span class="nav-text"> Script Type </span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'category' ? 'active' : ''" to="/admin/category">
+              <span class="nav-text"> Category </span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'language' ? 'active' : ''" to="/admin/languages">
+              <span class="nav-text"> Language </span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'tone' ? 'active' : ''" to="/admin/tone">
 
+              <span class="nav-text"> Tone </span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'flagged-script' ? 'active' : ''"
+              to="/admin/scripts/flagged">
+              <span class="nav-text"> Flagged Script </span>
+            </router-link>
+          </li>
+        </ul>
+      </li>
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'roles' ? 'active' : ''"
-          to="/admin/roles"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/roles-permissions.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/roles-permissions.svg"
-            alt=""
-          /> -->
+        <button class="btn no-shadow nav-link" @click="toggleCollapse">
+          <span class="nav-text"> Images </span>
+          <img class="collapse-icon" :class="isCollapse ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="btn no-shadow nav-link" @click="toggleCollapse">
+          <span class="nav-text"> Audio </span>
+          <img class="collapse-icon" :class="isCollapse ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
+        </button>
+      </li>
+      <li class="nav-item">
+        <router-link class="nav-link" :class="currentActive == 'promo-code' ? 'active' : ''" to="/admin/promo-codes">
+          <span class="nav-text"> Promo Code </span>
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link class="nav-link" :class="currentActive == 'roles' ? 'active' : ''" to="/admin/roles">
           <span class="nav-text"> Roles and Permissions </span>
         </router-link>
         <!-- </li>
@@ -242,126 +122,52 @@
       </li>
 
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'suggestion' ? 'active' : ''"
-          to="/admin/suggestions"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/suggestion.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/suggestion.svg"
-            alt=""
-          /> -->
+        <router-link class="nav-link" :class="currentActive == 'suggestion' ? 'active' : ''" to="/admin/suggestions">
+
           <span class="nav-text"> Suggestion </span>
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'configuration' ? 'active' : ''"
-          to="/admin/config"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/configuration.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/configuration.svg"
-            alt=""
-          /> -->
+        <router-link class="nav-link" :class="currentActive == 'configuration' ? 'active' : ''" to="/admin/config">
+
           <span class="nav-text"> Configuration </span>
         </router-link>
       </li>
-       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'keyword' ? 'active' : ''"
-          to="/admin/keywords"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/configuration.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/configuration.svg"
-            alt=""
-          /> -->
+      <li class="nav-item">
+        <router-link class="nav-link" :class="currentActive == 'keyword' ? 'active' : ''" to="/admin/keywords">
           <span class="nav-text"> Keyword </span>
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'bonuses' ? 'active' : ''"
-          to="/admin/bonuses"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/bonuses.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/bonuses.svg"
-            alt=""
-          /> -->
+        <router-link class="nav-link" :class="currentActive == 'bonuses' ? 'active' : ''" to="/admin/bonuses">
           <span class="nav-text"> Bonuses </span>
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'tutorials' ? 'active' : ''"
-          to="/admin/tutorials"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/tutorials.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/tutorial.svg"
-            alt=""
-          /> -->
+        <router-link class="nav-link" :class="currentActive == 'tutorials' ? 'active' : ''" to="/admin/tutorials">
+
           <span class="nav-text"> Tutorials </span>
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link
-          class="nav-link"
-          :class="currentActive == 'agency-files' ? 'active' : ''"
-          to="/admin/agency/files"
-        >
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/agency-file.svg"
-            alt=""
-          />
-          <img
-            class="active-icon"
-            src="@/assets/icons/admin/sidebar-active/agency-files.svg"
-            alt=""
-          /> -->
-          <span class="nav-text"> Agency Files </span>
-        </router-link>
+        <button class="btn no-shadow nav-link" @click="toggleCollapse">
+          <span class="nav-text"> Files </span>
+          <img class="collapse-icon" :class="isCollapse ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
+        </button>
       </li>
+      <li class="nav-item collapsible" :class="isCollapse ? 'open' : ''">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'agency-files' ? 'active' : ''"
+              to="/admin/agency/files">
+              <span class="nav-text"> Agency Files </span>
+            </router-link>
+          </li>
+        </ul>
+      </li>
+
       <li class="nav-item">
         <a @click="logout($event)" class="btn nav-link" href="#">
-          <!-- <img
-            class="main-icon"
-            src="@/assets/icons/admin/sidebar-icon/logout.svg"
-            alt="icon"
-          /> -->
           Logout
         </a>
       </li>
@@ -382,11 +188,15 @@ export default {
   data() {
     return {
       isShowing: false,
+      isCollapse: false,
     };
   },
   methods: {
     toggleShow: function () {
       this.isShowing = !this.isShowing;
+    },
+    toggleCollapse() {
+      this.isCollapse = !this.isCollapse;
     },
     logout: function (event) {
       event.preventDefault();
@@ -528,9 +338,31 @@ export default {
   margin-right: 0.5rem;
 }
 
+
+.collapse-icon {
+  width: 1.5rem;
+  margin-left: 0.5rem;
+  transition: all 0.5s;
+}
+
+.collapsible {
+  height: 0;
+  overflow: hidden;
+  padding-left: 2rem;
+  transition: all 0.5s linear;
+}
+
+.collapsible.open {
+  height: initial !important;
+}
+
+.collapse-icon.open {
+  transform: rotate(180deg);
+}
+
 @media screen and (min-width: 1350px) {
   .nav-wrap .nav-link {
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
 
   .main-icon,
