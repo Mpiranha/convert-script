@@ -116,13 +116,13 @@
           </li>
         </ul>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <router-link class="nav-link" :class="currentActive == 'settings' ? 'active' : ''" to="/settings">
           <img class="main-icon" src="@/assets/icons/convert-icon/settings.svg" alt="" />
           <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Settings.svg" alt="" />
           <span class="nav-text"> Settings </span>
         </router-link>
-      </li>
+      </li> -->
       <li class="nav-item">
         <router-link class="nav-link" :class="currentActive == 'tutorials' ? 'active' : ''" to="/tutorial">
           <img class="main-icon" src="@/assets/icons/convert-icon/Tutotials.svg" alt="" />

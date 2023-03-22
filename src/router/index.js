@@ -54,6 +54,9 @@ import PromoCode from '@/views/admin/PromoCode'
 import UsedCode from '@/views/admin/UsedCode'
 import UpgradeRedirect from '@/views/UpgradeRedirect'
 import ImageCreator from '@/views/ImageCreator'
+import ImageStyle from '@/views/admin/ImageStyle'
+import ImageFilter from '@/views/admin/ImageFilter'
+import ImageMedium from '@/views/admin/ImageMedium'
 
 
 
@@ -444,6 +447,36 @@ const routes = [{
   component: Tone,
   meta: {
     title: 'OneCopy AI Writer - Tone',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/image/filter',
+  name: 'ImageFilter',
+  component: ImageFilter,
+  meta: {
+    title: 'OneCopy AI Writer - Filter',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/image/medium',
+  name: 'ImageMedium',
+  component: ImageMedium,
+  meta: {
+    title: 'OneCopy AI Writer - Medium',
+    requiresAuth: true,
+    adminAuth: true
+  }
+},
+{
+  path: '/admin/image/style',
+  name: 'ImageStyle',
+  component: ImageStyle,
+  meta: {
+    title: 'OneCopy AI Writer - Style',
     requiresAuth: true,
     adminAuth: true
   }

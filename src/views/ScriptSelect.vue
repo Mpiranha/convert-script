@@ -234,8 +234,9 @@ export default {
 }
 
 .category-item {
-  border: 1px solid #566677;
-  font-size: 1.1rem;
+  border: 1px solid #393f46;
+  font-size: 0.9rem;
+  color: #393f46;
   cursor: pointer;
   padding: 0.2rem 0.75rem;
   margin: 0 1rem 1rem 0;

@@ -60,12 +60,12 @@
               </b-form-group>
 
               <div class="row">
-                <b-form-group class="col-12 col-md-6" label="Default Input language" label-class="input-label">
-                  <b-form-select class="form-control" v-model="defaultLanguageInput" :options="languageOptions">
+                <b-form-group class="col-12 col-md-6" label="Default Input language" label-class="form-label">
+                  <b-form-select class="form-control input-table" v-model="defaultLanguageInput" :options="languageOptions">
                   </b-form-select>
                 </b-form-group>
-                <b-form-group class="col-12 col-md-6" label="Default Output language" label-class="input-label">
-                  <b-form-select class="form-control" v-model="defaultLanguageOutput" :options="languageOptions">
+                <b-form-group class="col-12 col-md-6" label="Default Output language" label-class="form-label">
+                  <b-form-select class="form-control input-table" v-model="defaultLanguageOutput" :options="languageOptions">
                   </b-form-select>
                 </b-form-group>
               </div>
@@ -219,7 +219,7 @@ export default {
       this.$store
         .dispatch("getAllLanguages")
         .then((res) => {
-         
+
           var languages = res.data.data.sort(function (a, b) {
             if (a.name < b.name) {
               return -1;
@@ -230,16 +230,11 @@ export default {
             return 0;
           });
 
-        
+
 
           for (let i = 0; i < languages.length; i++) {
             this.languageOptions.push({
-              value: [
-                {
-                  language_id: languages[i].id,
-                  user_id: this.$store.state.user.id,
-                },
-              ],
+              value: languages[i].id,
               text: languages[i].name,
             });
           }
@@ -270,6 +265,8 @@ export default {
       this.userDetails.first_name = this.userData.first_name;
       this.userDetails.last_name = this.userData.last_name;
       this.email = this.userData.email;
+      this.defaultLanguageInput = this.userData.default_input_language_id.id;
+      this.defaultLanguageOutput = this.userData.default_output_language_id.id;
     },
 
     updateUserDetails(event) {
@@ -290,16 +287,19 @@ export default {
           first_name: this.userDetails.first_name,
           last_name: this.userDetails.last_name,
           email: this.email,
+          default_input_language_id: this.defaultLanguageInput.language_id,
+          default_output_language_id: this.defaultLanguageOutput.language_id
         })
         .then((res) => {
           console.log(res);
+
 
           this.makeToast("success", "Profile Updated successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // console.log(error.response);
-          this.error = error;
+          this.error = error.response.data.errors;
           this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
         });

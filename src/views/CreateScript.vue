@@ -63,7 +63,7 @@
                           <div class="row">
                             <b-form-group class="col-12 col-md-6" label="Input language (Optional)"
                               label-class="input-label" v-if="
-                              additional_content.script_type_language.script_type_allowed_tone">
+                                additional_content.script_type_language.script_type_allowed_tone">
                               <b-form-select class="form-control" v-model="languageInput" :options="languageOptions">
                               </b-form-select>
                             </b-form-group>
@@ -304,7 +304,7 @@ export default {
           script_response_id: this.generatedScript.id,
         })
         .then((res) => {
-          console.log(res.data.data.message);
+          // console.log(res.data.data.message);
 
           // this.getScripts();
           this.makeToast("success", res.data.data.message);
@@ -321,7 +321,7 @@ export default {
         .dispatch("getOneScriptTypeSelect", id)
         .then((res) => {
           this.scriptData = res.data.data;
-          console.log(res.data.data);
+          // console.log(res.data.data);
           this.additional_content = res.data.additional_content;
           for (let i = 0; i < this.scriptData.length; i++) {
             this.scriptAnswers.push({ answer: "" });
@@ -341,6 +341,23 @@ export default {
         .dispatch("getOneScriptType", id)
         .then((res) => {
           this.scriptType = res.data.data;
+
+          if (this.$store.state.user.default_input_language_id) {
+            this.languageInput = [{
+              language_id: this.$store.state.user.default_input_language_id.id,
+              script_type_id: res.data.data.id,
+              user_id: this.$store.state.user.id
+            }];
+          }
+
+          if (this.$store.state.user.default_output_language_id) {
+            this.languageOutput = [{
+              language_id: this.$store.state.user.default_output_language_id.id,
+              script_type_id: res.data.data.id,
+              user_id: this.$store.state.user.id
+            }];
+          }
+
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -404,9 +421,9 @@ export default {
             tones: this.tone ? this.tone : [],
           },
         })
-        .then((res) => {
+        .then(() => {
           this.loading = false;
-          console.log(res);
+          // console.log(res);
 
           this.generateScript();
 
@@ -507,7 +524,7 @@ export default {
         .dispatch("exportOneScript", id)
         .then((res) => {
           // this.users = res.data.data;
-          console.log(res);
+          //console.log(res);
 
           var a = document.createElement("a");
           document.body.appendChild(a);
@@ -540,7 +557,7 @@ export default {
         .dispatch("exportAllGeneratedScripts", id)
         .then((res) => {
           // this.users = res.data.data;
-          console.log(res);
+          // console.log(res);
 
           var a = document.createElement("a");
           document.body.appendChild(a);

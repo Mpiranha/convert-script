@@ -21,12 +21,13 @@
         </router-link>
       </li>
       <li class="nav-item">
-        <button class="btn no-shadow nav-link" @click="toggleCollapse">
+        <button class="btn no-shadow nav-link" @click="toggleCollapse('text')">
           <span class="nav-text"> Text </span>
-          <img class="collapse-icon" :class="isCollapse ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
+          <img class="collapse-icon" :class="isCollapse == 'text' ? 'open' : ''" src="@/assets/icons/down.png"
+            alt="up icon">
         </button>
       </li>
-      <li class="nav-item collapsible" :class="isCollapse ? 'open' : ''">
+      <li class="nav-item collapsible" :class="isCollapse == 'text' ? 'open' : ''">
         <ul class="nav flex-column">
           <li class="nav-item">
             <router-link class="nav-link" :class="currentActive == 'script-type' ? 'active' : ''" to="/admin/script/type">
@@ -58,15 +59,38 @@
         </ul>
       </li>
       <li class="nav-item">
-        <button class="btn no-shadow nav-link" @click="toggleCollapse">
+        <button class="btn no-shadow nav-link" @click="toggleCollapse('image')">
           <span class="nav-text"> Images </span>
-          <img class="collapse-icon" :class="isCollapse ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
+          <img class="collapse-icon" :class="isCollapse == 'image' ? 'open' : ''" src="@/assets/icons/down.png"
+            alt="up icon">
         </button>
       </li>
+      <li class="nav-item collapsible" :class="isCollapse == 'image' ? 'open' : ''">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'image-style' ? 'active' : ''" to="/admin/image/style">
+              <span class="nav-text"> Image Style
+              </span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'medium' ? 'active' : ''" to="/admin/image/medium">
+              <span class="nav-text"> Medium
+              </span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'filter' ? 'active' : ''" to="/admin/image/filter">
+              <span class="nav-text"> Filter </span>
+            </router-link>
+          </li>
+
+        </ul>
+      </li>
       <li class="nav-item">
-        <button class="btn no-shadow nav-link" @click="toggleCollapse">
+        <button class="btn no-shadow nav-link" @click="toggleCollapse('audio')">
           <span class="nav-text"> Audio </span>
-          <img class="collapse-icon" :class="isCollapse ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
+          <img class="collapse-icon" :class="isCollapse == 'audio' ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
         </button>
       </li>
       <li class="nav-item">
@@ -138,29 +162,30 @@
           <span class="nav-text"> Keyword </span>
         </router-link>
       </li>
+     
       <li class="nav-item">
-        <router-link class="nav-link" :class="currentActive == 'bonuses' ? 'active' : ''" to="/admin/bonuses">
-          <span class="nav-text"> Bonuses </span>
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link class="nav-link" :class="currentActive == 'tutorials' ? 'active' : ''" to="/admin/tutorials">
-
-          <span class="nav-text"> Tutorials </span>
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <button class="btn no-shadow nav-link" @click="toggleCollapse">
+        <button class="btn no-shadow nav-link" @click="toggleCollapse('files')">
           <span class="nav-text"> Files </span>
-          <img class="collapse-icon" :class="isCollapse ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
+          <img class="collapse-icon" :class="isCollapse == 'files' ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
         </button>
       </li>
-      <li class="nav-item collapsible" :class="isCollapse ? 'open' : ''">
+      <li class="nav-item collapsible" :class="isCollapse == 'files' ? 'open' : ''">
         <ul class="nav flex-column">
           <li class="nav-item">
             <router-link class="nav-link" :class="currentActive == 'agency-files' ? 'active' : ''"
               to="/admin/agency/files">
               <span class="nav-text"> Agency Files </span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'bonuses' ? 'active' : ''" to="/admin/bonuses">
+              <span class="nav-text"> Bonuses </span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'tutorials' ? 'active' : ''" to="/admin/tutorials">
+    
+              <span class="nav-text"> Tutorials </span>
             </router-link>
           </li>
         </ul>
@@ -195,8 +220,12 @@ export default {
     toggleShow: function () {
       this.isShowing = !this.isShowing;
     },
-    toggleCollapse() {
-      this.isCollapse = !this.isCollapse;
+    toggleCollapse(item) {
+      if (this.isCollapse == item) {
+        this.isCollapse = null;
+        return
+      } 
+      this.isCollapse = item;
     },
     logout: function (event) {
       event.preventDefault();
@@ -362,7 +391,7 @@ export default {
 
 @media screen and (min-width: 1350px) {
   .nav-wrap .nav-link {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .main-icon,
