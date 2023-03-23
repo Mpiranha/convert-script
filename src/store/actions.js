@@ -216,6 +216,49 @@ export default {
     });
   },
 
+  // Image AI
+  getImageFiltersUser({ state }) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/ai/filters`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  getImageMediumUser({ state }) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/ai/media`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  getImageStyleUser({ state }) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/ai/image_styles`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
   // Billing Page
 
   getUserPlanDetails({ state }) {
@@ -1613,6 +1656,22 @@ export default {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
         .delete(`${baseUrl}/api/v1/admin/ai_image_style/${id}`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  // generate image
+
+  generateImage({ state }, data) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .post(`${baseUrl}/api/v1/ai/image_creator`, data, {})
         .then((resp) => {
           resolve(resp);
         })

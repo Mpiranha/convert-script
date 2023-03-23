@@ -29,25 +29,19 @@
                     <div class="script-form-wrap pb-3 pb-lg-0">
                       <form action="#" method="GET" @submit.prevent="onSubmit">
                         <div class="script-form">
-                          <div v-for="(scriptInfo, index) in scriptData" :key="scriptInfo.id" class="form-group">
-                            <label for="">{{
-                              scriptInfo.question.label
-                            }}</label>
-                            <textarea v-if="
-                              scriptInfo.question.field_type === 'textarea'
-                            " :class="{
-  'is-invalid':
-    $v.scriptAnswers.$each[index].answer.$error,
-}" rows="3" cols="10" v-model="scriptAnswers[index].answer" :placeholder="scriptInfo.question.placeholder"
-                              class="form-control"></textarea>
-                            <input v-else :type="scriptInfo.question.field_type" name="" :class="{
+                          <div class="form-group">
+                            <label for="">
+                              Image Description
+                            </label>
+                            <textarea :class="{
                               'is-invalid':
-                                $v.scriptAnswers.$each[index].answer.$error,
-                            }" id="" v-model="scriptAnswers[index].answer" class="form-control"
-                              :placeholder="scriptInfo.question.placeholder" />
+                                $v.answerQuery.desc.$error,
+                            }" rows="5" cols="10" v-model="answerQuery.desc" placeholder=""
+                              class="form-control"></textarea>
+
                             <div class="invalid-feedback">
                               <div v-if="
-                                !$v.scriptAnswers.$each[index].answer
+                                !$v.answerQuery.desc
                                   .required && isSubmitted
                               ">
                                 Answer is required
@@ -55,27 +49,21 @@
                             </div>
                           </div>
 
-                          <b-form-group label="Choose a tone (Optional)" label-class="input-label" v-if="
-                            additional_content.script_type_tone.script_type_allowed_tone
-                          ">
-                            <b-form-select class="form-control" v-model="tone" :options="toneOptions"></b-form-select>
+                          <b-form-group label="Image Style (Optional)" label-class="input-label">
+                            <b-form-select class="form-control" v-model="answerQuery.imageStyle"
+                              :options="imageStyleOptions">
+                            </b-form-select>
                           </b-form-group>
-                          <div class="row">
-                            <b-form-group class="col-12 col-md-6" label="Input language (Optional)"
-                              label-class="input-label" v-if="
-                              additional_content.script_type_language.script_type_allowed_tone">
-                              <b-form-select class="form-control" v-model="languageInput" :options="languageOptions">
-                              </b-form-select>
-                            </b-form-group>
-                            <b-form-group class="col-12 col-md-6" label="Output language (Optional)"
-                              label-class="input-label" v-if="
-                                additional_content.script_type_language
-                                  .script_type_allowed_tone
-                              ">
-                              <b-form-select class="form-control" v-model="languageOutput" :options="languageOptions">
-                              </b-form-select>
-                            </b-form-group>
-                          </div>
+
+                          <b-form-group label="Medium (Optional)" label-class="input-label">
+                            <b-form-select class="form-control" v-model="answerQuery.medium" :options="mediumOptions">
+                            </b-form-select>
+                          </b-form-group>
+
+                          <b-form-group label="Filter (Optional)" label-class="input-label">
+                            <b-form-select class="form-control" v-model="answerQuery.filter" :options="filterOptions">
+                            </b-form-select>
+                          </b-form-group>
                         </div>
                         <div class="script-form-footer">
                           <!-- <div class="desc">Variation</div>
@@ -99,37 +87,26 @@
                   <div class="d-flex flex-column h-100">
                     <div class="section-head bordered-bottom">
                       <div class="section-head-right">
-                        <!-- <select class="sort-select" name="" id="">
-                        <option value="none" selected>Export All</option>
-                        <option value=""></option>
-                        <option value=""></option>
-                        <option value=""></option>
-                      </select> -->
-                        <button v-if="generatedScript.length > 0" @click="exportAllScripts()"
+                        <button v-if="generatedImage.length > 0" @click="exportAllScripts()"
                           class="btn btn-export-all mb-0">
                           Export All
                         </button>
                       </div>
                     </div>
                     <div class="control-overflow">
-                      <div v-if="generatedScript.length > 0">
-                        <div v-for="script in generatedScript" :key="script.id">
-                          <script-box @script-edited="(newText) => { response.text = newText }"
-                            :content="formatScript(response.text)" :id="response.id" @save-clicked="
-                              saveCampaign(response.id, response.text)
-                            " v-for="response in script.scriptResponses" :key="response.id"
-                            :script-content="formatScript(response.text)" :script-content-raw="response.text"
-                            @favorite-clicked="
-                              addRemoveScriptFavorite(response.id)
-                            " @edit-clicked="
-  openEditModal(response.id, response.text)
-" @export-clicked="exportScript(response.id)">
-                          </script-box>
+                      <div v-if="generatedImage.length > 0">
+                        <div class="container pt-5">
+                          <div class="row px-5">
+                            <image-display v-for="(image, index) in generatedImage" :key="index"
+                              :image-url="image.url"></image-display>
+
+                          </div>
                         </div>
                       </div>
                       <div v-else class="empty-script">
-                        Generated content will display here.
+                        Generated image will display here.
                       </div>
+
                     </div>
                   </div>
                 </div>
@@ -141,24 +118,14 @@
     </div>
     <b-modal :hide-header="true" id="modal-edit-script" centered size="md" :hide-footer="true"
       dialog-class="control-modal-width" content-class="modal-main">
-      <quill-editor ref="myQuillEditor" class="mb-3" v-model="content" :options="editorOption" />
+
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-edit-script')" class="close-modal">Go back</b-button>
         <b-button @click="editScript(editId, content)" class="save-modal">Edit</b-button>
       </div>
     </b-modal>
-    <b-modal :hide-header="true" id="modal-add-campaign" centered size="md" :hide-footer="true"
-      dialog-class="control-width" content-class="modal-main">
-      <b-form-group label="Add to Campaign" label-class="form-label">
-        <b-form-select class="input-table" v-model="selectedCampaign" :options="campaignOptions"></b-form-select>
-      </b-form-group>
 
-      <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-add-campaign')" class="close-modal">Close</b-button>
-        <b-button @click="saveToCampaign" class="save-modal">Add</b-button>
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -166,13 +133,9 @@
 // @ is an alias to /src
 import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
-import ScriptBox from "@/components/ScriptBox";
-import { required } from "vuelidate/lib/validators";
+import ImageDisplay from "../components/ImageDisplay.vue";
+import { required, minLength } from "vuelidate/lib/validators";
 import alertMixin from "@/mixins/alertMixin";
-import { quillEditor } from "vue-quill-editor";
-import "quill/dist/quill.core.css";
-import "quill/dist/quill.snow.css";
-import "quill/dist/quill.bubble.css";
 import $ from 'jquery'
 
 export default {
@@ -180,112 +143,36 @@ export default {
   components: {
     Sidebar,
     Navbar,
-    ScriptBox,
-    quillEditor,
+    ImageDisplay
   },
   mixins: [alertMixin],
   data() {
     return {
-      selectedCampaign: null,
-      campaignOptions: [{ value: null, text: "Select a Campaign" }],
-      tone: null,
-      languageInput: null,
-      languageOutput: null,
-      toneOptions: [{ value: null, text: "Select Tone" }],
-      languageOptions: [{ value: null, text: "Select Language" }],
+      imageStyleOptions: [{ value: null, text: "Select Style" }],
+      mediumOptions: [{ value: null, text: "Select Medium" }],
+      filterOptions: [{ value: null, text: "Select Filter" }],
       loading: false,
-      additional_content: {
-        script_type_tone: {
-          script_type_allowed_tone: false,
-        },
-        script_type_language: {
-          script_type_allowed_tone: false,
-        },
+      answerQuery: {
+        desc: "",
+        imageStyle: null,
+        medium: null,
+        filter: null
       },
-      scriptType: [],
-      scriptData: [],
-      scriptAnswers: [],
       content: "",
-      variation: 2,
-      generatedScript: [],
+      generatedImage: [],
       isSubmitted: false,
-      preset: [],
       editId: "",
-      selectedSave: {
-        id: null,
-        text: null,
-      },
-      editorOption: {
-        // Some Quill options...
-        theme: "snow",
-        modules: {
-          toolbar: {
-            container: [
-              [{ header: [1, 2, 3, 4, 5, 6, false] }],
-              ["bold", "italic", "underline", "strike"], // toggled buttons
-              [{ list: "ordered" }, { list: "bullet" }],
-              [{ script: "sub" }, { script: "super" }], // superscript/subscript
-              [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-              [{ align: [] }],
-
-              ["clean"],
-            ],
-          },
-        },
-      },
     };
   },
   validations: {
-    scriptAnswers: {
-      $each: {
-        answer: { required },
+    answerQuery: {
+      desc: {
+        required,
+        minLength: minLength(10),
       },
     },
   },
   methods: {
-
-    saveToCampaign() {
-      this.$bvModal.hide("modal-add-campaign");
-      this.editScript(
-        this.selectedSave.id,
-        this.selectedCampaign,
-        this.selectedSave.text
-      );
-    },
-    saveCampaign(id, txt) {
-      this.$bvModal.show("modal-add-campaign");
-
-      this.selectedSave = {
-        id: id,
-        text: txt,
-      };
-    },
-    getCampaign() {
-      // this.$store.commit("updateLoadState", true);
-      this.$store
-        .dispatch("getCampaigns")
-        .then((res) => {
-          let data = res.data.data;
-          for (let index = 0; index < data.length; index++) {
-            this.campaignOptions.push({
-              value: data[index].id,
-              text: data[index].name,
-            });
-          }
-
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          // // console.log(error);
-          // this.error = error.response.data.errors.root;
-          // // this.error = error;
-          console.log(error);
-          this.$store.commit("updateLoadState", false);
-        });
-    },
-    formatScript(text) {
-      return text.replace(/\n/g, "<br />");
-    },
     openEditModal(id, data) {
       this.$bvModal.show("modal-edit-script");
       this.editId = id;
@@ -298,157 +185,34 @@ export default {
       // this.editId = id;
       // this.campaignName = data;
     },
-    addRemoveScriptFavorite() {
-      this.$store
-        .dispatch("addRemoveFavorite", {
-          script_response_id: this.generatedScript.id,
-        })
-        .then((res) => {
-          console.log(res.data.data.message);
-
-          // this.getScripts();
-          this.makeToast("success", res.data.data.message);
-        })
-        .catch((error) => {
-          console.log(error);
-          this.error = error;
-          this.makeToast("danger", this.error);
-        });
-    },
-    getScriptData(id) {
-      this.$store.commit("updateLoadState", true);
-      this.$store
-        .dispatch("getOneScriptTypeSelect", id)
-        .then((res) => {
-          this.scriptData = res.data.data;
-          console.log(res.data.data);
-          this.additional_content = res.data.additional_content;
-          for (let i = 0; i < this.scriptData.length; i++) {
-            this.scriptAnswers.push({ answer: "" });
-          }
-
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error);
-          //this.loading = false;
-          this.$store.commit("updateLoadState", false);
-        });
-    },
-    getScriptType(id) {
-      this.$store.commit("updateLoadState", true);
-      this.$store
-        .dispatch("getOneScriptType", id)
-        .then((res) => {
-          this.scriptType = res.data.data;
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error);
-          //this.loading = false;
-          this.$store.commit("updateLoadState", false);
-        });
-    },
-    generateScript() {
-      this.$store.commit("updateLoadState", true);
+    generateImage() {
       this.loading = true;
 
       this.$store
-        .dispatch("generateScript", {
-          content: "Info Limited",
-          script_type_id: this.$route.params.id,
-          campaign_id: this.$route.params.campaignId
-            ? this.$route.params.campaignId
-            : "",
-          tone_id: this.tone ? this.tone[0].tone_id : "",
-          output_language_id: this.languageOutput
-            ? this.languageOutput[0].language_id
-            : "",
-          input_language_id: this.languageInput
-            ? this.languageInput[0].language_id
-            : "",
-          // language_id: this.language ? this.language[0].language_id : "",
+        .dispatch("generateImage", {
+          image_description: this.answerQuery.desc,
+          image_style_id: this.answerQuery.imageStyle,
+          medium_id: this.answerQuery.medium,
+          filter_id: this.answerQuery.filter,
         })
         .then((res) => {
           this.loading = false;
 
-          if (res.data.length > 0 || !$.isEmptyObject(res.data.data)) {
-            this.generatedScript.push(res.data.data);
+          console.log(res.data.data)
+
+          if (res.data.data.images.length > 0 || !$.isEmptyObject(res.data.data.images)) {
+            this.generatedImage = res.data.data.images;
           } else {
             this.makeToast("danger", res.data.message);
           }
 
           this.$store.commit("updateLoadState", false);
         })
-        .catch((error) => {
+        .catch(() => {
           this.loading = false;
-          console.log(error);
-          this.error = error.response.data.error;
+          // this.error = error.response.data.error;
           this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
-        });
-    },
-    postPresetAnswer() {
-      // this.$store.commit("updateLoadState", true);
-      this.loading = true;
-
-      this.$store
-        .dispatch("editScriptTypePresets", {
-          id: this.scriptData[0].id,
-          data: {
-            // answer: this.scriptAnswers[0].answer,
-            // script_type_preset_id: this.scriptData[0].question.id,
-            // script_type_id: this.$route.params.id,
-            presets: this.preset,
-            languages: this.languageInput ? this.languageInput : [],
-            tones: this.tone ? this.tone : [],
-          },
-        })
-        .then((res) => {
-          this.loading = false;
-          console.log(res);
-
-          this.generateScript();
-
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          this.loading = false;
-          console.log("error: " + error);
-          this.error = error.response.data.errors;
-
-          // this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
-        });
-    },
-    editScript(id, txt, campaignId) {
-      this.$store.commit("updateLoadState", true);
-      this.$bvModal.hide("modal-edit-script");
-      this.$store
-        .dispatch("editScript", {
-          id: id,
-          data: campaignId
-            ? { campaign_id: 1, text: txt }
-            : { text: this.content },
-        })
-        .then(() => {
-          this.error = null;
-          this.activeScript = null;
-
-          if (campaignId) {
-            this.selectedCampaign = null;
-            this.makeToast("success", "Script added to campaign successfully");
-          } else {
-            this.makeToast("success", "Script edited successfully");
-          }
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error);
-          this.error = error;
-          this.$store.commit("updateLoadState", false);
-          this.makeToast("danger", this.error);
-          // this.error = error;
         });
     },
     onSubmit() {
@@ -460,36 +224,18 @@ export default {
       // stop here if form is invalid
       if (this.$v.$invalid) return;
 
-      for (let i = 0; i < this.scriptData.length; i++) {
-        this.preset.push({
-          answer: this.scriptAnswers[i].answer,
-          script_type_preset_id: this.scriptData[i].question.id,
-          script_type_id: this.$route.params.id,
-          user_script_type_preset_id: this.scriptData[i].id,
-        });
-      }
+      this.generateImage();
 
-      // this.generateScript();
-      this.postPresetAnswer();
     },
-    getAllTones() {
+    getImageStyle() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllTones")
+        .dispatch("getImageStyleUser")
         .then((res) => {
+          console.log(res.data)
           for (let i = 0; i < res.data.data.length; i++) {
-            this.toneOptions.push({
-              value: [
-                {
-                  tone_id: res.data.data[i].id,
-                  script_type_id: this.scriptType.id
-                    ? this.scriptType.id
-                    : setTimeout(() => {
-                      return this.scriptType.id;
-                    }, 3000),
-                  user_id: this.$store.state.user.id,
-                },
-              ],
+            this.imageStyleOptions.push({
+              value: res.data.data[i].id,
               text: res.data.data[i].name,
             });
           }
@@ -501,95 +247,36 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-    exportScript(id) {
+
+
+
+    getImageFilters() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("exportOneScript", id)
+        .dispatch("getImageFiltersUser")
         .then((res) => {
-          // this.users = res.data.data;
-          console.log(res);
-
-          var a = document.createElement("a");
-          document.body.appendChild(a);
-          //a.style = "display: none";
-          var url = res.config.url;
-
-          a.href = url;
-          a.download = true;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(a);
-
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error);
-          this.$store.commit("updateLoadState", false);
-        });
-    },
-    exportAllScripts(id) {
-      if (this.generatedScript.length < 1) {
-        this.makeToast("danger", "No script to export");
-        return;
-      } else {
-        id = this.generatedScript[this.generatedScript.length - 1].id;
-      }
-
-      this.$store.commit("updateLoadState", true);
-      this.$store
-        .dispatch("exportAllGeneratedScripts", id)
-        .then((res) => {
-          // this.users = res.data.data;
-          console.log(res);
-
-          var a = document.createElement("a");
-          document.body.appendChild(a);
-          //a.style = "display: none";
-          var url = res.config.url;
-
-          a.href = url;
-          a.download = true;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(a);
-
-          this.$store.commit("updateLoadState", false);
-        })
-        .catch((error) => {
-          console.log(error);
-          this.$store.commit("updateLoadState", false);
-        });
-    },
-
-    getAllLanguages() {
-      this.$store.commit("updateLoadState", true);
-      this.$store
-        .dispatch("getAllLanguages")
-        .then((res) => {
-          this.languages = res.data.data.sort(function (a, b) {
-            if (a.name < b.name) {
-              return -1;
-            }
-            if (a.name > b.name) {
-              return 1;
-            }
-            return 0;
-          });
-          console.log(this.languages);
-
           for (let i = 0; i < res.data.data.length; i++) {
-            this.languageOptions.push({
-              value: [
-                {
-                  language_id: res.data.data[i].id,
-                  script_type_id: this.scriptType.id
-                    ? this.scriptType.id
-                    : setTimeout(() => {
-                      return this.scriptType.id;
-                    }, 3000),
-                  user_id: this.$store.state.user.id,
-                },
-              ],
+            this.filterOptions.push({
+              value: res.data.data[i].id,
+              text: res.data.data[i].name,
+            });
+          }
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    getImageMedium() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getImageMediumUser")
+        .then((res) => {
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.mediumOptions.push({
+              value: res.data.data[i].id,
               text: res.data.data[i].name,
             });
           }
@@ -603,11 +290,9 @@ export default {
     },
   },
   mounted() {
-    this.getCampaign();
-    this.getScriptType(this.$route.params.id);
-    this.getScriptData(this.$route.params.id);
-    this.getAllTones();
-    this.getAllLanguages();
+    this.getImageStyle();
+    this.getImageFilters();
+    this.getImageMedium();
   },
 };
 </script>
@@ -724,6 +409,6 @@ export default {
 }
 
 .control-overflow {
-  height: 70vh;
+  height: 79vh;
 }
 </style>
