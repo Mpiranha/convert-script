@@ -1,6 +1,6 @@
 <template>
     <div class="col-6">
-        <div class="image-display_wrap" :style="`background-image: url(${imageUrl})`">
+        <div class="image-display_wrap" :style="`background-image: url(${imageUrl})`" @click="updateParent()">
 
             <div class="button_wrap">
                 <button class="btn-img-actions">
@@ -18,7 +18,12 @@ export default {
 
         }
     },
-    props: ['imageUrl']
+    props: ['imageUrl'],
+    methods: {
+        updateParent() {
+            this.$emit("image-clicked");
+        }
+    }
 }
 
 </script>

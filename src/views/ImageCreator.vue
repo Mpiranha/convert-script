@@ -89,7 +89,7 @@
                       <div class="section-head-right">
                         <button v-if="generatedImage.length > 0" @click="exportAllScripts()"
                           class="btn btn-export-all mb-0">
-                          Export All
+                          Download All
                         </button>
                       </div>
                     </div>
@@ -97,8 +97,11 @@
                       <div v-if="generatedImage.length > 0">
                         <div class="container pt-5">
                           <div class="row px-5">
-                            <image-display v-for="(image, index) in generatedImage" :key="index"
-                              :image-url="image.url"></image-display>
+                            <image-display v-for="(image, index) in generatedImage" :key="index" 
+                            :image-url="image.url"
+                              @image-clicked="openImageModal(image.url)">
+
+                            </image-display>
 
                           </div>
                         </div>
@@ -116,13 +119,15 @@
         </div>
       </div>
     </div>
-    <b-modal :hide-header="true" id="modal-edit-script" centered size="md" :hide-footer="true"
+    <b-modal :hide-header="true" id="modal-edit-script" centered size="lg" :hide-footer="true"
       dialog-class="control-modal-width" content-class="modal-main">
+      <div class="large_image_display" :style="`background-image: url(${currentImageDisplay})`">
 
+      </div>
 
       <div class="d-flex justify-content-end">
-        <b-button @click="$bvModal.hide('modal-edit-script')" class="close-modal">Go back</b-button>
-        <b-button @click="editScript(editId, content)" class="save-modal">Edit</b-button>
+        <b-button @click="$bvModal.hide('modal-edit-script')" class="close-modal">Close</b-button>
+        <b-button @click="editScript(editId, content)" class="save-modal">Download</b-button>
       </div>
     </b-modal>
 
@@ -158,7 +163,7 @@ export default {
         medium: null,
         filter: null
       },
-      content: "",
+      currentImageDisplay: null,
       generatedImage: [],
       isSubmitted: false,
       editId: "",
@@ -173,17 +178,9 @@ export default {
     },
   },
   methods: {
-    openEditModal(id, data) {
+    openImageModal(data) {
       this.$bvModal.show("modal-edit-script");
-      this.editId = id;
-      // this.triggerEdit = true;
-      // this.$store.commit("triggerEdit", {
-      //   editStatus: true,
-      //   id: id,
-      // });
-      this.content = data;
-      // this.editId = id;
-      // this.campaignName = data;
+      this.currentImageDisplay = data;
     },
     generateImage() {
       this.loading = true;
@@ -197,9 +194,6 @@ export default {
         })
         .then((res) => {
           this.loading = false;
-
-          console.log(res.data.data)
-
           if (res.data.data.images.length > 0 || !$.isEmptyObject(res.data.data.images)) {
             this.generatedImage = res.data.data.images;
           } else {
@@ -298,6 +292,16 @@ export default {
 </script>
 
 <style>
+.large_image_display {
+  height: 90vh;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  margin-bottom: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #000;
+}
+
 .script-form-wrap {
   padding: 1rem;
   display: flex;
