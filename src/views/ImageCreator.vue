@@ -120,7 +120,7 @@
       </div>
     </div>
     <b-modal :hide-header="true" id="modal-edit-script" centered size="lg" :hide-footer="true"
-      dialog-class="control-modal-width" content-class="modal-main">
+      dialog-class="" content-class="modal-main">
       <div class="large_image_display" :style="`background-image: url(${currentImageDisplay})`">
 
       </div>
@@ -293,7 +293,7 @@ export default {
 
 <style>
 .large_image_display {
-  height: 90vh;
+  height: 80vh;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
