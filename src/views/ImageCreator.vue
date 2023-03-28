@@ -87,20 +87,19 @@
                   <div class="d-flex flex-column h-100">
                     <div class="section-head bordered-bottom">
                       <div class="section-head-right">
-                        <button v-if="generatedImage.length > 0" @click="exportAllScripts()"
+                        <a v-if="generatedImage.length > 0" :href="downloadAllLink" download="true" target="_blank"
                           class="btn btn-export-all mb-0">
                           Download All
-                        </button>
+                        </a>
                       </div>
                     </div>
                     <div class="control-overflow">
                       <div v-if="generatedImage.length > 0">
                         <div class="container pt-5">
                           <div class="row px-5">
-                            <image-display v-for="(image, index) in generatedImage" :key="index" 
-                            :image-url="image.url"
-                              @image-clicked="openImageModal(image.url)">
-
+                            <image-display v-for="(image, index) in generatedImage" :key="index" :image-url="image.url"
+                              @image-clicked="openImageModal(image.url)"
+                              @download-clicked="downloadImage(image.filename)">
                             </image-display>
 
                           </div>
@@ -109,7 +108,6 @@
                       <div v-else class="empty-script">
                         Generated image will display here.
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -119,15 +117,15 @@
         </div>
       </div>
     </div>
-    <b-modal :hide-header="true" id="modal-edit-script" centered size="lg" :hide-footer="true"
-      dialog-class="" content-class="modal-main">
+    <b-modal :hide-header="true" id="modal-edit-script" centered size="lg" :hide-footer="true" dialog-class=""
+      content-class="modal-main">
       <div class="large_image_display" :style="`background-image: url(${currentImageDisplay})`">
 
       </div>
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-edit-script')" class="close-modal">Close</b-button>
-        <b-button @click="editScript(editId, content)" class="save-modal">Download</b-button>
+        <a :href="currentImageDisplay" download="output.png" class="save-modal" target="_blank">Download</a>
       </div>
     </b-modal>
 
@@ -142,6 +140,7 @@ import ImageDisplay from "../components/ImageDisplay.vue";
 import { required, minLength } from "vuelidate/lib/validators";
 import alertMixin from "@/mixins/alertMixin";
 import $ from 'jquery'
+import { saveAs } from 'file-saver';
 
 export default {
   name: "ScriptGenerate",
@@ -153,6 +152,7 @@ export default {
   mixins: [alertMixin],
   data() {
     return {
+      downloadAllLink: null,
       imageStyleOptions: [{ value: null, text: "Select Style" }],
       mediumOptions: [{ value: null, text: "Select Medium" }],
       filterOptions: [{ value: null, text: "Select Filter" }],
@@ -173,7 +173,7 @@ export default {
     answerQuery: {
       desc: {
         required,
-        minLength: minLength(10),
+        minLength: minLength(1),
       },
     },
   },
@@ -196,6 +196,7 @@ export default {
           this.loading = false;
           if (res.data.data.images.length > 0 || !$.isEmptyObject(res.data.data.images)) {
             this.generatedImage = res.data.data.images;
+            this.downloadAllLink = res.data.data.zip
           } else {
             this.makeToast("danger", res.data.message);
           }
@@ -221,6 +222,9 @@ export default {
       this.generateImage();
 
     },
+    getFilename(url) {
+      return url.split("/")[url.split("/").length - 1].toString();
+    },
     getImageStyle() {
       this.$store.commit("updateLoadState", true);
       this.$store
@@ -234,6 +238,29 @@ export default {
             });
           }
 
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+
+    downloadImage(fileName) {
+      this.$store
+        .dispatch("downloadImage", encodeURIComponent(fileName))
+        .then((res) => {
+          console.log(res);
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          //a.style = "display: none";
+          var url = res.config.url;
+
+          a.href = url;
+          a.download = true;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -282,6 +309,22 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+    downloadAnImage(url) {
+      //var a = document.createElement("a");
+
+      //a.style = "display: none";
+
+      // a.href = url;
+      // a.download = url.split("/")[url.split("/").length - 1].toString();
+      // a.download = true;
+      // a.target = "_blank";
+      // document.body.appendChild(a);
+      // a.click();
+      // window.URL.revokeObjectURL(url);
+      //document.body.removeChild(a);
+
+      saveAs(url, url.split("/")[url.split("/").length - 1].toString());
+    }
   },
   mounted() {
     this.getImageStyle();

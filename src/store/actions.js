@@ -1681,6 +1681,21 @@ export default {
     });
   },
 
+  downloadImage({ state }, filename) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/download?filename=${filename}`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  
+
   // Languages
 
   getAllLanguages({ state }) {

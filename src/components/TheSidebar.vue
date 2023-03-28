@@ -96,7 +96,7 @@
 
       <li class="nav-item">
         <button class="btn no-shadow nav-link" @click="toggleCollapse">
-          <img class="main-icon" src="@/assets/icons/ai-tool.svg" alt="" />
+          <img class="main-icon" src="@/assets/icons/ai-icon.svg" alt="" />
           <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Settings.svg" alt="" />
           <span class="nav-text"> AI Tools </span>
           <img class="collapse-icon" :class="isCollapse ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">

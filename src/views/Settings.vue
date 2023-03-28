@@ -61,11 +61,13 @@
 
               <div class="row">
                 <b-form-group class="col-12 col-md-6" label="Default Input language" label-class="form-label">
-                  <b-form-select class="form-control input-table" v-model="defaultLanguageInput" :options="languageOptions">
+                  <b-form-select class="form-control input-table" v-model="defaultLanguageInput"
+                    :options="languageOptions">
                   </b-form-select>
                 </b-form-group>
                 <b-form-group class="col-12 col-md-6" label="Default Output language" label-class="form-label">
-                  <b-form-select class="form-control input-table" v-model="defaultLanguageOutput" :options="languageOptions">
+                  <b-form-select class="form-control input-table" v-model="defaultLanguageOutput"
+                    :options="languageOptions">
                   </b-form-select>
                 </b-form-group>
               </div>
@@ -265,8 +267,8 @@ export default {
       this.userDetails.first_name = this.userData.first_name;
       this.userDetails.last_name = this.userData.last_name;
       this.email = this.userData.email;
-      this.defaultLanguageInput = this.userData.default_input_language_id.id;
-      this.defaultLanguageOutput = this.userData.default_output_language_id.id;
+      this.defaultLanguageInput = this.userData.default_input_language_id ? this.userData.default_input_language_id.id : null;
+      this.defaultLanguageOutput = this.userData.default_output_language_id ? this.userData.default_output_language_id.id : null;
     },
 
     updateUserDetails(event) {
@@ -282,14 +284,18 @@ export default {
 
       this.$store.commit("updateLoadState", true);
 
+      var data = {
+        first_name: this.userDetails.first_name,
+        last_name: this.userDetails.last_name,
+        email: this.email,
+        default_input_language_id: this.defaultLanguageInput ? this.defaultLanguageInput : null,
+        default_output_language_id: this.defaultLanguageOutput ? this.defaultLanguageOutput : null
+      };
+
+      console.log(data);
+
       this.$store
-        .dispatch("updateUserDetails", {
-          first_name: this.userDetails.first_name,
-          last_name: this.userDetails.last_name,
-          email: this.email,
-          default_input_language_id: this.defaultLanguageInput.language_id,
-          default_output_language_id: this.defaultLanguageOutput.language_id
-        })
+        .dispatch("updateUserDetails", data)
         .then((res) => {
           console.log(res);
 
