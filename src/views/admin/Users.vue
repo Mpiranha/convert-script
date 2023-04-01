@@ -7,12 +7,12 @@
         <div class="scroll-content">
           <div class="container">
             <div class="
-                dashboard-top
-                d-flex
-                justify-content-between
-                align-items-center
-                mb-5
-              ">
+                                                        dashboard-top
+                                                        d-flex
+                                                        justify-content-between
+                                                        align-items-center
+                                                        mb-5
+                                                      ">
               <h6 class="title">Users ({{ userLength }})</h6>
               <div class="d-flex align-items-center">
                 <a href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=Admin&export=UsersExport"
@@ -31,8 +31,8 @@
                 <button class="btn search-btn">
                   <i class="flaticon-loupe icons"></i>
                 </button>
-                <input @input="searchKeyWord" class="form-control no-shadow search-input" type="text"
-                  placeholder="Search" v-model="searchKey" />
+                <input @input="searchKeyWord" class="form-control no-shadow search-input" type="text" placeholder="Search"
+                  v-model="searchKey" />
               </div>
               <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
               <div v-if="users.length === 0" class="no-data-info">
@@ -76,7 +76,6 @@
                           last_name: result.last_name,
                           role: result.role,
                           email: result.email,
-                          
                         })
                       " @delete-proceed="deleteUser(result.id)" delete-what="User">
                       </dropdown-tool>
@@ -96,11 +95,14 @@
                     </td>
                     <td>
                       <span v-if="user.role.toLowerCase() === 'free'" class="badge badge-secondary">Free</span>
-                      <span v-else-if="user.role.toLowerCase() === 'basic (yearly)'" class="badge badge-warning">Basic (Yearly)</span>
-                      <span v-else-if="user.role.toLowerCase() === 'basic (monthly)'" class="badge badge-primary">Basic (Monthly)</span>
+                      <span v-else-if="user.role.toLowerCase() === 'basic (yearly)'" class="badge badge-warning">Basic
+                        (Yearly)</span>
+                      <span v-else-if="user.role.toLowerCase() === 'basic (monthly)'" class="badge badge-primary">Basic
+                        (Monthly)</span>
                       <span v-else-if="user.role.toLowerCase() === 'admin'" class="badge badge-success">Admin</span>
-                       <span v-else-if="user.role.toLowerCase() === 'premium lifetime'" class="badge badge-danger">Premium Lifetime</span>
-                       <span v-else>{{user.role.toUpperCase()}}</span>
+                      <span v-else-if="user.role.toLowerCase() === 'premium lifetime'" class="badge badge-danger">Premium
+                        Lifetime</span>
+                      <span v-else>{{ user.role.toUpperCase() }}</span>
                     </td>
                     <td>
                       {{ formatDate(user.created_at) }}
@@ -112,6 +114,7 @@
                           last_name: user.last_name,
                           role: user.role,
                           email: user.email,
+
                         })
                       " @delete-proceed="deleteUser(user.id)" delete-what="User">
                         <!-- <template v-slot:secondary>
@@ -152,31 +155,66 @@
       <div class="row">
         <div class="col-6">
           <b-form-group label="First Name">
-            <b-form-input id="name" v-model="userData.first_name" type="text" class="input-table">
+            <b-form-input id="first_name" v-model="userData.first_name" type="text" class="input-table">
             </b-form-input>
           </b-form-group>
         </div>
         <div class="col-6">
           <b-form-group label="Last Name">
-            <b-form-input id="name" v-model="userData.last_name" type="text" class="input-table">
+            <b-form-input id="last_name" v-model="userData.last_name" type="text" class="input-table">
             </b-form-input>
           </b-form-group>
         </div>
       </div>
 
       <b-form-group label="Email">
-        <b-form-input id="name" v-model="userData.email" type="text" class="input-table">
+        <b-form-input id="email" v-model="userData.email" type="text" class="input-table">
         </b-form-input>
       </b-form-group>
 
       <b-form-group label="Password">
-        <b-form-input id="name" v-model="userData.password" type="password" class="input-table">
+        <b-form-input id="password" v-model="userData.password" type="password" class="input-table">
         </b-form-input>
       </b-form-group>
 
       <b-form-group label="Role">
-        <b-form-select v-model="userData.role" :options="optionsRole"></b-form-select>
+        <b-form-select v-model="tempRole" :options="optionsRole" @change="fetchRelatedPlan()"
+          :disabled="planIsLoading"></b-form-select>
       </b-form-group>
+
+      <b-form-group label="Plan" v-if="tempRole == 'recurring' && optionsPlan.length > 1">
+        <b-form-select v-model="userData.role" :options="optionsPlan">
+
+        </b-form-select>
+      </b-form-group>
+      <!--  -->
+      <div class="form-group" v-else-if="tempRole == 'lifetime' && optionsPlan.length > 1">
+        <label for="">Plan</label>
+        <div class="custom_plan_input">
+          <div class="plan_list_inner">
+            <div class="plan_list_item" v-for="(plan, inx) in selectedPlans" :key="inx">
+              <span>{{ plan.text }}</span>
+              <button class="btn no-shadow btn_remove_plan" @click="deleteSelectedPlan(plan)">
+                x
+              </button>
+            </div>
+
+
+          </div>
+          <button id="popover-button-sync" class="btn btn_add_plan">+</button>
+
+          <b-popover :show.sync="showPop" target="popover-button-sync" title="Add Plan(s)">
+            <ul class="nav popover_plans_list">
+              <li class="popover_item" v-for="(plan, index) in optionsPlan" :key="index"
+                @click="updateSelectedPlans(plan)">
+                {{ plan.text }}
+              </li>
+            </ul>
+          </b-popover>
+        </div>
+      </div>
+
+
 
       <!-- <b-form-group label="Select Plan" v-slot="{ ariaDescribedby }">
         <b-form-checkbox-group
@@ -190,7 +228,9 @@
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-user')" class="close-modal">Close</b-button>
-        <b-button @click="triggerEdit ? editUser(editId) : addUser()" class="save-modal">{{ triggerEdit ? "Edit" : "Add User" }}</b-button>
+        <b-button @click="triggerEdit ? editUser(editId) : addUser()" class="save-modal">
+          {{ triggerEdit ? "EDIT" : "ADD USER" }}
+        </b-button>
       </div>
     </b-modal>
   </div>
@@ -213,6 +253,7 @@ export default {
   },
   data() {
     return {
+      showPop: false,
       searchKey: "",
       searchResult: [],
       perPage: 20,
@@ -221,6 +262,10 @@ export default {
       userLength: 0,
       firstname: "",
       lastname: "",
+      tempRole: null,
+      planIsLoading: false,
+      selectedPlans: [],
+      selectedPlansStringify: [],
       userData: {
         first_name: "",
         last_name: "",
@@ -233,9 +278,11 @@ export default {
       editId: null,
       optionsRole: [
         { value: null, text: "Select a Role" },
+        { value: "recurring", text: "RECURRING" },
+        { value: "lifetime", text: "LIFETIME" }
       ],
 
-      optionsPlan: [{ text: "", value: "" }],
+      optionsPlan: [{ text: "Select a Plan", value: null }],
       roles: [],
     };
   },
@@ -304,10 +351,59 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+    getCycleType() {
+      this.planIsLoading = true;
+      this.optionsPlan = [{ text: "Select a Plan", value: null }];
+      this.$store
+        .dispatch("getCycleType", this.tempRole)
+        .then((res) => {
+          res.data.data.forEach((plan) => {
+            this.optionsPlan.push({
+              text: plan.name.toUpperCase(),
+              value: plan.name,
+              id: plan.id
+            });
+          });
+
+          this.planIsLoading = false;
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    getPlanType(plan) {
+      this.planIsLoading = true;
+      this.optionsPlan = [{ text: "Select a Plan", value: null }];
+      this.$store
+        .dispatch("getRoleType", plan)
+        .then((res) => {
+          this.tempRole = res.data.data.name;
+          this.getCycleType();
+
+          this.planIsLoading = false;
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     filterRoles(roles) {
 
       roles.forEach((role) => {
-        this.optionsRole.push({
+        this.optionsPlan.push({
           text: role.name.toUpperCase(),
           value: role.name,
         });
@@ -355,6 +451,23 @@ export default {
           console.log(error);
           this.$store.commit("updateLoadState", false);
         });
+    },
+    fetchRelatedPlan() {
+      this.userData.role = null;
+      this.selectedPlans = [];
+      this.selectedPlansStringify = [];
+      this.getCycleType();
+    },
+    updateSelectedPlans(plan) {
+      this.selectedPlans.push(plan);
+      this.selectedPlansStringify.push(plan.value);
+      this.userData.role = this.selectedPlansStringify.toString();
+
+    },
+    deleteSelectedPlan(plan) {
+      this.selectedPlans = this.selectedPlans.filter((newItem) => newItem.text !== plan.text);
+      this.selectedPlansStringify = this.selectedPlansStringify.filter((item) => item != plan.value);
+      this.userData.role = this.selectedPlansStringify.toString();
     },
     addUser() {
       this.$store.commit("updateLoadState", true);
@@ -435,15 +548,27 @@ export default {
     },
 
     openEditModal(id, data) {
-
       this.$bvModal.show("modal-new-user");
+      this.selectedPlans = [];
+      this.selectedPlansStringify = [];
       this.triggerEdit = true;
       this.editId = id;
       this.userData.last_name = data.last_name;
       this.userData.first_name = data.first_name;
-      this.userData.role = data.role;
+      // this.userData.role = data.role;
+      // this.userData.plan = data.plan;
+      console.log(data);
+      this.getPlanType(data.role);
+      data.role.split(",").forEach((plan) => {
+        this.selectedPlans.push({ text: plan.toUpperCase(), value: plan })
+        this.selectedPlansStringify.push(plan);
+        this.userData.role = this.selectedPlansStringify.toString();
+      }
+      );
       this.userData.password = data.password;
       this.userData.email = data.email;
+
+
 
       // this.userData.plans = data.plans;
     },
@@ -455,6 +580,8 @@ export default {
         email: "",
         password: "",
       };
+      this.selectedPlans = [];
+      this.selectedPlansStringify = [];
       this.triggerEdit = false;
     },
     orderSort(arr) {
@@ -482,7 +609,7 @@ export default {
 
   mounted() {
     this.getAllUsers();
-    this.getSharedPlans();
+    // this.getSharedPlans();
   },
   computed: {},
 };
@@ -503,6 +630,67 @@ export default {
 }
 
 .custom-control-inline {
+  margin-bottom: 1rem;
+}
+
+.custom_plan_input {
+  border: 1px solid #c2c8d1 !important;
+  font-size: 0.9rem !important;
+  border-radius: 0.5rem !important;
+  width: 100%;
+  padding: 0.35rem 0.75rem 0 0.75rem !important;
+  display: flex;
+  align-items: center;
+}
+
+.plan_list_inner {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.plan_list_item {
+  margin-right: 1rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  background-color: #8338ec;
+  padding: 0.2rem 0.7rem;
+  border-radius: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.btn_remove_plan {
+  color: inherit !important;
+  padding: 0 !important;
+  margin-left: 1rem;
+  font-size: 1rem !important;
+}
+
+.btn_add_plan {
+  background-color: #8338ec !important;
+  color: #fff !important;
+  font-size: 1.4rem !important;
+  margin-left: auto;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0.05rem 0.7rem !important;
+  border-radius: 0.3rem !important;
+  margin-bottom: 0.35rem;
+}
+
+.popover_plans_list {
+  flex-direction: column;
+}
+
+.popover_item:first-child {
+  display: none;
+}
+
+.popover_plans_list .popover_item {
+  color: #8338ec;
+  cursor: pointer;
   margin-bottom: 1rem;
 }
 </style>

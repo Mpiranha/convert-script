@@ -1685,7 +1685,7 @@ export default {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .get(`${baseUrl}/api/v1/download?filename=${filename}`)
+        .get(`${baseUrl}/api/v1/download?filename=${filename}`, { responseType: 'blob' })
         .then((resp) => {
           resolve(resp);
         })
@@ -1694,6 +1694,36 @@ export default {
         });
     });
   },
+
+  getCycleType({ state }, name) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/admin/plans/${name}`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  getRoleType({ state }, plan) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/admin/role/${plan}`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+
   
 
   // Languages

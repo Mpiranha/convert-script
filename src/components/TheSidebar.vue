@@ -109,11 +109,11 @@
               <span class="nav-text"> AI Image Creator </span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link class="nav-link" :class="currentActive == 'ai-speech' ? 'active' : ''" to="/settings">
               <span class="nav-text"> AI Text to Speech </span>
             </router-link>
-          </li>
+          </li> -->
         </ul>
       </li>
       <!-- <li class="nav-item">

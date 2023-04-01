@@ -5,7 +5,7 @@
       <sidebar :user-name="this.$store.state.user.first_name" logo-class="permanent-logo"
         dismiss-class="permanent-dismiss" current-active="ai-image" class="always-hidden"></sidebar>
       <div class="content-section">
-        <navbar script-type-icon="/img/ai-tool.7ea5d7e9.svg" script-type-name="Image Creator" logo-link-class="hide-logo"
+        <navbar script-type-icon="/img/ai-icon.242b4db5.svg" script-type-name="Image Creator" logo-link-class="hide-logo"
           toggle-class="permanent-toggler"></navbar>
         <div class="scroll-content script-content-fs">
           <div class="container-fluid pt-3">
@@ -251,17 +251,23 @@ export default {
         .dispatch("downloadImage", encodeURIComponent(fileName))
         .then((res) => {
           console.log(res);
-          var a = document.createElement("a");
-          document.body.appendChild(a);
-          //a.style = "display: none";
-          var url = res.config.url;
+          return res.data
+          // var a = document.createElement("a");
+          // document.body.appendChild(a);
+          // //a.style = "display: none";
+          // var url = res.config.url;
 
-          a.href = url;
-          a.download = true;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(a);
-          this.$store.commit("updateLoadState", false);
+          // a.href = url;
+          // a.download = true;
+          // a.click();
+          // window.URL.revokeObjectURL(url);
+          // document.body.removeChild(a);
+          // this.$store.commit("updateLoadState", false);
+        }).then((blob) => {
+          var _windowURL = window.URL.createObjectURL(blob);
+          console.log(_windowURL);
+          window.open(_windowURL + '.png', '_blank');
+          window.URL.revokeObjectURL(_windowURL + '.png');
         })
         .catch((error) => {
           console.log(error);

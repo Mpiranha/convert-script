@@ -32,10 +32,10 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-if="planDetail.active_plan.length > 0">
-                      <td scope="row"> {{ capitaliseStr(planDetail.active_plan[0].name) }} </td>
-                      <td class="text-left">{{ planDetail.active_plan[0].words.toLocaleString('en-US') }}</td>
-                      <td>{{ formatDate(planDetail.active_plan[0].end_date) }}</td>
+                    <tr v-for="activePlan in planDetail.active_plan" :key="activePlan.id">
+                      <td scope="row"> {{ capitaliseStr(activePlan.name) }} <span class="plan_count">{{ activePlan.count > 1 ? "x " + activePlan.count : "" }}</span></td>
+                      <td class="text-left">{{ activePlan.words.toLocaleString('en-US') }}</td>
+                      <td>{{ formatDate(activePlan.end_date) }}</td>
 
                       <td><span class="badge badge-success">ACTIVE</span></td>
                     </tr>
@@ -205,6 +205,11 @@ export default {
   background-color: #8338ec;
 }
 
+.plan_count {
+  margin-left: 1rem;
+  font-weight: bold;
+}
+
 @media screen and (max-width: 480px) {
   .word-usage-stat {
     flex-direction: column;
@@ -217,5 +222,6 @@ export default {
   .word-usage-stat .label {
     margin-bottom: 1rem;
   }
+
 }
 </style>
