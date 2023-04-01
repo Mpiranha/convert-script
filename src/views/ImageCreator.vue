@@ -98,7 +98,7 @@
                         <div class="container pt-5">
                           <div class="row px-5">
                             <image-display v-for="(image, index) in generatedImage" :key="index" :image-url="image.url"
-                              @image-clicked="openImageModal(image.url)"
+                              @image-clicked="openImageModal({ url: image.url, file_name: image.fileName })"
                               @download-clicked="downloadImage(image.filename)">
                             </image-display>
 
@@ -125,7 +125,8 @@
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-edit-script')" class="close-modal">Close</b-button>
-        <a :href="currentImageDisplay" download="output.png" class="save-modal" target="_blank">Download</a>
+        <a href="#" :disable="downloading" @click="downloadImage(currentImageDisplay.file_name)" download="output.png" class="save-modal"
+          target="_blank">Download</a>
       </div>
     </b-modal>
 
@@ -152,6 +153,7 @@ export default {
   mixins: [alertMixin],
   data() {
     return {
+      downloading: false,
       downloadAllLink: null,
       imageStyleOptions: [{ value: null, text: "Select Style" }],
       mediumOptions: [{ value: null, text: "Select Medium" }],
@@ -180,7 +182,7 @@ export default {
   methods: {
     openImageModal(data) {
       this.$bvModal.show("modal-edit-script");
-      this.currentImageDisplay = data;
+      this.currentImageDisplay = data.url;
     },
     generateImage() {
       this.loading = true;
@@ -247,6 +249,7 @@ export default {
     },
 
     downloadImage(fileName) {
+      this.downloading = true;
       this.$store
         .dispatch("downloadImage", encodeURIComponent(fileName))
         .then((res) => {
@@ -264,19 +267,25 @@ export default {
           // document.body.removeChild(a);
           // this.$store.commit("updateLoadState", false);
         }).then((blob) => {
-          var _windowURL = window.URL.createObjectURL(blob);
-          console.log(_windowURL);
-          window.open(_windowURL + '.png', '_blank');
-          window.URL.revokeObjectURL(_windowURL + '.png');
+          blob = blob.slice(0, blob.size, "image/png");
+          return window.URL.createObjectURL(blob);
+        }).then(url => {
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          //a.style = "display: none";
+          a.href = url;
+          a.download = true;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+          this.downloading = false;
         })
         .catch((error) => {
           console.log(error);
+          this.downloading = false;
           this.$store.commit("updateLoadState", false);
         });
     },
-
-
-
     getImageFilters() {
       this.$store.commit("updateLoadState", true);
       this.$store
@@ -463,5 +472,9 @@ export default {
 
 .control-overflow {
   height: 79vh;
+}
+
+a[disabled] {
+  pointer-events: none;
 }
 </style>
