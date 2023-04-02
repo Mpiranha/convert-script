@@ -456,7 +456,7 @@ export default {
 }
 
 .collapsible.open {
-  height: 95px !important;
+  height: 40px !important;
 }
 
 .collapse-icon.open {
