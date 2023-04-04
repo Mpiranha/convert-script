@@ -37,17 +37,16 @@ export default {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    border: 1px solid #000;
-    border-radius: 1rem;
-    transition: all 0.2s linear;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+    border-radius: 0.4rem;
+    transition: all 0.3s linear;
     position: relative;
     margin-bottom: 2rem;
     cursor: pointer;
 }
 
 .image-display_wrap:hover {
-
-    transform: scale(1.1)
+    transform: scale(1.01);
 }
 
 .image-display_wrap .button_wrap {

@@ -7,12 +7,12 @@
         <div class="scroll-content">
           <div class="container">
             <div class="
-                                                        dashboard-top
-                                                        d-flex
-                                                        justify-content-between
-                                                        align-items-center
-                                                        mb-5
-                                                      ">
+                                                            dashboard-top
+                                                            d-flex
+                                                            justify-content-between
+                                                            align-items-center
+                                                            mb-5
+                                                          ">
               <h6 class="title">Users ({{ userLength }})</h6>
               <div class="d-flex align-items-center">
                 <a href="http://api.onecopy.ai/api/v1/export/excel/model?model=User&type=Admin&export=UsersExport"
@@ -62,9 +62,16 @@
                       </label>
                     </td>
                     <td>
-                      <span v-if="result.role === 'Free'" class="badge badge-secondary">Free</span>
-                      <span v-else-if="result.role === 'monthly'" class="badge badge-primary">Pro</span>
-                      <span v-else-if="result.role === 'Admin'" class="badge badge-success">Enterprise</span>
+                      <span v-if="result.role.toLowerCase() === 'free'" class="badge badge-secondary">Free</span>
+                      <span v-else-if="result.role.toLowerCase() === 'basic (yearly)'" class="badge badge-warning">Basic
+                        (Yearly)</span>
+                      <span v-else-if="result.role.toLowerCase() === 'basic (monthly)'" class="badge badge-primary">Basic
+                        (Monthly)</span>
+                      <span v-else-if="result.role.toLowerCase() === 'admin'" class="badge badge-success">Admin</span>
+                      <span v-else-if="result.role.toLowerCase() === 'premium lifetime'"
+                        class="badge badge-danger">Premium
+                        Lifetime</span>
+                      <span v-else>{{ result.role.toUpperCase() }}</span>
                     </td>
                     <td>
                       {{ formatDate(result.created_at) }}
