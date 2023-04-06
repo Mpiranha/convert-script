@@ -214,7 +214,10 @@ export default {
   computed: {
     filteredCategory() {
       return this.scriptTypes.filter((cat) => {
-        return this.category == cat.script_type_category;
+        // return this.category == cat.script_type_category;
+        for (var i = 0; i < cat.script_type_category.length; i++) {
+          return this.category == cat.script_type_category[i].id;
+        }
       });
     },
   },
