@@ -22,7 +22,7 @@
                   <div class="section-head">
                     <div class="section-head-left">
                       <img class="section-head-icon" src="@/assets/icons/convert-icon/All script.svg" alt="" />
-                      {{ scripts.length }}
+                      {{ scriptLength }}
                     </div>
                     <div class="search-form">
                       <button class="btn search-btn">
@@ -37,7 +37,7 @@
                       </a>
                     </div>
                   </div>
-                  <div class="control-height">
+                  <div class="control-height" @scroll="infiniteScroll($event)">
                     <div v-if="scripts.length === 0" class="no-data-info">
                       Created Copies will display here.
                     </div>
@@ -104,11 +104,11 @@
                   <div v-else class="d-flex flex-column h-100">
                     <div class="section-head" v-if="activeScript">
                       <button v-b-modal.modal-add-campaign class="
-                          d-flex
-                          align-items-center
-                          no-shadow
-                          btn btn-save-to
-                        ">
+                                              d-flex
+                                              align-items-center
+                                              no-shadow
+                                              btn btn-save-to
+                                            ">
                         <img src="@/assets/icons/convert-icon/save 1.svg" alt="" class="icon-save mr-2" /><span> Save to
                         </span>
                       </button>
@@ -173,8 +173,7 @@
       </div>
     </b-modal>
 
-    <b-modal :hide-header="true" id="modal-view-script" centered size="md" :hide-footer="true"
-      content-class="modal-main">
+    <b-modal :hide-header="true" id="modal-view-script" centered size="md" :hide-footer="true" content-class="modal-main">
       <div v-if="isEdit" class="h-100">
 
         <div class="editor-outter h-100">
@@ -193,11 +192,11 @@
           <div class="d-flex flex-column m-min-height">
             <div class="section-head">
               <button v-b-modal.modal-add-campaign class="
-                d-flex
-                align-items-center
-                no-shadow
-                btn btn-save-to
-              ">
+                                    d-flex
+                                    align-items-center
+                                    no-shadow
+                                    btn btn-save-to
+                                  ">
                 <img src="@/assets/icons/convert-icon/save 1.svg" alt="" class="icon-save mr-2" /><span> Save to
                 </span>
               </button>
@@ -274,12 +273,16 @@ export default {
   },
   data() {
     return {
+      nextLoading: false,
       loading: false,
       isEdit: false,
       selectedCampaign: null,
       campaignOptions: [{ value: null, text: "Select a Campaign" }],
       searchKey: "",
       searchResult: [],
+      scriptLength: 0,
+      perPage: 20,
+      currentPage: 1,
       triggerEdit: false,
       isFavourite: false,
       scripts: [],
@@ -443,14 +446,24 @@ export default {
 
         });
     },
-    getScripts(noload) {
+    getScripts(noload, next) {
       if (!noload) {
         this.$store.commit("updateLoadState", true);
       }
+      this.nextLoading = next ? true : false;
       this.$store
-        .dispatch("getGeneratedScripts")
+        .dispatch("getGeneratedScripts", {
+          number: this.currentPage,
+          perPage: this.perPage,
+        })
         .then((res) => {
-          this.scripts = res.data.data;
+          if (next) {
+            this.nextLoading = false;
+            this.scripts = this.scripts.concat(res.data.data);
+          } else {
+            this.scripts = res.data.data;
+            this.scriptLength = res.data.meta.total;
+          }
 
           this.$store.commit("updateLoadState", false);
         })
@@ -460,6 +473,7 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+
     deleteScript(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
@@ -618,6 +632,23 @@ export default {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     },
+    infiniteScroll(event) {
+      let heightOfWindow = event.target.scrollHeight - event.target.offsetHeight;
+      let bottomOfWindow = Math.round(event.target.scrollTop) >= heightOfWindow;
+      // console.log("scroll height " + event.target.scrollHeight )
+      // console.log("scroll top " + event.target.scrollTop);
+      // console.log("inner height " + event.target.children[0].offsetHeight);
+      // console.log("height " +event.target.offsetHeight);
+      // console.log("height " + heightOfWindow);
+
+      console.log("is bottom of window " + bottomOfWindow);
+      if (bottomOfWindow) {
+        // ...
+        this.currentPage++;
+        this.getScripts(true, true);
+
+      }
+    }
   },
   computed: {
     editor() {
@@ -627,6 +658,7 @@ export default {
   mounted() {
     this.getCampaign();
     this.getScripts();
+
 
   },
 };

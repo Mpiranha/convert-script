@@ -42,10 +42,10 @@
                       </multiselect>
                     </b-form-group>
 
-                    <b-form-group label="Category" label-class="input-label">
+                    <!-- <b-form-group label="Category" label-class="input-label">
                       <b-form-select class="input-table" v-model="scriptTypeData.script_type_category_id"
                         :options="categoryOptions"></b-form-select>
-                    </b-form-group>
+                    </b-form-group> -->
 
                     <b-form-group label="ICON URL" label-class="input-label">
                       <b-form-input id="name" v-model="scriptTypeData.icon" type="text" class="input-table">
