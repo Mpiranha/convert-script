@@ -584,4 +584,20 @@ export default {
   border: 1px dashed #474e56 !important;
   padding: 0.075rem 0.75rem !important;
 }
+
+.multiselect__tag {
+  background: #8338ec !important;
+}
+
+.multiselect__tag-icon:after {
+  color: #fff;
+}
+
+.multiselect__tag-icon:focus, .multiselect__tag-icon:hover {
+  background: #8338ec !important;
+}
+
+.multiselect__option--highlight {
+  background: #8338ec !important;
+}
 </style>

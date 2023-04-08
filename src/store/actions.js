@@ -680,11 +680,11 @@ export default {
         });
     });
   },
-  getAllFavorites({ state }) {
+  getAllFavorites({ state }, page) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .get(`${baseUrl}/api/v1/favorite-script-responses`)
+        .get(`${baseUrl}/api/v1/favorite-script-responses?page=${page.number}&per_page=${page.perPage}`)
         .then((resp) => {
           resolve(resp);
         })

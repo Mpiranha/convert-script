@@ -83,6 +83,7 @@
                           </tr>
                         </tbody>
                       </table>
+                      <loader-modal :loading-state="nextLoading" class="next-loader"></loader-modal>
                     </div>
                   </div>
                 </div>
@@ -273,7 +274,7 @@ export default {
   },
   data() {
     return {
-      nextLoading: false,
+      nextLoading: true,
       loading: false,
       isEdit: false,
       selectedCampaign: null,
@@ -283,6 +284,7 @@ export default {
       scriptLength: 0,
       perPage: 20,
       currentPage: 1,
+      maxPage: 1,
       triggerEdit: false,
       isFavourite: false,
       scripts: [],
@@ -463,6 +465,7 @@ export default {
           } else {
             this.scripts = res.data.data;
             this.scriptLength = res.data.meta.total;
+            this.maxPage = res.data.meta.last_page;
           }
 
           this.$store.commit("updateLoadState", false);
@@ -641,14 +644,14 @@ export default {
       // console.log("height " +event.target.offsetHeight);
       // console.log("height " + heightOfWindow);
 
-      console.log("is bottom of window " + bottomOfWindow);
-      if (bottomOfWindow) {
+      // console.log("is bottom of window " + bottomOfWindow);
+      if (bottomOfWindow && this.currentPage < this.maxPage) {
         // ...
         this.currentPage++;
         this.getScripts(true, true);
 
       }
-    }
+    },
   },
   computed: {
     editor() {
@@ -675,5 +678,16 @@ export default {
 
 .m-min-height {
   min-height: 500px;
+}
+
+.next-loader {
+  position: static;
+  width: 100%;
+  height: 5rem;
+  background: #fff;
+}
+
+.next-loader .loader-img {
+  width: 3rem !important;
 }
 </style>
