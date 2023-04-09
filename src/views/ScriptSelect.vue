@@ -215,9 +215,16 @@ export default {
     filteredCategory() {
       return this.scriptTypes.filter((cat) => {
         // return this.category == cat.script_type_category;
-        for (var i = 0; i < cat.script_type_category.length; i++) {
-          return this.category == cat.script_type_category[i].id;
-        }
+        // console.log(cat);
+        // for (var i = 0; i < cat.script_type_category.length; i++) {
+        //   console.log(i);
+        //   console.log(cat.script_type_category.length);
+        //   return this.category == cat.script_type_category[i].id;
+        // }
+        return cat.script_type_category.some((id) => {
+          // console.log(id)
+          return this.category == id.id;
+        });
       });
     },
   },
