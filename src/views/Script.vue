@@ -681,10 +681,10 @@ export default {
 }
 
 .next-loader {
-  position: static;
-  width: 100%;
-  height: 5rem;
-  background: #fff;
+  position: static !important;
+  width: 100% !important;
+  height: 5rem !important;
+  background: #fff !important;
 }
 
 .next-loader .loader-img {
