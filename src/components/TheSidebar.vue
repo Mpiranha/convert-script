@@ -452,7 +452,7 @@ export default {
   height: 0;
   overflow: hidden;
   padding-left: 2rem;
-  transition: all 0.5s linear;
+  transition: all 0.2s linear;
 }
 
 .collapsible.open {

@@ -39,7 +39,7 @@
               </div>
             </div>
 
-            <div v-if="searchResult.length > 0" class="row">
+            <div v-if="searchResult.length > 0" class="row mb-5">
               <script-select-type-box v-for="scriptType in searchResult" :key="scriptType.id" :img-url="
                 scriptType.icon
                   ? scriptType.icon
@@ -60,7 +60,7 @@
 " :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
             </div>
 
-            <div v-else-if="category" class="row">
+            <div v-else-if="category" class="row mb-5">
               <script-select-type-box v-for="scriptType in filteredCategory" :key="scriptType.id" :img-url="
                 scriptType.icon
                   ? scriptType.icon
@@ -80,7 +80,7 @@
     }
 " :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
             </div>
-            <div v-else-if="scriptTypes && searchKey.length < 1" class="row">
+            <div v-else-if="scriptTypes && searchKey.length < 1" class="row mb-5">
               <script-select-type-box v-for="scriptType in scriptTypes" :key="scriptType.id" :img-url="
                 scriptType.icon
                   ? scriptType.icon
