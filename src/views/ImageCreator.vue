@@ -5,8 +5,7 @@
       <sidebar :user-name="this.$store.state.user.first_name" logo-class="permanent-logo"
         dismiss-class="permanent-dismiss" current-active="ai-image" class="always-hidden"></sidebar>
       <div class="content-section">
-        <navbar script-type-icon="/img/ai-icon.242b4db5.svg" script-type-name="Image Creator" logo-link-class="hide-logo"
-          toggle-class="permanent-toggler"></navbar>
+        <navbar script-type-name="AI Image Creator" logo-link-class="hide-logo" toggle-class="permanent-toggler"></navbar>
         <div class="scroll-content script-content-fs">
           <div class="container-fluid pt-3">
             <!-- <div class="
@@ -64,6 +63,10 @@
                             <b-form-select class="form-control" v-model="answerQuery.filter" :options="filterOptions">
                             </b-form-select>
                           </b-form-group>
+
+                          <small class="ai_note">
+                            Tip: Need better results? Write a more creative and descriptive text for your image prompt.
+                          </small>
                         </div>
                         <div class="script-form-footer">
                           <!-- <div class="desc">Variation</div>
@@ -125,8 +128,8 @@
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-edit-script')" class="close-modal">Close</b-button>
-        <a href="#" :disable="downloading" @click="downloadImage(currentImageDisplay.file_name)" download="output.png" class="save-modal"
-          target="_blank">Download</a>
+        <a href="#" :disable="downloading" @click="downloadImage(currentImageDisplay.file_name)" download="output.png"
+          class="save-modal" target="_blank">Download</a>
       </div>
     </b-modal>
 
@@ -456,6 +459,11 @@ export default {
   width: 100% !important;
   left: 0 !important;
   height: 100% !important;
+}
+
+.ai_note {
+  font-size: 0.9rem;
+  color: #474e56;
 }
 
 @media screen and (max-width: 768px) {
