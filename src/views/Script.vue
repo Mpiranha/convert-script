@@ -105,11 +105,11 @@
                   <div v-else class="d-flex flex-column h-100">
                     <div class="section-head" v-if="activeScript">
                       <button v-b-modal.modal-add-campaign class="
-                                              d-flex
-                                              align-items-center
-                                              no-shadow
-                                              btn btn-save-to
-                                            ">
+                                                d-flex
+                                                align-items-center
+                                                no-shadow
+                                                btn btn-save-to
+                                              ">
                         <img src="@/assets/icons/convert-icon/save 1.svg" alt="" class="icon-save mr-2" /><span> Save to
                         </span>
                       </button>
@@ -193,11 +193,11 @@
           <div class="d-flex flex-column m-min-height">
             <div class="section-head">
               <button v-b-modal.modal-add-campaign class="
-                                    d-flex
-                                    align-items-center
-                                    no-shadow
-                                    btn btn-save-to
-                                  ">
+                                      d-flex
+                                      align-items-center
+                                      no-shadow
+                                      btn btn-save-to
+                                    ">
                 <img src="@/assets/icons/convert-icon/save 1.svg" alt="" class="icon-save mr-2" /><span> Save to
                 </span>
               </button>
@@ -347,7 +347,7 @@ export default {
             });
           }
 
-          this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
@@ -647,6 +647,7 @@ export default {
       // console.log("is bottom of window " + bottomOfWindow);
       if (bottomOfWindow && this.currentPage < this.maxPage) {
         // ...
+        window.scrollTo(0, heightOfWindow);
         this.currentPage++;
         this.getScripts(true, true);
 

@@ -374,7 +374,7 @@ export default {
             });
           }
 
-          this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           // // console.log(error);
