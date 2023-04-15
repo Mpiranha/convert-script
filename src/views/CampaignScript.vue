@@ -8,9 +8,9 @@
         <navbar :script-type-name="campaign.name" logo-link-class="hide-logo" toggle-class="permanent-toggler">
           <template v-slot:create-btn>
             <router-link class="btn btn-create" :to="{
-  name: 'CampaignScriptSelect',
-  params: { id: campaign.id },
-}">
+              name: 'CampaignScriptSelect',
+              params: { id: campaign.id },
+            }">
               <span>+</span>
               New Copy
             </router-link>
@@ -40,7 +40,7 @@
                       </a>
                     </div>
                   </div>
-                  <div class="control-height">
+                  <div class="control-height" @scroll="infiniteScroll($event)">
                     <div v-if="campaign.scripts_count === 0" class="no-data-info">
                       Created Copies will display here.
                     </div>
@@ -85,6 +85,7 @@
                           </tr>
                         </tbody>
                       </table>
+                      <loader-modal :loading-state="nextLoading" class="next-loader"></loader-modal>
                     </div>
                   </div>
                 </div>
@@ -106,11 +107,11 @@
                   <div v-else class="d-flex flex-column h-100">
                     <div class="section-head" v-if="activeScript">
                       <button v-b-modal.modal-add-campaign class="
-                          d-flex
-                          align-items-center
-                          no-shadow
-                          btn btn-save-to
-                        ">
+                                  d-flex
+                                  align-items-center
+                                  no-shadow
+                                  btn btn-save-to
+                                ">
                         <img src="@/assets/icons/convert-icon/save 1.svg" alt="" class="icon-save mr-2" /><span> Save to
                         </span>
                       </button>
@@ -169,8 +170,7 @@
       </div>
     </b-modal>
 
-    <b-modal :hide-header="true" id="modal-view-script" centered size="md" :hide-footer="true"
-      content-class="modal-main">
+    <b-modal :hide-header="true" id="modal-view-script" centered size="md" :hide-footer="true" content-class="modal-main">
       <div v-if="isEdit" class="h-100">
 
         <div class="editor-outter h-100">
@@ -189,11 +189,11 @@
           <div class="d-flex flex-column m-min-height">
             <div class="section-head">
               <button v-b-modal.modal-add-campaign class="
-              d-flex
-              align-items-center
-              no-shadow
-              btn btn-save-to
-            ">
+                      d-flex
+                      align-items-center
+                      no-shadow
+                      btn btn-save-to
+                    ">
                 <img src="@/assets/icons/convert-icon/save 1.svg" alt="" class="icon-save mr-2" /><span> Save to
                 </span>
               </button>
@@ -258,7 +258,11 @@ export default {
     return {
       isEdit: false,
       loading: false,
+      nextLoading: false,
       selectedCampaign: null,
+      perPage: 15,
+      currentPage: 1,
+      maxPage: 1,
       campaignOptions: [{ value: null, text: "Select a Campaign" }],
       searchKey: "",
       searchResult: [],
@@ -392,14 +396,27 @@ export default {
 
         });
     },
-    getCampaignData(id, noload) {
+    getCampaignData(id, noload, next) {
       if (!noload) {
         this.$store.commit("updateLoadState", true);
       }
+      this.nextLoading = next ? true : false;
       this.$store
-        .dispatch("getOneCampaign", id)
+        .dispatch("getOneCampaign", {
+          id: id, page: {
+            number: this.currentPage,
+            perPage: this.perPage,
+          }
+        })
         .then((res) => {
-          this.campaign = res.data.data;
+          if (next) {
+            this.nextLoading = false;
+            this.campaign.scripts = this.campaign.scripts.concat(res.data.data.scripts)
+          } else {
+            this.campaign = res.data.data;
+            this.maxPage = Math.ceil(res.data.data.scripts_count / this.perPage);
+
+          }
 
           this.$store.commit("updateLoadState", false);
         })
@@ -534,6 +551,23 @@ export default {
     formatScript(text) {
       return text.replace(/\n/g, "<br />");
     },
+    infiniteScroll(event) {
+      let heightOfWindow = event.target.scrollHeight - event.target.offsetHeight;
+      let bottomOfWindow = Math.round(event.target.scrollTop) >= heightOfWindow;
+      console.log("scroll height " + event.target.scrollHeight)
+      console.log("scroll top " + event.target.scrollTop);
+      console.log("inner height " + event.target.children[0].offsetHeight);
+      console.log("height " + event.target.offsetHeight);
+      console.log("height " + heightOfWindow);
+
+      console.log("is bottom of window " + bottomOfWindow);
+      if (bottomOfWindow && this.currentPage < this.maxPage) {
+        // ...
+        this.currentPage++;
+        this.getCampaignData(this.$route.params.id, true, true);
+
+      }
+    },
   },
   mounted() {
     this.getCampaign();
@@ -547,6 +581,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

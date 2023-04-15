@@ -445,11 +445,11 @@ export default {
         });
     });
   },
-  getOneCampaign({ state }, id) {
+  getOneCampaign({ state }, {id, page}) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .get(`${baseUrl}/api/v1/campaigns/${id}`)
+        .get(`${baseUrl}/api/v1/campaigns/${id}?page=${page.number}&per_page=${page.perPage}`)
         .then((resp) => {
           resolve(resp);
         })

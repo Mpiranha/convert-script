@@ -3,7 +3,7 @@
         <div class="image-display_wrap" :style="`background-image: url(${imageUrl})`" @click="updateParent()">
 
             <div class="button_wrap">
-                <button class="btn-img-actions" @click="downloadClicked()">
+                <button class="btn-img-actions" @click="downloadClicked($event)">
                     <img src="@/assets/icons/image-vector.svg" alt="download icon">
                 </button>
             </div>
@@ -23,7 +23,8 @@ export default {
         updateParent() {
             this.$emit("image-clicked");
         },
-        downloadClicked() {
+        downloadClicked(event) {
+            event.stopPropagation();
             this.$emit("download-clicked");
         }
     }
