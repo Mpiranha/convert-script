@@ -21,6 +21,7 @@
           <img v-if="scriptTypeIcon" class="script-type-icon" :src="scriptTypeIcon" alt="" />
           {{ scriptTypeName }}
         </h6>
+        <slot></slot>
       </div>
 
     </div>

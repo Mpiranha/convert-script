@@ -5,7 +5,9 @@
       <sidebar :user-name="this.$store.state.user.first_name" logo-class="permanent-logo"
         dismiss-class="permanent-dismiss" current-active="ai-image" class="always-hidden"></sidebar>
       <div class="content-section">
-        <navbar script-type-name="AI Image Creator" logo-link-class="hide-logo" toggle-class="permanent-toggler"></navbar>
+        <navbar script-type-name="AI Image Creator" logo-link-class="hide-logo" toggle-class="permanent-toggler">
+          <div class="beta_text">BETA</div>
+        </navbar>
         <div class="scroll-content script-content-fs">
           <div class="container-fluid pt-3">
             <!-- <div class="
@@ -26,6 +28,11 @@
                 <div class="col-12 col-lg-4 pr-lg-0">
                   <div class="bordered-right h-100 md-bordered-bottom">
                     <div class="script-form-wrap pb-3 pb-lg-0">
+                      <div class="image_creator_head">
+                        Create high-quality images for your website or blog using text with our AI image creator tool.
+                        <br>
+                        <span>Each AI image creator prompt will deduct 500 words.</span>
+                      </div>
                       <form action="#" method="GET" @submit.prevent="onSubmit">
                         <div class="script-form">
                           <div class="form-group">
@@ -464,6 +471,17 @@ export default {
 .ai_note {
   font-size: 0.9rem;
   color: #474e56;
+}
+
+.image_creator_head span {
+  background-color: #8338EC;
+  color: #ffffff;
+  display: block;
+  text-align: center;
+  border-radius: 0.3rem;
+  padding: 0.2rem;
+  margin-top: .5rem;
+  margin-bottom: 1rem;
 }
 
 @media screen and (max-width: 768px) {

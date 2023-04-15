@@ -105,8 +105,8 @@
       <li class="nav-item collapsible" :class="isCollapse ? 'open' : ''">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <router-link class="nav-link" :class="currentActive == 'ai-image' ? 'active' : ''" to="/tools/image-creator">
-              <span class="nav-text"> AI Image Creator </span>
+            <router-link class="nav-link pl-0 d-flex align-items-center" :class="currentActive == 'ai-image' ? 'active' : ''" to="/tools/image-creator">
+              <span class="nav-text"> AI Image Creator <span class="beta_text beta_text_sm">BETA</span> </span>
             </router-link>
           </li>
           <!-- <li class="nav-item">
@@ -286,6 +286,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.nav-text {
+  position: relative;
+}
+
 .side-bar {
   height: 100vh;
   min-width: 215px;

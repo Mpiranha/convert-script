@@ -1511,6 +1511,23 @@ input:checked+.slider:before {
     height: 95% !important;
 }
 
+.beta_text {
+    background-color: #393F46;
+    color: #fff;
+    margin-left: 0.5rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.8rem;
+}
+
+.beta_text_sm {
+    font-size: 0.7rem;
+    position: absolute;
+    top: 50%;
+    margin-top: -8px;
+  
+}
+
+
 
 
 @media screen and (min-width: 1367px) {
