@@ -6,7 +6,7 @@
         dismiss-class="permanent-dismiss" current-active="ai-image" class="always-hidden"></sidebar>
       <div class="content-section">
         <navbar script-type-name="AI Image Creator" logo-link-class="hide-logo" toggle-class="permanent-toggler">
-          <div class="beta_text beta_text_sm">BETA</div>
+          <div class="beta_text beta_text_top">BETA</div>
         </navbar>
         <div class="scroll-content script-content-fs">
           <div class="container-fluid pt-3">
