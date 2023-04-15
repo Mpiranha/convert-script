@@ -7,13 +7,13 @@
         <div class="scroll-content">
           <div class="container">
             <div class="
-                dashboard-top
-                d-flex
-                flex-wrap
-                justify-content-between
-                align-items-center
-                mb-5
-              ">
+                  dashboard-top
+                  d-flex
+                  flex-wrap
+                  justify-content-between
+                  align-items-center
+                  mb-5
+                ">
               <h6 class="title">All Campaign</h6>
 
               <div class="d-flex flex-wrap align-items-center ml-md-auto">
@@ -38,8 +38,8 @@
                 <button class="btn search-btn">
                   <i class="flaticon-loupe icons"></i>
                 </button>
-                <input @input="searchKeyWord" v-model="searchKey" class="form-control no-shadow search-input"
-                  type="text" placeholder="Search" />
+                <input @input="searchKeyWord" v-model="searchKey" class="form-control no-shadow search-input" type="text"
+                  placeholder="Search" />
               </div>
 
               <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
@@ -48,98 +48,98 @@
                 Created campaigns will display here.
               </div>
               <div v-else class="responsive-table">
-              <table class="table table-custom">
-                <tbody v-if="searchResult.length > 0">
-                  <tr v-for="result in searchResult" :key="result.id">
-                    <td scope="row">
-                      <router-link :to="{
-                        name: 'CampaignScript',
-                        params: { id: result.id },
-                      }">
-                        {{  result.name  }}
-                      </router-link>
-                    </td>
-                    <td>{{  result.scripts_count  }}</td>
-                    <td>
-                      {{  formatDate(result.created_at)  }}
-                    </td>
-                    <td>
-                      <dropdown-tool delete-what="Campaign" @edit-clicked="openEditModal(result.id, result.name)"
-                        @delete-proceed="deleteCampaign(result.id)">
-                        <template v-slot:secondary>
-                          <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#"
-                            @click="getCampaignId(result.id)">
-                            <img class="drop-img-icon" src="@/assets/icons/convert-icon/Add to client icon.svg"
-                              alt="add to client icon" />
-                            Add to Client
-                          </b-dropdown-item>
-                        </template>
-                      </dropdown-tool>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody v-else-if="selectedAgency">
-                  <tr v-for="campaign in filteredCampaign" :key="campaign.id">
-                    <td scope="row">
-                      <router-link :to="{
-                        name: 'CampaignScript',
-                        params: { id: campaign.id },
-                      }">
-                        {{  campaign.name  }}
-                      </router-link>
-                    </td>
-                    <td>{{  campaign.scripts_count  }}</td>
-                    <td>
-                      {{  formatDate(campaign.created_at)  }}
-                    </td>
-                    <td>
-                      <dropdown-tool delete-what="Campaign" @edit-clicked="
-                        openEditModal(campaign.id, campaign.name)
-                      " @delete-proceed="deleteCampaign(campaign.id)">
-                        <template v-slot:secondary>
-                          <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#"
-                            @click="getCampaignId(campaign.id)">
-                            <img class="drop-img-icon" src="@/assets/icons/convert-icon/Add to client icon.svg"
-                              alt="add to client icon" />
-                            Add to Client
-                          </b-dropdown-item>
-                        </template>
-                      </dropdown-tool>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody v-else-if="campaigns && searchKey.length < 1">
-                  <tr v-for="campaign in campaigns" :key="campaign.id">
-                    <td scope="row">
-                      <router-link :to="{
-                        name: 'CampaignScript',
-                        params: { id: campaign.id },
-                      }">
-                        {{  campaign.name  }}
-                      </router-link>
-                    </td>
-                    <td>{{  campaign.scripts_count  }}</td>
-                    <td>
-                      {{  formatDate(campaign.created_at)  }}
-                    </td>
-                    <td>
-                      <dropdown-tool delete-what="Campaign" @edit-clicked="
-                        openEditModal(campaign.id, campaign.name)
-                      " @delete-proceed="deleteCampaign(campaign.id)">
-                        <template v-slot:secondary>
-                          <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#"
-                            @click="getCampaignId(campaign.id)">
-                            <img class="drop-img-icon" src="@/assets/icons/convert-icon/Add to client icon.svg"
-                              alt="add to client icon" />
-                            Add to Client
-                          </b-dropdown-item>
-                        </template>
-                      </dropdown-tool>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                <table class="table table-custom">
+                  <tbody v-if="searchResult.length > 0">
+                    <tr v-for="result in searchResult" :key="result.id">
+                      <td scope="row">
+                        <router-link :to="{
+                          name: 'CampaignScript',
+                          params: { id: result.id },
+                        }">
+                          {{ result.name }}
+                        </router-link>
+                      </td>
+                      <td>{{ result.scripts_count }}</td>
+                      <td>
+                        {{ formatDate(result.created_at) }}
+                      </td>
+                      <td>
+                        <dropdown-tool delete-what="Campaign" @edit-clicked="openEditModal(result.id, result.name)"
+                          @delete-proceed="deleteCampaign(result.id)">
+                          <template v-slot:secondary>
+                            <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#"
+                              @click="getCampaignId(result.id)">
+                              <img class="drop-img-icon" src="@/assets/icons/convert-icon/Add to client icon.svg"
+                                alt="add to client icon" />
+                              Add to Client
+                            </b-dropdown-item>
+                          </template>
+                        </dropdown-tool>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tbody v-else-if="selectedAgency">
+                    <tr v-for="campaign in filteredCampaign" :key="campaign.id">
+                      <td scope="row">
+                        <router-link :to="{
+                          name: 'CampaignScript',
+                          params: { id: campaign.id },
+                        }">
+                          {{ campaign.name }}
+                        </router-link>
+                      </td>
+                      <td>{{ campaign.scripts_count }}</td>
+                      <td>
+                        {{ formatDate(campaign.created_at) }}
+                      </td>
+                      <td>
+                        <dropdown-tool delete-what="Campaign" @edit-clicked="
+                          openEditModal(campaign.id, campaign.name)
+                        " @delete-proceed="deleteCampaign(campaign.id)">
+                          <template v-slot:secondary>
+                            <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#"
+                              @click="getCampaignId(campaign.id)">
+                              <img class="drop-img-icon" src="@/assets/icons/convert-icon/Add to client icon.svg"
+                                alt="add to client icon" />
+                              Add to Client
+                            </b-dropdown-item>
+                          </template>
+                        </dropdown-tool>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tbody v-else-if="campaigns && searchKey.length < 1">
+                    <tr v-for="campaign in campaigns" :key="campaign.id">
+                      <td scope="row">
+                        <router-link :to="{
+                          name: 'CampaignScript',
+                          params: { id: campaign.id },
+                        }">
+                          {{ campaign.name }}
+                        </router-link>
+                      </td>
+                      <td>{{ campaign.scripts_count }}</td>
+                      <td>
+                        {{ formatDate(campaign.created_at) }}
+                      </td>
+                      <td>
+                        <dropdown-tool delete-what="Campaign" @edit-clicked="
+                          openEditModal(campaign.id, campaign.name)
+                        " @delete-proceed="deleteCampaign(campaign.id)">
+                          <template v-slot:secondary>
+                            <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#"
+                              @click="getCampaignId(campaign.id)">
+                              <img class="drop-img-icon" src="@/assets/icons/convert-icon/Add to client icon.svg"
+                                alt="add to client icon" />
+                              Add to Client
+                            </b-dropdown-item>
+                          </template>
+                        </dropdown-tool>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -167,11 +167,11 @@
         <b-button @click="$bvModal.hide('modal-new-campaign')" class="close-modal">Close</b-button>
         <b-button @click="
           triggerEdit ? editCampaign(editId, $event) : addCampaign($event)
-        " class="save-modal">{{  triggerEdit ? "Edit" : "Create"  }}</b-button>
+        " class="save-modal">{{ triggerEdit ? "Edit" : "Create" }}</b-button>
       </div>
     </b-modal>
-    <b-modal :hide-header="true" id="modal-add-client" centered size="md" :hide-footer="true"
-      dialog-class="control-width" content-class="modal-main">
+    <b-modal :hide-header="true" id="modal-add-client" centered size="md" :hide-footer="true" dialog-class="control-width"
+      content-class="modal-main">
       <b-form-group label="Add to Client" label-for="pwd" label-class="form-label">
         <b-form-select class="input-table" v-model="client" :options="clientOptions"></b-form-select>
       </b-form-group>
@@ -433,16 +433,20 @@ export default {
     },
     getClientsCampaign() {
       this.$store.commit("updateLoadState", true);
-      this.$store
-        .dispatch("getAgencyCampaign", this.selectedAgency)
-        .then((res) => {
-          this.$store.commit("updateLoadState", false);
-          this.clientCampaign = res.data.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.$store.commit("updateLoadState", false);
-        });
+      if (this.selectedAgency) {
+        this.$store
+          .dispatch("getAgencyCampaign", this.selectedAgency)
+          .then((res) => {
+            this.$store.commit("updateLoadState", false);
+            this.clientCampaign = res.data.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.$store.commit("updateLoadState", false);
+          });
+      } else {
+        this.getAgency();
+      }
     },
   },
 
