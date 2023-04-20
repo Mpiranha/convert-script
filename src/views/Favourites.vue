@@ -303,7 +303,7 @@ export default {
   },
   data() {
     return {
-      perPage: 10,
+      perPage: 20,
       currentPage: 1,
       maxPage: 1,
       nextLoading: false,

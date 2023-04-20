@@ -282,7 +282,7 @@ export default {
       searchKey: "",
       searchResult: [],
       scriptLength: 0,
-      perPage: 10,
+      perPage: 20,
       currentPage: 1,
       maxPage: 1,
       triggerEdit: false,

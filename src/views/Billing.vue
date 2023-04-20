@@ -33,7 +33,8 @@
                   </thead>
                   <tbody>
                     <tr v-for="activePlan in planDetail.active_plan" :key="activePlan.id">
-                      <td scope="row"> {{ capitaliseStr(activePlan.name) }} <span class="plan_count">{{ activePlan.count > 1 ? "x " + activePlan.count : "" }}</span></td>
+                      <td scope="row"> {{ capitaliseStr(activePlan.name) }} <span class="plan_count">{{ activePlan.count >
+                        1 ? "x " + activePlan.count : "" }}</span></td>
                       <td class="text-left">{{ activePlan.words.toLocaleString('en-US') }}</td>
                       <td>{{ formatDate(activePlan.end_date) }}</td>
 
@@ -43,8 +44,8 @@
                       <td scope="row">{{ capitaliseStr(plan.name) }}</td>
                       <td class="text-left">{{ plan.words.toLocaleString('en-US') }}</td>
                       <td>{{ new Intl.NumberFormat('en-US', {
-                      style: 'currency',
-                      currency: 'USD'
+                        style: 'currency',
+                        currency: 'USD'
                       }).format(plan.price)
                       }}/{{ capitaliseStr(plan.billing_cycle) }}</td>
                       <td>
@@ -61,13 +62,15 @@
                 </table>
               </div>
 
-            
+
 
             </div>
 
             <div class="content-wrap word-usage-stat">
               <div class="label">Word Usage Count</div>
-              <b-progress :value="wordStat.script_words_generated" :max="wordStat.limit" animated height="0.8rem">
+              <b-progress v-if="String(wordStat.limit).toLowerCase() == 'unlimited'" :value="0"
+                :max="99999999999" animated height="0.8rem"></b-progress>
+              <b-progress v-else :value="wordStat.script_words_generated" :max="wordStat.limit" animated height="0.8rem">
               </b-progress>
               <div class="value">
                 {{ wordStat.script_words_generated }} of {{ wordStat.limit }}
