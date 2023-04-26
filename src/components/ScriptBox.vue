@@ -282,7 +282,8 @@ export default {
 } */
 
 .script-content-wrap .script-content {
-  font-size: 1.1rem;
+  color: #000000;
+  font-size: 1.3rem;
   margin-bottom: 1.3rem;
   line-height: 1.6;
   text-align: left;
