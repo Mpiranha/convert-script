@@ -638,13 +638,7 @@ export default {
     infiniteScroll(event) {
       let heightOfWindow = event.target.scrollHeight - event.target.offsetHeight;
       let bottomOfWindow = Math.round(event.target.scrollTop) >= heightOfWindow;
-      console.log("scroll height " + event.target.scrollHeight )
-      console.log("scroll top " + event.target.scrollTop);
-      console.log("inner height " + event.target.children[0].offsetHeight);
-      console.log("height " +event.target.offsetHeight);
-      console.log("height " + heightOfWindow);
-
-      // console.log("is bottom of window " + bottomOfWindow);
+      
       if (bottomOfWindow && this.currentPage < this.maxPage) {
         // ...
         window.scrollTo(0, heightOfWindow);

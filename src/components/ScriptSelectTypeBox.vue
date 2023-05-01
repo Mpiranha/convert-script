@@ -39,7 +39,7 @@ export default {
   margin-bottom: 1rem;
   padding: 1rem 1rem 1rem 0.7rem;
   box-shadow: 2px 1px 2px #d9d2d2, -1px 2px 2px #d9d2d2;
-  height: 190px;
+  min-height: 190px;
   /* max-width: 284px; */
 }
 
