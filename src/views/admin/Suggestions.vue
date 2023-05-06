@@ -39,17 +39,17 @@
                 </thead>
                 <tbody v-if="searchResult.length > 0">
                   <tr v-for="result in searchResult" :key="result.id">
-                    <td>
+                    <td class="ctrl-width">
                       {{  result.message  }}
                     </td>
-                    <td class="text-left">{{  result.user.email ? result.user.email : "NULL"  }}</td>
+                    <td class="text-left">{{  result.user ? result.user.email : "NULL"  }}</td>
                     <td>{{  formatDate(result.created_at)  }}</td>
                     <td class="text-left">
                       <nav class="nav flex-column action-view">
                         <a class="nav-link" href="#" v-b-modal.modal-view-script @click="
                           getCurrent({
                             message: result.message,
-                            email: result.user.email ? result.user.email : 'NULL',
+                            email: result.user ? result.user.email : 'NULL',
                             date: formatDate(result.created_at),
                           })
                         ">
@@ -62,17 +62,17 @@
                 </tbody>
                 <tbody v-else-if="suggestions && searchKey.length < 1">
                   <tr v-for="suggestion in suggestions" :key="suggestion.id">
-                    <td>
+                    <td class="ctrl-width">
                       {{  suggestion.message  }}
                     </td>
-                    <td class="text-left">{{  suggestion.user.email ? suggestion.user.email : "NULL"  }}</td>
+                    <td class="text-left">{{  suggestion.user ? suggestion.user.email : "NULL"  }}</td>
                     <td>{{  formatDate(suggestion.created_at)  }}</td>
                     <td class="text-left">
                       <nav class="nav flex-column action-view">
                         <a class="nav-link" href="#" v-b-modal.modal-view-script @click="
                           getCurrent({
                             message: suggestion.message,
-                            email: suggestion.user.email ? suggestion.user.email : 'NUll',
+                            email: suggestion.user ? suggestion.user.email : 'NUll',
                             date: formatDate(suggestion.created_at),
                           })
                         ">
@@ -239,4 +239,7 @@ export default {
 </script>
 
 <style>
+.ctrl-width {
+  max-width: 400px;
+}
 </style>
