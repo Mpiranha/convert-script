@@ -3,7 +3,9 @@
 
 @font-face {
     font-family: "jost";
-    src: url("../fonts/jost/static/Jost-Regular.ttf");
+    /* src: url("../fonts/jost/static/Jost-Regular.ttf"); */
+    src: url('../fonts/jost/jost-variablefont_wght-webfont.woff2') format('woff2'),
+        url('../fonts/jost/jost-variablefont_wght-webfont.woff') format('woff');
     /* IE9*/
     src: url("../fonts/jost/static/Jost-Regular.ttf") format("embedded-opentype"),
         /* IE6-IE8 */
@@ -84,10 +86,11 @@ body {
     color: #fff !important;
     background-color: #8338ec !important;
     font-size: 0.7rem !important;
-    font-weight: bold !important;
+    /* font-weight: bold !important; */
     padding: 0.5rem 1rem 0.5rem 2rem !important;
     display: flex !important;
     align-items: center !important;
+    border-radius: 0.5rem !important;
 }
 
 .py-2 {
@@ -121,7 +124,7 @@ body {
 .search-form {
     display: flex;
     align-items: center;
-    border: 1px solid #566677;
+    border: 1px solid #d9dce3;
     border-radius: 0.5rem;
     margin: 0 1rem 3rem 1rem;
 }
@@ -879,7 +882,7 @@ input:checked+.slider:before {
     transition: background 0.5s !important;
 }
 
- .spinner {
+.spinner {
     width: 1.5rem;
     display: none;
 }

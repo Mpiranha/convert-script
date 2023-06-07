@@ -213,6 +213,12 @@
         </b-form-checkbox>
       </b-form-group>
 
+      <b-form-group label="">
+        <b-form-checkbox v-model="rolesData.team_member_role" :value="true" :unchecked-value="false" name="flavour-1">
+          Make role for team member
+        </b-form-checkbox>
+      </b-form-group>
+
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-role')" class="close-modal">Close</b-button>
         <b-button @click="triggerEdit ? editRole(editId, rolesData) : addRole($event)" class="save-modal">{{  triggerEdit
@@ -287,7 +293,8 @@ export default {
         wordLimit: "",
         success_url: "",
         cancel_url: "",
-        set_as_user_plan: false
+        set_as_user_plan: false,
+        team_member_role: false
       },
       cycleOptions: [{
         value: null,
@@ -405,6 +412,7 @@ export default {
           success_url: this.rolesData.success_url,
           cancel_url: this.rolesData.cancel_url,
           set_as_user_plan: this.rolesData.set_as_user_plan,
+          team_member_role: this.rolesData.team_member_role
         })
         .then((res) => {
           console.log(res);
@@ -416,7 +424,8 @@ export default {
             wordLimit: "",
             success_url: "",
             cancel_url: "",
-            set_as_user_plan: false
+            set_as_user_plan: false,
+            team_member_role: false
           };
           this.makeToast("success", "Role added successfully");
           this.$store.commit("updateLoadState", false);
@@ -442,6 +451,7 @@ export default {
             success_url: this.rolesData.success_url,
             cancel_url: this.rolesData.cancel_url,
             set_as_user_plan: this.rolesData.set_as_user_plan,
+            team_member_role: this.rolesData.team_member_role,
             type: "role"
           },
         })
@@ -455,7 +465,8 @@ export default {
             wordLimit: "",
             success_url: "",
             cancel_url: "",
-            set_as_user_plan: false
+            set_as_user_plan: false,
+            team_member_role: false
           };
           this.makeToast("success", "Role edited successfully");
           this.$store.commit("updateLoadState", false);
@@ -496,7 +507,8 @@ export default {
         wordLimit: data.words_allowed,
         success_url: data.success_url,
         cancel_url: data.cancel_url,
-        set_as_user_plan: data.set_as_user_plan
+        set_as_user_plan: data.set_as_user_plan,
+        team_member_role: data.team_member_role
       }
     },
     clearField() {
@@ -507,7 +519,8 @@ export default {
         wordLimit: "",
         success_url: "",
         cancel_url: "",
-        set_as_user_plan: false
+        set_as_user_plan: false,
+        team_member_role: false
       };
       this.triggerEdit = false;
     },

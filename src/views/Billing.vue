@@ -16,6 +16,8 @@
                   <span class="slider round"></span>
                 </label>
                 <h6 class="title mb-0 ml-3">Yearly</h6>
+
+                <button class="btn btn-create pl-3 ml-4 px-4" v-b-modal.modal-new-promo_code>Add Promocode</button>
               </div>
             </div>
 
@@ -68,18 +70,48 @@
 
             <div class="content-wrap word-usage-stat">
               <div class="label">Word Usage Count</div>
-              <b-progress v-if="String(wordStat.limit).toLowerCase() == 'unlimited'" :value="0"
-                :max="99999999999" animated height="0.8rem"></b-progress>
+              <b-progress v-if="String(wordStat.limit).toLowerCase() == 'unlimited'" :value="0" :max="99999999999"
+                animated height="0.8rem"></b-progress>
               <b-progress v-else :value="wordStat.script_words_generated" :max="wordStat.limit" animated height="0.8rem">
               </b-progress>
               <div class="value">
                 {{ wordStat.script_words_generated }} of {{ wordStat.limit }}
               </div>
             </div>
+
+            <div class="content-wrap word-usage-stat">
+              <div class="label">Plagiarism Checker Credit: <b>345</b></div>
+
+              <div class="value ml-auto">
+                <button class="btn btn-create px-3">
+                  Buy Credit
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <b-modal :hide-header="true" id="modal-new-promo_code" centered size="md" :hide-footer="true"
+      dialog-class="control-width" content-class="modal-main">
+
+
+      <b-form-group>
+        <label for="promo_code">Promo Code</label>
+        <b-form-input :class="{ 'is-invalid': submitted && $v.promoCode.$error }" id="promo_code" v-model="promoCode"
+          type="text" class="input-table">
+        </b-form-input>
+        <div v-if="submitted && $v.promoCode.$error" class="invalid-feedback">
+          <span v-if="!$v.promoCode.required">* Promo code is required <br /></span>
+          <span v-if="!$v.promoCode.minLength">* Minimum of 3 Characters</span>
+        </div>
+      </b-form-group>
+
+      <div class="d-flex justify-content-end">
+        <b-button @click="$bvModal.hide('modal-new-promo_code')" class="close-modal">Close</b-button>
+        <b-button @click="upgradeWithPurchaseCode($event)" class="save-modal">Redeem</b-button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -87,12 +119,21 @@
 // @ is an alias to /src
 import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
+import alertMixin from "@/mixins/alertMixin";
+import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   name: "Billing",
+  mixins: [alertMixin],
   components: {
     Sidebar,
     Navbar,
+  },
+  validations: {
+    promoCode: {
+      required,
+      minLength: minLength(3),
+    },
   },
   data() {
     return {
@@ -107,6 +148,8 @@ export default {
         script_words_generated: null,
       },
       isYearly: false,
+      submitted: false,
+      promoCode: "",
     };
   },
   methods: {
@@ -129,6 +172,31 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    upgradeWithPurchaseCode(event) {
+      event.preventDefault();
+
+      this.submitted = true;
+
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
+
+      this.$store.commit("updateLoadState", true);
+      this.$bvModal.hide("modal-new-promo_code");
+      this.$store
+        .dispatch("upgradeWithPurchaseCode", this.promoCode)
+        .then((res) => {
+          this.promoCode = "";
+          this.makeToast("success", res);
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          this.promoCode = "";
+          this.makeToast("danger", error.response.data.message);
           this.$store.commit("updateLoadState", false);
         });
     },

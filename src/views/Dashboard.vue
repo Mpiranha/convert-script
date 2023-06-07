@@ -40,7 +40,7 @@
               <h6 class="title">Recently used</h6>
             </div>
 
-            <div class="row" v-if="stat.recent_templates.length > 0">
+            <div class="row mb-5" v-if="stat.recent_templates.length > 0">
               <script-select-type-box
                 v-for="scriptType in stat.recent_templates"
                 :key="scriptType.id"
