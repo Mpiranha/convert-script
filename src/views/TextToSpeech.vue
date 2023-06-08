@@ -186,10 +186,11 @@
 
                           <textarea :class="{ 'is-invalid': $v.speechData.text.$error }" v-model="speechData.text"
                             class="form-control" name="" id="" cols="30" rows="10"></textarea>
-                          <div v-if="isSubmitted && $v.speechData.text.$error" class="invalid-feedback">
-                            <span v-if="!$v.speechData.text.required">* Please enter a text <br /></span>
-                            <span v-if="!$v.speechData.text.minLength">* Minimum of 3 Characters</span>
-                          </div>
+                        
+                        </div>
+                        <div v-if="isSubmitted && $v.speechData.text.$error" class="invalid-feedback">
+                          <span v-if="!$v.speechData.text.required">* Please enter a text <br /></span>
+                          <span v-if="!$v.speechData.text.minLength">* Minimum of 3 Characters</span>
                         </div>
                         <div class="text_speech_actions">
                           <button class="btn no-shadow btn_play_pause">
