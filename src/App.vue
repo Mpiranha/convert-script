@@ -48,6 +48,8 @@ export default {
       document.head.appendChild(supportChat);
     }
 
+    this.$store.dispatch("getUser");
+
 
 
 
