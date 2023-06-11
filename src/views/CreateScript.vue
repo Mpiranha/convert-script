@@ -186,6 +186,7 @@ export default {
   mixins: [alertMixin],
   data() {
     return {
+      workspace_id: this.$store.state.user.default_workspace_id,
       selectedCampaign: null,
       campaignOptions: [{ value: null, text: "Select a Campaign" }],
       tone: null,
@@ -248,8 +249,8 @@ export default {
       this.$bvModal.hide("modal-add-campaign");
       this.editScript(
         this.selectedSave.id,
+        this.selectedSave.text,
         this.selectedCampaign,
-        this.selectedSave.text
       );
     },
     saveCampaign(id, txt) {
@@ -263,7 +264,7 @@ export default {
     getCampaign() {
       // this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getCampaigns")
+        .dispatch("getCampaigns", this.workspace_id)
         .then((res) => {
           let data = res.data.data;
           for (let index = 0; index < data.length; index++) {
@@ -298,10 +299,11 @@ export default {
       // this.editId = id;
       // this.campaignName = data;
     },
-    addRemoveScriptFavorite() {
+    addRemoveScriptFavorite(id) {
       this.$store
         .dispatch("addRemoveFavorite", {
-          script_response_id: this.generatedScript.id,
+          script_response_id: id,
+          workspace_id: this.workspace_id
         })
         .then((res) => {
           // console.log(res.data.data.message);
@@ -384,6 +386,7 @@ export default {
           input_language_id: this.languageInput
             ? this.languageInput[0].language_id
             : "",
+            workspace_id: this.workspace_id
           // language_id: this.language ? this.language[0].language_id : "",
         })
         .then((res) => {

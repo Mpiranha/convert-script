@@ -90,8 +90,27 @@
       <li class="nav-item">
         <button class="btn no-shadow nav-link" @click="toggleCollapse('audio')">
           <span class="nav-text"> Audio </span>
-          <img class="collapse-icon" :class="isCollapse == 'audio' ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
+          <img class="collapse-icon" :class="isCollapse == 'audio' ? 'open' : ''" src="@/assets/icons/down.png"
+            alt="up icon">
         </button>
+      </li>
+      <li class="nav-item collapsible" :class="isCollapse == 'audio' ? 'open' : ''">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'audio-language' ? 'active' : ''" to="/admin/audio/languages">
+              <span class="nav-text"> Languages
+              </span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :class="currentActive == 'audio-voices' ? 'active' : ''" to="/admin/audio/voices">
+              <span class="nav-text"> Voices
+              </span>
+            </router-link>
+          </li>
+        
+
+        </ul>
       </li>
       <li class="nav-item">
         <router-link class="nav-link" :class="currentActive == 'promo-code' ? 'active' : ''" to="/admin/promo-codes">
@@ -144,6 +163,17 @@
         </router-link>
       </li> -->
       </li>
+      <li class="nav-item">
+        <router-link class="nav-link" :class="currentActive == 'plagiarism-credit' ? 'active' : ''" to="/admin/setup/plagiarism">
+          <span class="nav-text"> Plagiarism credit </span>
+        </router-link>
+      </li>
+
+      <li class="nav-item">
+        <router-link class="nav-link" :class="currentActive == 'chat-prompt' ? 'active' : ''" to="/admin/setup/chat-prompt">
+          <span class="nav-text"> Chat prompt </span>
+        </router-link>
+      </li>
 
       <li class="nav-item">
         <router-link class="nav-link" :class="currentActive == 'suggestion' ? 'active' : ''" to="/admin/suggestions">
@@ -162,11 +192,12 @@
           <span class="nav-text"> Keyword </span>
         </router-link>
       </li>
-     
+
       <li class="nav-item">
         <button class="btn no-shadow nav-link" @click="toggleCollapse('files')">
           <span class="nav-text"> Files </span>
-          <img class="collapse-icon" :class="isCollapse == 'files' ? 'open' : ''" src="@/assets/icons/down.png" alt="up icon">
+          <img class="collapse-icon" :class="isCollapse == 'files' ? 'open' : ''" src="@/assets/icons/down.png"
+            alt="up icon">
         </button>
       </li>
       <li class="nav-item collapsible" :class="isCollapse == 'files' ? 'open' : ''">
@@ -184,7 +215,7 @@
           </li>
           <li class="nav-item">
             <router-link class="nav-link" :class="currentActive == 'tutorials' ? 'active' : ''" to="/admin/tutorials">
-    
+
               <span class="nav-text"> Tutorials </span>
             </router-link>
           </li>
@@ -224,7 +255,7 @@ export default {
       if (this.isCollapse == item) {
         this.isCollapse = null;
         return
-      } 
+      }
       this.isCollapse = item;
     },
     logout: function (event) {

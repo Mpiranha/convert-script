@@ -26,6 +26,30 @@
 
     </div>
     <div class="menu-section">
+      <div class="workspace_ps_relative" :class="removeContent ? 'hide-content' : ''">
+        <div class="workspace-input_custom" @click="isOpen = !isOpen">
+          <span class="selected_workspace">{{ this.$store.state.user.default_workspace.name }} </span>
+          <img class="collapse-icon_workspace" src="@/assets/icons/down.png" alt="up icon">
+        </div>
+
+        <div v-if="isOpen" class="workspace_items_wrap close-click-outside">
+          <ul class="nav">
+            <li class="cur_active"> {{ this.$store.state.user.default_workspace.name }}
+              <img src="@/assets/icons/check-mark 1.svg" alt="check mark">
+            </li>
+            <li v-for="workspace in firstTwoWorkspaces" :key="workspace.id" @click="setDefaultWorkspace(workspace.id)">
+              {{ workspace.name }}
+            </li>
+          </ul>
+          <div class="workspace_item_footer">
+            <router-link class="btn btn_view_all" to="/workspace">
+              View All
+
+              <img src="@/assets/icons/hamburger_icon.svg" alt="view all workspace">
+            </router-link>
+          </div>
+        </div>
+      </div>
       <slot name="create-btn"></slot>
       <ul class="nav align-items-center" :class="removeContent ? 'hide-content' : ''">
         <li class="nav-item d-none-mobile">
@@ -125,18 +149,56 @@ export default {
   },
   data() {
     return {
+      isOpen: false,
       widget: undefined,
       isToggled: false,
       suggestion: {
         parent_id: 1,
         message: "",
       },
+      firstTwoWorkspaces: [],
       submitted: false,
     };
   },
   methods: {
+    getWorkspaces() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getWorkspaces")
+        .then((res) => {
+
+          this.firstTwoWorkspaces = res.data.response.data.filter((workspace) => workspace.id != this.$store.state.user.default_workspace_id && this.firstTwoWorkspaces.length < 2);
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     toggleNav() {
       this.isToggled = !this.isToggled;
+    },
+    setDefaultWorkspace(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("addDefaultWorkspace", {
+          workspace_id: id
+        })
+        .then(() => {
+          this.isOpen = false;
+          this.error = null;
+          window.location.reload();
+          this.makeToast("success", "Workspace successfully set as Default");
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          this.$store.commit("updateLoadState", false);
+          this.makeToast("danger", this.error);
+
+        });
     },
     addSuggestion(event) {
 
@@ -222,7 +284,21 @@ export default {
           $vm.isToggled = false;
         }
       }
+
+      if ($vm.isOpen) {
+
+        if ($('.workspace-input_custom').has(e.target).length > 0 || $('.workspace-input_custom').is(e.target)) {
+          return;
+        }
+
+        // if the target of the click isn't the container nor a descendant of the container
+        if (!container.is(e.target) && container.has(e.target).length === 0) {
+          //container.removeClass('show-visible');
+          $vm.isOpen = false;
+        }
+      }
     });
+    this.getWorkspaces();
   },
 };
 </script>
@@ -400,7 +476,82 @@ export default {
   border-width: 1px;
 }
 
+.workspace-input_custom {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgb(158 161 164);
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  min-width: 182px;
+  margin-right: 1rem;
+}
 
+.selected_workspace {
+  font-size: 0.8rem;
+
+}
+
+.cur_active {
+  display: flex;
+  align-items: center;
+}
+
+.cur_active img {
+  margin-left: auto;
+  width: 1rem;
+}
+
+.workspace_ps_relative {
+  position: relative;
+}
+
+.workspace_items_wrap {
+  position: absolute;
+  width: 100%;
+  top: 126%;
+  box-shadow: -1px -1px 7px #5151541f, 1px 1px 7px #5151541f;
+  background-color: #ffffff;
+  border-radius: 0.3rem;
+}
+
+.workspace_items_wrap .nav {
+  flex-direction: column;
+  padding: 0.7rem 0.7rem 0 0.7rem;
+}
+
+.workspace_items_wrap .nav li {
+  font-size: 0.8rem;
+  margin-bottom: .8rem;
+
+}
+
+.workspace_items_wrap .nav li:not(:first-child) {
+  cursor: pointer;
+}
+
+.collapse-icon_workspace {
+  width: 1.6rem;
+  margin-left: auto;
+}
+
+.workspace_item_footer {
+  border-top: 1px solid #E5E5E5;
+}
+
+.btn_view_all {
+  width: 100%;
+  display: flex !important;
+  align-items: center;
+  font-size: 0.8rem !important;
+  text-align: left !important;
+  padding: 0.475rem 0.75rem !important;
+}
+
+.btn_view_all img {
+  margin-left: auto;
+  width: 1.1rem;
+}
 
 @media (min-width: 1367px) {
   .menu-section .nav-link {

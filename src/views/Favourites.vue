@@ -44,27 +44,26 @@
                       <table class="table table-section script-table">
                         <tbody v-if="searchResult.length > 0">
                           <tr v-for="script in searchResult" :key="script.id"
-                            :class="activeScript ? script.response.id == activeScript.response.id ? 'active' : '' : ''">
+                            :class="activeScript ? script.id == activeScript.id ? 'active' : '' : ''">
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
                                 {{
-                                  script.response.script_type_name
-                                  ? script.response.script_type_name
+                                  script.script_type_name
+                                  ? script.script_type_name
                                   : "NIL"
                                 }}
                               </div>
                               <div class="script-content">
-                                {{ removeTags(abbrScript(script.response.text)) }}
+                                {{ removeTags(abbrScript(script.text)) }}
                               </div>
                             </td>
 
                             <td class="text-right">
                               <dropdown-tool :no-edit="true" :no-delete="true" delete-what="Script"
-                                @delete-proceed="deleteScript(script.response.id)">
+                                @delete-proceed="deleteScript(script.id)">
                                 <template v-slot:secondary>
-                                  <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#" @click="
-                                    addRemoveScriptFavorite(script.response.id)
-                                  ">
+                                  <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#" @click="addRemoveScriptFavorite(script.response.id)
+                                    ">
                                     <img class="drop-img-icon" src="@/assets/icons/convert-icon/my Favourites.svg"
                                       alt="remove from favorite icon" />
                                     Remove from favorite
@@ -76,26 +75,26 @@
                         </tbody>
                         <tbody v-else-if="scripts && searchKey.length < 1">
                           <tr v-for="script in scripts" :key="script.id"
-                            :class="activeScript ? script.response.id == activeScript.response.id ? 'active' : '' : ''">
+                            :class="activeScript ? script.id == activeScript.id ? 'active' : '' : ''">
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
                                 {{
-                                  script.response.script_type_name
-                                  ? script.response.script_type_name
+                                  script.script_type_name
+                                  ? script.script_type_name
                                   : "NIL"
                                 }}
                               </div>
                               <div class="script-content">
-                                {{ removeTags(abbrScript(script.response.text)) }}
+                                {{ removeTags(abbrScript(script.text)) }}
                               </div>
                             </td>
 
                             <td class="text-right">
                               <dropdown-tool :no-edit="true" :no-delete="true" delete-what="Script"
-                                @delete-proceed="deleteScript(script.response.id)">
+                                @delete-proceed="deleteScript(script.id)">
                                 <template v-slot:secondary>
                                   <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#"
-                                    @click="addRemoveScriptFavorite(script.response.id)">
+                                    @click="addRemoveScriptFavorite(script.id)">
                                     <img class="drop-img-icon" src="@/assets/icons/convert-icon/my Favourites.svg"
                                       alt="remove from favorite icon" />
                                     Remove from favorite
@@ -142,20 +141,20 @@
                           <img v-else class="fav-icon" src="@/assets/icons/convert-icon/my Favourites.svg" alt="" />
                         </div>
 
-                        <button @click="exportScript(activeScript.response.id)" class="btn btn-export-all">
+                        <button @click="exportScript(activeScript.id)" class="btn btn-export-all">
                           Export
                         </button>
                       </div>
                     </div>
                     <div class="content-display" v-if="activeScript">
-                      <div v-html="formatScript(activeScript.response.text)"></div>
+                      <div v-html="formatScript(activeScript.text)"></div>
                     </div>
                     <div v-else class="no-select">
                       Select a Script to Preview
                     </div>
                     <div class="section-footer">
                       <button v-if="activeScript"
-                        @click="toggleEdit(activeScript.response.id, formatScript(activeScript.response.text))"
+                        @click="toggleEdit(activeScript.id, formatScript(activeScript.text))"
                         class="btn no-shadow btn-share">
                         <img class="foot-icons" src="@/assets/icons/convert-icon/draw.svg" alt="edit icon" />
                         Edit
@@ -165,7 +164,7 @@
                         Copy to clipboard
                       </button>
                       <textarea type="hidden" id="text--copy"
-                        :value="activeScript ? activeScript.response.text : ''"></textarea>
+                        :value="activeScript ? activeScript.text : ''"></textarea>
                     </div>
                   </div>
                 </div>
@@ -237,20 +236,20 @@
             <option value=""></option>
             <option value=""></option>
           </select> -->
-                <button @click="exportScript(activeScript.response.id)" target="_blank" class="btn btn-export-all">
+                <button @click="exportScript(activeScript.id)" target="_blank" class="btn btn-export-all">
                   Export
                 </button>
               </div>
             </div>
             <div class="content-display" v-if="activeScript">
-              <div v-html="formatScript(activeScript.response.text)"></div>
+              <div v-html="formatScript(activeScript.text)"></div>
             </div>
             <div v-else class="no-select">
               Select a Script to Preview
             </div>
             <div class="section-footer">
 
-              <button v-if="activeScript" @click="toggleEdit(activeScript.id, formatScript(activeScript.response.text))"
+              <button v-if="activeScript" @click="toggleEdit(activeScript.id, formatScript(activeScript.text))"
                 class="btn no-shadow btn-share">
                 <img class="foot-icons" src="@/assets/icons/convert-icon/draw.svg" alt="edit icon" />
                 Edit
@@ -260,7 +259,7 @@
                 Copy to clipboard
               </button>
               <b-button @click="$bvModal.hide('modal-view-script')" class="close-modal ml-auto">Close</b-button>
-              <textarea type="hidden" id="text--copy" :value="activeScript ? activeScript.response.text : ''"></textarea>
+              <textarea type="hidden" id="text--copy" :value="activeScript ? activeScript.text : ''"></textarea>
             </div>
           </div>
         </div>
@@ -303,6 +302,7 @@ export default {
   },
   data() {
     return {
+      workspace_id: this.$store.state.user.default_workspace_id,
       perPage: 20,
       currentPage: 1,
       maxPage: 1,
@@ -356,15 +356,15 @@ export default {
         return;
       }
       this.editScript(
-        this.activeScript.response.id,
-        this.activeScript.response.text,
+        this.activeScript.id,
+        this.activeScript.text,
         this.selectedCampaign
       );
     },
     getCampaign() {
       // this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getCampaigns")
+        .dispatch("getCampaigns", this.workspace_id)
         .then((res) => {
           let data = res.data.data;
           for (let index = 0; index < data.length; index++) {
@@ -479,17 +479,19 @@ export default {
       this.nextLoading = next ? true : false;
       this.$store
         .dispatch("getAllFavorites", {
-          number: this.currentPage,
-          perPage: this.perPage,
+          page: {
+            number: this.currentPage,
+            perPage: this.perPage,
+          }, workspace_id: this.workspace_id
         })
         .then((res) => {
           if (next) {
             this.nextLoading = false;
-            this.scripts = this.scripts.concat(res.data.data);
+            this.scripts = this.scripts.concat(res.data.data.data);
           } else {
-            this.scripts = res.data.data;
-            this.scriptLength = res.data.meta.total;
-            this.maxPage = res.data.meta.last_page;
+            this.scripts = res.data.data.data;
+            this.scriptLength = res.data.data.meta.total;
+            this.maxPage = res.data.data.meta.last_page;
           }
 
           this.$store.commit("updateLoadState", false);
@@ -507,7 +509,8 @@ export default {
       }
       this.$store
         .dispatch("addRemoveFavorite", {
-          script_response_id: id ? id : this.activeScript.response.id,
+          script_response_id: id ? id : this.activeScript.id,
+          workspace_id: this.workspace_id
         })
         .then((res) => {
           //console.log(res.data.data.message);
@@ -531,7 +534,7 @@ export default {
     deleteScript(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deleteScript", id)
+        .dispatch("deleteScript", {id, workspace_id: this.workspace_id})
         .then((res) => {
           this.error = null;
           this.getFavorites();
@@ -562,7 +565,7 @@ export default {
         .then(() => {
           this.error = null;
           this.isEdit = false;
-          this.activeScript.response.text = txt;
+          this.activeScript.text = txt;
           this.getFavorites(true);
           if (campaignId) {
             this.selectedCampaign = null;
@@ -626,7 +629,7 @@ export default {
         this.$bvModal.show("modal-view-script");
       }
       this.activeScript = data;
-      this.isFavourite = data.response.favorite;
+      this.isFavourite = data.favorite;
     },
     copyText() {
       let testingCodeToCopy = document.querySelector("#text--copy");
