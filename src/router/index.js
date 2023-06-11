@@ -40,6 +40,8 @@ import ScriptFlagged from "@/views/admin/ScriptFlagged";
 import RolesPermissions from "@/views/admin/RolesPermissions";
 import SetPermission from "@/views/admin/SetPermission";
 import IntegrationAdmin from "@/views/admin/Integration";
+import LongForm from '@/views/LongForm';
+import BlogPostWriter from '@/views/BlogPostWriter';
 import Suggestions from "@/views/admin/Suggestions";
 import Configuration from "@/views/admin/Configuration";
 import Bonuses from "@/views/admin/Bonuses";
@@ -62,8 +64,9 @@ import ImageCreator from "@/views/ImageCreator";
 import ImageStyle from "@/views/admin/ImageStyle";
 import ImageFilter from "@/views/admin/ImageFilter";
 import ImageMedium from "@/views/admin/ImageMedium";
-import TextToSpeech from '@/views/TextToSpeech'
-import WorkspacesTeam from '@/views/WorkspacesTeam'
+import TextToSpeech from '@/views/TextToSpeech';
+import WorkspacesTeam from '@/views/WorkspacesTeam';
+import OnecopyAI from '@/views/OnecopyAI'
 
 Vue.use(VueRouter);
 
@@ -342,6 +345,36 @@ const routes = [
     component: Workspaces,
     meta: {
       title: "OneCopy AI Writer - Workspace",
+      requiresAuth: true,
+      adminAuth: false,
+    },
+  },
+  {
+    path: "/long-form",
+    name: "LongForm",
+    component: LongForm,
+    meta: {
+      title: "OneCopy AI Writer - Long Form",
+      requiresAuth: true,
+      adminAuth: false,
+    },
+  },
+  {
+    path: "/long-form/blog-post-writer",
+    name: "BlogPostWriter",
+    component: BlogPostWriter,
+    meta: {
+      title: "OneCopy AI Writer - Blog Post Writer",
+      requiresAuth: true,
+      adminAuth: false,
+    },
+  },
+  {
+    path: "/chat-ai",
+    name: "OnecopyAI",
+    component: OnecopyAI,
+    meta: {
+      title: "OneCopy AI Writer - OnecopyAI",
       requiresAuth: true,
       adminAuth: false,
     },

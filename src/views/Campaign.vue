@@ -53,9 +53,9 @@
                     <tr v-for="result in searchResult" :key="result.id">
                       <td scope="row">
                         <router-link :to="{
-                          name: 'CampaignScript',
-                          params: { id: result.id },
-                        }">
+                            name: 'CampaignScript',
+                            params: { id: result.id },
+                          }">
                           {{ result.name }}
                         </router-link>
                       </td>
@@ -82,9 +82,9 @@
                     <tr v-for="campaign in filteredCampaign" :key="campaign.id">
                       <td scope="row">
                         <router-link :to="{
-                          name: 'CampaignScript',
-                          params: { id: campaign.id },
-                        }">
+                            name: 'CampaignScript',
+                            params: { id: campaign.id },
+                          }">
                           {{ campaign.name }}
                         </router-link>
                       </td>
@@ -93,9 +93,8 @@
                         {{ formatDate(campaign.created_at) }}
                       </td>
                       <td>
-                        <dropdown-tool delete-what="Campaign" @edit-clicked="
-                          openEditModal(campaign.id, campaign.name)
-                        " @delete-proceed="deleteCampaign(campaign.id)">
+                        <dropdown-tool delete-what="Campaign" @edit-clicked="openEditModal(campaign.id, campaign.name)
+                          " @delete-proceed="deleteCampaign(campaign.id)">
                           <template v-slot:secondary>
                             <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#"
                               @click="getCampaignId(campaign.id)">
@@ -112,9 +111,9 @@
                     <tr v-for="campaign in campaigns" :key="campaign.id">
                       <td scope="row">
                         <router-link :to="{
-                          name: 'CampaignScript',
-                          params: { id: campaign.id },
-                        }">
+                            name: 'CampaignScript',
+                            params: { id: campaign.id },
+                          }">
                           {{ campaign.name }}
                         </router-link>
                       </td>
@@ -123,9 +122,8 @@
                         {{ formatDate(campaign.created_at) }}
                       </td>
                       <td>
-                        <dropdown-tool delete-what="Campaign" @edit-clicked="
-                          openEditModal(campaign.id, campaign.name)
-                        " @delete-proceed="deleteCampaign(campaign.id)">
+                        <dropdown-tool delete-what="Campaign" @edit-clicked="openEditModal(campaign.id, campaign.name)
+                          " @delete-proceed="deleteCampaign(campaign.id)">
                           <template v-slot:secondary>
                             <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#"
                               @click="getCampaignId(campaign.id)">
@@ -165,9 +163,8 @@
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-campaign')" class="close-modal">Close</b-button>
-        <b-button @click="
-          triggerEdit ? editCampaign(editId, $event) : addCampaign($event)
-        " class="save-modal">{{ triggerEdit ? "Edit" : "Create" }}</b-button>
+        <b-button @click="triggerEdit ? editCampaign(editId, $event) : addCampaign($event)
+          " class="save-modal">{{ triggerEdit ? "Edit" : "Create" }}</b-button>
       </div>
     </b-modal>
     <b-modal :hide-header="true" id="modal-add-client" centered size="md" :hide-footer="true" dialog-class="control-width"
@@ -208,6 +205,7 @@ export default {
   },
   data() {
     return {
+      workspace_id: this.$store.state.user.default_workspace_id,
       searchKey: "",
       searchResult: [],
       client: null,
@@ -255,7 +253,7 @@ export default {
     getCampaign() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getCampaigns")
+        .dispatch("getCampaigns", this.workspace_id)
         .then((res) => {
           this.campaigns = res.data.data.reverse();
           console.log(res.data + "called now");
@@ -283,7 +281,7 @@ export default {
 
       this.$bvModal.hide("modal-new-campaign");
       this.$store
-        .dispatch("addCampaign", { name: this.campaignName })
+        .dispatch("addCampaign", { name: this.campaignName, workspace_id: this.workspace_id })
         .then((res) => {
           this.error = null;
           console.log(res.data);
@@ -318,7 +316,7 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-campaign");
       this.$store
-        .dispatch("editCampaign", { id: id, data: { name: this.campaignName } })
+        .dispatch("editCampaign", { id: id, data: { name: this.campaignName }, workspace_id: this.workspace_id })
         .then((res) => {
           this.error = null;
           console.log(res.data);
@@ -337,7 +335,7 @@ export default {
     deleteCampaign(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deleteCampaign", id)
+        .dispatch("deleteCampaign", { id: id, workspace_id: this.workspace_id })
         .then((res) => {
           this.error = null;
           this.getCampaign();

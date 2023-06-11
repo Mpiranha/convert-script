@@ -274,6 +274,7 @@ export default {
   },
   data() {
     return {
+      workspace_id: this.$store.state.user.default_workspace_id,
       nextLoading: true,
       loading: false,
       isEdit: false,
@@ -337,7 +338,7 @@ export default {
     getCampaign() {
       // this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getCampaigns")
+        .dispatch("getCampaigns", this.$store.state.user.default_workspace_id)
         .then((res) => {
           let data = res.data.data;
           for (let index = 0; index < data.length; index++) {
@@ -455,8 +456,10 @@ export default {
       this.nextLoading = next ? true : false;
       this.$store
         .dispatch("getGeneratedScripts", {
-          number: this.currentPage,
-          perPage: this.perPage,
+          page: {
+            number: this.currentPage,
+            perPage: this.perPage
+          }, workspace_id: this.$store.state.user.default_workspace_id
         })
         .then((res) => {
           if (next) {
@@ -480,7 +483,7 @@ export default {
     deleteScript(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deleteScript", id)
+        .dispatch("deleteScript", { id: id, workspace_id: this.workspace_id })
         .then((res) => {
           this.error = null;
           this.getScripts();
@@ -539,6 +542,7 @@ export default {
       this.$store
         .dispatch("addRemoveFavorite", {
           script_response_id: this.activeScript.id,
+          workspace_id: this.workspace_id
         })
         .then((res) => {
           console.log(res.data.data.message);
@@ -638,7 +642,7 @@ export default {
     infiniteScroll(event) {
       let heightOfWindow = event.target.scrollHeight - event.target.offsetHeight;
       let bottomOfWindow = Math.round(event.target.scrollTop) >= heightOfWindow;
-      
+
       if (bottomOfWindow && this.currentPage < this.maxPage) {
         // ...
         window.scrollTo(0, heightOfWindow);

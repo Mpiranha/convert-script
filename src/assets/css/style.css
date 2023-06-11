@@ -1529,6 +1529,68 @@ input:checked+.slider:before {
     margin-top: -8px;
 }
 
+.b-toast {
+    max-width: 290px !important;
+}
+
+.toast {
+    display: flex;
+    flex-direction: row-reverse;
+    border-width: 2px !important;
+    align-items: center;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+}
+
+.b-toast .toast .toast-body {
+    margin-right: auto;
+}
+
+.toast button.close {
+    border-radius: 50%;
+    font-size: 1rem;
+    width: 1.4rem;
+    height: 1.4rem;
+    margin-bottom: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ }
+
+.b-toast-success .toast {
+    background-color: rgb(226, 235, 226) !important;
+    border-color: rgb(187 208 184) !important;
+    color: rgb(57, 63, 70) !important;
+
+}
+
+.b-toast-success .toast .toast-header {
+    background-color: rgb(226, 235, 226) !important;
+}
+
+.b-toast-success .toast button.close {
+    border: 2px solid rgb(140, 148, 148) !important;
+
+}
+
+.b-toast-danger .toast {
+    background-color: rgb(244 223 224) !important;
+    border-color: rgb(233 178 179) !important;
+    color: rgb(57, 63, 70) !important;
+
+}
+
+.b-toast-danger .toast .toast-header {
+    background-color: rgb(244 223 224) !important;
+}
+
+.b-toast-danger .toast button.close {
+    border: 2px solid rgb(140, 148, 148) !important;
+
+}
+
+
+
 
 
 

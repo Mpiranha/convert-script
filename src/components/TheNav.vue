@@ -484,6 +484,7 @@ export default {
   border-radius: 0.3rem;
   cursor: pointer;
   min-width: 182px;
+  margin-right: 1rem;
 }
 
 .selected_workspace {

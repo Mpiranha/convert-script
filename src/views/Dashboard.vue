@@ -104,7 +104,7 @@ export default {
     getStatInfo() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getDashboardInfo")
+        .dispatch("getDashboardInfo", this.$store.state.user.default_workspace_id)
         .then((res) => {
           this.stat = res.data.data.message;
 

@@ -309,11 +309,11 @@ export default {
 
   // Dashboard
 
-  getDashboardInfo({ state }) {
+  getDashboardInfo({ state }, workspace_id) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .get(`${baseUrl}/api/v1/dashboard`)
+        .get(`${baseUrl}/api/v1/dashboard/${workspace_id}`)
         .then((resp) => {
           resolve(resp);
         })
@@ -434,11 +434,11 @@ export default {
   },
   // Campaigns
 
-  getCampaigns({ state }) {
+  getCampaigns({ state }, workspace_id) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .get(`${baseUrl}/api/v1/campaigns`)
+        .get(`${baseUrl}/api/v1/campaigns/${workspace_id}`)
         .then((resp) => {
           resolve(resp);
         })
@@ -447,12 +447,12 @@ export default {
         });
     });
   },
-  getOneCampaign({ state }, { id, page }) {
+  getOneCampaign({ state }, { id, page, workspace_id }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
         .get(
-          `${baseUrl}/api/v1/campaigns/${id}?page=${page.number}&per_page=${page.perPage}`
+          `${baseUrl}/api/v1/campaigns/${id}/${workspace_id}?page=${page.number}&per_page=${page.perPage}`
         )
         .then((resp) => {
           resolve(resp);
@@ -475,11 +475,11 @@ export default {
         });
     });
   },
-  editCampaign({ state }, { id, data }) {
+  editCampaign({ state }, { id, data, workspace_id }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .put(`${baseUrl}/api/v1/campaigns/${id}`, data)
+        .put(`${baseUrl}/api/v1/campaigns/${id}/${workspace_id}`, data)
         .then((resp) => {
           resolve(resp);
         })
@@ -488,11 +488,11 @@ export default {
         });
     });
   },
-  deleteCampaign({ state }, id) {
+  deleteCampaign({ state }, { id, workspace_id }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .delete(`${baseUrl}/api/v1/campaigns/${id}`)
+        .delete(`${baseUrl}/api/v1/campaigns/${id}/${workspace_id}`)
         .then((resp) => {
           resolve(resp);
         })
@@ -544,12 +544,12 @@ export default {
     });
   },
 
-  getGeneratedScripts({ state }, page) {
+  getGeneratedScripts({ state }, { page, workspace_id }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
         .get(
-          `${baseUrl}/api/v1/scripts?page=${page.number}&per_page=${page.perPage}`
+          `${baseUrl}/api/v1/scripts/${workspace_id}?page=${page.number}&per_page=${page.perPage}`
         )
         .then((resp) => {
           resolve(resp);
@@ -686,12 +686,12 @@ export default {
         });
     });
   },
-  getAllFavorites({ state }, page) {
+  getAllFavorites({ state }, { page, workspace_id }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
         .get(
-          `${baseUrl}/api/v1/favorite-script-responses?page=${page.number}&per_page=${page.perPage}`
+          `${baseUrl}/api/v1/favorite-script-responses/${workspace_id}?page=${page.number}&per_page=${page.perPage}`
         )
         .then((resp) => {
           resolve(resp);
@@ -745,11 +745,11 @@ export default {
     });
   },
 
-  deleteScript({ state }, id) {
+  deleteScript({ state }, { id, workspace_id }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .delete(`${baseUrl}/api/v1/scripts/${id}`)
+        .delete(`${baseUrl}/api/v1/scripts/${id}/${workspace_id}`)
         .then((resp) => {
           resolve(resp);
         })
@@ -2154,6 +2154,52 @@ export default {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
         .post(`${baseUrl}/api/v1/ai/text_to_speech`, data, {})
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  // Long Form
+
+  generateOutline({ state }, data) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .post(`${baseUrl}/api/v1/longform/gen_outlines`, data, {})
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  fromOutlineGenSubsection({ state }, data) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .post(
+          `${baseUrl}/api/v1/longform/from_outline_gen_subsections`,
+          data,
+          {}
+        )
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  fromOutlineGenPost({ state }, data) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .post(`${baseUrl}/api/v1/longform/from_outline_gen_post`, data, {})
         .then((resp) => {
           resolve(resp);
         })

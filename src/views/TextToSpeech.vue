@@ -128,12 +128,12 @@
                       <div class="generated_player_details">
                         <div class="player_stat">
                           WORDS <br>
-                          <span class="word_count">538</span>
+                          <span class="word_count">{{ genAudioWordCount }}</span>
                         </div>
 
                         <div class="player_stat">
                           SECONDS <br>
-                          <span class="word_count">538</span>
+                          <span class="word_count">{{ genAudioDur }}</span>
                         </div>
                       </div>
 
@@ -143,17 +143,26 @@
                             <img src="@/assets/icons/next-_1_ 1.png" alt="previous icon">
                           </button>
 
-                          <button class="btn no-shadow btn_play_gen_speech">
+                          <button v-if="audioIsPlaying" ref="playPauseBtn" class="btn no-shadow btn_play_gen_speech"
+                            @click="playPauseAudio">
+                            <img src="@/assets/icons/pause 1.png" alt="play icon">
+                          </button>
+                          <button v-else ref="playPauseBtn" class="btn no-shadow btn_play_gen_speech"
+                            @click="playPauseAudio">
                             <img src="@/assets/icons/play_btn.png" alt="play icon">
                           </button>
 
+
                           <div class="player_timer">
-                            00:00:37 / 00:10:58
+                            <span ref="audioCurTime">00:00:00</span> / <span ref="audioDuration">00:00:00</span>
                           </div>
                         </div>
+                        <audio @play="changeButtonState('playpause')" @pause="changeButtonState('playpause')"
+                          @loadedmetadata="updateProgressBar" @timeupdate="updateTimeAndProgressBar" ref="genAudio"
+                          v-if="generatedAudio[0].url" hidden :src="generatedAudio[0].url"></audio>
 
                         <div class="progress">
-                          <progress id="progress" value="50" min="0" max="100">
+                          <progress ref="audioProgressBar" id="progress" value="0" min="0" max="100">
                             <span id="progress-bar"></span>
                           </progress>
                         </div>
@@ -172,7 +181,9 @@
                       </div>
                     </div>
                     <div class="text_speech_word_form_wrap">
-                      <div class="word_text_area_main_wrap">
+
+                      <div v-for="( text, index ) in speechData.text" :key="index"
+                        class="word_text_area_main_wrap">
                         <div class="word_textarea_wrap">
                           <div class="btn_reposition_wrap">
                             <button class="btn no-shadow btn_move_up">
@@ -184,9 +195,9 @@
                             </button>
                           </div>
 
-                          <textarea :class="{ 'is-invalid': $v.speechData.text.$error }" v-model="speechData.text"
-                            class="form-control" name="" id="" cols="30" rows="10"></textarea>
-                        
+                          <textarea :class="{ 'is-invalid': $v.speechData.text.$error }" v-model="text.text"
+                            @input="updateWordcount" class="form-control" name="" id="" cols="30" rows="10"></textarea>
+
                         </div>
                         <div v-if="isSubmitted && $v.speechData.text.$error" class="invalid-feedback">
                           <span v-if="!$v.speechData.text.required">* Please enter a text <br /></span>
@@ -197,17 +208,17 @@
                             <img src="@/assets/icons/play_btn.png" alt="play / pause button">
                           </button>
 
-                          <button class="btn btn-create btn-create-workspace px-4 py-3" @click="onSubmit">Generate
+                          <button class="btn btn-create btn-create-workspace px-4 py-3" @click="onSubmit()">Generate
                             Audio</button>
 
-                          <button class="btn btn_delete_gen_speech">
+                          <button class="btn btn_delete_gen_speech" @click="deleteSection($event, index)">
                             <img src="@/assets/icons/delete_speech.png" alt="delete icon">
                           </button>
                         </div>
                       </div>
 
                       <div class="btn_wrap_add_section">
-                        <button class="btn btn_add_section">
+                        <button @click="addSection" class="btn btn_add_section">
                           <img src="@/assets/icons/plus_dark.png" alt="plus icon">
                           Add Section
                         </button>
@@ -249,16 +260,21 @@ export default {
       languageOptions: [{ value: null, text: "Select Language" }],
       loading: false,
       speechData: {
-        text: "",
+        text: [],
         language_id: null,
         voice_id: null,
       },
+      audioIsPlaying: false,
       voiceValue: null,
-      generatedAudio: [],
+      generatedAudio: [{}],
+      genAudioWordCount: 0,
+      genAudioDur: 0.0,
+      sections: [],
       gender: null,
       showOptions: false,
       isSubmitted: false,
       editId: "",
+      rafVid: null,
     };
   },
   validations: {
@@ -276,6 +292,73 @@ export default {
     },
   },
   methods: {
+    addSection(event) {
+      if (event) {
+        event.preventDefault();
+      }
+
+      this.speechData.text.push("");
+    },
+    deleteSection(event, index) {
+      event.preventDefault();
+      this.speechData.text =
+        this.speechData.text.filter(function (value, indx) {
+          return indx != index;
+        });
+    },
+    updateWordcount() {
+      this.genAudioWordCount = this.speechData.text.trim().split(' ').length;
+    },
+    whilePlayingVideo() {
+      this.$refs.audioCurTime.textContent = this.calculateTime(Math.floor(this.$refs.genAudio.currentTime));
+
+      // audioPlayerContainer.style.setProperty('--seek-before-width', `${seekSlider.value / seekSlider.max * 100}%`);
+      this.rafVid = requestAnimationFrame(this.whilePlayingVideo);
+    },
+    updateTimeAndProgressBar() {
+      if (!this.$refs.audioProgressBar.getAttribute("max"))
+        this.$refs.audioProgressBar.setAttribute("max", this.$refs.genAudio.duration);
+      this.$refs.audioProgressBar.value = this.$refs.genAudio.currentTime;
+      // progressBar.style.width =
+      //   Math.floor((video.currentTime / video.duration) * 100) + "%";
+    },
+    updateProgressBar() {
+      this.$refs.audioDuration.textContent = this.calculateTime(Math.floor(this.$refs.genAudio.duration));
+      this.$refs.audioProgressBar.setAttribute("max", this.$refs.genAudio.duration);
+      this.genAudioDur = this.$refs.genAudio.duration;
+    },
+    calculateTime(secs) {
+      const hour = Math.floor(secs / 3600);
+      const minutes = Math.floor(secs / 60);
+      const seconds = Math.floor(secs % 60);
+      const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+      const returnedHour = hour < 10 ? `0${hour}` : `${hour}`;
+      return `${returnedHour}:${returnedMinutes}:${returnedSeconds}`;
+    },
+    changeButtonState(type) {
+      // Play/Pause button
+      if (type == "playpause") {
+        if (this.$refs.genAudio.paused || this.$refs.genAudio.ended) {
+          this.$refs.playPauseBtn.setAttribute("data-state", "play");
+          this.audioIsPlaying = false;
+          // bigPlayImg.src = "../assets/icons/play frame.svg";
+        } else {
+          this.$refs.playPauseBtn.setAttribute("data-state", "pause");
+          this.audioIsPlaying = true;
+          // bigPlayImg.src = "../assets/icons/time.svg";
+        }
+      }
+    },
+    playPauseAudio() {
+      if (this.$refs.genAudio.paused || this.$refs.genAudio.ended) {
+        this.$refs.genAudio.play();
+        requestAnimationFrame(this.whilePlayingVideo);
+      } else {
+        this.$refs.genAudio.pause();
+        cancelAnimationFrame(this.rafVid);
+      }
+    },
     selectOption(option) {
       this.speechData.voice_id = option.value;
       this.voiceValue = option.text;
@@ -409,6 +492,7 @@ export default {
     // this.getAllTones();
     this.getAllLanguages();
     this.getAllVoices();
+    this.addSection();
   },
   computed: {
     filteredVoiceLanguage() {
@@ -593,7 +677,7 @@ export default {
   border-top: 2px solid #E5E5E5;
   display: flex;
   flex-direction: column;
-  padding: 0.35rem 1rem 1.5rem 1rem;
+  padding: 0.95rem 1rem 1.5rem 1rem;
 }
 
 .player_upper_section {
@@ -601,7 +685,7 @@ export default {
   align-items: center;
   align-self: center;
   padding-left: 7rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.7rem;
 }
 
 .player_upper_section .btn_prev {
@@ -672,13 +756,13 @@ export default {
 }
 
 .text_speech_word_form_wrap {
-  height: calc(100% - 60px);
+  height: 80vh;
+  overflow-y: auto;
 }
 
 .word_text_area_main_wrap {
   border-bottom: 1px solid#E5E5E5;
   padding: 1rem 1rem 1rem 0rem;
-  margin-bottom: 2rem;
 }
 
 .word_textarea_wrap {
@@ -725,6 +809,7 @@ export default {
   box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.1) !important;
   background-color: #fff !important;
   padding: 0.5rem 0.75rem !important;
+  margin-top: 1rem;
 }
 
 
