@@ -235,7 +235,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .template-categories-wrap {
   display: flex;
   justify-content: center;

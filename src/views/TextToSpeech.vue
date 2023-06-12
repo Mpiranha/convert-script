@@ -182,8 +182,7 @@
                     </div>
                     <div class="text_speech_word_form_wrap">
 
-                      <div v-for="( text, index ) in speechData.text" :key="index"
-                        class="word_text_area_main_wrap">
+                      <div v-for="( text, index ) in speechData.text" :key="index" class="word_text_area_main_wrap">
                         <div class="word_textarea_wrap">
                           <div class="btn_reposition_wrap">
                             <button class="btn no-shadow btn_move_up">
@@ -195,21 +194,31 @@
                             </button>
                           </div>
 
-                          <textarea :class="{ 'is-invalid': $v.speechData.text.$error }" v-model="text.text"
-                            @input="updateWordcount" class="form-control" name="" id="" cols="30" rows="10"></textarea>
+                          <textarea :class="{ 'is-invalid': $v.speechData.text.$each[index].text.$error }"
+                            v-model="text.text" @input="updateWordcount" class="form-control" name="" id="" cols="30"
+                            rows="10"></textarea>
 
                         </div>
-                        <div v-if="isSubmitted && $v.speechData.text.$error" class="invalid-feedback">
-                          <span v-if="!$v.speechData.text.required">* Please enter a text <br /></span>
-                          <span v-if="!$v.speechData.text.minLength">* Minimum of 3 Characters</span>
+                        <div v-if="isSubmitted && $v.speechData.text.$each[index].text.$error" class="invalid-feedback">
+                          <span v-if="!$v.speechData.text.$each[index].text.required">* Please enter a text <br /></span>
+                          <span v-if="!$v.speechData.text.$each[index].text.minLength">* Minimum of 3 Characters</span>
                         </div>
                         <div class="text_speech_actions">
-                          <button class="btn no-shadow btn_play_pause">
+                          <button class="btn no-shadow btn_play_pause" @click="playMyAudio('audio' + index)">
                             <img src="@/assets/icons/play_btn.png" alt="play / pause button">
                           </button>
 
-                          <button class="btn btn-create btn-create-workspace px-4 py-3" @click="onSubmit()">Generate
-                            Audio</button>
+                          <button class="btn btn-create btn-create-workspace px-4 py-3"
+                            @click="onSubmit(index, text.text)">
+                            Generate
+                            Audio
+                          </button>
+
+                          <audio v-if="sectionsAudio[index]" :ref="'audio' + index" :src="sectionsAudio[index][0].url"
+                            hidden>
+                          </audio>
+
+
 
                           <button class="btn btn_delete_gen_speech" @click="deleteSection($event, index)">
                             <img src="@/assets/icons/delete_speech.png" alt="delete icon">
@@ -264,6 +273,7 @@ export default {
         language_id: null,
         voice_id: null,
       },
+      sectionsAudio: [],
       audioIsPlaying: false,
       voiceValue: null,
       generatedAudio: [{}],
@@ -280,8 +290,9 @@ export default {
   validations: {
     speechData: {
       text: {
-        required,
-        minLength: minLength(3),
+        $each: {
+          text: { required, minLength: minLength(3) },
+        },
       },
       language_id: {
         required
@@ -292,12 +303,20 @@ export default {
     },
   },
   methods: {
+    playMyAudio(target) {
+      var el = this.$refs[target];
+
+      console.log(el);
+
+      el[0].play();
+      // this.$refs[ref].play();
+    },
     addSection(event) {
       if (event) {
         event.preventDefault();
       }
 
-      this.speechData.text.push("");
+      this.speechData.text.push({ text: "" });
     },
     deleteSection(event, index) {
       event.preventDefault();
@@ -307,7 +326,7 @@ export default {
         });
     },
     updateWordcount() {
-      this.genAudioWordCount = this.speechData.text.trim().split(' ').length;
+      //this.genAudioWordCount = this.speechData.text.trim().split(' ').length;
     },
     whilePlayingVideo() {
       this.$refs.audioCurTime.textContent = this.calculateTime(Math.floor(this.$refs.genAudio.currentTime));
@@ -375,7 +394,7 @@ export default {
       // this.editId = id;
       // this.campaignName = data;
     },
-    onSubmit() {
+    onSubmit(index, text) {
       // set all fields to touched
       this.$v.$touch();
 
@@ -387,10 +406,16 @@ export default {
 
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("initiateTextToSpeech", this.speechData)
+        .dispatch("initiateTextToSpeech", {
+          text: text,
+          language_id: this.speechData.language_id,
+          voice_id: this.speechData.voice_id
+        })
         .then((res) => {
           console.log(res);
-          this.generatedAudio = res.data.data;
+          //this.generatedAudio = res.data.data;
+          // this.sectionsAudio[index] = res.data.data;
+          this.sectionsAudio.splice(index, 0, res.data.data);
           this.makeToast("success", res.data.message);
           this.$store.commit("updateLoadState", false);
         })
@@ -616,6 +641,7 @@ export default {
   padding: 0.35rem 0.75rem 0.35rem 0.45rem !important;
   border-bottom: 1px solid rgb(219 222 229);
   cursor: pointer;
+  background-color: #fff;
 }
 
 .voice_details {

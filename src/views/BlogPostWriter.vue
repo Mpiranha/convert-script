@@ -173,12 +173,18 @@
 
                         </div>
 
-                        <div class="d-flex justify-content-end mt-auto mb-3">
-                          <button v-if="generatedOutlines.length > 0" class="btn btn-create px-4 py-3 mb-3"
-                            @click="fromOutlineGenerateSubsection">
+                        <div v-if="!isEmpty(generatedSubsection)" class="d-flex justify-content-end mt-auto mb-3">
+                          <button class="btn close-modal px-4 py-3">Go Back</button>
+                          <button class="btn btn-create px-4 py-3">
+                            Write Blog Post
+                          </button>
+                        </div>
+                        <div v-else-if="generatedOutlines.length > 0" class="d-flex justify-content-end mt-auto mb-3">
+                          <button class="btn btn-create px-4 py-3 mb-3" @click="fromOutlineGenerateSubsection">
                             Expand Outlines
                           </button>
                         </div>
+
 
 
 

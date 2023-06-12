@@ -22,14 +22,14 @@
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link class="nav-link position-relative" :class="currentActive == 'long-copy' ? 'active' : ''" to=""
+        <router-link class="nav-link position-relative" :class="currentActive == 'long-copy' ? 'active' : ''" to="/long-form"
           :disabled="true">
           <img class="main-icon" src="@/assets/icons/convert-icon/long-form.svg" alt="" />
           <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/New Copy Active.svg" alt="" />
           <span class="nav-text"> Long-Form </span>
-          <span class="coming-soon-text">
+          <!-- <span class="coming-soon-text">
             Coming Soon
-          </span>
+          </span> -->
         </router-link>
       </li>
       <li class="nav-item">

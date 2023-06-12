@@ -2163,6 +2163,80 @@ export default {
     });
   },
 
+  // OneChat AI
+
+  startChat({ state }, data) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .post(`${baseUrl}/api/v1/ai/chat`, data, {})
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  continueChat({ state }, { id, data }) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .put(`${baseUrl}/api/v1/ai/chat/${id}`, data)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+
+  getChatHistory({ state }, workspace_id) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/ai/chat/history/${workspace_id}`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  deleteChatHistory({ state }, { id, workspace_id }) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .delete(`${baseUrl}/api/v1/ai/chat/${workspace_id}/${id}`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  clearChatHistory({ state }, workspace_id ) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .delete(`${baseUrl}/api/v1/ai/clear/chat/${workspace_id}`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+
   // Long Form
 
   generateOutline({ state }, data) {
