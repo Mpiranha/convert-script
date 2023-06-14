@@ -3,20 +3,19 @@
         <div class="title">{{ outlineTitle }}</div>
 
         <div class="subsection_list">
-            <div class="outline_item outline_section_item" v-for="(section, index) in subSection"
-            :key="index" @click="onParentFocusInput">
+            <div class="outline_item outline_section_item" v-for="(section, index) in subSection" :key="index"
+                @click="onParentFocusInput(index)">
                 <img class="outline_icon" src="@/assets/icons/outline.png" alt="outline icon">
 
-                <span @blur="onBlur" ref="textInput" @input="updateModel($event)"  :contenteditable="isEdit[index]" class="text">
-                    {{ section }}
-                </span>
+                <input @blur="onBlur(index)" :ref="'textInput' + index" @input="updateModel($event, index)"
+                    :disabled="isEdit[index]" :value="section" class="form-control text">
 
                 <div class="outline_actions">
-                    <button v-if="!isEdit" @click="toggleEdit" class="btn no-shadow btn_outline_edit">
+                    <button v-if="isEdit[index]" @click="toggleEdit(index)" class="btn no-shadow btn_outline_edit">
                         <img src="@/assets/icons/edit_blog.png" alt="edit icon">
                     </button>
 
-                    <button class="btn no-shadow btn_outline_edit" @click="deleteEvent">
+                    <button class="btn no-shadow btn_outline_edit" @click="deleteEvent(index)">
                         <img src="@/assets/icons/delete_speech.png" alt="delete icon">
                     </button>
                 </div>
@@ -24,15 +23,15 @@
         </div>
 
         <div class="subsection_actions">
-            <button class="btn btn_subsection">
+            <button class="btn btn_subsection" @click="addEvent">
                 Add Point
             </button>
 
-            <button class="btn btn_subsection">
+            <button class="btn btn_subsection" @click="generateEvent">
                 Generate Points
             </button>
 
-            <button class="btn btn_subsection">
+            <button class="btn btn_subsection" @click="refreshEvent">
                 Refresh
             </button>
         </div>
@@ -45,13 +44,13 @@
 export default {
     data() {
         return {
-            isEdit: false,
+            isEdit: [],
         };
     },
     props: ["outlineTitle", "subSection"],
     methods: {
-        updateModel(event) {
-            this.$emit('input', event.target.innerText);
+        updateModel(event, index) {
+            this.$emit('input', {text: event.target.value, index: index});
         },
         SelectText(element) {
             var doc = document
@@ -69,21 +68,37 @@ export default {
                 selection.addRange(range);
             }
         },
-        toggleEdit() {
-            let textField = this.$refs.textInput;
-            this.isEdit = true;
-            if (textField) { textField.focus(); }
-            this.SelectText(textField);
+        toggleEdit(index) {
+            let textField = this.$refs['textInput' + index];
+            this.isEdit.splice(index, 1, false);
+            if (textField) { textField[0].focus(); }
+            this.SelectText(textField[0]);
         },
-        deleteEvent() {
-            this.$emit("delete-clicked");
+        deleteEvent(index) {
+            this.$emit("delete-clicked", index);
         },
-        onBlur() {
-            this.isEdit = false;
+        onBlur(index) {
+            this.isEdit.splice(index, 1, 'disabled');
             document.getSelection().removeAllRanges();
         },
-        onParentFocusInput() {
-            if (this.$refs.textInput) this.$refs.textInput.focus()
+        onParentFocusInput(index) {
+            let textField = this.$refs['textInput' + index];
+            console.log(textField);
+            if (textField[0]) textField[0].focus()
+        },
+        addEvent() {
+            this.$emit('add-point');
+        },
+        generateEvent() {
+            this.$emit('gen-point');
+        },
+        refreshEvent() {
+            this.$emit('refresh-point');
+        }
+    },
+    mounted() {
+        for (var i = 0; i < this.subSection.length; i++) {
+            this.isEdit.push('disabled');
         }
     }
 }

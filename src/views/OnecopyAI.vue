@@ -77,7 +77,7 @@
                       </button>
 
                       <!-- <button class="btn no-shadow btn_chat_prompt mr-3">  </button> -->
-                      <VueRecordAudio mode="press" class="mr-3" />
+                      <VueRecordAudio mode="press" @result="onResult" class="mr-3" />
 
 
                       <div class="chat-input-div">
@@ -127,10 +127,10 @@
               <!-- <div class="category-item" :class="category == null ? 'active' : ''" @click="resetCategory">
               All Categories ({{ totalScripts }})
             </div> -->
-              <div v-for="cat in categories" :key="cat.id" class="category-item"
+              <!-- <div v-for="cat in categories" :key="cat.id" class="category-item"
                 :class="category == cat.id ? 'active' : ''" @click="setActiveCategory(cat.id)">
                 {{ cat.name }} ({{ cat.scripts }})
-              </div>
+              </div> -->
             </div>
 
             <div class="prompt_list">
@@ -191,6 +191,34 @@ export default {
     };
   },
   methods: {
+    onResult(blob) {
+
+      console.log('Downloadable audio', window.URL.createObjectURL(blob));
+
+      blob = blob.slice(0, blob.size, "audio/webm");
+
+      console.log(blob);
+      var aud = new FormData();
+
+      aud.append("audio", blob);
+
+      this.$store
+        .dispatch("speechToText", aud)
+        .then((res) => {
+
+          this.error = null;
+          this.$refs.chatDiv.innerText = res.data.data;
+          this.message = res.data.data;
+
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          this.makeToast("danger", this.error);
+          // this.error = error.response.data.errors.root;
+          // this.error = error;
+        });
+    },
     updateData(e) {
 
 
@@ -678,6 +706,10 @@ export default {
 .vue-audio-recorder.active span:after,
 .vue-audio-recorder.active span:before {
   background-color: #fff !important;
+}
+
+.outline_subsection_list_wrap {
+  padding: 1rem;
 }
 </style>
 

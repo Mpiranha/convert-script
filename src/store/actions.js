@@ -2165,6 +2165,21 @@ export default {
 
   // OneChat AI
 
+  speechToText({ state }, data) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .post(`${baseUrl}/api/v1/ai/speech_to_text`, data, {})
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+
   startChat({ state }, data) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
@@ -2235,15 +2250,16 @@ export default {
         });
     });
   },
+  
 
 
   // Long Form
 
-  generateOutline({ state }, data) {
+  generateOutline({ state }, {data, config}) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .post(`${baseUrl}/api/v1/longform/gen_outlines`, data, {})
+        .post(`${baseUrl}/api/v1/longform/gen_outlines`, data, config)
         .then((resp) => {
           resolve(resp);
         })
@@ -2274,6 +2290,19 @@ export default {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
         .post(`${baseUrl}/api/v1/longform/from_outline_gen_post`, data, {})
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  checkPlagiarism({ state }, data) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .post(`${baseUrl}/api/v1/ai/plagiarism_checker`, data, {})
         .then((resp) => {
           resolve(resp);
         })

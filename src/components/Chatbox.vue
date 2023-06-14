@@ -1,6 +1,6 @@
 <template>
     <div ref="chatBox" v-if="author == 'assistant'" class="ai-msg">
-        <p>
+        <p class="mb-0">
             {{ message }}
         </p>
         <div class="message_actions">
@@ -19,7 +19,7 @@
     </div>
     <div ref="chatBox" v-else class="user-msg">
 
-        <p> {{ message }} </p>
+        <p class="mb-0"> {{ message }} </p>
 
     </div>
 </template>

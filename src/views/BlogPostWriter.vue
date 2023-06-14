@@ -14,14 +14,14 @@
               <div class="row h-100">
                 <div class="col-12 col-lg-4 pr-lg-0">
                   <div class="bordered-right h-100 md-bordered-bottom">
-                    <div v-if="generatingBlogPost" class="blog_post_generated_wrap">
+                    <div v-if="generatingBlogPost" class="blog_post_generated_wrap h-100">
                       <div class="blog_post_generated_input_wrap">
                         <div class="action_buttons">
                           <button class="btn btn-block btn_save_blog_post">
                             Save
                           </button>
 
-                          <button class="btn btn-block btn_copy_clipboard">
+                          <button class="btn btn-block btn_copy_clipboard" @click="copyContent">
                             Copy to Clipboard
                           </button>
                         </div>
@@ -47,7 +47,7 @@
                       <div class="plagiarism_checker_wrap">
                         <div class="tt">Plagiarism checker</div>
 
-                        <button class="btn btn-block btn_check_plagiarism">
+                        <button class="btn btn-block btn_check_plagiarism" @click="checkPlagiarism">
                           Check plagiarism
                         </button>
 
@@ -74,13 +74,26 @@
                       </div>
 
 
+                      <div class="d-flex justify-content-between mt-auto mb-3 px-4">
+
+                        <button class="btn close-modal px-4 py-3">Go Back</button>
+
+
+
+                        <button class="btn btn-create px-4 py-3" @click="fromOutlineGenPost">
+                          Rewrite Blog Post
+                        </button>
+
+                      </div>
+
+
 
                     </div>
-                    <div class="script-form-wrap blog-form-wrap pb-3 pb-lg-0">
+                    <div v-else class="script-form-wrap blog-form-wrap pb-3 pb-lg-0">
                       <div class="script-form d-flex flex-column h-100">
 
                         <div class="inner_wrap_long_form">
-                          <div class="disabler" v-if="generatedSubsection.length > 0"></div>
+                          <!-- <div class="disabler" v-if="generatedSubsection.length > 0"></div> -->
                           <div class="form-group">
                             <label for="">Blog Post Title</label>
                             <input type="text" name="" :class="{
@@ -111,10 +124,7 @@
 
                           <div class="form-group">
                             <label for="">Focus Keywords</label>
-                            <div ref="keywordInput" class="multi-search-filter" :class="{
-                                'is-invalid':
-                                  $v.genOutlineData.keywords.$error,
-                              }"
+                            <div ref="keywordInput" class="multi-search-filter"
                               @click="Array.from($refs.keywordInput.children).find(n => n.tagName === 'INPUT').focus()">
                               <div v-for="(keyword, index) in genOutlineData.keywords" :key="index"
                                 class="multi-search-item">
@@ -126,23 +136,14 @@
                               <input ref="inputElem" type="text" @keyup="multiSearchKeyup($event, $refs.inputElem)">
                             </div>
 
-                            <div v-if="isSubmitted && $v.genOutlineData.keywords.$error" class="invalid-feedback">
-                              <span v-if="!$v.genOutlineData.keywords.required">* Keyword is required <br /></span>
 
-                            </div>
                           </div>
 
                           <b-form-group label="Tone" label-class="input-label">
-                            <b-form-select :class="{
-                                'is-invalid':
-                                  $v.genOutlineData.tone_id.$error,
-                              }" v-model="genOutlineData.tone_id" class="form-control"
+                            <b-form-select v-model="genOutlineData.tone_id" class="form-control"
                               :options="toneOptions"></b-form-select>
 
-                            <div v-if="isSubmitted && $v.genOutlineData.tone_id.$error" class="invalid-feedback">
-                              <span v-if="!$v.genOutlineData.tone_id.required">* Tone is required <br /></span>
 
-                            </div>
                           </b-form-group>
 
                           <div class="row">
@@ -164,8 +165,10 @@
                             </div>
                           </div>
 
-                          <div class="d-flex justify-content-end outline_btn_wrap mb-5">
-                            <button @click="generateOutline($event)" class="btn btn_gen_outline">
+                          <div class="d-flex justify-content-end outline_btn_wrap blog-loader mb-5">
+                            <loader-modal :loading-state="generatingOutline"></loader-modal>
+                            <button @click="generateOutline($event)" :disabled="generatingOutline ? 'disabled' : false"
+                              class="btn btn_gen_outline">
                               <img src="@/assets/icons/outline.png" alt="outline icon">
                               Write outline for me
                             </button>
@@ -174,13 +177,21 @@
                         </div>
 
                         <div v-if="!isEmpty(generatedSubsection)" class="d-flex justify-content-end mt-auto mb-3">
+
                           <button class="btn close-modal px-4 py-3">Go Back</button>
-                          <button class="btn btn-create px-4 py-3">
+
+
+
+                          <button class="btn btn-create px-4 py-3" @click="fromOutlineGenPost">
                             Write Blog Post
                           </button>
+
                         </div>
-                        <div v-else-if="generatedOutlines.length > 0" class="d-flex justify-content-end mt-auto mb-3">
-                          <button class="btn btn-create px-4 py-3 mb-3" @click="fromOutlineGenerateSubsection">
+                        <div v-else-if="generatedOutlines.length > 0"
+                          class="d-flex justify-content-end mt-auto mb-3 blog-loader">
+                          <loader-modal :loading-state="generatingSubsection"></loader-modal>
+                          <button :disabled="generatingSubsection ? 'disabled' : false" class="btn btn-create px-4 py-3"
+                            @click="fromOutlineGenerateSubsection">
                             Expand Outlines
                           </button>
                         </div>
@@ -213,12 +224,15 @@
                     </div>
                     <div class="text_speech_word_form_wrap">
                       <quill-editor v-if="generatingBlogPost" ref="myQuillEditor"
-                        class="mb-3 script-editor blog_post_editor" v-model="blogPost" :options="editorOption">
+                        class="mb-3 script-editor blog_post_editor" v-model="generatedPost" :options="editorOption">
 
                       </quill-editor>
                       <div v-else-if="!isEmpty(generatedSubsection)" class="outline_subsection_list_wrap">
                         <blog-post-outline-subsection v-for="(subsection, index) in generatedSubsection" :key="index"
-                          :outline-title="index" :sub-section="subsection"></blog-post-outline-subsection>
+                          :outline-title="index" :sub-section="subsection"
+                          @delete-clicked="deleteSubsection($event, index)" @add-point="addSubsection(index)"
+                          @gen-point="newSubsection(index)"
+                          @input="updateSubsection($event, index)"></blog-post-outline-subsection>
                       </div>
                       <div v-else class="outline_list_wrap">
                         <div class="outline_wraps">
@@ -242,6 +256,32 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="blog_post_loader" v-if="postLoading">
+      <div class="loader_content">
+        <img class="loader-img" src="@/assets/image/Rolling-2s-221px.svg" alt="" />
+        <div class="loader_text">Writing your Blog Post</div>
+        <div class="loader_counter_text">(23% Complete)</div>
+        <div class="wait_desc">Please wait, this can take a few minutes.</div>
+      </div>
+    </div>
+
+    <div class="plagiarism_loader" v-if="checkingPlagiarism">
+      <div class="loader_content">
+        <div class="content" v-if="!plagiarismResult">
+          <img class="loader-img" src="@/assets/image/Rolling-2s-221px.svg" alt="" />
+          <div class="loader_text">Checking for plagiarism</div>
+          <div class="wait_desc">Please wait, this can take a few minutes.</div>
+        </div>
+        <div class="content" v-else>
+          <img class="loader-img mb-0" src="@/assets/icons/check-plagiarism.svg" alt="" />
+          <div class="loader_text">Awesome!</div>
+          <div class="wait_desc mb-4">The plagiarism rate of this text is 0% so your text is completely original: 0 result
+            found for 1700 words.</div>
+
+          <button class="btn btn-create px-4">Done</button>
         </div>
       </div>
     </div>
@@ -288,11 +328,17 @@ export default {
         workspace_id: ""
       },
       generatingBlogPost: false,
+      generatingOutline: false,
+      generatingSubsection: false,
+      postLoading: false,
+      checkingPlagiarism: false,
       generatedOutlines: [],
-      generatedSubsection: [],
-      outlines: "Hello",
-      blogPost: "",
       sections: [],
+      generatedSubsection: {},
+      generatedPost: "",
+      generatedSubsectionData: "",
+      plagiarismResult: null,
+      blogPost: "",
       isSubmitted: false,
       editId: "",
       editorOption: {
@@ -321,15 +367,66 @@ export default {
         required,
         minLength: minLength(3)
       },
-      keywords: {
-        required
-      },
-      tone_id: {
-        required
-      },
     }
   },
   methods: {
+    newSubsection(prop) {
+      let data = {
+        outlines: prop.trim().substring(0, prop.length - 1),
+        tone_id: this.genOutlineData.tone_id,
+        output_language_id: this.genOutlineData.output_language_id,
+        input_language_id: this.genOutlineData.input_language_id,
+        workspace_id: this.$store.state.user.default_workspace_id,
+      };
+
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("fromOutlineGenSubsection", data)
+        .then((res) => {
+          console.log(this.grabSubsection(res.data.data));
+          this.generatedSubsection[prop].concat.apply([], this.grabSubsection(res.data.data));
+          this.makeToast("success", res.data.message);
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          this.loading = false;
+          console.log("error: " + error);
+          this.error = error.response.data.errors;
+
+          // this.makeToast("danger", this.error);
+          this.$store.commit("updateLoadState", false);
+        });
+      console.log(data);
+    },
+
+    grabSubsection(text) {
+      return text.split("\n").filter((outline) => outline.trim().charAt(outline.trim().length - 1) == ":").map((data) => data.trim().substring(0, data.length - 2));
+    },
+    updateSubsection(value, prop) {
+      console.log(value);
+      console.log(prop);
+
+      console.log(this.generatedSubsection[prop]);
+
+      this.generatedSubsection[prop].splice(value.index, 1, value.text);
+    },
+    addSubsection(prop) {
+      this.generatedSubsection[prop].push("new suboutline");
+
+      // this.$set(this.generatedSubsection, prop, this.generatedSubsection[prop].push(""));
+    },
+    deleteSubsection(index, prop) {
+      // console.log(index);
+      // console.log(prop);
+      // console.log(this.generatedSubsection[prop].filter((data, idx) => idx != index));
+
+      this.$set(this.generatedSubsection, prop, this.generatedSubsection[prop].filter((data, idx) => idx != index));
+
+
+      // console.log(this.generatedSubsection[index])
+
+      // this.generatedSubsection.splice(index, )
+    },
     getAllTones() {
       this.$store.commit("updateLoadState", true);
       this.$store
@@ -351,6 +448,11 @@ export default {
     },
     multiSearchKeyup(event, inputElement) {
       if (event.keyCode === 13) {
+        this.genOutlineData.keywords.push(inputElement.value);
+        inputElement.value = "";
+      } else if (event.keyCode === 188) {
+        event.preventDefault();
+        inputElement.value = inputElement.value.slice(0, -1);
         this.genOutlineData.keywords.push(inputElement.value);
         inputElement.value = "";
       }
@@ -432,8 +534,6 @@ export default {
             }
             return 0;
           });
-          console.log(this.languages);
-
           for (let i = 0; i < res.data.data.length; i++) {
             this.languageOptions.push({
               value: res.data.data[i].id,
@@ -470,13 +570,24 @@ export default {
 
       console.log(data);
 
-      this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
+      this.generatingOutline = true;
       this.$store
-        .dispatch("generateOutline", data)
+        .dispatch("generateOutline", {
+          data: data, config: {
+            onUploadProgress: (progressEvent) => {
+              const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+              console.log("onUploadProgress", totalLength);
+              if (totalLength !== null) {
+                console.log(Math.round((progressEvent.loaded * 100) / totalLength));
+              }
+            }
+          }
+        })
         .then((res) => {
           this.generatedOutlines = res.data.data.outlines;
           this.makeToast("success", res.data.message);
-          this.$store.commit("updateLoadState", false);
+          this.generatingOutline = false;
         })
         .catch((error) => {
           this.loading = false;
@@ -484,7 +595,7 @@ export default {
           this.error = error.response.data.errors;
 
           // this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+          this.generatingOutline = false;
         });
     },
     fromOutlineGenerateSubsection() {
@@ -498,13 +609,14 @@ export default {
         workspace_id: this.$store.state.user.default_workspace_id,
       };
 
-      this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
+      this.generatingSubsection = true;
       this.$store
         .dispatch("fromOutlineGenSubsection", data)
         .then((res) => {
           this.generatedSubsection = this.convertToObject(res.data.data);
           this.makeToast("success", res.data.message);
-          this.$store.commit("updateLoadState", false);
+          this.generatingSubsection = false;
         })
         .catch((error) => {
           this.loading = false;
@@ -512,10 +624,80 @@ export default {
           this.error = error.response.data.errors;
 
           // this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+          this.generatingSubsection = false;
         });
     },
 
+    fromOutlineGenPost() {
+      // set all fields to touched
+
+
+
+      let data = {
+        sections: this.arrayOfSubsections,
+        title: this.genOutlineData.title,
+        outlines: this.generatedOutlines.join(", "),
+        keywords: this.genOutlineData.keywords.join(", "),
+        tone_id: this.genOutlineData.tone_id,
+        output_language_id: this.genOutlineData.output_language_id,
+        input_language_id: this.genOutlineData.input_language_id,
+        workspace_id: this.$store.state.user.default_workspace_id
+      };
+      this.generatingBlogPost = true;
+
+      this.postLoading = true;
+      this.$store
+        .dispatch("fromOutlineGenPost", data)
+        .then((res) => {
+
+          this.generatedPost = res.data.data.post;
+          this.makeToast("success", res.data.message);
+          this.postLoading = false;
+        })
+        .catch((error) => {
+          this.loading = false;
+          console.log("error: " + error);
+          this.error = error.response.data.errors;
+
+          // this.makeToast("danger", this.error);
+          this.postLoading = false;
+        });
+    },
+
+    checkPlagiarism() {
+      // set all fields to touched
+
+
+      // this.$store.commit("updateLoadState", true);
+      this.checkingPlagiarism = true;
+      this.$store
+        .dispatch("checkPlagiarism", this.generatedPost)
+        .then((res) => {
+
+          this.generatedPost = res.data.data.post;
+          this.makeToast("success", res.data.message);
+          this.checkingPlagiarism = false;
+        })
+        .catch((error) => {
+          this.loading = false;
+          console.log("error: " + error);
+          this.error = error.response.data.errors;
+
+          // this.makeToast("danger", this.error);
+          this.checkingPlagiarism = false;
+        });
+    },
+    async copyContent() {
+      try {
+        await navigator.clipboard.writeText(this.generatedPost);
+        this.makeToast("success", "Text copied");
+        /* Resolved - text copied to clipboard successfully */
+      } catch (err) {
+        this.makeToast("danger", err);
+        //console.error('Failed to copy: ', err);
+        /* Rejected - text failed to copy to the clipboard */
+      }
+    },
     convertToObject(text) {
       var obj = {};
       var key = "";
@@ -523,14 +705,14 @@ export default {
       text.split("\n").forEach(function (item) {
         // console.log("item " + item);
         console.log(item.charAt(0))
-        if (!(["*", "-"].includes(item.charAt(0)))) {
+        if (!(["*", "-", "•"].includes(item.charAt(0)))) {
           if (item.length > 0) {
             key = item;
             obj[key] = [];
           }
 
         } else {
-          obj[key].push(item);
+          obj[key].push(item.substring(1, item.length - 1));
         }
 
       });
@@ -553,9 +735,25 @@ export default {
     // this.addSection();
     this.getAllTones();
     this.getAllLanguages();
+
+    // this.generatedSubsection = this.convertToObject("Introduction: \n• Overview of the process of building a house \n• Benefits of building a house \n\nMaterials Needed: \n• Building materials \n• Tools \n• Protective gear \n\nFoundation: \n• Preparing the land \n• Laying the foundation \n• Setting up the footings \n• Securing the foundation \n\nFraming: \n• Assembling the frame \n• Setting up the walls \n• Installing the roof \n\nInterior Finishing: \n• Installing the drywall \n• Painting the walls \n• Installing the flooring \n• Installing the fixtures \n\nExterior Finishing: \n• Applying siding \n• Installing windows and doors \n• Adding exterior trim \n• Adding a porch or deck \n\nConclusion: \n• Summary of the process \n• Benefits of building a house \n• Tips for success ");
+    // 
   },
   computed: {
+    arrayOfSubsections() {
+      var arr = [];
+      for (const key in this.generatedSubsection) {
+        if (Object.hasOwnProperty.call(this.generatedSubsection, key)) {
+          // arr.push({ title: this.generatedSubsection[key] });
+          for (var i = 0; i < this.generatedSubsection[key].length; i++) {
+            arr.push({ title: this.generatedSubsection[key][i] })
+          }
 
+        }
+      }
+
+      return arr;
+    }
   }
 };
 </script>
@@ -712,13 +910,21 @@ export default {
 }
 
 .outline_item .text {
-  font-size: 1.2rem;
+  font-size: 1rem;
+  border-radius: unset !important;
   color: #393F46;
+  border: none;
+  margin-right: 1rem;
 }
 
 .outline_item .text:focus {
   outline: none;
   border-bottom: 1px solid #000000;
+  box-shadow: none;
+}
+
+.outline_item .text[disabled] {
+  background-color: inherit !important;
 }
 
 .outline_item .outline_actions .btn {
@@ -735,12 +941,13 @@ export default {
 }
 
 .disabler {
-  background-color: #474e56;
+  background-color: #474e565c;
   position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
+  width: 105%;
+  height: 96%;
+  top: -16px;
+  left: -15px;
+  z-index: 9;
 }
 
 .blog_post_editor .ql-container {
@@ -816,7 +1023,80 @@ export default {
 
 .focus_keywords_wrap {
   padding: 1.3rem 1.1rem 1.7rem 1.1rem;
-  ;
+}
+
+.blog-loader {
+  align-items: center;
+}
+
+.blog-loader .loader-modal {
+  position: static;
+  background-color: inherit;
+  width: unset;
+  margin-right: 1rem;
+}
+
+.blog-loader .loader-modal .loader-img {
+  width: 3rem;
+}
+
+.blog_post_generated_wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.blog_post_loader,
+.plagiarism_loader {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: #00000042;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader_content {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  border-radius: 0.3rem;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.loader_content .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loader_text {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #393F46;
+}
+
+.wait_desc {
+  font-size: 0.9rem;
+}
+
+.loader_counter_text {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+
+.blog_post_loader .loader-img,
+.plagiarism_loader .loader-img {
+  width: 52px;
+  margin-bottom: 1rem;
 }
 
 @media screen and (max-width: 768px) {
