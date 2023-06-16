@@ -53,7 +53,7 @@
       <slot name="create-btn"></slot>
       <ul class="nav align-items-center" :class="removeContent ? 'hide-content' : ''">
         <li class="nav-item d-none-mobile">
-          <a class="nav-link" v-b-modal.modal-suggest href="#">
+          <a class="nav-link" target="_blank" href="http://go.onecopy.ai/suggestions">
             Suggest Feature
           </a>
         </li>
@@ -76,7 +76,7 @@
             <Transition name="fade">
               <ul v-if="isToggled" class="nav close-click-outside nav-drop-mobile">
                 <li class="nav-item">
-                  <a class="nav-link" v-b-modal.modal-suggest href="#">
+                  <a class="nav-link" target="_blank" href="http://go.onecopy.ai/suggestions">
                     Suggest Feature
                   </a>
                 </li>

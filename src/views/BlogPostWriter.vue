@@ -29,17 +29,17 @@
                         <div class="blog_post_report">
                           <div class="blog_stat">
                             WORDS <br>
-                            <span class="word_count">5,276</span>
+                            <span class="word_count">{{ postWordCount }}</span>
                           </div>
 
-                          <div class="blog_stat">
+                          <!-- <div class="blog_stat">
                             HEADING <br>
                             <span class="word_count">8</span>
-                          </div>
+                          </div> -->
 
                           <div class="blog_stat">
                             PARAGRAPHS <br>
-                            <span class="word_count">10</span>
+                            <span class="word_count">{{ paragraphCount }}</span>
                           </div>
                         </div>
                       </div>
@@ -182,7 +182,7 @@
 
 
 
-                          <button class="btn btn-create px-4 py-3" @click="fromOutlineGenPost">
+                          <button class="btn btn-one px-4 py-3" @click="fromOutlineGenPost">
                             Write Blog Post
                           </button>
 
@@ -190,7 +190,7 @@
                         <div v-else-if="generatedOutlines.length > 0"
                           class="d-flex justify-content-end mt-auto mb-3 blog-loader">
                           <loader-modal :loading-state="generatingSubsection"></loader-modal>
-                          <button :disabled="generatingSubsection ? 'disabled' : false" class="btn btn-create px-4 py-3"
+                          <button :disabled="generatingSubsection ? 'disabled' : false" class="btn btn-one px-4 py-3"
                             @click="fromOutlineGenerateSubsection">
                             Expand Outlines
                           </button>
@@ -280,7 +280,7 @@
           <div class="loader_text">Awesome!</div>
           <div class="wait_desc mb-4">{{ plagiarismResult ? plagiarismResult : error }}</div>
 
-          <button class="btn btn-create px-4">Done</button>
+          <button class="btn btn-one px-4" @click="resetPlagiarism">Done</button>
         </div>
       </div>
     </div>
@@ -335,6 +335,7 @@ export default {
       sections: [],
       generatedSubsection: {},
       generatedPost: "",
+      generatedPostRaw: "",
       generatedSubsectionData: "",
       plagiarismResult: null,
       blogPost: "",
@@ -370,6 +371,9 @@ export default {
     }
   },
   methods: {
+    resetPlagiarism() {
+      this.checkingPlagiarism = false;
+    },
     newSubsection(prop) {
       let data = {
         outlines: prop.trim().substring(0, prop.length - 1),
@@ -672,7 +676,7 @@ export default {
               // // }
               // if (progressEvent.lengthComputable) {
               //   console.log(progressEvent.loaded + ' ' + progressEvent.total);
-                
+
               //   // this.updateProgressBarValue(progressEvent);
               // }
               console.log(progressEvent);
@@ -680,7 +684,7 @@ export default {
             onDownloadProgress: (progressEvent) => {
               console.log(progressEvent);
 
-            
+
 
               //let percentCompleted = Math.floor(current / total * 100)
               //console.log('completed: ', percentCompleted)
@@ -689,7 +693,8 @@ export default {
         })
         .then((res) => {
 
-          this.generatedPost = res.data.data.post;
+          this.generatedPost = this.formatPost(res.data.data.post);
+          this.generatedPostRaw = this.res.data.data.post;
           this.makeToast("success", res.data.message);
           this.postLoading = false;
         })
@@ -715,7 +720,7 @@ export default {
         })
         .then((res) => {
 
-          this.generatedPost = res.data.data.post;
+          this.plagiarismResult = res.data.data;
           this.makeToast("success", res.data.message);
         })
         .catch((error) => {
@@ -728,7 +733,7 @@ export default {
     },
     async copyContent() {
       try {
-        await navigator.clipboard.writeText(this.generatedPost);
+        await navigator.clipboard.writeText(this.generatedPostRaw);
         this.makeToast("success", "Text copied");
         /* Resolved - text copied to clipboard successfully */
       } catch (err) {
@@ -744,7 +749,7 @@ export default {
       text.split("\n").forEach(function (item) {
         // console.log("item " + item);
         console.log(item.charAt(0))
-        if (!(["*", "-", "•", ".","."].includes(item.charAt(0)))) {
+        if (!(["*", "-", "•", ".", "."].includes(item.charAt(0)))) {
           if (item.length > 0) {
             key = item;
             obj[key] = [];
@@ -766,6 +771,9 @@ export default {
       }
 
       return true
+    },
+    formatPost(text) {
+      return text.replace(/\n/g, "<br>");
     }
   },
   mounted() {
@@ -792,6 +800,20 @@ export default {
       }
 
       return arr;
+    },
+    postWordCount() {
+      if (!this.generatedPost) {
+        return 0;
+      } else {
+        return this.generatedPost.split(" ").length;
+      }
+    },
+    paragraphCount() {
+      if (!this.generatedPost) {
+        return 0;
+      } else {
+        return this.generatedPost.match(/<br>/g).length;
+      }
     }
   }
 };

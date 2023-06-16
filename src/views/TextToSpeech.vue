@@ -128,18 +128,18 @@
                       <div class="generated_player_details">
                         <div class="player_stat">
                           WORDS <br>
-                          <span class="word_count">{{ genAudioWordCount }}</span>
+                          <span class="word_count">{{ totalWordCount }}</span>
                         </div>
 
                         <div class="player_stat">
                           SECONDS <br>
-                          <span class="word_count">{{ genAudioDur }}</span>
+                          <span class="word_count">{{ allAudioLength }}</span>
                         </div>
                       </div>
 
                       <div class="custom_text_speech_player">
                         <div class="player_upper_section">
-                          <button class="btn no-shadow btn_prev">
+                          <button class="btn no-shadow btn_prev" @click="prevAudio">
                             <img src="@/assets/icons/next-_1_ 1.png" alt="previous icon">
                           </button>
 
@@ -158,8 +158,9 @@
                           </div>
                         </div>
                         <audio @play="changeButtonState('playpause')" @pause="changeButtonState('playpause')"
-                          @loadedmetadata="updateProgressBar" @timeupdate="updateTimeAndProgressBar" ref="genAudio"
-                          v-if="generatedAudio[0].url" hidden :src="generatedAudio[0].url"></audio>
+                          @ended="playNext" @loadedmetadata="updateProgressBar" @timeupdate="updateTimeAndProgressBar"
+                          ref="genAudio" v-if="sectionsAudio[currentPlayIndex]" hidden
+                          :src="sectionsAudio[currentPlayIndex][0].url"></audio>
 
                         <div class="progress">
                           <progress ref="audioProgressBar" id="progress" value="0" min="0" max="100">
@@ -203,24 +204,31 @@
                           <span v-if="!$v.speechData.text.$each[index].text.required">* Please enter a text <br /></span>
                           <span v-if="!$v.speechData.text.$each[index].text.minLength">* Minimum of 3 Characters</span>
                         </div>
-                        <div class="text_speech_actions">
-                          <button class="btn no-shadow btn_play_pause" @click="playMyAudio('audio' + index)">
-                            <img src="@/assets/icons/play_btn.png" alt="play / pause button">
+                        <div class="text_speech_actions blog-loader">
+                          <button v-if="sectionsAudio[index] && sectionAudioIsPlaying[index]" class="btn no-shadow btn_play_pause"
+                            @click="playMyAudio('audio' + index)">
+                            <img src="@/assets/icons/pause 1.png" alt="play / pause button">
                           </button>
+                          <button v-else-if="sectionsAudio[index]" class="btn no-shadow btn_play_pause"
+                          @click="playMyAudio('audio' + index)">
+                          <img src="@/assets/icons/play_btn.png" alt="play / pause button">
+                        </button>
 
-                          <button class="btn btn-create btn-create-workspace px-4 py-3"
-                            @click="onSubmit(index, text.text)">
+                          <loader-modal :loading-state="loading[index]"></loader-modal>
+
+                          <button class="btn btn-one btn-create-workspace px-4 py-3" @click="onSubmit(index, text.text)">
                             Generate
                             Audio
                           </button>
 
-                          <audio v-if="sectionsAudio[index]" :ref="'audio' + index" :src="sectionsAudio[index][0].url"
-                            hidden>
+                          <audio @play="changeButtonState('playpause', 'audio' + index, index)" @pause="changeButtonState('playpause', 'audio' + index, index)" hidden class="gen-audios" @loadedmetadata="updateMaxLength" v-if="sectionsAudio[index]" :ref="'audio' + index"
+                            :src="sectionsAudio[index][0].url">
                           </audio>
 
 
 
-                          <button class="btn btn_delete_gen_speech" @click="deleteSection($event, index)">
+                          <button v-if="speechData.text.length > 1" class="btn btn_delete_gen_speech"
+                            @click="deleteSection($event, index)">
                             <img src="@/assets/icons/delete_speech.png" alt="delete icon">
                           </button>
                         </div>
@@ -267,13 +275,15 @@ export default {
       genderOptions: [{ value: null, text: "Select a Gender" }, { value: "Male", text: "Male" }, { value: "Female", text: "Female" }],
       voiceOptions: [],
       languageOptions: [{ value: null, text: "Select Language" }],
-      loading: false,
+      loading: [],
       speechData: {
         text: [],
         language_id: null,
         voice_id: null,
       },
+      currentPlayIndex: 0,
       sectionsAudio: [],
+      sectionAudioIsPlaying: [],
       audioIsPlaying: false,
       voiceValue: null,
       generatedAudio: [{}],
@@ -285,6 +295,7 @@ export default {
       isSubmitted: false,
       editId: "",
       rafVid: null,
+      allAudioLength: 0.0,
     };
   },
   validations: {
@@ -303,12 +314,40 @@ export default {
     },
   },
   methods: {
+    prevAudio() {
+      if (this.currentPlayIndex > 0) {
+        this.currentPlayIndex--;
+      }
+    },
+    playNext() {
+      console.log("play index " + this.currentPlayIndex);
+      console.log("section length" + this.sectionsAudio.length);
+      if (this.currentPlayIndex < this.sectionsAudio.length - 1) {
+        this.currentPlayIndex++;
+
+
+        setTimeout(() => {
+          this.$refs.genAudio.play();
+        }, 2000)
+
+
+
+
+      } else {
+        this.currentPlayIndex = 0;
+      }
+    },
     playMyAudio(target) {
       var el = this.$refs[target];
 
-      console.log(el);
+      // el[0].play();
 
-      el[0].play();
+      if (el[0].paused || el[0].ended) {
+        el[0].play();
+        
+      } else {
+        el[0].pause();
+      }
       // this.$refs[ref].play();
     },
     addSection(event) {
@@ -317,6 +356,8 @@ export default {
       }
 
       this.speechData.text.push({ text: "" });
+      this.loading.push(false);
+      this.sectionAudioIsPlaying.push(false);
     },
     deleteSection(event, index) {
       event.preventDefault();
@@ -355,16 +396,31 @@ export default {
       const returnedHour = hour < 10 ? `0${hour}` : `${hour}`;
       return `${returnedHour}:${returnedMinutes}:${returnedSeconds}`;
     },
-    changeButtonState(type) {
+    changeButtonState(type, target, index) {
       // Play/Pause button
       if (type == "playpause") {
         if (this.$refs.genAudio.paused || this.$refs.genAudio.ended) {
           this.$refs.playPauseBtn.setAttribute("data-state", "play");
+        
           this.audioIsPlaying = false;
           // bigPlayImg.src = "../assets/icons/play frame.svg";
         } else {
           this.$refs.playPauseBtn.setAttribute("data-state", "pause");
+        
           this.audioIsPlaying = true;
+          // bigPlayImg.src = "../assets/icons/time.svg";
+        }
+      }
+
+      var el = this.$refs[target];
+      if (type == "playpause") {
+        if (el[0].paused || el[0].ended) {
+         
+          this.$set(this.sectionAudioIsPlaying, index, false);
+          // bigPlayImg.src = "../assets/icons/play frame.svg";
+        } else {
+         
+          this.$set(this.sectionAudioIsPlaying, index, true);
           // bigPlayImg.src = "../assets/icons/time.svg";
         }
       }
@@ -395,6 +451,7 @@ export default {
       // this.campaignName = data;
     },
     onSubmit(index, text) {
+      console.log(index);
       // set all fields to touched
       this.$v.$touch();
 
@@ -404,7 +461,7 @@ export default {
       if (this.$v.speechData.$invalid) return;
 
 
-      this.$store.commit("updateLoadState", true);
+      this.loading.splice(index, 1, true);
       this.$store
         .dispatch("initiateTextToSpeech", {
           text: text,
@@ -415,15 +472,16 @@ export default {
           console.log(res);
           //this.generatedAudio = res.data.data;
           // this.sectionsAudio[index] = res.data.data;
-          this.sectionsAudio.splice(index, 0, res.data.data);
+          // this.sectionsAudio.splice(index, 0, res.data.data);
+          this.$set(this.sectionsAudio, index, res.data.data);
           this.makeToast("success", res.data.message);
-          this.$store.commit("updateLoadState", false);
+          this.loading.splice(index, 1, false);
         })
         .catch((error) => {
           console.log(error.response);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
-          this.$store.commit("updateLoadState", false);
+          this.loading.splice(index, 1, false);
         });
     },
     getAllVoices() {
@@ -509,6 +567,17 @@ export default {
 
         });
     },
+    updateMaxLength() {
+      var count = 0;
+      for (var i = 0; i < this.sectionsAudio.length; i++) {
+       
+          let el = this.$refs["audio" + i];
+
+       
+        count += el[0].duration;
+      }
+      this.allAudioLength = count.toFixed(2);
+    }
   },
   mounted() {
     // this.getCampaign();
@@ -529,7 +598,16 @@ export default {
       return this.filteredVoiceLanguage.filter((voice) => {
         return voice.detail.gender == this.gender;
       })
-    }
+    },
+    totalWordCount() {
+      let count = 0;
+
+
+      for (var i = 0; i < this.speechData.text.length; i++) {
+        count += this.speechData.text[i].text.split(" ").length;
+      }
+      return count;
+    },
   }
 };
 </script>

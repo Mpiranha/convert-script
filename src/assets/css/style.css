@@ -83,14 +83,19 @@ body {
 
 .btn-create {
     position: relative;
-    color: #fff !important;
-    background-color: #8338ec !important;
+   
     font-size: 0.7rem !important;
     /* font-weight: bold !important; */
-    padding: 0.5rem 1rem 0.5rem 2rem !important;
+    padding: 0.5rem 1rem 0.5rem 2rem;
     display: flex !important;
     align-items: center !important;
     border-radius: 0.5rem !important;
+}
+
+.btn-one {
+    color: #fff !important;
+    background-color: #8338ec !important;
+    font-size: 0.7rem !important;
 }
 
 .py-2 {
@@ -702,7 +707,7 @@ input:checked+.slider:before {
 .dashboard-top .title {
     color: #393f46;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin-bottom: 1.5rem;
 }
 

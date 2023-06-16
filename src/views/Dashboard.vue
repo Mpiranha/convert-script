@@ -94,6 +94,8 @@ export default {
   },
   data() {
     return {
+      workspace_id: this.$store.state.user.default_workspace_id,
+      
       stat: {
         recent_templates: [],
       },
@@ -104,7 +106,7 @@ export default {
     getStatInfo() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getDashboardInfo", this.$store.state.user.default_workspace_id)
+        .dispatch("getDashboardInfo", this.workspace_id)
         .then((res) => {
           this.stat = res.data.data.message;
 

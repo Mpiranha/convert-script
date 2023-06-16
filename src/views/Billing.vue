@@ -17,7 +17,7 @@
                 </label>
                 <h6 class="title mb-0 ml-3">Yearly</h6>
 
-                <button class="btn btn-create pl-3 ml-4 px-4" v-b-modal.modal-new-promo_code>Add Promocode</button>
+                <button class="btn btn-one pl-3 ml-4 px-4" v-b-modal.modal-new-promo_code>Add Promocode</button>
               </div>
             </div>
 
@@ -83,7 +83,7 @@
               <div class="label">Plagiarism Checker Credit: <b>345</b></div>
 
               <div class="value ml-auto">
-                <button class="btn btn-create px-3">
+                <button class="btn btn-one px-3" v-b-modal.modal-new-credit>
                   Buy Credit
                 </button>
               </div>
@@ -112,6 +112,29 @@
         <b-button @click="upgradeWithPurchaseCode($event)" class="save-modal">Redeem</b-button>
       </div>
     </b-modal>
+
+    <b-modal :hide-header="true" id="modal-new-credit" centered size="sm" :hide-footer="true" dialog-class="control-width"
+      content-class="modal-main">
+      <div class="credit_title">Add plagiarism checker credit</div>
+      <div class="credit_desc">Purchases are one-time purchases (no subscription)</div>
+
+      <b-form-group>
+        <label for="promo_code">Number of words</label>
+
+        <b-form-select :class="{ 'is-invalid': submitted && $v.promoCode.$error }"
+          class="form-control"></b-form-select>
+
+        <div v-if="submitted && $v.promoCode.$error" class="invalid-feedback">
+          <span v-if="!$v.promoCode.required">* Promo code is required <br /></span>
+          <span v-if="!$v.promoCode.minLength">* Minimum of 3 Characters</span>
+        </div>
+      </b-form-group>
+
+      <div class="d-flex justify-content-end">
+        <b-button @click="$bvModal.hide('modal-new-credit')" class="close-modal">Close</b-button>
+        <b-button @click="upgradeWithPurchaseCode($event)" class="save-modal">Purchase</b-button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -137,6 +160,8 @@ export default {
   },
   data() {
     return {
+      plagiarismPlans: [],
+      workspace_id: this.$store.state.user.default_workspace_id,
       progressValue: 50,
       max: 100,
       planDetail: {
@@ -161,6 +186,19 @@ export default {
 
 
       return formatedDate.toLocaleDateString();
+    },
+    getPlagiarismPlan() {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getPlagiarismPlan")
+        .then((res) => {
+          this.plagiarismPlans = res.data.data;
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
     },
     getUserPlanDetails() {
       this.$store.commit("updateLoadState", true);
@@ -203,7 +241,7 @@ export default {
     getStatInfo() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getDashboardInfo")
+        .dispatch("getDashboardInfo", this.workspace_id)
         .then((res) => {
           this.wordStat = res.data.data.message;
           this.$store.commit("updateLoadState", false);
@@ -246,6 +284,7 @@ export default {
   mounted() {
     this.getUserPlanDetails();
     this.getStatInfo();
+    this.getPlagiarismPlan();
   },
 
 };
@@ -281,6 +320,17 @@ export default {
   font-weight: bold;
 }
 
+.credit_title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.credit_desc {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
 @media screen and (max-width: 480px) {
   .word-usage-stat {
     flex-direction: column;
