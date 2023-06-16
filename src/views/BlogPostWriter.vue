@@ -270,7 +270,7 @@
 
     <div class="plagiarism_loader" v-if="checkingPlagiarism">
       <div class="loader_content">
-        <div class="content" v-if="!plagiarismResult">
+        <div class="content" v-if="!plagiarismResult && !error">
           <img class="loader-img" src="@/assets/image/Rolling-2s-221px.svg" alt="" />
           <div class="loader_text">Checking for plagiarism</div>
           <div class="wait_desc">Please wait, this can take a few minutes.</div>
@@ -278,8 +278,7 @@
         <div class="content" v-else>
           <img class="loader-img mb-0" src="@/assets/icons/check-plagiarism.svg" alt="" />
           <div class="loader_text">Awesome!</div>
-          <div class="wait_desc mb-4">The plagiarism rate of this text is 0% so your text is completely original: 0 result
-            found for 1700 words.</div>
+          <div class="wait_desc mb-4">{{ plagiarismResult ? plagiarismResult : error }}</div>
 
           <button class="btn btn-create px-4">Done</button>
         </div>
@@ -339,6 +338,7 @@ export default {
       generatedSubsectionData: "",
       plagiarismResult: null,
       blogPost: "",
+      error: null,
       isSubmitted: false,
       editId: "",
       editorOption: {
@@ -576,11 +576,26 @@ export default {
         .dispatch("generateOutline", {
           data: data, config: {
             onUploadProgress: (progressEvent) => {
-              const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
-              console.log("onUploadProgress", totalLength);
-              if (totalLength !== null) {
-                console.log(Math.round((progressEvent.loaded * 100) / totalLength));
-              }
+              // const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+              // console.log("onUploadProgress", totalLength);
+              // if (totalLength !== null) {
+              //   console.log(Math.round((progressEvent.loaded * 100) / totalLength));
+              // }
+              // if (progressEvent.lengthComputable) {
+              //   console.log(progressEvent.loaded + ' ' + progressEvent.total);
+              //   console.log(progressEvent);
+              //   // this.updateProgressBarValue(progressEvent);
+              // }
+              console.log(progressEvent);
+            },
+            onDownloadProgress: (progressEvent) => {
+              console.log(progressEvent);
+
+              const total = parseFloat(progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length'))
+              const current = progressEvent.currentTarget.response.length
+
+              let percentCompleted = Math.floor(current / total * 100)
+              console.log('completed: ', percentCompleted)
             }
           }
         })
@@ -647,7 +662,31 @@ export default {
 
       this.postLoading = true;
       this.$store
-        .dispatch("fromOutlineGenPost", data)
+        .dispatch("fromOutlineGenPost", {
+          data: data, config: {
+            onUploadProgress: (progressEvent) => {
+              // const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+              // console.log("onUploadProgress", totalLength);
+              // if (totalLength !== null) {
+              //   console.log(Math.round((progressEvent.loaded * 100) / totalLength));
+              // // }
+              // if (progressEvent.lengthComputable) {
+              //   console.log(progressEvent.loaded + ' ' + progressEvent.total);
+                
+              //   // this.updateProgressBarValue(progressEvent);
+              // }
+              console.log(progressEvent);
+            },
+            onDownloadProgress: (progressEvent) => {
+              console.log(progressEvent);
+
+            
+
+              //let percentCompleted = Math.floor(current / total * 100)
+              //console.log('completed: ', percentCompleted)
+            }
+          }
+        })
         .then((res) => {
 
           this.generatedPost = res.data.data.post;
@@ -671,20 +710,20 @@ export default {
       // this.$store.commit("updateLoadState", true);
       this.checkingPlagiarism = true;
       this.$store
-        .dispatch("checkPlagiarism", this.generatedPost)
+        .dispatch("checkPlagiarism", {
+          text: this.generatedPost,
+        })
         .then((res) => {
 
           this.generatedPost = res.data.data.post;
           this.makeToast("success", res.data.message);
-          this.checkingPlagiarism = false;
         })
         .catch((error) => {
           this.loading = false;
-          console.log("error: " + error);
-          this.error = error.response.data.errors;
+          this.error = error.response.data.message;
+
 
           // this.makeToast("danger", this.error);
-          this.checkingPlagiarism = false;
         });
     },
     async copyContent() {
@@ -705,7 +744,7 @@ export default {
       text.split("\n").forEach(function (item) {
         // console.log("item " + item);
         console.log(item.charAt(0))
-        if (!(["*", "-", "•"].includes(item.charAt(0)))) {
+        if (!(["*", "-", "•", ".","."].includes(item.charAt(0)))) {
           if (item.length > 0) {
             key = item;
             obj[key] = [];

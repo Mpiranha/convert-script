@@ -2285,11 +2285,11 @@ export default {
         });
     });
   },
-  fromOutlineGenPost({ state }, data) {
+  fromOutlineGenPost({ state }, {data, config}) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .post(`${baseUrl}/api/v1/longform/from_outline_gen_post`, data, {})
+        .post(`${baseUrl}/api/v1/longform/from_outline_gen_post`, data, config)
         .then((resp) => {
           resolve(resp);
         })
