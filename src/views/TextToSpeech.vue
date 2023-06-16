@@ -147,7 +147,7 @@
                             @click="playPauseAudio">
                             <img src="@/assets/icons/pause 1.png" alt="play icon">
                           </button>
-                          <button v-else ref="playPauseBtn" class="btn no-shadow btn_play_gen_speech"
+                          <button v-else ref="playPauseBtn" :disabled="sectionsAudio.length == 0" class="btn no-shadow btn_play_gen_speech"
                             @click="playPauseAudio">
                             <img src="@/assets/icons/play_btn.png" alt="play icon">
                           </button>
@@ -320,8 +320,7 @@ export default {
       }
     },
     playNext() {
-      console.log("play index " + this.currentPlayIndex);
-      console.log("section length" + this.sectionsAudio.length);
+      
       if (this.currentPlayIndex < this.sectionsAudio.length - 1) {
         this.currentPlayIndex++;
 
@@ -451,7 +450,7 @@ export default {
       // this.campaignName = data;
     },
     onSubmit(index, text) {
-      console.log(index);
+      
       // set all fields to touched
       this.$v.$touch();
 
@@ -469,7 +468,7 @@ export default {
           voice_id: this.speechData.voice_id
         })
         .then((res) => {
-          console.log(res);
+         
           //this.generatedAudio = res.data.data;
           // this.sectionsAudio[index] = res.data.data;
           // this.sectionsAudio.splice(index, 0, res.data.data);
