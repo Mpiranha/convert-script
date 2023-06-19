@@ -97,9 +97,9 @@ export default {
           .dispatch("verifyGoogleToken", to.query.code)
           .then(() => {
             vm.error = null;
-            vm.$router.push(this.$route.query.from || "/").catch(() => {
-            });
-
+            // vm.$router.push(this.$route.query.from || "/").catch(() => {
+            // });
+            next("/");
           })
           .catch((errors) => {
             
@@ -259,9 +259,9 @@ export default {
 }
 
 .fs-loader-modal {
-  width: 100%;
-  left: 0;
-  top: 0;
-  height: 100%;
+  width: 100% !important;
+  left: 0 !important;
+  top: 0 !important;
+  height: 100% !important;
 }
 </style>
