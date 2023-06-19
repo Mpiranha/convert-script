@@ -97,9 +97,9 @@
                           <div class="form-group">
                             <label for="">Blog Post Title</label>
                             <input type="text" name="" :class="{
-                                'is-invalid':
-                                  $v.genOutlineData.title.$error,
-                              }" id="" v-model="genOutlineData.title" class="form-control"
+                              'is-invalid':
+                                $v.genOutlineData.title.$error,
+                            }" id="" v-model="genOutlineData.title" class="form-control"
                               placeholder="Enter blog title" />
 
                             <div v-if="isSubmitted && $v.genOutlineData.title.$error" class="invalid-feedback">
@@ -112,9 +112,9 @@
                           <div class="form-group">
                             <label for="">Description</label>
                             <textarea :class="{
-                                'is-invalid':
-                                  $v.genOutlineData.description.$error,
-                              }" v-model="genOutlineData.description" rows="5" cols="10"
+                              'is-invalid':
+                                $v.genOutlineData.description.$error,
+                            }" v-model="genOutlineData.description" rows="5" cols="10"
                               placeholder="Enter a description" class="form-control"></textarea>
                             <div v-if="isSubmitted && $v.genOutlineData.description.$error" class="invalid-feedback">
                               <span v-if="!$v.genOutlineData.description.required">* Description is required <br /></span>
@@ -169,7 +169,7 @@
                             <loader-modal :loading-state="generatingOutline"></loader-modal>
                             <button @click="generateOutline($event)" :disabled="generatingOutline ? 'disabled' : false"
                               class="btn btn_gen_outline">
-                              <img src="@/assets/icons/outline.png" alt="outline icon">
+                              <img src="@/assets/icons/write-outline.svg" alt="outline icon">
                               Write outline for me
                             </button>
                           </div>
@@ -662,7 +662,7 @@ export default {
         input_language_id: this.genOutlineData.input_language_id,
         workspace_id: this.$store.state.user.default_workspace_id
       };
-      this.generatingBlogPost = true;
+      // this.generatingBlogPost = true;
 
       this.postLoading = true;
       this.$store
@@ -692,6 +692,7 @@ export default {
           }
         })
         .then((res) => {
+          this.generatingBlogPost = true;
 
           this.generatedPost = this.formatPost(res.data.data.post);
           this.generatedPostRaw = this.res.data.data.post;

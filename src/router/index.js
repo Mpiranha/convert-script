@@ -40,8 +40,8 @@ import ScriptFlagged from "@/views/admin/ScriptFlagged";
 import RolesPermissions from "@/views/admin/RolesPermissions";
 import SetPermission from "@/views/admin/SetPermission";
 import IntegrationAdmin from "@/views/admin/Integration";
-import LongForm from '@/views/LongForm';
-import BlogPostWriter from '@/views/BlogPostWriter';
+import LongForm from "@/views/LongForm";
+import BlogPostWriter from "@/views/BlogPostWriter";
 import Suggestions from "@/views/admin/Suggestions";
 import Configuration from "@/views/admin/Configuration";
 import Bonuses from "@/views/admin/Bonuses";
@@ -64,9 +64,9 @@ import ImageCreator from "@/views/ImageCreator";
 import ImageStyle from "@/views/admin/ImageStyle";
 import ImageFilter from "@/views/admin/ImageFilter";
 import ImageMedium from "@/views/admin/ImageMedium";
-import TextToSpeech from '@/views/TextToSpeech';
-import WorkspacesTeam from '@/views/WorkspacesTeam';
-import OnecopyAI from '@/views/OnecopyAI'
+import TextToSpeech from "@/views/TextToSpeech";
+import WorkspacesTeam from "@/views/WorkspacesTeam";
+import OnecopyAI from "@/views/OnecopyAI";
 
 Vue.use(VueRouter);
 
@@ -171,6 +171,9 @@ const routes = [
       title: "OneCopy AI Writer - Agency",
       requiresAuth: true,
       adminAuth: false,
+    },
+    redirect: () => {
+      return "Workspace";
     },
   },
   {

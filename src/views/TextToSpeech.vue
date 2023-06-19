@@ -495,13 +495,26 @@ export default {
         });
       }
 
-     
+
       this.$store
         .dispatch("exportAudios", {
           audios: data
         })
         .then((res) => {
           console.log(res);
+
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          a.style = "display: none";
+          var url = res.data.data;
+
+          a.href = url;
+          a.download = url.split("/")[url.split("/").length - 1];
+          console.log(a.download);
+          a.target = "_blank";
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
 
 
 

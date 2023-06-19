@@ -1,7 +1,7 @@
 <template>
     <div ref="chatBox" v-if="author == 'assistant'" class="ai-msg">
         <p class="mb-0">
-            {{ message }}
+            <span v-html="formatPost(message)"></span>
         </p>
         <div class="message_actions">
             <button class="btn no-shadow btn_message_actions" @click="copyContent">
@@ -9,11 +9,11 @@
             </button>
 
             <button class="btn no-shadow btn_message_actions" @click="regenerateClicked">
-                <img src="@/assets/icons/refresh.png" alt="">
+                <img src="@/assets/icons/regenerate-response.svg" alt="">
             </button>
 
             <button class="btn no-shadow btn_message_actions">
-                <img src="@/assets/icons/save-to.png" alt="">
+                <img src="@/assets/icons/save-response.svg" alt="">
             </button>
         </div>
     </div>
@@ -48,7 +48,10 @@ export default {
         },
         regenerateClicked() {
             this.$emit("regenerate-response");
-        }
+        },
+        formatPost(text) {
+            return text.replace(/\n/g, "<br>");
+        },
     },
     mounted() {
         this.$refs.chatBox.parentNode.scrollTop = this.$refs.chatBox.parentNode.scrollHeight;

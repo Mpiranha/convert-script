@@ -1,12 +1,12 @@
 <template>
   <div class="col-12 col-md-6 col-lg-3">
     <div class="stat-box" :class="boxType">
-      <div class="title">{{text}}</div>
+      <div class="title">{{ text }}</div>
       <div class="stat-details">
         <div class="icon-wrap">
-          <img  :src="require(`@/assets/icons/${imageUrl}`)" alt="box icon" />
+          <img :src="require(`@/assets/icons/${imageUrl}`)" alt="box icon" />
         </div>
-        <div class="value">{{boxValue}}</div>
+        <div class="value">{{ boxValue }}</div>
       </div>
     </div>
   </div>
@@ -14,12 +14,12 @@
 
 <script>
 export default {
-    props: {
-        imageUrl: String,
-        text: String,
-        boxValue: Number,
-        boxType: String
-    }
+  props: [
+    'imageUrl',
+    'text',
+    'boxValue',
+    'boxType'
+  ]
 };
 </script>
 

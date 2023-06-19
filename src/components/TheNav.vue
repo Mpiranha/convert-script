@@ -28,10 +28,11 @@
     <div class="menu-section">
       <div class="workspace_ps_relative" :class="removeContent ? 'hide-content' : ''">
         <div class="workspace-input_custom" @click="isOpen = !isOpen">
-          <span class="selected_workspace">{{ this.$store.state.user.default_workspace.name }} </span>
+          <span class="selected_workspace">{{ this.$store.state.user.default_workspace ? this.$store.state.user.default_workspace.name : 'Loading...' }} </span>
           <img class="collapse-icon_workspace" src="@/assets/icons/down.png" alt="up icon">
         </div>
 
+        
         <div v-if="isOpen" class="workspace_items_wrap close-click-outside">
           <ul class="nav">
             <li class="cur_active"> {{ this.$store.state.user.default_workspace.name }}

@@ -17,14 +17,13 @@
                     <div class="history-section_wrap h-100">
                       <div class="chat_actions">
                         <button class="btn btn_chat_action" @click="newChat">New Chat
-                          <!-- <img src="@/assets/icons/plus_dark.png"
-                            alt="plus icon"> -->
+                          <img src="@/assets/icons/new-chat.svg" alt="plus icon">
                         </button>
 
                         <button :disabled="activeChatID ? false : 'disabled'" class="btn btn_chat_action"
                           v-b-modal.modal-delete>
                           Clear Chat
-                          <!-- <img src="@/assets/icons/x_dark.png" alt="clear icon"> -->
+                          <img src="@/assets/icons/clear-chat.svg" alt="clear icon">
                         </button>
                       </div>
 
@@ -40,7 +39,7 @@
                             </span>
                             <button @click="deleteChatHistory(history.chat_id)"
                               class="btn no-shadow btn_del_chat_history">
-                              <img src="@/assets/icons/delete_speech.png" alt="delete icon">
+                              <img src="@/assets/icons/delete.svg" alt="delete icon">
                             </button>
                           </div>
                         </div>
@@ -51,11 +50,16 @@
                 <div class="col-12 col-lg-8 pl-lg-0 h-100">
                   <div class="d-flex flex-column h-100">
                     <div class="section-head bordered-bottom">
-                      <div class="section-head-right mb-0 py-1 ml-0">
-                        <div class="active_chat_title">
+                      <div class="section-head-right w-100 d-flex align-items-center mb-0 py-1 ml-0">
+                        <input ref="titleInput" v-if="isEditTitle" class="form-control no-shadow text edit_title_input"
+                          v-model="activeChatTitle" @blur="onBlur()">
+                        <div v-else class="active_chat_title">
                           {{ activeChatTitle.length > 51 ? activeChatTitle.substring(0, 51).concat("...") :
                             activeChatTitle }}
                         </div>
+                        <button v-if="activeChatTitle" class="btn no-shadow btn_edit_chat_title" type="button" @click="toggleEditTitle">
+                          <img src="@/assets/icons/edit.svg" alt="edit icon">
+                        </button>
                       </div>
                     </div>
                     <div class="chat_area" ref="chatScrollWrap">
@@ -76,7 +80,7 @@
                     </div>
                     <div class="chat_footer">
                       <button class="btn no-shadow btn_chat_prompt mr-3" v-b-modal.modal-prompt>
-                        <img src="@/assets/icons/prompt.png" alt="prompt icon">
+                        <img src="@/assets/icons/templates.svg" alt="prompt icon">
                       </button>
 
                       <button class="btn no-shadow btn_chat_prompt btn_mic mr-3"
@@ -84,7 +88,7 @@
                           'active': isRecording
                         }" @click="isRecording ? stopRecording() : startRecording()">
                         <img v-if="isRecording" src="@/assets/icons/mic_white.svg" alt="prompt icon">
-                        <img v-else src="@/assets/icons/microphone.png" alt="prompt icon">
+                        <img v-else src="@/assets/icons/voice-rec.svg" alt="prompt icon">
 
                       </button>
 
@@ -92,16 +96,19 @@
 
 
                       <div class="chat-input-div">
+                        <div class="speech_text_processing" v-if="convertingToText">
+                          <img src="@/assets/icons/Message-1s-267px.gif" alt="ai typing icon">
+                        </div>
                         <!-- <textarea name="name" cols="80"
                             placeholder="Type in your answers here"></textarea> -->
 
                         <div @keyup="doKeydownEvent($event)" @keydown="doKeydownEvent($event)" @input="updateData($event)"
                           ref="chatDiv" contenteditable="showPromptBox" class="chat-input"
-                          data-placeholder="Type in your answers here">
+                          data-placeholder="Send a Message">
 
                         </div>
                         <button class="btn btn-send" @click="sendMessage(message)">
-                          <img src="@/assets/icons/send-message.png" class="send-icon" name="send">
+                          <img src="@/assets/icons/send-chat.svg" class="send-icon" name="send">
                         </button>
                       </div>
                     </div>
@@ -138,7 +145,7 @@
               <div class="category-item" :class="category == null ? 'active' : ''" @click="resetCategory">
                 All Categories ({{ this.prompts.length }})
               </div>
-              <div v-for="cat in categories" :key="cat.id" class="category-item"
+              <div v-for="cat in removedCategoryWithoutPrompt" :key="cat.id" class="category-item"
                 :class="category == cat.id ? 'active' : ''" @click="setActiveCategory(cat.id)">
                 {{ cat.name }} ({{ cat.prompt_count }})
               </div>
@@ -195,6 +202,7 @@ export default {
   mixins: [alertMixin],
   data() {
     return {
+      isEditTitle: false,
       loading: false,
       isRecording: false,
       Recorder: "",
@@ -232,7 +240,7 @@ export default {
           console.log(res.data);
           // this.getCampaign();
           this.activeChat = res.data.data.messages;
-        
+
         })
         .catch((error) => {
           console.log(error);
@@ -259,7 +267,7 @@ export default {
             this.activeChatID = null;
           this.activeChat = [];
           this.activeChatTitle = "";
-          this.getChatHistory();
+          this.getChatHistory(true);
           this.makeToast("success", "Chat cleared deleted successfully");
         })
         .catch((error) => {
@@ -516,7 +524,7 @@ export default {
       this.$store
         .dispatch("getChatHistory", this.workspace_id)
         .then((res) => {
-          this.chatHistories = res.data.data;
+          this.chatHistories = res.data.data.reverse();
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -601,6 +609,12 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+    toggleEditTitle() {
+      this.isEditTitle = true;
+    },
+    onBlur() {
+      this.isEditTitle = false;
+    }
   },
   mounted() {
     // this.getCampaign();
@@ -622,6 +636,11 @@ export default {
         // console.log(id)
         return this.category == cat.script_type_category_id;
       });
+    },
+    removedCategoryWithoutPrompt() {
+      return this.categories.filter((cat) => {
+        return cat.prompt_count > 0
+      })
     }
   }
 };
@@ -646,7 +665,7 @@ export default {
 
 .chat-input:empty:before {
   content: attr(data-placeholder);
-  color: rgb(56, 54, 57);
+  color: rgb(187 187 187);
 }
 
 .chat_actions {
@@ -662,7 +681,9 @@ export default {
   border-radius: 7px !important;
   color: #79869D !important;
   width: 45%;
-
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
 }
 
 .chat_history_main_wrap {
@@ -685,6 +706,7 @@ export default {
 
 .btn_chat_action img {
   width: 1rem;
+  margin-left: 0.5rem;
 }
 
 .chat_history_wrap {
@@ -733,6 +755,35 @@ export default {
   align-items: center;
   padding: 0.8rem 1rem;
   border-radius: 0.5rem;
+  position: relative;
+}
+
+.btn_edit_chat_title {
+  margin-left: auto;
+}
+
+.edit_title_input {
+  border: none !important;
+  border-bottom: 1px solid #afb7c4 !important;
+  border-radius: unset !important;
+  margin-right: 1rem;
+}
+
+.speech_text_processing {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff52;
+  height: 100%;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.speech_text_processing img {
+  width: 4rem;
 }
 
 .chat-input:focus {

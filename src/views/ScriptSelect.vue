@@ -201,7 +201,7 @@ export default {
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-          this.$store.commit("updateLoadState", false);
+         // this.$store.commit("updateLoadState", false);
         });
     },
     setActiveCategory(cat) {
