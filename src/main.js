@@ -8,7 +8,7 @@ import Vuelidate from "vuelidate";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import Loader from "@/components/Loader";
-import VueRecord from "@codekraft-studio/vue-record";
+
 
 
 
@@ -29,7 +29,7 @@ Vue.use(Vuelidate);
 Vue.use(Vuex);
 Vue.use(VueAxios, axios);
 Vue.use(VueApexCharts);
-Vue.use(VueRecord);
+
 
 Vue.component("apexchart", VueApexCharts);
 Vue.component("loader-modal", Loader);

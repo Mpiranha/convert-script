@@ -4,7 +4,9 @@
       <img class="img-icon" :src="imgUrl" />
       <h6 class="title">{{ typeTitle }}</h6>
       <p class="desc">{{ desc }}</p>
-      <router-link :to="linkUrl">
+
+      <slot></slot>
+      <router-link v-if="!noLink" :to="linkUrl">
         Get Started
         <span>
           <img
@@ -25,6 +27,7 @@ export default {
     desc: String,
     linkUrl: Object,
     imgUrl: String,
+    noLink: Boolean
   },
 };
 </script>

@@ -42,6 +42,50 @@ export default {
             // user: data
           });
           commit("login_attempt", true);
+          //dispatch("getUser");
+          resolve(resp);
+        })
+        .catch((err) => {
+          commit("auth_error", err);
+
+          commit("login_attempt", false);
+          localStorage.removeItem("token");
+          reject(err);
+        });
+    });
+  },
+  getGoogleSignURL({ state }) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/user/google/login/url`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  verifyGoogleToken({ commit }, auth_code) {
+    return new Promise((resolve, reject) => {
+      commit("auth_request");
+      axios
+        .post(`${baseUrl}/api/v1/user/google/auth/login?auth_code=${auth_code}`, {})
+        .then((resp) => {
+          const token = resp.data.token;
+          // const data = resp.user
+          // console.log(resp)
+          // console.log('User: ')
+          // console.log(data)
+          // console.log('token: '+ token)
+          localStorage.setItem("token", token);
+          axios.defaults.headers.common["Authorization"] = token;
+          commit("auth_success", {
+            token: token,
+            // user: data
+          });
+          commit("login_attempt", true);
           // dispatch("getUser")
           resolve(resp);
         })
@@ -2121,6 +2165,20 @@ export default {
 
   // Text to Speech
 
+  exportAudios({ state }, data) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .post(`${baseUrl}/api/v1/ai/text_to_speech/export`, data, {})
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
   getLanguageTextToSpeech({ state }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
@@ -2179,7 +2237,6 @@ export default {
     });
   },
 
-
   startChat({ state }, data) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
@@ -2208,12 +2265,66 @@ export default {
     });
   },
 
-
   getChatHistory({ state }, workspace_id) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
         .get(`${baseUrl}/api/v1/ai/chat/history/${workspace_id}`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  getPromptCategory({ state }) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/ai/chat/prompt_categories`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  getPrompts({ state }) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/ai/chat/prompts/0`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  regenerateChat({ state }, {workspace_id, chat_id, message_id}) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/ai/chat_regenerate/${workspace_id}/${chat_id}/${message_id}`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  getOneChatHistory({ state }, { workspace_id, chat_id }) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/ai/chat/${workspace_id}/${chat_id}`)
         .then((resp) => {
           resolve(resp);
         })
@@ -2237,11 +2348,11 @@ export default {
     });
   },
 
-  clearChatHistory({ state }, workspace_id ) {
+  clearChat({ state }, { chat_id, workspace_id }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .delete(`${baseUrl}/api/v1/ai/clear/chat/${workspace_id}`)
+        .delete(`${baseUrl}/api/v1/ai/clear/chat/${chat_id}/${workspace_id}`)
         .then((resp) => {
           resolve(resp);
         })
@@ -2250,12 +2361,10 @@ export default {
         });
     });
   },
-  
-
 
   // Long Form
 
-  generateOutline({ state }, {data, config}) {
+  generateOutline({ state }, { data, config }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
@@ -2285,7 +2394,7 @@ export default {
         });
     });
   },
-  fromOutlineGenPost({ state }, {data, config}) {
+  fromOutlineGenPost({ state }, { data, config }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
@@ -2311,7 +2420,7 @@ export default {
         });
     });
   },
-  
+
   getPlagiarismPlan({ state }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;

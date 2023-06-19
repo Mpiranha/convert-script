@@ -2,24 +2,18 @@
   <div class="container-fluid px-0">
     <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap">
-      <sidebar :user-name="this.$store.state.user.first_name" current-active="new-copy"></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name" current-active="long-form"></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="scroll-content">
           <div class="container">
             <div class="d-flex flex-wrap">
               <div class="dashboard-top">
-                <h6 class="title">Select Template</h6>
+                <h6 class="title">Long-Form Template</h6>
               </div>
 
               <div class="select-script-forms">
-                <!-- <b-form-group label-class="input-label">
-                  <b-form-select
-                    class="input-table"
-                    v-model="category"
-                    :options="categoryOptions"
-                  ></b-form-select>
-                </b-form-group> -->
+
                 <div class="search-form">
                   <button class="btn search-btn">
                     <i class="flaticon-loupe icons"></i>
@@ -29,17 +23,9 @@
                 </div>
               </div>
             </div>
-            <div class="template-categories-wrap">
-              <div class="category-item" :class="category == null ? 'active' : ''" @click="resetCategory">
-                All Categories ({{ totalScripts }})
-              </div>
-              <div v-for="cat in categories" :key="cat.id" class="category-item"
-                :class="category == cat.id ? 'active' : ''" @click="setActiveCategory(cat.id)">
-                {{ cat.name }} ({{ cat.scripts }})
-              </div>
-            </div>
 
-            <div v-if="searchResult.length > 0" class="row mb-5">
+
+            <!-- <div v-if="searchResult.length > 0" class="row mb-5">
               <script-select-type-box v-for="scriptType in searchResult" :key="scriptType.id" :img-url="
                 scriptType.icon
                   ? scriptType.icon
@@ -58,47 +44,17 @@
       params: { id: scriptType.id },
     }
 " :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
-            </div>
+            </div> -->
+            <div class="row mb-5">
+              <script-select-type-box :img-url="require(`@/assets/icons/blog 1.svg`)"
+                :link-url="{ name: 'BlogPostWriter' }" type-title="Blog Post Writer"
+                desc="Write SEO blog post that hook and educate your reader with a few input."></script-select-type-box>
 
-            <div v-else-if="category" class="row mb-5">
-              <script-select-type-box v-for="scriptType in filteredCategory" :key="scriptType.id" :img-url="
-                scriptType.icon
-                  ? scriptType.icon
-                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
-              " :link-url="
-  $route.params.id
-    ? {
-      name: 'CampaignCreateScript',
-      params: {
-        campaignId: $route.params.id,
-        id: scriptType.id,
-      },
-    }
-    : {
-      name: 'CreateScript',
-      params: { id: scriptType.id },
-    }
-" :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
-            </div>
-            <div v-else-if="scriptTypes && searchKey.length < 1" class="row mb-5">
-              <script-select-type-box v-for="scriptType in scriptTypes" :key="scriptType.id" :img-url="
-                scriptType.icon
-                  ? scriptType.icon
-                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
-              " :link-url="
-  $route.params.id
-    ? {
-      name: 'CampaignCreateScript',
-      params: {
-        campaignId: $route.params.id,
-        id: scriptType.id,
-      },
-    }
-    : {
-      name: 'CreateScript',
-      params: { id: scriptType.id },
-    }
-" :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
+              <script-select-type-box :img-url="require(`@/assets/icons/book 1.svg`)" type-title="Book Writer"
+                desc="Write a well researched and detailed book for your audience." :no-link="true">
+                <div class="soon_text">Coming Soon</div>
+              </script-select-type-box>
+
             </div>
           </div>
         </div>
@@ -234,6 +190,19 @@ export default {
   },
 };
 </script>
+
+<style>
+.soon_text {
+  background-color: red;
+  color: #fff;
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.3rem;
+  width: 83px;
+  text-align: center;
+  border-radius: 1rem;
+}
+</style>
 
 <style scoped>
 .template-categories-wrap {

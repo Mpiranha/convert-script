@@ -22,7 +22,7 @@
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link class="nav-link position-relative" :class="currentActive == 'long-copy' ? 'active' : ''" to="/long-form"
+        <router-link class="nav-link position-relative" :class="currentActive == 'long-form' ? 'active' : ''" to="/long-form"
           :disabled="true">
           <img class="main-icon" src="@/assets/icons/convert-icon/long-form.svg" alt="" />
           <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/New Copy Active.svg" alt="" />
@@ -109,11 +109,16 @@
               <span class="nav-text"> AI Image Creator <span class="beta_text beta_text_sm">BETA</span> </span>
             </router-link>
           </li>
-          <!-- <li class="nav-item">
-            <router-link class="nav-link" :class="currentActive == 'ai-speech' ? 'active' : ''" to="/settings">
+          <li class="nav-item">
+            <router-link class="nav-link pl-0" :class="currentActive == 'ai-speech' ? 'active' : ''" to="/text-to-speech">
               <span class="nav-text"> AI Text to Speech </span>
             </router-link>
-          </li> -->
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link pl-0" :class="currentActive == 'ai-speech' ? 'active' : ''" to="/chat-ai">
+              <span class="nav-text"> Onechat AI </span>
+            </router-link>
+          </li>
         </ul>
       </li>
       <!-- <li class="nav-item">
@@ -461,7 +466,7 @@ export default {
 }
 
 .collapsible.open {
-  height: 40px !important;
+  height: 140px !important;
 }
 
 .collapse-icon.open {

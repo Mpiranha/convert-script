@@ -16,12 +16,13 @@
                   <div class="bordered-right h-100 md-bordered-bottom">
                     <div class="history-section_wrap h-100">
                       <div class="chat_actions">
-                        <button class="btn btn_chat_action">New Chat
+                        <button class="btn btn_chat_action" @click="newChat">New Chat
                           <!-- <img src="@/assets/icons/plus_dark.png"
                             alt="plus icon"> -->
                         </button>
 
-                        <button class="btn btn_chat_action" v-b-modal.modal-delete>
+                        <button :disabled="activeChatID ? false : 'disabled'" class="btn btn_chat_action"
+                          v-b-modal.modal-delete>
                           Clear Chat
                           <!-- <img src="@/assets/icons/x_dark.png" alt="clear icon"> -->
                         </button>
@@ -32,11 +33,13 @@
 
                         <div class="chat_history_wrap">
                           <div v-for="history in chatHistories" :key="history.id" class="chat_history_item">
-                            <span class="history_title">
-                              {{ history.length > 51 ? history.prompt_1.substring(0, 51).concat("...") : history.prompt_1
+                            <span class="history_title" @click="getOneChatHistory(history.chat_id)">
+                              {{ history.prompt_1.length > 51 ? history.prompt_1.substring(0, 51).concat("...") :
+                                history.prompt_1
                               }}
                             </span>
-                            <button @click="deleteChatHistory(history.id)" class="btn no-shadow btn_del_chat_history">
+                            <button @click="deleteChatHistory(history.chat_id)"
+                              class="btn no-shadow btn_del_chat_history">
                               <img src="@/assets/icons/delete_speech.png" alt="delete icon">
                             </button>
                           </div>
@@ -64,7 +67,7 @@
                         </div>
                       </div>
                       <chatbox v-else v-for="(chat, index) in activeChat" :key="index" :author="chat.role"
-                        :message="chat.content">
+                        :message="chat.content" @regenerate-response="doRegeneration(index)">
                       </chatbox>
                       <div class="ai-typing" v-if="isProcessing">
                         <img src="@/assets/icons/Message-1s-267px.gif" alt="ai typing icon">
@@ -76,8 +79,16 @@
                         <img src="@/assets/icons/prompt.png" alt="prompt icon">
                       </button>
 
+                      <button class="btn no-shadow btn_chat_prompt btn_mic mr-3"
+                        :disabled="this.convertingToText ? 'disabled' : false" :class="{
+                          'active': isRecording
+                        }" @click="isRecording ? stopRecording() : startRecording()">
+                        <img v-if="isRecording" src="@/assets/icons/mic_white.svg" alt="prompt icon">
+                        <img v-else src="@/assets/icons/microphone.png" alt="prompt icon">
+
+                      </button>
+
                       <!-- <button class="btn no-shadow btn_chat_prompt mr-3">  </button> -->
-                      <VueRecordAudio mode="press" @result="onResult" class="mr-3" />
 
 
                       <div class="chat-input-div">
@@ -108,13 +119,13 @@
       content-class="modal-main py-3">
       <div class="modal-head text-center mb-4">
         <h3 class="title">
-          Are You sure you want to clear your chat history?
+          Are You sure you want to clear this chat?
         </h3>
       </div>
 
       <div class="d-flex justify-content-center">
         <b-button @click="$bvModal.hide('modal-delete')" class="close-modal">No</b-button>
-        <b-button @click="clearChatHistory()" class="save-modal btn-danger">Yes</b-button>
+        <b-button @click="clearChat()" class="save-modal btn-danger">Yes</b-button>
       </div>
     </b-modal>
 
@@ -124,33 +135,39 @@
         <div class="col-7 border-right">
           <div class="prompt_left_side">
             <div class="template-categories-wrap justify-content-start">
-              <!-- <div class="category-item" :class="category == null ? 'active' : ''" @click="resetCategory">
-              All Categories ({{ totalScripts }})
-            </div> -->
-              <!-- <div v-for="cat in categories" :key="cat.id" class="category-item"
+              <div class="category-item" :class="category == null ? 'active' : ''" @click="resetCategory">
+                All Categories ({{ this.prompts.length }})
+              </div>
+              <div v-for="cat in categories" :key="cat.id" class="category-item"
                 :class="category == cat.id ? 'active' : ''" @click="setActiveCategory(cat.id)">
-                {{ cat.name }} ({{ cat.scripts }})
-              </div> -->
+                {{ cat.name }} ({{ cat.prompt_count }})
+              </div>
             </div>
 
-            <div class="prompt_list">
-              <div class="prompt_list_item">
-                Twitter Thread
+            <div class="prompt_list" v-if="category">
+              <div v-for="prompt in filteredCategory" :key="prompt.id" class="prompt_list_item"
+                :class="selectedPrompt ? prompt.id == selectedPrompt.id ? 'selected' : '' : ''"
+                @click="setActivePrompt(prompt)">
+                {{ prompt.name }}
+              </div>
+            </div>
+            <div class="prompt_list" v-else>
+              <div v-for="prompt in prompts" :key="prompt.id" class="prompt_list_item"
+                :class="selectedPrompt ? prompt.id == selectedPrompt.id ? 'selected' : '' : ''"
+                @click="setActivePrompt(prompt)">
+                {{ prompt.name }}
               </div>
             </div>
           </div>
         </div>
         <div class="col-5">
           <div class="prompt_right_side">
-            <div class="prompt_desc">
-              Using the 'Attention-Interest-Desire-Action' framework, write an email marketing campaign that highlights
-              the [features] of our [product/service] and explains how these [advantages] can be helpful to [ideal
-              customer persona].
-
-              Elaborate on the [benefits] of our product and how it can positively impact the reader.
+            <div class="prompt_desc" v-if="selectedPrompt">
+              {{ selectedPrompt.prompt }}
             </div>
             <div class="d-flex justify-content-end mt-auto">
-              <b-button class="save-modal">Use Prompt</b-button>
+              <b-button :disabled="selectedPrompt ? false : 'disabled'" class="save-modal" @click="setPromptToFIeld">Use
+                Prompt</b-button>
             </div>
           </div>
         </div>
@@ -164,7 +181,8 @@
 import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import alertMixin from "@/mixins/alertMixin";
-import Chatbox from '@/components/Chatbox'
+import Chatbox from '@/components/Chatbox';
+// import Recorder from 'recorder-js';
 // import $ from 'jquery'
 
 export default {
@@ -178,7 +196,10 @@ export default {
   data() {
     return {
       loading: false,
+      isRecording: false,
+      Recorder: "",
       message: "",
+      convertingToText: false,
       workspace_id: this.$store.state.user.default_workspace_id,
       chatHistories: [],
       isFirstTime: true,
@@ -188,9 +209,134 @@ export default {
       activeChatTitle: "",
       map: {},
       categories: [],
+      category: null,
+      prompts: [],
+      selectedPrompt: null,
     };
   },
   methods: {
+    setPromptToFIeld() {
+      this.$bvModal.hide('modal-prompt');
+      this.$refs.chatDiv.innerText = this.selectedPrompt.prompt;
+      this.message = this.selectedPrompt.prompt;
+    },
+    doRegeneration(index) {
+      this.activeChat.splice(index);
+
+      this.isProcessing = true;
+      this.$store
+        .dispatch("regenerateChat", { workspace_id: this.workspace_id, chat_id: this.activeChatID, message_id: this.activeChat[index - 1].message_id })
+        .then((res) => {
+          this.isProcessing = false;
+          this.error = null;
+          console.log(res.data);
+          // this.getCampaign();
+          this.activeChat = res.data.data.messages;
+        
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          this.makeToast("danger", this.error);
+          // this.error = error.response.data.errors.root;
+          // this.error = error;
+        });
+
+    },
+    newChat() {
+      this.isFirstTime = true,
+        this.activeChatID = null;
+      this.activeChat = [];
+      this.activeChatTitle = "";
+    },
+    clearChat() {
+      this.$store
+        .dispatch("clearChat", { chat_id: this.activeChatID, workspace_id: this.workspace_id })
+        .then(() => {
+          this.error = null;
+          this.$bvModal.hide('modal-delete');
+          this.isFirstTime = true,
+            this.activeChatID = null;
+          this.activeChat = [];
+          this.activeChatTitle = "";
+          this.getChatHistory();
+          this.makeToast("success", "Chat cleared deleted successfully");
+        })
+        .catch((error) => {
+          this.error = error;
+          this.makeToast("danger", this.error);
+          // this.error = error;
+        });
+    },
+    async startRecording() {
+      let stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      this.Recorder = new MediaRecorder(stream);
+      this.Recorder.start();
+      console.log(this.Recorder.state);
+      if (this.Recorder.state === "recording") {
+        this.isRecording = true;
+      }
+      let chunks = [];
+      this.Recorder.ondataavailable = (e) => {
+        chunks.push(e.data);
+      }
+      //function to catch error
+      this.Recorder.onerror = (e) => {
+        alert(e.error);
+      }
+
+      this.Recorder.onstop = () => {
+        this.isRecording = false;
+        let blob = new Blob(chunks);
+        // var base64String;
+        // var reader = new FileReader();
+        // reader.readAsDataURL(blob);
+        // reader.onloadend = function () {
+        //   base64String = reader.result;
+        //   console.log('Base64 String - ', base64String);
+        // }
+
+        blob = blob.slice(0, blob.size, "audio/webm");
+
+        var aud = new FormData();
+
+        aud.append("audio", blob);
+
+        this.convertingToText = true;
+
+        this.$store
+          .dispatch("speechToText", aud)
+          .then((res) => {
+            this.convertingToText = false;
+            this.error = null;
+            this.$refs.chatDiv.innerText = res.data.data.text;
+            this.message = res.data.data.text;
+
+          })
+          .catch((error) => {
+            console.log(error);
+            this.error = error;
+            this.convertingToText = false
+            this.makeToast("danger", this.error);
+            // this.error = error.response.data.errors.root;
+            // this.error = error;
+          });
+
+        //   console.log(blob);
+        //  // create url for audio
+        //    let url = URL.createObjectURL(blob);
+        //    //pass url into audio tag
+        //    var audio = document.createElement("audio");
+        //    audio.src = url;
+
+        //    document.body.appendChild(audio);
+
+        //    audio.play();
+      }
+    },
+    stopRecording() {
+      this.Recorder.stop();
+    },
     onResult(blob) {
 
       console.log('Downloadable audio', window.URL.createObjectURL(blob));
@@ -274,6 +420,41 @@ export default {
       this.$refs.chatDiv.innerText = '';
       this.message = '';
     },
+    getOneChatHistory(chat_id) {
+      this.$store
+        .dispatch("getOneChatHistory", { chat_id: chat_id, workspace_id: this.workspace_id })
+        .then((res) => {
+          this.isProcessing = false;
+          this.isFirstTime = false;
+          this.error = null;
+          console.log(res.data);
+          // this.getCampaign();
+          this.activeChat = res.data.data;
+          this.activeChatID = chat_id;
+          this.activeChatTitle = res.data.data[0].content;
+
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          this.makeToast("danger", this.error);
+          // this.error = error.response.data.errors.root;
+          // this.error = error;
+        });
+
+      // this.getCampaign();
+
+      // this.$vm.$forceUpdate();
+    },
+    setActiveCategory(cat) {
+      this.category = cat;
+    },
+    setActivePrompt(prompt) {
+      this.selectedPrompt = prompt;
+    },
+    resetCategory() {
+      this.category = null;
+    },
     startChat() {
       this.isProcessing = true;
 
@@ -335,11 +516,12 @@ export default {
       this.$store
         .dispatch("getChatHistory", this.workspace_id)
         .then((res) => {
-          this.chatHistories = res.data.data
+          this.chatHistories = res.data.data;
+          this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           console.log(error);
-
+          this.$store.commit("updateLoadState", false);
         });
     },
     deleteChatHistory(id) {
@@ -383,23 +565,31 @@ export default {
     },
     getCategories() {
       this.$store
-        .dispatch("getAllCategories")
+        .dispatch("getPromptCategory")
         .then((res) => {
           //this.categoryOptions = res.data.data;
 
           this.categories = res.data.data.reverse();
 
-          // cat.forEach(function (data) {
-          //   console.log( "cat data " + data);
-          //   this.categoryOptions.push({ value: data.id, text: data.name });
-          // });
 
-          // for (let index = 0; index < this.categories.length; index++) {
-          //   this.categoryOptions.push({
-          //     value: this.categories[index].id,
-          //     text: this.categories[index].name + " (" + this.categories[index].scripts + ")",
-          //   });
-          // }
+
+
+          // this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          console.log(error);
+          //this.loading = false;
+          this.$store.commit("updateLoadState", false);
+        });
+    },
+    getPrompts() {
+      this.$store
+        .dispatch("getPrompts")
+        .then((res) => {
+          //this.categoryOptions = res.data.data;
+
+          this.prompts = res.data.data;
+
 
 
 
@@ -419,10 +609,20 @@ export default {
     // this.getAllTones();
     this.getChatHistory();
     this.getCategories();
+    this.getPrompts();
+
+
+
+
 
   },
   computed: {
-
+    filteredCategory() {
+      return this.prompts.filter((cat) => {
+        // console.log(id)
+        return this.category == cat.script_type_category_id;
+      });
+    }
   }
 };
 </script>
@@ -469,6 +669,11 @@ export default {
   height: calc(100% - 71px);
   padding: 2rem 0.9rem;
 
+}
+
+.history_title {
+  cursor: pointer;
+  flex-grow: 1;
 }
 
 .chat_history_title {
@@ -589,7 +794,6 @@ export default {
   background-color: #FCFBFB;
   padding: 0.6rem 0.7rem;
   border: 1px solid #E5E5E5;
-  min-width: 50%;
   max-width: 70%;
   margin-bottom: 1rem;
 
@@ -612,7 +816,6 @@ export default {
   background-color: #F4ECFF;
   color: #000;
   padding: 0.6rem 0.7rem;
-  min-width: 50%;
   max-width: 80%;
   z-index: 1;
   text-align: left;
@@ -655,7 +858,9 @@ export default {
   background-color: #FAFAFA;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   padding: 0.45rem 0.8rem;
+  cursor: pointer;
 }
+
 
 .prompt_right_side {
   display: flex;
@@ -670,46 +875,40 @@ export default {
 }
 
 .prompt_list_item.selected {
-  background-color: #79869D;
+  background-color: #cdcecf;
 }
 
 .prompt_left_side {
   padding: 2rem;
 }
 
-.vue-audio-recorder {
-  width: 47px !important;
-  height: 45px !important;
-  background-color: #fff !important;
-  border: 1px solid #4b5157;
-}
-
-.vue-audio-recorder:after,
-.vue-audio-recorder:before,
-.vue-audio-recorder span:before,
-.vue-audio-recorder span:after {
-  background-color: #4b5157 !important;
-}
-
-.vue-audio-recorder span:before {
-  border: .125em solid #4b5157 !important;
-}
-
-
-.vue-audio-recorder.active {
-  background-color: #ef5350 !important;
-}
-
-.vue-audio-recorder.active:after,
-.vue-audio-recorder.active:before,
-.vue-audio-recorder.active span:before,
-.vue-audio-recorder.active span:after,
-.vue-audio-recorder.active span:before {
-  background-color: #fff !important;
-}
 
 .outline_subsection_list_wrap {
   padding: 1rem;
+}
+
+.btn_mic {
+  border-radius: 50% !important;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+}
+
+.btn_mic.active {
+  -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes pulse {
+  to {
+    box-shadow: 0 0 0 10px rgba(239, 83, 80, 0.1);
+    background-color: #E53935;
+    transform: scale(0.9);
+  }
 }
 </style>
 

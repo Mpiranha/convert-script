@@ -45,10 +45,16 @@ export default {
         "https://cdn.helpspace.com/widget/widget-v1.js"
       );
       supportChat.setAttribute("async", "true");
-      document.head.appendChild(supportChat);
+
+
+      if (this.$route.name != "OnecopyAI") {
+        document.head.appendChild(supportChat);
+      }
     }
 
-    this.$store.dispatch("getUser");
+    if (this.$store.getters.isAuthenticated) {
+      this.$store.dispatch("getUser");
+    }
 
 
 
@@ -65,6 +71,4 @@ export default {
 };
 </script>
 
-<style src="@/assets/css/style.css">
-
-</style>
+<style src="@/assets/css/style.css"></style>

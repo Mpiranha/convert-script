@@ -80,7 +80,7 @@
             </div>
 
             <div class="content-wrap word-usage-stat">
-              <div class="label">Plagiarism Checker Credit: <b>345</b></div>
+              <div class="label">Plagiarism Checker Credit: <b>0</b></div>
 
               <div class="value ml-auto">
                 <button class="btn btn-one px-3" v-b-modal.modal-new-credit>
@@ -121,18 +121,17 @@
       <b-form-group>
         <label for="promo_code">Number of words</label>
 
-        <b-form-select :class="{ 'is-invalid': submitted && $v.promoCode.$error }"
-          class="form-control"></b-form-select>
+        <b-form-select class="form-control" v-model="selectedPlagiarismPlan"
+          :options="plagiarismPlanOption"></b-form-select>
 
-        <div v-if="submitted && $v.promoCode.$error" class="invalid-feedback">
-          <span v-if="!$v.promoCode.required">* Promo code is required <br /></span>
-          <span v-if="!$v.promoCode.minLength">* Minimum of 3 Characters</span>
-        </div>
+        <!-- <div v-if="submitted && $v.promoCode.$error" class="invalid-feedback">
+          <span v-if="!$v.promoCode.required">* Plan is required <br /></span>
+        </div> -->
       </b-form-group>
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-credit')" class="close-modal">Close</b-button>
-        <b-button @click="upgradeWithPurchaseCode($event)" class="save-modal">Purchase</b-button>
+        <a v-if="selectedPlagiarismPlan" class="save-modal" :href="selectedPlagiarismPlan" target="_blank">Purchase</a>
       </div>
     </b-modal>
   </div>
@@ -161,6 +160,8 @@ export default {
   data() {
     return {
       plagiarismPlans: [],
+      plagiarismPlanOption: [{ value: null, text: "Select a plan" }],
+      selectedPlagiarismPlan: null,
       workspace_id: this.$store.state.user.default_workspace_id,
       progressValue: 50,
       max: 100,
@@ -193,6 +194,10 @@ export default {
         .dispatch("getPlagiarismPlan")
         .then((res) => {
           this.plagiarismPlans = res.data.data;
+
+          for (var i = 0; i < res.data.data.all_plans.length; i++) {
+            this.plagiarismPlanOption.push({ value: res.data.data.all_plans[i].upgrade_link, text: res.data.data.all_plans[i].words + ' ($' + res.data.data.all_plans[i].price + ')' })
+          }
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -331,6 +336,7 @@ export default {
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
 }
+
 @media screen and (max-width: 480px) {
   .word-usage-stat {
     flex-direction: column;

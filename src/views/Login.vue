@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid px-md-0">
+    <loader-modal class="fs-loader-modal" :loading-state="this.$store.state.loading"></loader-modal>
     <div class="flex-main-wrap justify-content-center">
       <div class="form-section">
         <div class="login-form-wrap">
@@ -9,6 +10,18 @@
 
           <h1 class="title">Login</h1>
           <div class="error">{{ error }}</div>
+
+          <a :href="signedURL" target="_blank" class="btn btn_sign_in_google">
+            <img src="@/assets/icons/google-icon.svg" alt="google icon">
+            <span class="btn_text">Login with Google</span>
+
+          </a>
+
+          <div class="line_wrap">
+            <div class="line"></div>
+            <div class="or_text">OR</div>
+            <div class="line"></div>
+          </div>
 
           <form action="#" method="post">
             <div class="form-group">
@@ -65,6 +78,7 @@ export default {
   data() {
     return {
       // isText: false,
+      signedURL: null,
       disabledButton: false,
       user: {
         email: "",
@@ -74,10 +88,48 @@ export default {
       submitted: false,
     };
   },
+  beforeRouteEnter(to, from, next) {
+    // ...
+    if (to.query.code) {
+
+      next(vm => {
+        vm.$store
+          .dispatch("verifyGoogleToken", to.query.code)
+          .then(() => {
+            vm.error = null;
+            vm.$router.push(this.$route.query.from || "/").catch(() => {
+            });
+
+          })
+          .catch((errors) => {
+            
+
+            for (const key in errors) {
+              if (Object.hasOwnProperty.call(errors, key)) {
+                console.log(key);
+                console.log(errors[key]);
+
+              }
+            }
+            vm.error = errors.response.data.message;
+            // this.error = error;
+          });
+      })
+
+    } else {
+      next();
+    }
+  },
   mounted: function () {
     if (this.$store.getters.isAuthenticated) {
       this.$router.push("/");
     }
+
+    this.getGoogleSignURL();
+
+    // if (this.$route.fullPath.split("?")[1].split("&")[0]) {
+
+    // }
   },
   validations: {
     user: {
@@ -139,8 +191,6 @@ export default {
           // console.log(error);
           this.disabledButton = false;
           this.error = errors.response.data.errors.root;
-
-          console.log();
           // this.error = error;
         });
       // const ( username, password ) = this
@@ -148,6 +198,70 @@ export default {
       //   this.$router.push('/')
       // })
     },
+    getGoogleSignURL: function () {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getGoogleSignURL")
+        .then((res) => {
+          this.error = null;
+
+          this.signedURL = res.data;
+          this.$store.commit("updateLoadState", false);
+
+
+        })
+        .catch((errors) => {
+          this.error = errors.response.data.errors.root;
+          this.$store.commit("updateLoadState", false);
+          // this.error = error;
+        });
+
+    },
   },
 };
 </script>
+
+<style>
+.btn_sign_in_google {
+  border: 1px solid #8A95A9 !important;
+  color: #393F46 !important;
+  font-size: 0.9rem !important;
+  border-radius: 0.3rem !important;
+  width: 100%;
+  display: flex !important;
+  justify-content: flex-start;
+  padding: 0.55rem 0.6rem !important;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.btn_sign_in_google .btn_text {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.line_wrap {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.line_wrap .or_text {
+  margin: 0 0.5rem;
+  font-size: 0.9rem;
+  color: #AEADB3;
+}
+
+.line_wrap .line {
+  background-color: #AEADB3;
+  height: 1px;
+  flex-grow: 1;
+}
+
+.fs-loader-modal {
+  width: 100%;
+  left: 0;
+  top: 0;
+  height: 100%;
+}
+</style>

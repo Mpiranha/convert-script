@@ -80,7 +80,7 @@
 
 
 
-                        <button class="btn btn-create px-4 py-3" @click="fromOutlineGenPost">
+                        <button class="btn btn-one px-4 py-3" @click="fromOutlineGenPost">
                           Rewrite Blog Post
                         </button>
 
