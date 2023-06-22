@@ -12,7 +12,7 @@
               d-flex
               justify-content-between
               align-items-center
-              mb-5
+              mb-4
             ">
               <h6 class="title">Reseller</h6>
 

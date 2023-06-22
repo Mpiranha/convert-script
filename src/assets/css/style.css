@@ -96,7 +96,7 @@ body {
 .btn-one {
     color: #fff !important;
     background-color: #8338ec !important;
-    font-size: 0.7rem !important;
+    font-size: 0.9rem !important;
 }
 
 .py-2 {
@@ -208,7 +208,7 @@ body {
 }
 
 .table-custom tbody td {
-    font-size: 0.9rem;
+    font-size: 1rem;
     vertical-align: middle;
 }
 
@@ -1443,8 +1443,8 @@ input:checked+.slider:before {
 }
 
 .select-script-forms .search-form .search-btn i::before {
-    color: #929caf;
-    font-size: 1rem;
+    /* color: #929caf;
+    font-size: 1rem; */
 }
 
 .select-script-forms .search-form .search-btn {

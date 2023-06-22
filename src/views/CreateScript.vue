@@ -87,7 +87,7 @@
                         /> -->
                           <loader-modal :loading-state="loading"></loader-modal>
 
-                          <button class="btn btn-create py-2 btn-script">
+                          <button class="btn btn-create py-3 px-4 btn-script">
                             Create Copy
                           </button>
                         </div>

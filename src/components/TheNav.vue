@@ -28,11 +28,12 @@
     <div class="menu-section">
       <div class="workspace_ps_relative" :class="removeContent ? 'hide-content' : ''">
         <div class="workspace-input_custom" @click="isOpen = !isOpen">
-          <span class="selected_workspace">{{ this.$store.state.user.default_workspace ? this.$store.state.user.default_workspace.name : 'Loading...' }} </span>
+          <span class="selected_workspace">{{ this.$store.state.user.default_workspace ?
+            this.$store.state.user.default_workspace.name : 'Loading...' }} </span>
           <img class="collapse-icon_workspace" src="@/assets/icons/down.png" alt="up icon">
         </div>
 
-        
+
         <div v-if="isOpen" class="workspace_items_wrap close-click-outside">
           <ul class="nav">
             <li class="cur_active"> {{ this.$store.state.user.default_workspace.name }}
@@ -157,24 +158,25 @@ export default {
         parent_id: 1,
         message: "",
       },
-      firstTwoWorkspaces: [],
+      workspaces: [],
+
       submitted: false,
     };
   },
   methods: {
     getWorkspaces() {
-      this.$store.commit("updateLoadState", true);
+      // this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("getWorkspaces")
         .then((res) => {
 
-          this.firstTwoWorkspaces = res.data.response.data.filter((workspace) => workspace.id != this.$store.state.user.default_workspace_id && this.firstTwoWorkspaces.length < 2);
-          this.$store.commit("updateLoadState", false);
+          this.workspaces = res.data.response.data;
+          //this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
 
           console.log(error);
-          this.$store.commit("updateLoadState", false);
+          //this.$store.commit("updateLoadState", false);
         });
     },
     toggleNav() {
@@ -237,6 +239,11 @@ export default {
     openSidebar() {
       this.$store.commit("updateSidebarState", true);
     }
+  },
+  computed: {
+    firstTwoWorkspaces() {
+      return this.workspaces.filter((workspace, indx) => workspace.id != this.$store.state.user.default_workspace_id && indx < 3);
+    },
   },
   mounted() {
     let $vm = this;

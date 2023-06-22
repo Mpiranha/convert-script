@@ -13,13 +13,17 @@
             </button>
 
             <button class="btn no-shadow btn_message_actions">
-                <img src="@/assets/icons/save-response.svg" alt="">
+                <img src="@/assets/icons/save-response.svg" alt="" @click="saveMessage">
             </button>
         </div>
     </div>
     <div ref="chatBox" v-else class="user-msg">
 
-        <p class="mb-0"> {{ message }} </p>
+        <p class="mb-0">
+
+            <span v-html="formatPost(message)"></span>
+
+        </p>
 
     </div>
 </template>
@@ -51,6 +55,9 @@ export default {
         },
         formatPost(text) {
             return text.replace(/\n/g, "<br>");
+        },
+        saveMessage() {
+            return this.$emit("save-clicked");
         },
     },
     mounted() {

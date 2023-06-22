@@ -71,7 +71,10 @@ export default {
     return new Promise((resolve, reject) => {
       commit("auth_request");
       axios
-        .post(`${baseUrl}/api/v1/user/google/auth/login?auth_code=${auth_code}`, {})
+        .post(
+          `${baseUrl}/api/v1/user/google/auth/login?auth_code=${auth_code}`,
+          {}
+        )
         .then((resp) => {
           const token = resp.data.token;
           // const data = resp.user
@@ -1779,11 +1782,13 @@ export default {
 
   // Voice Languages
 
-  getAllVoiceLanguages({ state }) {
+  getAllVoiceLanguages({ state }, page) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .get(`${baseUrl}/api/v1/admin/voice-languages`)
+        .get(
+          `${baseUrl}/api/v1/admin/voice-languages?page=${page.number}&per_page=${page.perPage}`
+        )
         .then((resp) => {
           resolve(resp);
         })
@@ -2265,6 +2270,34 @@ export default {
     });
   },
 
+  updateChatTitle({ state }, { chat_id, data }) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .put(`${baseUrl}/api/v1/ai/chat_title/${chat_id}`, data)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  saveMessage({ state }, { chat_id, data }) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .put(`${baseUrl}/api/v1/ai/chat_message/save/${chat_id}`, data)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
   getChatHistory({ state }, workspace_id) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
@@ -2306,11 +2339,13 @@ export default {
         });
     });
   },
-  regenerateChat({ state }, {workspace_id, chat_id, message_id}) {
+  regenerateChat({ state }, { workspace_id, chat_id, message_id }) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .get(`${baseUrl}/api/v1/ai/chat_regenerate/${workspace_id}/${chat_id}/${message_id}`)
+        .get(
+          `${baseUrl}/api/v1/ai/chat_regenerate/${workspace_id}/${chat_id}/${message_id}`
+        )
         .then((resp) => {
           resolve(resp);
         })
@@ -2369,6 +2404,19 @@ export default {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
         .post(`${baseUrl}/api/v1/longform/gen_outlines`, data, config)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  savePost({ state }, data) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .post(`${baseUrl}/api/v1/longform/save`, data)
         .then((resp) => {
           resolve(resp);
         })

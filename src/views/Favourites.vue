@@ -489,7 +489,8 @@ export default {
             this.nextLoading = false;
             this.scripts = this.scripts.concat(res.data.data.data);
           } else {
-            this.scripts = res.data.data.data;
+            console.log(res.data);
+            this.scripts = res.data.data ? res.data.data.data : res.data.data;
             this.scriptLength = res.data.data.meta.total;
             this.maxPage = res.data.data.meta.last_page;
           }

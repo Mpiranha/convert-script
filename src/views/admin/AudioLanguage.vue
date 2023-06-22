@@ -99,7 +99,7 @@
                     </tbody>
                   </table>
                 </div>
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center mb-4">
                   <b-pagination
                     v-model="currentPage"
                     :total-rows="languageLength"
@@ -232,10 +232,10 @@
       getAllLanguages() {
         this.$store.commit("updateLoadState", true);
         this.$store
-          .dispatch("getAllVoiceLanguages")
+          .dispatch("getAllVoiceLanguages", {number: this.currentPage, perPage: this.perPage})
           .then((res) => {
             this.languages = res.data.response.data;
-            // this.rolesLength = res.data.meta.total;
+            this.languageLength = res.data.response.meta.total;
             console.log(res.data);
             console.log("Current Page: " + this.currentPage);
             console.log("Per Page: " + this.perPage);

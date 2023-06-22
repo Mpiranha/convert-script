@@ -23,7 +23,7 @@
                         <button :disabled="activeChatID ? false : 'disabled'" class="btn btn_chat_action"
                           v-b-modal.modal-delete>
                           Clear Chat
-                          <img src="@/assets/icons/clear-chat.svg" alt="clear icon">
+                          <img src="@/assets/icons/close.svg" alt="clear icon">
                         </button>
                       </div>
 
@@ -57,7 +57,8 @@
                           {{ activeChatTitle.length > 51 ? activeChatTitle.substring(0, 51).concat("...") :
                             activeChatTitle }}
                         </div>
-                        <button v-if="activeChatTitle" class="btn no-shadow btn_edit_chat_title" type="button" @click="toggleEditTitle">
+                        <button v-if="activeChatTitle" class="btn no-shadow btn_edit_chat_title" type="button"
+                          @click="toggleEditTitle">
                           <img src="@/assets/icons/edit.svg" alt="edit icon">
                         </button>
                       </div>
@@ -71,7 +72,7 @@
                         </div>
                       </div>
                       <chatbox v-else v-for="(chat, index) in activeChat" :key="index" :author="chat.role"
-                        :message="chat.content" @regenerate-response="doRegeneration(index)">
+                        :message="chat.content" @regenerate-response="doRegeneration(index)" @save-clicked="saveChat(chat.message_id)">
                       </chatbox>
                       <div class="ai-typing" v-if="isProcessing">
                         <img src="@/assets/icons/Message-1s-267px.gif" alt="ai typing icon">
@@ -96,8 +97,23 @@
 
 
                       <div class="chat-input-div">
-                        <div class="speech_text_processing" v-if="convertingToText">
-                          <img src="@/assets/icons/Message-1s-267px.gif" alt="ai typing icon">
+                        <div class="speech_text_processing" v-if="isRecording">
+                          <!-- <img src="@/assets/icons/Message-1s-267px.gif" alt="ai typing icon"> -->
+
+                          <div class="recording_state">
+                            {{ recordState }}
+                          </div>
+
+                          <button class="btn btn_cancel_record">
+                            x
+                          </button>
+
+                          <div id="waveform" class="wave_form">
+
+                          </div>
+
+                          <button class="btn btn-one btn_done">Done</button>
+
                         </div>
                         <!-- <textarea name="name" cols="80"
                             placeholder="Type in your answers here"></textarea> -->
@@ -189,6 +205,7 @@ import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import alertMixin from "@/mixins/alertMixin";
 import Chatbox from '@/components/Chatbox';
+
 // import Recorder from 'recorder-js';
 // import $ from 'jquery'
 
@@ -220,9 +237,28 @@ export default {
       category: null,
       prompts: [],
       selectedPrompt: null,
+      recordState: "Listening",
+      wavesurfer: ""
     };
   },
   methods: {
+    animateRecordState() {
+      var _this = this;
+      var count = 1;
+      var temp = _this.recordState;
+      setInterval(function () {
+
+        if (count <= 3) {
+          _this.recordState = _this.recordState + ".";
+          count++;
+        } else {
+          count = 1;
+          _this.recordState = temp;
+        }
+
+
+      }, 500)
+    },
     setPromptToFIeld() {
       this.$bvModal.hide('modal-prompt');
       this.$refs.chatDiv.innerText = this.selectedPrompt.prompt;
@@ -294,6 +330,9 @@ export default {
       }
 
       this.Recorder.onstop = () => {
+        stream.getTracks().forEach(function (track) {
+          track.stop();
+        });
         this.isRecording = false;
         let blob = new Blob(chunks);
         // var base64String;
@@ -439,7 +478,7 @@ export default {
           // this.getCampaign();
           this.activeChat = res.data.data;
           this.activeChatID = chat_id;
-          this.activeChatTitle = res.data.data[0].content;
+          this.activeChatTitle = res.data.data[0].title;
 
         })
         .catch((error) => {
@@ -504,6 +543,44 @@ export default {
           this.activeChat = res.data.data.messages;
           this.activeChatID = res.data.data.chat_id;
           this.getChatHistory(true);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          this.makeToast("danger", this.error);
+          // this.error = error.response.data.errors.root;
+          // this.error = error;
+        });
+
+      // this.getCampaign();
+
+      // this.$vm.$forceUpdate();
+    },
+    updateTitle() {
+      this.$store
+        .dispatch("updateChatTitle", { chat_id: this.activeChatID, data: { title: this.activeChatTitle, workspace_id: this.workspace_id } })
+        .then((res) => {
+          this.getChatHistory(true);
+          this.makeToast("success", res.data.message);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+          this.makeToast("danger", this.error);
+          // this.error = error.response.data.errors.root;
+          // this.error = error;
+        });
+
+      // this.getCampaign();
+
+      // this.$vm.$forceUpdate();
+    },
+
+    saveChat(message_id) {
+      this.$store
+        .dispatch("saveMessage", { chat_id: this.activeChatID, data: { message_id: message_id, workspace_id: this.workspace_id } })
+        .then((res) => {
+          this.makeToast("success", res.data.message);
         })
         .catch((error) => {
           console.log(error);
@@ -614,6 +691,8 @@ export default {
     },
     onBlur() {
       this.isEditTitle = false;
+
+      this.updateTitle();
     }
   },
   mounted() {
@@ -625,7 +704,8 @@ export default {
     this.getCategories();
     this.getPrompts();
 
-
+    // this.isRecording = true;
+    // this.animateRecordState();
 
 
 
@@ -661,6 +741,7 @@ export default {
   color: rgb(56, 54, 57);
   flex-grow: 1;
   margin-right: 1.5rem;
+  white-space: pre-line;
 }
 
 .chat-input:empty:before {
@@ -774,12 +855,12 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #ffffff52;
+  background-color: #ffffff;
   height: 100%;
   border-radius: 0.5rem;
   display: flex;
-  justify-content: center;
   align-items: center;
+  padding: 0.7rem;
 }
 
 .speech_text_processing img {
@@ -842,14 +923,15 @@ export default {
 }
 
 .ai-msg {
-  background-color: #FCFBFB;
+
+  background-color: #F4ECFF;
   padding: 0.6rem 0.7rem;
   border: 1px solid #E5E5E5;
   max-width: 70%;
   margin-bottom: 1rem;
 
   /* z-index: 1; */
-  font-size: 0.95rem;
+  font-size: 1rem;
   display: flex;
   flex-direction: column;
 }
@@ -864,13 +946,14 @@ export default {
 
 
 .user-msg {
-  background-color: #F4ECFF;
+  background-color: #FCFBFB;
   color: #000;
   padding: 0.6rem 0.7rem;
+  border: 1px solid #E5E5E5;
   max-width: 80%;
   z-index: 1;
   text-align: left;
-  font-size: 0.95rem;
+  font-size: 1rem;
   align-self: end;
 }
 
@@ -907,9 +990,9 @@ export default {
   border: 0.5px solid #79869D;
   border-radius: 7px;
   background-color: #FAFAFA;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   padding: 0.45rem 0.8rem;
   cursor: pointer;
+  margin-bottom: 0.5rem;
 }
 
 
@@ -952,6 +1035,27 @@ export default {
   -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
   -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
   animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+.recording_state,
+.btn_cancel_record {
+  border: 1px solid #79869D !important;
+  padding: 0.65rem 0.95rem;
+  border-radius: 7px !important;
+  margin-right: 1rem;
+}
+
+.btn_cancel_record {
+  font-size: 1.4rem !important;
+  padding: 0.35rem 0.95rem !important;
+}
+
+.wave_form {
+  flex-grow: 1;
+}
+
+.btn_done {
+  font-size: 1rem !important;
 }
 
 @keyframes pulse {

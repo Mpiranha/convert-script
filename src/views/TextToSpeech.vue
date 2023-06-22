@@ -14,7 +14,7 @@
               <div class="row h-100">
                 <div class="col-12 col-lg-5 pr-lg-0">
                   <div class="bordered-right h-100 md-bordered-bottom">
-                    <div class="script-form-wrap speech_form_wrap pb-3 pb-lg-0">
+                    <div class="script-form-wrap speech_form_wrap text-speech-form-wrap pb-3 pb-lg-0">
                       <div class="text_speech_header">
                         Create high quality audio/voice overs from your text in seconds using our humain-sounding text to
                         speech tool
@@ -67,10 +67,10 @@
                                   <div class="voice_details">
                                     <div class="voice_name">{{ option.detail.name }} ({{ option.detail.gender.charAt(0)
                                     }})</div>
-                                    <div class="voice_desc">English (US) - Middle-Aged - Cheerful, Conversational</div>
+                                    <!-- <div class="voice_desc">English (US) - Middle-Aged - Cheerful, Conversational</div> -->
                                   </div>
                                   <button class="btn no-shadow btn_play_voice">
-                                    <img src="@/assets/icons/play_btn.png" alt="play icon">
+                                    <img src="@/assets/icons/play.svg" alt="play icon">
                                   </button>
                                   <audio hidden src=""></audio>
                                   <!-- <label> <input type="checkbox" :value="option" /> {{ option.text }}</label> -->
@@ -86,28 +86,15 @@
                                   <div class="voice_details">
                                     <div class="voice_name">{{ option.detail.name }} ({{ option.detail.gender.charAt(0)
                                     }})</div>
-                                    <div class="voice_desc">English (US) - Middle-Aged - Cheerful, Conversational</div>
+                                    <!-- <div class="voice_desc">English (US) - Middle-Aged - Cheerful, Conversational</div> -->
                                   </div>
                                   <button class="btn no-shadow btn_play_voice">
-                                    <img src="@/assets/icons/play_btn.png" alt="play icon">
+                                    <img src="@/assets/icons/play.svg" alt="play icon">
                                   </button>
                                   <audio hidden src=""></audio>
                                   <!-- <label> <input type="checkbox" :value="option" /> {{ option.text }}</label> -->
                                 </li>
                               </div>
-                              <!-- <li class="select--option" v-for="(option, index) in voiceOptions" :key="index"
-                                  @click="selectOption(option)">
-                                  <img class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
-                                    alt="voice icon">
-                                  <div class="voice_details">
-                                    <div class="voice_name">Mary (F)</div>
-                                    <div class="voice_desc">English (US) - Middle-Aged - Cheerful, Conversational</div>
-                                  </div>
-                                  <button class="btn btn_play_voice">
-                                    <img src="@/assets/icons/play_btn.png" alt="play icon">
-                                  </button>
-                                 
-                                </li> -->
                             </ul>
                           </div>
                           <div class="invalid-feedback" v-if="!$v.speechData.voice_id.required && isSubmitted
@@ -140,16 +127,16 @@
                       <div class="custom_text_speech_player">
                         <div class="player_upper_section">
                           <button class="btn no-shadow btn_prev" @click="prevAudio">
-                            <img src="@/assets/icons/next-_1_ 1.png" alt="previous icon">
+                            <img src="@/assets/icons/previous.svg" alt="previous icon">
                           </button>
 
                           <button v-if="audioIsPlaying" ref="playPauseBtn" class="btn no-shadow btn_play_gen_speech"
                             @click="playPauseAudio">
-                            <img src="@/assets/icons/pause 1.png" alt="play icon">
+                            <img src="@/assets/icons/pause.svg" alt="play icon">
                           </button>
                           <button v-else ref="playPauseBtn" :disabled="sectionsAudio.length == 0"
                             class="btn no-shadow btn_play_gen_speech" @click="playPauseAudio">
-                            <img src="@/assets/icons/play_btn.png" alt="play icon">
+                            <img src="@/assets/icons/play.svg" alt="play icon">
                           </button>
 
 
@@ -186,18 +173,18 @@
                       <div v-for="( text, index ) in speechData.text" :key="index" class="word_text_area_main_wrap">
                         <div class="word_textarea_wrap">
                           <div class="btn_reposition_wrap">
-                            <button class="btn no-shadow btn_move_up">
-                              <img src="@/assets/icons/up_control.png" alt="go up icon">
+                            <button class="btn no-shadow btn_move_up" @click="moveUp(index)">
+                              <img src="@/assets/icons/reorder-up.svg" alt="go up icon">
                             </button>
 
-                            <button class="btn no-shadow btn_move_up">
-                              <img src="@/assets/icons/down_control.png" alt="go down icon">
+                            <button class="btn no-shadow btn_move_up" @click="moveDown(index)">
+                              <img src="@/assets/icons/reorder-down.svg" alt="go down icon">
                             </button>
                           </div>
 
                           <textarea :class="{ 'is-invalid': $v.speechData.text.$each[index].text.$error }"
                             v-model="text.text" @input="updateWordcount" class="form-control" name="" id="" cols="30"
-                            rows="10"></textarea>
+                            rows="5"></textarea>
 
                         </div>
                         <div v-if="isSubmitted && $v.speechData.text.$each[index].text.$error" class="invalid-feedback">
@@ -207,11 +194,11 @@
                         <div class="text_speech_actions blog-loader">
                           <button v-if="sectionsAudio[index] && sectionAudioIsPlaying[index]"
                             class="btn no-shadow btn_play_pause" @click="playMyAudio('audio' + index)">
-                            <img src="@/assets/icons/pause 1.png" alt="play / pause button">
+                            <img src="@/assets/icons/pause.svg" alt="play / pause button">
                           </button>
                           <button v-else-if="sectionsAudio[index]" class="btn no-shadow btn_play_pause"
                             @click="playMyAudio('audio' + index)">
-                            <img src="@/assets/icons/play_btn.png" alt="play / pause button">
+                            <img src="@/assets/icons/play.svg" alt="play / pause button">
                           </button>
 
                           <loader-modal :loading-state="loading[index]"></loader-modal>
@@ -231,14 +218,14 @@
 
                           <button v-if="speechData.text.length > 1" class="btn btn_delete_gen_speech"
                             @click="deleteSection($event, index)">
-                            <img src="@/assets/icons/delete_speech.png" alt="delete icon">
+                            <img src="@/assets/icons/delete.svg" alt="delete icon">
                           </button>
                         </div>
                       </div>
 
                       <div class="btn_wrap_add_section">
                         <button @click="addSection" class="btn btn_add_section">
-                          <img src="@/assets/icons/plus_dark.png" alt="plus icon">
+                          <img src="@/assets/icons/plus.svg" alt="plus icon">
                           Add Section
                         </button>
                       </div>
@@ -316,6 +303,46 @@ export default {
     },
   },
   methods: {
+    moveUp(index) {
+      if (index === 0) {
+        return;
+      }
+
+      let priorIndex = index - 1;
+
+      let itemCopy = { ...this.speechData.text[index] };
+      let priorItemCopy = { ...this.speechData.text[priorIndex] };
+      let itemAudio = { ...this.sectionsAudio[index] };
+      let priorAudioCopy = { ...this.sectionsAudio[priorIndex] }
+
+      // Swap array position with prior element
+      this.$set(this.speechData.text, priorIndex, itemCopy);
+      this.$set(this.speechData.text, index, priorItemCopy);
+      if (this.sectionsAudio.length > 0) {
+        this.$set(this.sectionsAudio, priorIndex, itemAudio);
+        this.$set(this.sectionsAudio, index, priorAudioCopy);
+      }
+    },
+    moveDown(index) {
+      if (index === this.speechData.text.length - 1) {
+        return;
+      }
+
+      let subsequentIndex = index + 1;
+
+      let itemCopy = { ...this.speechData.text[index] };
+      let subsequentItemCopy = { ...this.speechData.text[subsequentIndex] };
+      let itemAudio = { ...this.sectionsAudio[index] };
+      let subsequentAudioCopy = { ...this.sectionsAudio[subsequentIndex] };
+
+      // Swap array positions with subsequent element
+      this.$set(this.speechData.text, subsequentIndex, itemCopy);
+      this.$set(this.speechData.text, index, subsequentItemCopy);
+      if (this.sectionsAudio.length > 0) {
+        this.$set(this.sectionsAudio, subsequentIndex, itemAudio);
+        this.$set(this.sectionsAudio, index, subsequentAudioCopy);
+      }
+    },
     prevAudio() {
       if (this.currentPlayIndex > 0) {
         this.currentPlayIndex--;
@@ -437,7 +464,8 @@ export default {
     },
     selectOption(option) {
       this.speechData.voice_id = option.value;
-      this.voiceValue = option.text;
+      this.voiceValue = option.text + " (" + option.detail.gender.charAt(0) + ")";
+      this.showOptions = false;
     },
     openEditModal(id, data) {
       this.$bvModal.show("modal-edit-script");
@@ -525,7 +553,6 @@ export default {
         });
     },
     getAllVoices() {
-
       this.$store
         .dispatch("getVoiceTextToSpeech")
         .then((res) => {
@@ -537,39 +564,6 @@ export default {
             });
           }
 
-
-        })
-        .catch((error) => {
-          console.log(error);
-          this.$store.commit("updateLoadState", false);
-        });
-    },
-    exportAllScripts(id) {
-      if (this.generatedScript.length < 1) {
-        this.makeToast("danger", "No script to export");
-        return;
-      } else {
-        id = this.generatedScript[this.generatedScript.length - 1].id;
-      }
-
-      this.$store.commit("updateLoadState", true);
-      this.$store
-        .dispatch("exportAllGeneratedScripts", id)
-        .then((res) => {
-          // this.users = res.data.data;
-          // console.log(res);
-
-          var a = document.createElement("a");
-          document.body.appendChild(a);
-          //a.style = "display: none";
-          var url = res.config.url;
-
-          a.href = url;
-          a.download = true;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(a);
-
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -577,7 +571,6 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
-
     getAllLanguages() {
       this.$store.commit("updateLoadState", true);
       this.$store
@@ -599,6 +592,8 @@ export default {
               text: res.data.data[i].name,
             });
           }
+
+          this.$store.commit("updateLoadState", false);
 
 
         })
@@ -670,6 +665,10 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.text-speech-form-wrap {
+  overflow-y: unset !important;
 }
 
 .script-form-wrap .form-control {
@@ -749,6 +748,9 @@ export default {
   position: absolute;
   width: 100%;
   top: 115%;
+  height: 350px;
+  overflow-y: auto;
+  z-index: 9;
 }
 
 .select--option {
@@ -801,7 +803,7 @@ export default {
 
 .generated_player_details .player_stat {
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .generated_player_details .player_stat:first-child {
@@ -841,7 +843,7 @@ export default {
 }
 
 .player_timer {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .speech_form_wrap {
@@ -902,6 +904,7 @@ export default {
 .text_speech_word_form_wrap {
   height: 80vh;
   overflow-y: auto;
+  padding-bottom: 1rem;
 }
 
 .word_text_area_main_wrap {
@@ -950,7 +953,6 @@ export default {
   border: 1px solid #393F46 !important;
   border-radius: 7px !important;
   font-size: 0.9rem !important;
-  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.1) !important;
   background-color: #fff !important;
   padding: 0.5rem 0.75rem !important;
   margin-top: 1rem;

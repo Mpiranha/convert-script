@@ -3,7 +3,7 @@
     <loader-modal :loading-state="this.$store.state.loading" class="fullscreen-loader"></loader-modal>
     <div class="flex-main-wrap">
       <sidebar :user-name="this.$store.state.user.first_name" logo-class="permanent-logo"
-        dismiss-class="permanent-dismiss" current-active="new-copy" class="always-hidden"></sidebar>
+        dismiss-class="permanent-dismiss" current-active="long-form" class="always-hidden"></sidebar>
       <div class="content-section">
         <navbar script-type-name="Blog Post Writer" logo-link-class="hide-logo" toggle-class="permanent-toggler"></navbar>
         <div class="scroll-content script-content-fs">
@@ -17,8 +17,11 @@
                     <div v-if="generatingBlogPost" class="blog_post_generated_wrap h-100">
                       <div class="blog_post_generated_input_wrap">
                         <div class="action_buttons">
-                          <button class="btn btn-block btn_save_blog_post">
-                            Save
+                          <button :disabled="savingPost ? 'disabled' : false" class="btn btn-block btn_save_blog_post"
+                            @click="savePost">
+                            <img v-if="savingPost" class="spinner" src="../assets/image/Rolling-1s-64px.gif"
+                              alt="loading icon">
+                            <span v-else>Save</span>
                           </button>
 
                           <button class="btn btn-block btn_copy_clipboard" @click="copyContent">
@@ -32,10 +35,10 @@
                             <span class="word_count">{{ postWordCount }}</span>
                           </div>
 
-                          <!-- <div class="blog_stat">
+                          <div class="blog_stat">
                             HEADING <br>
-                            <span class="word_count">8</span>
-                          </div> -->
+                            <span class="word_count">{{ headingCount }}</span>
+                          </div>
 
                           <div class="blog_stat">
                             PARAGRAPHS <br>
@@ -245,7 +248,7 @@
 
                         <div class="btn_wrap_add_section">
                           <button @click="addOutline" class="btn btn_add_section">
-                            <img src="@/assets/icons/plus_dark.png" alt="plus icon">
+                            <img src="@/assets/icons/plus.svg" alt="plus icon">
                             Add Outline
                           </button>
                         </div>
@@ -263,7 +266,7 @@
       <div class="loader_content">
         <img class="loader-img" src="@/assets/image/Rolling-2s-221px.svg" alt="" />
         <div class="loader_text">Writing your Blog Post</div>
-        <div class="loader_counter_text">(23% Complete)</div>
+        <div class="loader_counter_text">({{ percentCompleted }}% Complete)</div>
         <div class="wait_desc">Please wait, this can take a few minutes.</div>
       </div>
     </div>
@@ -341,7 +344,10 @@ export default {
       blogPost: "",
       error: null,
       isSubmitted: false,
+      savingPost: false,
       editId: "",
+      percentCompleted: 0,
+      headingCount: 0,
       editorOption: {
         // Some Quill options...
         theme: "snow",
@@ -524,6 +530,27 @@ export default {
           this.$store.commit("updateLoadState", false);
         });
     },
+    savePost() {
+      // set all fields to touched
+
+      this.savingPost = true;
+      this.$store
+        .dispatch("savePost", {
+          text: this.generatedPostRaw,
+          workspace_id: this.$store.state.user.default_workspace_id
+        })
+        .then((res) => {
+
+          this.makeToast("success", res.data.message);
+          this.savingPost = false;
+        })
+        .catch((error) => {
+          console.log(error.response);
+          this.error = error.response.data.error;
+          this.makeToast("danger", this.error);
+          this.savingPost = false;
+        });
+    },
     getAllLanguages() {
 
       this.$store
@@ -592,14 +619,14 @@ export default {
               // }
               console.log(progressEvent);
             },
-            onDownloadProgress: (progressEvent) => {
-              console.log(progressEvent);
+            onDownloadProgress: () => {
+              // console.log(progressEvent);
 
-              const total = parseFloat(progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length'))
-              const current = progressEvent.currentTarget.response.length
+              // const total = parseFloat(progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length'))
+              // const current = progressEvent.currentTarget.response.length
 
-              let percentCompleted = Math.floor(current / total * 100)
-              console.log('completed: ', percentCompleted)
+              // let percentCompleted = Math.floor(current / total * 100)
+              // console.log('completed: ', percentCompleted)
             }
           }
         })
@@ -665,6 +692,7 @@ export default {
       // this.generatingBlogPost = true;
 
       this.postLoading = true;
+      this.percentCompleted = 0;
       this.$store
         .dispatch("fromOutlineGenPost", {
           data: data, config: {
@@ -683,21 +711,37 @@ export default {
             },
             onDownloadProgress: (progressEvent) => {
               console.log(progressEvent);
+              let lastOne = progressEvent.currentTarget.response.split("data: ").length - 1;
+              let data;
+              try {
+                data = JSON.parse(progressEvent.currentTarget.response.split("data: ")[lastOne]);
+                this.percentCompleted = data ? Math.floor((data.data.sections_generated / data.data.total_sections) * 100) : this.percentCompleted;
+              } catch (err) {
+                console.log(progressEvent.currentTarget.response.split("data: "))
+              }
+              console.log(data);
 
 
 
-              //let percentCompleted = Math.floor(current / total * 100)
+
+
+
+              if (this.percentCompleted == 100) {
+                this.generatingBlogPost = true;
+
+                this.generatedPost = this.formatPost(data.data.post);
+                this.postLoading = false;
+                this.generatedPostRaw = data.data.post;
+                this.headingCount = data.data.total_sections;
+                this.makeToast("success", data.message);
+
+              }
               //console.log('completed: ', percentCompleted)
             }
           }
         })
-        .then((res) => {
-          this.generatingBlogPost = true;
+        .then(() => {
 
-          this.generatedPost = this.formatPost(res.data.data.post);
-          this.generatedPostRaw = this.res.data.data.post;
-          this.makeToast("success", res.data.message);
-          this.postLoading = false;
         })
         .catch((error) => {
           this.loading = false;

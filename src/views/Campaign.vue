@@ -12,19 +12,19 @@
                   flex-wrap
                   justify-content-between
                   align-items-center
-                  mb-5
+                  mb-2
                 ">
               <h6 class="title">All Campaign</h6>
 
               <div class="d-flex flex-wrap align-items-center ml-md-auto">
-                <button @click="resetFilter" v-if="selectedAgency" class="btn btn-cancel-filters">
+                <!-- <button @click="resetFilter" v-if="selectedAgency" class="btn btn-cancel-filters">
                   <img src="@/assets/icons/cancel.svg" alt="cancel icon" />
                 </button>
 
                 <b-form-group class="mb-3 mr-3" label-class="input-label">
                   <b-form-select @input="getClientsCampaign" class="input-table manage-width" v-model="selectedAgency"
                     :options="clientOptions"></b-form-select>
-                </b-form-group>
+                </b-form-group> -->
 
                 <button @click="clearField" class="btn btn-create mb-3" v-b-modal.modal-new-campaign>
                   <span>+</span>
@@ -66,14 +66,14 @@
                       <td>
                         <dropdown-tool delete-what="Campaign" @edit-clicked="openEditModal(result.id, result.name)"
                           @delete-proceed="deleteCampaign(result.id)">
-                          <template v-slot:secondary>
+                          <!-- <template v-slot:secondary>
                             <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#"
                               @click="getCampaignId(result.id)">
                               <img class="drop-img-icon" src="@/assets/icons/convert-icon/Add to client icon.svg"
                                 alt="add to client icon" />
                               Add to Client
                             </b-dropdown-item>
-                          </template>
+                          </template> -->
                         </dropdown-tool>
                       </td>
                     </tr>
@@ -81,7 +81,7 @@
                   <tbody v-else-if="selectedAgency">
                     <tr v-for="campaign in filteredCampaign" :key="campaign.id">
                       <td scope="row">
-                        <router-link :to="{
+                        <router-link class="campaign_link" :to="{
                             name: 'CampaignScript',
                             params: { id: campaign.id },
                           }">
@@ -95,14 +95,14 @@
                       <td>
                         <dropdown-tool delete-what="Campaign" @edit-clicked="openEditModal(campaign.id, campaign.name)
                           " @delete-proceed="deleteCampaign(campaign.id)">
-                          <template v-slot:secondary>
+                          <!-- <template v-slot:secondary>
                             <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#"
                               @click="getCampaignId(campaign.id)">
                               <img class="drop-img-icon" src="@/assets/icons/convert-icon/Add to client icon.svg"
                                 alt="add to client icon" />
                               Add to Client
                             </b-dropdown-item>
-                          </template>
+                          </template> -->
                         </dropdown-tool>
                       </td>
                     </tr>
@@ -110,7 +110,7 @@
                   <tbody v-else-if="campaigns && searchKey.length < 1">
                     <tr v-for="campaign in campaigns" :key="campaign.id">
                       <td scope="row">
-                        <router-link :to="{
+                        <router-link class="campaign_link" :to="{
                             name: 'CampaignScript',
                             params: { id: campaign.id },
                           }">
@@ -480,5 +480,11 @@ export default {
 
 .manage-width {
   width: 200px !important;
+}
+
+.campaign_link {
+  color: #8338ec !important;
+  text-decoration: none;
+  font-size: 1rem;
 }
 </style>

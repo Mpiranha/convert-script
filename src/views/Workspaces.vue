@@ -12,7 +12,7 @@
                   flex-wrap
                   justify-content-between
                   align-items-center
-                  mb-1
+                  mb-4
                 ">
               <h6 class="title">Workspaces ({{ workspaces.length }})</h6>
 

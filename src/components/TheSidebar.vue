@@ -145,13 +145,13 @@
         </router-link>
       </li>
 
-      <!-- <li class="nav-item">
-        <router-link class="nav-link" :class="currentActive == 'agency' ? 'active' : ''" to="/agency">
-          <img class="main-icon" src="@/assets/icons/convert-icon/Agency.svg" alt="" />
+      <li class="nav-item">
+        <router-link class="nav-link" :class="currentActive == 'workspace' ? 'active' : ''" to="/workspace">
+          <img class="main-icon" src="@/assets/icons/workspace.svg" alt="" />
           <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Agent.svg" alt="" />
-          <span class="nav-text"> Agency </span>
+          <span class="nav-text"> Workspace </span>
         </router-link>
-      </li> -->
+      </li>
       <li class="nav-item">
         <router-link class="nav-link" :class="currentActive == 'reseller' ? 'active' : ''" to="/reseller">
           <img class="main-icon" src="@/assets/icons/convert-icon/Reseller.svg" alt="" />
