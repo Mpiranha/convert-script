@@ -72,7 +72,8 @@
                         </div>
                       </div>
                       <chatbox v-else v-for="(chat, index) in activeChat" :key="index" :author="chat.role"
-                        :message="chat.content" @regenerate-response="doRegeneration(index)" @save-clicked="saveChat(chat.message_id)">
+                        :message="chat.content" @regenerate-response="doRegeneration(index)"
+                        @save-clicked="saveChat(chat.message_id)">
                       </chatbox>
                       <div class="ai-typing" v-if="isProcessing">
                         <img src="@/assets/icons/Message-1s-267px.gif" alt="ai typing icon">
@@ -108,8 +109,8 @@
                             x
                           </button>
 
-                          <div id="waveform" class="wave_form">
-
+                          <div ref="waveform" id="waveform" class="wave_form">
+                            <canvas ref="visualizer" class="visualizer" width="400" height="50"></canvas>
                           </div>
 
                           <button class="btn btn-one btn_done">Done</button>
@@ -313,12 +314,112 @@ export default {
         });
     },
     async startRecording() {
+
+
+
+      // Old code
       let stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      // Old code
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const analyser = audioCtx.createAnalyser();
+
+      const source = audioCtx.createMediaStreamSource(stream);
+      const distortion = audioCtx.createWaveShaper();
+      source.connect(analyser);
+      analyser.connect(distortion);
+      distortion.connect(audioCtx.destination);
+      analyser.minDecibels = -90;
+      analyser.maxDecibels = -10;
+      analyser.smoothingTimeConstant = 0.85;
+
+
+
+
+
+
+      let drawVisual;
+
+
+
+
+      // Old code
       this.Recorder = new MediaRecorder(stream);
       this.Recorder.start();
       console.log(this.Recorder.state);
       if (this.Recorder.state === "recording") {
         this.isRecording = true;
+
+        let canvas;
+        let canvasCtx;
+        let intendedWidth;
+        const visualize = function () {
+          var WIDTH = canvas.width;
+          var HEIGHT = canvas.height;
+
+
+
+          analyser.fftSize = 2048;
+          const bufferLength = analyser.frequencyBinCount;
+          const dataArray = new Uint8Array(bufferLength);
+          console.log(bufferLength);
+
+          // We can use Float32Array instead of Uint8Array if we want higher precision
+          // const dataArray = new Float32Array(bufferLength);
+         
+
+          canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+
+          const draw = function () {
+            
+            console.log(bufferLength);
+            drawVisual = window.requestAnimationFrame(draw);
+
+            analyser.getByteTimeDomainData(dataArray);
+
+            canvasCtx.fillStyle = "rgb(200, 200, 200)";
+            canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+            canvasCtx.lineWidth = 2;
+            canvasCtx.strokeStyle = "rgb(0, 0, 0)";
+
+            canvasCtx.beginPath();
+
+            const sliceWidth = (WIDTH * 1.0) / bufferLength;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+              let v = dataArray[i] / 128.0;
+              let y = (v * HEIGHT) / 2;
+
+              if (i === 0) {
+                canvasCtx.moveTo(x, y);
+              } else {
+                canvasCtx.lineTo(x, y);
+              }
+
+              x += sliceWidth;
+            }
+
+            canvasCtx.lineTo(canvas.width, canvas.height / 2);
+            canvasCtx.stroke();
+          };
+
+          draw();
+
+        }
+        setTimeout(() => {
+          canvas = this.$refs.visualizer;
+          canvasCtx = canvas.getContext("2d");
+          intendedWidth = this.$refs.waveform.clientWidth;
+          canvas.setAttribute("width", intendedWidth);
+
+          visualize();
+        }, 1000)
+
+
+
+
+
       }
       let chunks = [];
       this.Recorder.ondataavailable = (e) => {
@@ -333,6 +434,7 @@ export default {
         stream.getTracks().forEach(function (track) {
           track.stop();
         });
+        window.cancelAnimationFrame(drawVisual);
         this.isRecording = false;
         let blob = new Blob(chunks);
         // var base64String;
@@ -380,6 +482,8 @@ export default {
 
         //    audio.play();
       }
+
+
     },
     stopRecording() {
       this.Recorder.stop();
@@ -704,8 +808,8 @@ export default {
     this.getCategories();
     this.getPrompts();
 
-    // this.isRecording = true;
-    // this.animateRecordState();
+    //    this.isRecording = true;
+    this.animateRecordState();
 
 
 

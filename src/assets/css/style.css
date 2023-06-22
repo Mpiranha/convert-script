@@ -1,28 +1,30 @@
 @import 'font/flaticon.css';
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-@font-face {
-    font-family: "jost";
-    /* src: url("../fonts/jost/static/Jost-Regular.ttf"); */
-    src: url('../fonts/jost/jost-variablefont_wght-webfont.woff2') format('woff2'),
-        url('../fonts/jost/jost-variablefont_wght-webfont.woff') format('woff');
-    /* IE9*/
-    src: url("../fonts/jost/static/Jost-Regular.ttf") format("embedded-opentype"),
-        /* IE6-IE8 */
-        /* url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.woff2") format("woff2"), */
-        /* chrome、firefox */
-        /* url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.woff") format("woff"), */
-        /* chrome、firefox */
-        /* url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.ttf") format("truetype"), */
-        /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-        /* url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.svg#Circular Std Medium") format("svg"); */
-        /* iOS 4.1- */
-}
+/* @font-face {
+    font-family: "jost"; */
+/* src: url("../fonts/jost/static/Jost-Regular.ttf"); */
+/* src: url('../fonts/jost/jost-variablefont_wght-webfont.woff2') format('woff2'),
+        url('../fonts/jost/jost-variablefont_wght-webfont.woff') format('woff'); */
+/* IE9*/
+/* src: url("../fonts/jost/static/Jost-Regular.ttf") format("embedded-opentype"), */
+/* IE6-IE8 */
+/* url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.woff2") format("woff2"), */
+/* chrome、firefox */
+/* url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.woff") format("woff"), */
+/* chrome、firefox */
+/* url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.ttf") format("truetype"), */
+/* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+/* url("../fonts/Circular\ Std\ Medium/@font-face/9475d6a0b79c164f9f605673714e75d9.svg#Circular Std Medium") format("svg"); */
+/* iOS 4.1- */
+/* } */
+
+@import url('https://fonts.googleapis.com/css2?family=Jost&display=swap');
 
 
 body {
 
-    font-family: jost, Roboto !important;
+    font-family: Jost, Roboto !important;
     scrollbar-color: #8338ec #f1f1f1;
     scrollbar-width: 10px;
     /* scrollbar */
@@ -1563,7 +1565,7 @@ input:checked+.slider:before {
     display: flex;
     align-items: center;
     justify-content: center;
- }
+}
 
 .b-toast-success .toast {
     background-color: rgb(226, 235, 226) !important;
