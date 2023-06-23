@@ -110,11 +110,16 @@
                           </button>
 
                           <div ref="waveform" id="waveform" class="wave_form">
-                            <canvas ref="visualizer" class="visualizer" width="400" height="50"></canvas>
+                            <canvas ref="visualizer" class="visualizer"></canvas>
                           </div>
 
-                          <button class="btn btn-one btn_done">Done</button>
+                          <button class="btn btn-one btn_done" @click="stopRecording()">Done</button>
 
+                        </div>
+                        <div class="speech_text_processing" v-if="this.convertingToText">
+                          <div class="recording_state">
+                            {{ recordState }}
+                          </div>
                         </div>
                         <!-- <textarea name="name" cols="80"
                             placeholder="Type in your answers here"></textarea> -->
@@ -254,6 +259,9 @@ export default {
           count++;
         } else {
           count = 1;
+          if (temp != _this.recordState.substring(0, _this.recordState.length - 3)) {
+            temp = _this.recordState;
+          }
           _this.recordState = temp;
         }
 
@@ -314,6 +322,7 @@ export default {
         });
     },
     async startRecording() {
+      this.recordState = "Listening";
 
 
 
@@ -324,10 +333,10 @@ export default {
       const analyser = audioCtx.createAnalyser();
 
       const source = audioCtx.createMediaStreamSource(stream);
-      const distortion = audioCtx.createWaveShaper();
+      //const distortion = audioCtx.createWaveShaper();
       source.connect(analyser);
-      analyser.connect(distortion);
-      distortion.connect(audioCtx.destination);
+      //analyser.connect(distortion);
+      //distortion.connect(audioCtx.destination);
       analyser.minDecibels = -90;
       analyser.maxDecibels = -10;
       analyser.smoothingTimeConstant = 0.85;
@@ -352,6 +361,7 @@ export default {
         let canvas;
         let canvasCtx;
         let intendedWidth;
+        let intendedHeight;
         const visualize = function () {
           var WIDTH = canvas.width;
           var HEIGHT = canvas.height;
@@ -370,13 +380,13 @@ export default {
           canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
           const draw = function () {
-            
+
             console.log(bufferLength);
             drawVisual = window.requestAnimationFrame(draw);
 
             analyser.getByteTimeDomainData(dataArray);
 
-            canvasCtx.fillStyle = "rgb(200, 200, 200)";
+            canvasCtx.fillStyle = "rgb(255, 255, 255)";
             canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
             canvasCtx.lineWidth = 2;
@@ -410,8 +420,11 @@ export default {
         setTimeout(() => {
           canvas = this.$refs.visualizer;
           canvasCtx = canvas.getContext("2d");
-          intendedWidth = this.$refs.waveform.clientWidth;
+          intendedWidth = this.$refs.waveform.clientWidth - 32;
+          intendedHeight = this.$refs.waveform.clientHeight;
+          console.log("intended width", intendedWidth);
           canvas.setAttribute("width", intendedWidth);
+          canvas.setAttribute("height", intendedHeight);
 
           visualize();
         }, 1000)
@@ -452,6 +465,7 @@ export default {
         aud.append("audio", blob);
 
         this.convertingToText = true;
+        this.recordState = "Processing";
 
         this.$store
           .dispatch("speechToText", aud)
@@ -808,7 +822,7 @@ export default {
     this.getCategories();
     this.getPrompts();
 
-    //    this.isRecording = true;
+    //this.isRecording = true;
     this.animateRecordState();
 
 
@@ -1149,6 +1163,10 @@ export default {
   margin-right: 1rem;
 }
 
+.recording_state {
+  min-width: 120px;
+}
+
 .btn_cancel_record {
   font-size: 1.4rem !important;
   padding: 0.35rem 0.95rem !important;
@@ -1156,6 +1174,12 @@ export default {
 
 .wave_form {
   flex-grow: 1;
+  border: 1px solid #afb6c4;
+  padding: 0 1rem;
+  border-radius: 0.3rem;
+  margin-right: 1rem;
+  height: 48px;
+  width: 72%;
 }
 
 .btn_done {
