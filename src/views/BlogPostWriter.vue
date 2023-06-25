@@ -79,7 +79,7 @@
 
                       <div class="d-flex justify-content-between mt-auto mb-3 px-4">
 
-                        <button class="btn close-modal px-4 py-3">Go Back</button>
+                        <button class="btn close-modal px-4 py-3" @click="goBacktoSubSection">Go Back</button>
 
 
 
@@ -181,7 +181,7 @@
 
                         <div v-if="!isEmpty(generatedSubsection)" class="d-flex justify-content-end mt-auto mb-3">
 
-                          <button class="btn close-modal px-4 py-3">Go Back</button>
+                          <button class="btn close-modal px-4 py-3" @click="goBackToOutline">Go Back</button>
 
 
 
@@ -377,6 +377,16 @@ export default {
     }
   },
   methods: {
+    goBackToOutline() {
+      this.generatedSubsection = {};
+    },
+    goBacktoSubSection() {
+      this.generatingBlogPost = false;
+      this.generatedPost = "";
+      this.postLoading = false;
+      this.generatedPostRaw = "";
+      this.headingCount = 0;
+    },
     resetPlagiarism() {
       this.checkingPlagiarism = false;
     },
@@ -696,19 +706,6 @@ export default {
       this.$store
         .dispatch("fromOutlineGenPost", {
           data: data, config: {
-            onUploadProgress: (progressEvent) => {
-              // const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
-              // console.log("onUploadProgress", totalLength);
-              // if (totalLength !== null) {
-              //   console.log(Math.round((progressEvent.loaded * 100) / totalLength));
-              // // }
-              // if (progressEvent.lengthComputable) {
-              //   console.log(progressEvent.loaded + ' ' + progressEvent.total);
-
-              //   // this.updateProgressBarValue(progressEvent);
-              // }
-              console.log(progressEvent);
-            },
             onDownloadProgress: (progressEvent) => {
               console.log(progressEvent);
               let lastOne = progressEvent.currentTarget.response.split("data: ").length - 1;
@@ -801,7 +798,7 @@ export default {
           }
 
         } else {
-          obj[key].push(item.substring(1, item.length - 1));
+          obj[key].push(item.substring(1, item.length));
         }
 
       });

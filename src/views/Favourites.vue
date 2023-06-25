@@ -43,24 +43,24 @@
                     <div v-else class="responsive-table">
                       <table class="table table-section script-table">
                         <tbody v-if="searchResult.length > 0">
-                          <tr v-for="script in searchResult" :key="script.id"
-                            :class="activeScript ? script.id == activeScript.id ? 'active' : '' : ''">
+                          <tr v-for="script in searchResult" :key="script.response.id"
+                            :class="activeScript ? script.response.id == activeScript.response.id ? 'active' : '' : ''">
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
                                 {{
-                                  script.script_type_name
-                                  ? script.script_type_name
+                                  script.response.script_type_name
+                                  ? script.response.script_type_name
                                   : "NIL"
                                 }}
                               </div>
                               <div class="script-content">
-                                {{ removeTags(abbrScript(script.text)) }}
+                                {{ removeTags(abbrScript(script.response.text)) }}
                               </div>
                             </td>
 
                             <td class="text-right">
                               <dropdown-tool :no-edit="true" :no-delete="true" delete-what="Script"
-                                @delete-proceed="deleteScript(script.id)">
+                                @delete-proceed="deleteScript(script.response.id)">
                                 <template v-slot:secondary>
                                   <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#" @click="addRemoveScriptFavorite(script.response.id)
                                     ">
@@ -74,27 +74,27 @@
                           </tr>
                         </tbody>
                         <tbody v-else-if="scripts && searchKey.length < 1">
-                          <tr v-for="script in scripts" :key="script.id"
-                            :class="activeScript ? script.id == activeScript.id ? 'active' : '' : ''">
+                          <tr v-for="script in scripts" :key="script.response.id"
+                            :class="activeScript ? script.response.id == activeScript.response.id ? 'active' : '' : ''">
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
                                 {{
-                                  script.script_type_name
-                                  ? script.script_type_name
+                                  script.response.script_type_name
+                                  ? script.response.script_type_name
                                   : "NIL"
                                 }}
                               </div>
                               <div class="script-content">
-                                {{ removeTags(abbrScript(script.text)) }}
+                                {{ removeTags(abbrScript(script.response.text)) }}
                               </div>
                             </td>
 
                             <td class="text-right">
                               <dropdown-tool :no-edit="true" :no-delete="true" delete-what="Script"
-                                @delete-proceed="deleteScript(script.id)">
+                                @delete-proceed="deleteScript(script.response.id)">
                                 <template v-slot:secondary>
                                   <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#"
-                                    @click="addRemoveScriptFavorite(script.id)">
+                                    @click="addRemoveScriptFavorite(script.response.id)">
                                     <img class="drop-img-icon" src="@/assets/icons/convert-icon/my Favourites.svg"
                                       alt="remove from favorite icon" />
                                     Remove from favorite
@@ -126,7 +126,7 @@
                   </div>
                   <div v-else class="d-flex flex-column h-100">
                     <div class="section-head" v-if="activeScript">
-                      <button v-b-modal.modal-add-campaign class="
+                      <!-- <button v-b-modal.modal-add-campaign class="
                               d-flex
                               align-items-center
                               no-shadow
@@ -134,27 +134,27 @@
                             ">
                         <img src="@/assets/icons/convert-icon/save 1.svg" alt="" class="icon-save mr-2" /><span> Save to
                         </span>
-                      </button>
+                      </button> -->
                       <div class="section-head-right d-flex align-items-center">
                         <div class="fav-star" @click="toggleFavourite">
                           <img v-if="isFavourite" class="fav-icon" src="@/assets/icons/convert-icon/star.png" alt="" />
                           <img v-else class="fav-icon" src="@/assets/icons/convert-icon/my Favourites.svg" alt="" />
                         </div>
 
-                        <button @click="exportScript(activeScript.id)" class="btn btn-export-all">
+                        <button @click="exportScript(activeScript.response.id)" class="btn btn-export-all">
                           Export
                         </button>
                       </div>
                     </div>
                     <div class="content-display" v-if="activeScript">
-                      <div v-html="formatScript(activeScript.text)"></div>
+                      <div v-html="formatScript(activeScript.response.text)"></div>
                     </div>
                     <div v-else class="no-select">
                       Select a Script to Preview
                     </div>
                     <div class="section-footer">
                       <button v-if="activeScript"
-                        @click="toggleEdit(activeScript.id, formatScript(activeScript.text))"
+                        @click="toggleEdit(activeScript.response.id, formatScript(activeScript.response.text))"
                         class="btn no-shadow btn-share">
                         <img class="foot-icons" src="@/assets/icons/convert-icon/draw.svg" alt="edit icon" />
                         Edit
@@ -164,7 +164,7 @@
                         Copy to clipboard
                       </button>
                       <textarea type="hidden" id="text--copy"
-                        :value="activeScript ? activeScript.text : ''"></textarea>
+                        :value="activeScript ? activeScript.response.text : ''"></textarea>
                     </div>
                   </div>
                 </div>
@@ -236,20 +236,20 @@
             <option value=""></option>
             <option value=""></option>
           </select> -->
-                <button @click="exportScript(activeScript.id)" target="_blank" class="btn btn-export-all">
+                <button @click="exportScript(activeScript.response.id)" target="_blank" class="btn btn-export-all">
                   Export
                 </button>
               </div>
             </div>
             <div class="content-display" v-if="activeScript">
-              <div v-html="formatScript(activeScript.text)"></div>
+              <div v-html="formatScript(activeScript.response.text)"></div>
             </div>
             <div v-else class="no-select">
               Select a Script to Preview
             </div>
             <div class="section-footer">
 
-              <button v-if="activeScript" @click="toggleEdit(activeScript.id, formatScript(activeScript.text))"
+              <button v-if="activeScript" @click="toggleEdit(activeScript.response.id, formatScript(activeScript.response.text))"
                 class="btn no-shadow btn-share">
                 <img class="foot-icons" src="@/assets/icons/convert-icon/draw.svg" alt="edit icon" />
                 Edit
@@ -259,7 +259,7 @@
                 Copy to clipboard
               </button>
               <b-button @click="$bvModal.hide('modal-view-script')" class="close-modal ml-auto">Close</b-button>
-              <textarea type="hidden" id="text--copy" :value="activeScript ? activeScript.text : ''"></textarea>
+              <textarea type="hidden" id="text--copy" :value="activeScript ? activeScript.response.text : ''"></textarea>
             </div>
           </div>
         </div>
@@ -490,7 +490,7 @@ export default {
             this.scripts = this.scripts.concat(res.data.data.data);
           } else {
             console.log(res.data);
-            this.scripts = res.data.data ? res.data.data.data : res.data.data;
+            this.scripts = res.data.data;
             this.scriptLength = res.data.data.meta.total;
             this.maxPage = res.data.data.meta.last_page;
           }

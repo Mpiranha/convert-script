@@ -519,5 +519,6 @@ export default {
   color: #fff;
   padding: 0.35rem 1.2rem 0.3rem 1.2rem;
   border-radius: 1rem;
+  font-size: 0.8rem;
 }
 </style>

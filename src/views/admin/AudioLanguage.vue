@@ -61,7 +61,6 @@
                     <tbody v-if="searchResult.length > 0">
                       <tr v-for="result in searchResult" :key="result.id">
                         <td scope="row">{{ result.name }}</td>
-  
                         <td>{{ result.code }}</td>
                         <td>
                           <dropdown-tool
@@ -210,11 +209,11 @@
       searchKeyWord() {
         this.$store
           .dispatch("search", {
-            endpoint: "/api/v1/admin/script-type-categories",
+            endpoint: "/api/v1/admin/voice-languages",
             keyword: this.searchKey,
           })
           .then((res) => {
-            this.searchResult = res.data.data;
+            this.searchResult = res.data.response.data;
   
             // console.log(res.data + "called now");
             //this.loading = false;

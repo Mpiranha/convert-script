@@ -61,8 +61,8 @@
         </li>
 
         <li class="nav-item d-none-mobile">
-          <a class="nav-link" href="https://support.onecopy.ai" target="_blank">
-            Support
+          <a class="nav-link" href="https://onecopy.ai/help/" target="_blank">
+            Help & Support
           </a>
         </li>
 
@@ -84,8 +84,8 @@
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link" href="https://support.onecopy.ai" target="_blank">
-                    Support
+                  <a class="nav-link" href="https://onecopy.ai/help/" target="_blank">
+                    Help & Support
                   </a>
                 </li>
               </ul>
@@ -242,7 +242,7 @@ export default {
   },
   computed: {
     firstTwoWorkspaces() {
-      return this.workspaces.filter((workspace, indx) => workspace.id != this.$store.state.user.default_workspace_id && indx < 3);
+      return this.workspaces.filter((workspace, indx) => workspace.id != this.$store.state.user.default_workspace_id && indx < 6);
     },
   },
   mounted() {
@@ -496,7 +496,7 @@ export default {
 }
 
 .selected_workspace {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 
 }
 
@@ -529,7 +529,7 @@ export default {
 }
 
 .workspace_items_wrap .nav li {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   margin-bottom: .8rem;
 
 }

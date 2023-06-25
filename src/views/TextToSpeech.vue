@@ -126,7 +126,7 @@
 
                       <div class="custom_text_speech_player">
                         <div class="player_upper_section">
-                          <button class="btn no-shadow btn_prev" @click="prevAudio">
+                          <button class="btn no-shadow btn_prev" @click="prevAudio" :disabled="sectionsAudio.length == 0">
                             <img src="@/assets/icons/previous.svg" alt="previous icon">
                           </button>
 

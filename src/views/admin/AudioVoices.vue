@@ -47,8 +47,11 @@
                   <tbody v-if="searchResult.length > 0">
                     <tr v-for="result in searchResult" :key="result.id">
                       <td scope="row">{{ result.name }}</td>
-
+                      <td class="text-left">{{ result.language }}</td>
                       <td class="text-left">{{ result.name }}</td>
+                      <td>
+                        <img class="avatar_view" :src="result.avatar_url" alt="audio avatar">
+                      </td>
                       <td>
                         <audio controls :src="result.sample_voice_url"></audio>
                       </td>
@@ -78,7 +81,7 @@
                   </tbody>
                 </table>
               </div>
-              <div class="d-flex justify-content-center">
+              <div class="d-flex justify-content-center mb-5">
                 <b-pagination v-model="currentPage" :total-rows="voiceLength" :per-page="perPage" aria-controls="my-table"
                   size="sm" :hide-goto-end-buttons="true" prev-text="<" next-text=">"
                   @change="handlePageChange"></b-pagination>
@@ -225,17 +228,17 @@ export default {
   methods: {
     handlePageChange(value) {
       this.currentPage = value;
-      this.getAllvoices();
+      this.getAllVoices();
       console.log("Value: " + value);
     },
     searchKeyWord() {
       this.$store
         .dispatch("search", {
-          endpoint: "/api/v1/admin/script-type-categories",
+          endpoint: "/api/v1/admin/voices",
           keyword: this.searchKey,
         })
         .then((res) => {
-          this.searchResult = res.data.data;
+          this.searchResult = res.data.response.data;
 
           // console.log(res.data + "called now");
           //this.loading = false;
@@ -253,10 +256,10 @@ export default {
     getAllVoices() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllVoices")
+        .dispatch("getAllVoices", {number: this.currentPage, perPage: this.perPage})
         .then((res) => {
           this.voices = res.data.response.data;
-          // this.rolesLength = res.data.meta.total;
+          this.voiceLength = res.data.response.meta.total;
           console.log(res.data);
           console.log("Current Page: " + this.currentPage);
           console.log("Per Page: " + this.perPage);

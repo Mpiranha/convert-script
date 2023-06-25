@@ -105,8 +105,8 @@
                             {{ recordState }}
                           </div>
 
-                          <button class="btn btn_cancel_record">
-                            x
+                          <button class="btn btn_cancel_record" @click="cancelRecord">
+                            <img class="cancel_icon" src="@/assets/icons/close.svg" alt="clear icon">
                           </button>
 
                           <div ref="waveform" id="waveform" class="wave_form">
@@ -243,6 +243,7 @@ export default {
       category: null,
       prompts: [],
       selectedPrompt: null,
+      isCancel: false,
       recordState: "Listening",
       wavesurfer: ""
     };
@@ -375,7 +376,7 @@ export default {
 
           // We can use Float32Array instead of Uint8Array if we want higher precision
           // const dataArray = new Float32Array(bufferLength);
-         
+
 
           canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
@@ -444,11 +445,22 @@ export default {
       }
 
       this.Recorder.onstop = () => {
+        if (this.isCancel) {
+          stream.getTracks().forEach(function (track) {
+            track.stop();
+          });
+          window.cancelAnimationFrame(drawVisual);
+          this.isRecording = false;
+          this.isCancel = false;
+          return
+        }
+
         stream.getTracks().forEach(function (track) {
           track.stop();
         });
         window.cancelAnimationFrame(drawVisual);
         this.isRecording = false;
+
         let blob = new Blob(chunks);
         // var base64String;
         // var reader = new FileReader();
@@ -500,6 +512,10 @@ export default {
 
     },
     stopRecording() {
+      this.Recorder.stop();
+    },
+    cancelRecord() {
+      this.isCancel = true;
       this.Recorder.stop();
     },
     onResult(blob) {
@@ -1184,6 +1200,10 @@ export default {
 
 .btn_done {
   font-size: 1rem !important;
+}
+
+.cancel_icon {
+  width: 1rem !important;
 }
 
 @keyframes pulse {

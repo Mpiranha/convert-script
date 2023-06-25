@@ -12,11 +12,11 @@
 
                 <div class="outline_actions">
                     <button v-if="isEdit[index]" @click="toggleEdit(index)" class="btn no-shadow btn_outline_edit">
-                        <img src="@/assets/icons/edit_blog.png" alt="edit icon">
+                        <img src="@/assets/icons/edit.svg" alt="edit icon">
                     </button>
 
                     <button class="btn no-shadow btn_outline_edit" @click="deleteEvent(index)">
-                        <img src="@/assets/icons/delete_speech.png" alt="delete icon">
+                        <img src="@/assets/icons/delete.svg" alt="delete icon">
                     </button>
                 </div>
             </div>
