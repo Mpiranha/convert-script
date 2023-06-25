@@ -467,6 +467,7 @@ export default {
             this.scripts = this.scripts.concat(res.data.data);
           } else {
             this.scripts = res.data.data;
+            console.log(res.data);
             this.scriptLength = res.data.meta.total;
             this.maxPage = res.data.meta.last_page;
           }
@@ -642,6 +643,9 @@ export default {
     infiniteScroll(event) {
       let heightOfWindow = event.target.scrollHeight - event.target.offsetHeight;
       let bottomOfWindow = Math.round(event.target.scrollTop) >= heightOfWindow;
+
+      // console.log("height of window", heightOfWindow);
+      // console.log("bottom of window", bottomOfWindow);
 
       if (bottomOfWindow && this.currentPage < this.maxPage) {
         // ...

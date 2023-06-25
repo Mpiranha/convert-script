@@ -487,12 +487,12 @@ export default {
         .then((res) => {
           if (next) {
             this.nextLoading = false;
-            this.scripts = this.scripts.concat(res.data.data.data);
+            this.scripts = this.scripts.concat(res.data.data);
           } else {
             console.log(res.data);
             this.scripts = res.data.data;
-            this.scriptLength = res.data.data.meta.total;
-            this.maxPage = res.data.data.meta.last_page;
+            this.scriptLength = res.data.meta.total;
+            this.maxPage = res.data.meta.last_page;
           }
 
           this.$store.commit("updateLoadState", false);
@@ -661,6 +661,10 @@ export default {
       // console.log("inner height " + event.target.children[0].offsetHeight);
       // console.log("height " +event.target.offsetHeight);
       // console.log("height " + heightOfWindow);
+
+      // console.log("height of window", heightOfWindow);
+      // console.log("bottom of window", bottomOfWindow);
+
 
       // console.log("is bottom of window " + bottomOfWindow);
       if (bottomOfWindow && this.currentPage < this.maxPage) {
