@@ -33,6 +33,10 @@
               <div class="category-item" :class="category == null ? 'active' : ''" @click="resetCategory">
                 All Categories ({{ totalScripts }})
               </div>
+              <div class="category-item" :class="category == 'long-form' ? 'active' : ''"
+                @click="setActiveCategory('long-form')">
+                Long Form (2)
+              </div>
               <div v-for="cat in categories" :key="cat.id" class="category-item"
                 :class="category == cat.id ? 'active' : ''" @click="setActiveCategory(cat.id)">
                 {{ cat.name }} ({{ cat.scripts }})
@@ -40,12 +44,10 @@
             </div>
 
             <div v-if="searchResult.length > 0" class="row mb-5">
-              <script-select-type-box v-for="scriptType in searchResult" :key="scriptType.id" :img-url="
-                scriptType.icon
-                  ? scriptType.icon
-                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
-              " :link-url="
-  $route.params.id
+              <script-select-type-box v-for="scriptType in searchResult" :key="scriptType.id" :img-url="scriptType.icon
+                ? scriptType.icon
+                : require(`@/assets/icons/convert-icon/Aweber.svg`)
+                " :link-url="$route.params.id
     ? {
       name: 'CampaignCreateScript',
       params: {
@@ -57,16 +59,25 @@
       name: 'CreateScript',
       params: { id: scriptType.id },
     }
-" :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
+    " :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
+            </div>
+
+            <div v-else-if="category && category == 'long-form'" class="row mb-5">
+              <script-select-type-box :img-url="require(`@/assets/icons/blog 1.svg`)"
+                :link-url="{ name: 'BlogPostWriter' }" type-title="Blog Post Writer"
+                desc="Write SEO blog post that hook and educate your reader with a few input."></script-select-type-box>
+
+              <script-select-type-box :img-url="require(`@/assets/icons/book 1.svg`)" type-title="Book Writer"
+                desc="Write a well researched and detailed book for your audience." :no-link="true">
+                <div class="soon_text">Coming Soon</div>
+              </script-select-type-box>
             </div>
 
             <div v-else-if="category" class="row mb-5">
-              <script-select-type-box v-for="scriptType in filteredCategory" :key="scriptType.id" :img-url="
-                scriptType.icon
-                  ? scriptType.icon
-                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
-              " :link-url="
-  $route.params.id
+              <script-select-type-box v-for="scriptType in filteredCategory" :key="scriptType.id" :img-url="scriptType.icon
+                ? scriptType.icon
+                : require(`@/assets/icons/convert-icon/Aweber.svg`)
+                " :link-url="$route.params.id
     ? {
       name: 'CampaignCreateScript',
       params: {
@@ -78,15 +89,21 @@
       name: 'CreateScript',
       params: { id: scriptType.id },
     }
-" :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
+    " :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
             </div>
             <div v-else-if="scriptTypes && searchKey.length < 1" class="row mb-5">
-              <script-select-type-box v-for="scriptType in scriptTypes" :key="scriptType.id" :img-url="
-                scriptType.icon
-                  ? scriptType.icon
-                  : require(`@/assets/icons/convert-icon/Aweber.svg`)
-              " :link-url="
-  $route.params.id
+              <script-select-type-box :img-url="require(`@/assets/icons/blog 1.svg`)"
+                :link-url="{ name: 'BlogPostWriter' }" type-title="Blog Post Writer"
+                desc="Write SEO blog post that hook and educate your reader with a few input."></script-select-type-box>
+
+              <script-select-type-box :img-url="require(`@/assets/icons/book 1.svg`)" type-title="Book Writer"
+                desc="Write a well researched and detailed book for your audience." :no-link="true">
+                <div class="soon_text">Coming Soon</div>
+              </script-select-type-box>
+              <script-select-type-box v-for="scriptType in scriptTypes" :key="scriptType.id" :img-url="scriptType.icon
+                ? scriptType.icon
+                : require(`@/assets/icons/convert-icon/Aweber.svg`)
+                " :link-url="$route.params.id
     ? {
       name: 'CampaignCreateScript',
       params: {
@@ -98,7 +115,7 @@
       name: 'CreateScript',
       params: { id: scriptType.id },
     }
-" :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
+    " :type-title="scriptType.name" :desc="scriptType.description"></script-select-type-box>
             </div>
           </div>
         </div>
@@ -201,7 +218,7 @@ export default {
         .catch((error) => {
           console.log(error);
           //this.loading = false;
-         // this.$store.commit("updateLoadState", false);
+          // this.$store.commit("updateLoadState", false);
         });
     },
     setActiveCategory(cat) {

@@ -1785,16 +1785,27 @@ export default {
   getAllVoiceLanguages({ state }, page) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
-      axios
-        .get(
-          `${baseUrl}/api/v1/admin/voice-languages?page=${page.number}&per_page=${page.perPage}`
-        )
-        .then((resp) => {
-          resolve(resp);
-        })
-        .catch((err) => {
-          reject(err);
-        });
+      if (page) {
+        axios
+          .get(
+            `${baseUrl}/api/v1/admin/voice-languages?page=${page.number}&per_page=${page.perPage}`
+          )
+          .then((resp) => {
+            resolve(resp);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      } else {
+        axios
+          .get(`${baseUrl}/api/v1/admin/voice-languages`)
+          .then((resp) => {
+            resolve(resp);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      }
     });
   },
   addVoiceLanguage({ state }, data) {
@@ -1843,7 +1854,9 @@ export default {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .get(`${baseUrl}/api/v1/admin/voices?page=${page.number}&per_page=${page.perPage}`)
+        .get(
+          `${baseUrl}/api/v1/admin/voices?page=${page.number}&per_page=${page.perPage}`
+        )
         .then((resp) => {
           resolve(resp);
         })

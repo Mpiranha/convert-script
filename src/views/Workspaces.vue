@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid px-0">
     <div class="flex-main-wrap">
-      <sidebar :user-name="this.$store.state.user.first_name" current-active="nil"></sidebar>
+      <sidebar :user-name="this.$store.state.user.first_name" current-active="workspace"></sidebar>
       <div class="content-section">
         <navbar></navbar>
         <div class="scroll-content">

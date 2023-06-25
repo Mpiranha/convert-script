@@ -235,9 +235,6 @@
           .then((res) => {
             this.languages = res.data.response.data;
             this.languageLength = res.data.response.meta.total;
-            console.log(res.data);
-            console.log("Current Page: " + this.currentPage);
-            console.log("Per Page: " + this.perPage);
   
             this.$store.commit("updateLoadState", false);
           })

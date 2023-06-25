@@ -117,9 +117,9 @@
         <b-form-select class="form-control" v-model="voiceData.language_id" :options="language_option"></b-form-select>
       </b-form-group>
 
-      <b-form-group label="Engine">
+      <!-- <b-form-group label="Engine">
         <b-form-select class="form-control" v-model="voiceData.engine" :options="engineOption"></b-form-select>
-      </b-form-group>
+      </b-form-group> -->
 
       <b-form-group label="Description">
         <b-form-input id="voice-id" v-model="voiceData.description" type="text" class="input-table">
@@ -142,13 +142,13 @@
       </div>
 
       <div class="row">
-        <div class="col-6">
+        <!-- <div class="col-6">
           <b-form-group label="Language code">
             <b-form-input id="name" v-model="voiceData.language_code" type="text" class="input-table">
             </b-form-input>
           </b-form-group>
-        </div>
-        <div class="col-6">
+        </div> -->
+        <div class="col-12">
           <b-form-group label="Voice name code">
             <b-form-input id="name" v-model="voiceData.voice_code" type="text" class="input-table">
             </b-form-input>
@@ -204,18 +204,18 @@ export default {
       currentPage: 1,
       voiceLength: 0,
       language_option: [{ text: "Select Language", value: null }],
-      engineOption: [{ text: "Select Engine", value: null }, { text: "Standard", value: "standard" }, { text: "Neural", value: "neural" }],
+      // engineOption: [{ text: "Select Engine", value: null }, { text: "Standard", value: "standard" }, { text: "Neural", value: "neural" }],
       genderOption: [{ text: "Select Gender", value: null }, { text: "Male", value: "Male" }, { text: "Female", value: "Female" }],
       voices: [],
       voiceData: {
         name: "",
         gender: null,
         language_id: null,
-        engine: null,
+        // engine: null,
         description: "",
         pitch: "",
         speaking_rate: "",
-        language_code: "",
+        // language_code: "",
         voice_code: "",
         sample_voice_url: "",
         avatar_url: ""
@@ -256,7 +256,7 @@ export default {
     getAllVoices() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getAllVoices", {number: this.currentPage, perPage: this.perPage})
+        .dispatch("getAllVoices", { number: this.currentPage, perPage: this.perPage })
         .then((res) => {
           this.voices = res.data.response.data;
           this.voiceLength = res.data.response.meta.total;
@@ -281,13 +281,13 @@ export default {
           this.getAllVoices();
           this.voiceData = {
             name: "",
-            engine: null,
+            // engine: null,
             gender: null,
             language_id: null,
             description: "",
             pitch: "",
             speaking_rate: "",
-            language_code: "",
+            // language_code: "",
             voice_code: "",
             sample_voice_url: "",
             avatar_url: ""
@@ -315,13 +315,13 @@ export default {
           this.getAllvoices();
           this.voiceData = {
             name: "",
-            engine: null,
+            // engine: null,
             gender: null,
             language_id: null,
             description: "",
             pitch: "",
             speaking_rate: "",
-            language_code: "",
+            // language_code: "",
             voice_code: "",
             sample_voice_url: "",
             avatar_url: ""
@@ -357,11 +357,20 @@ export default {
       this.$store
         .dispatch("getAllVoiceLanguages")
         .then((res) => {
-          for (var i = 0; i < res.data.response.data.length; i++) {
+          var data = res.data.response.data.sort(function (a, b) {
+            if (a.name < b.name) {
+              return -1;
+            }
+            if (a.name > b.name) {
+              return 1;
+            }
+            return 0;
+          });
+          for (var i = 0; i < data.length; i++) {
 
             this.language_option.push({
-              text: res.data.response.data[i].name,
-              value: res.data.response.data[i].id
+              text: data[i].name,
+              value: data[i].id
             });
           }
 
@@ -380,13 +389,13 @@ export default {
 
       this.voiceData = {
         name: data.name,
-        engine: data.engine,
+        // engine: data.engine,
         gender: data.gender,
         language_id: data.language_id,
         description: data.description,
         pitch: data.pitch,
         speaking_rate: data.speaking_rate,
-        language_code: data.language_code,
+        // language_code: data.language_code,
         voice_code: data.voice_code,
         sample_voice_url: data.sample_voice_url,
         avatar_url: data.avatar_url
@@ -401,7 +410,7 @@ export default {
         description: "",
         pitch: "",
         speaking_rate: "",
-        language_code: "",
+        // language_code: "",
         voice_code: "",
         sample_voice_url: "",
         avatar_url: ""

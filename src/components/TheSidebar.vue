@@ -21,17 +21,17 @@
           <span class="nav-text"> New Copy </span>
         </router-link>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <router-link class="nav-link position-relative" :class="currentActive == 'long-form' ? 'active' : ''" to="/long-form"
           :disabled="true">
           <img class="main-icon" src="@/assets/icons/convert-icon/long-form.svg" alt="" />
           <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/New Copy Active.svg" alt="" />
           <span class="nav-text"> Long-Form </span>
-          <!-- <span class="coming-soon-text">
+          <span class="coming-soon-text">
             Coming Soon
-          </span> -->
+          </span>
         </router-link>
-      </li>
+      </li> -->
       <li class="nav-item">
         <router-link class="nav-link" :class="currentActive == 'script' ? 'active' : ''" to="/scripts">
           <img class="main-icon" src="@/assets/icons/convert-icon/All script.svg" alt="" />
@@ -115,7 +115,7 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link pl-0" :class="currentActive == 'ai-speech' ? 'active' : ''" to="/chat-ai">
+            <router-link class="nav-link pl-0" :class="currentActive == 'ai-chat' ? 'active' : ''" to="/chat-ai">
               <span class="nav-text"> Onechat AI </span>
             </router-link>
           </li>
@@ -128,13 +128,13 @@
           <span class="nav-text"> Settings </span>
         </router-link>
       </li> -->
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <router-link class="nav-link" :class="currentActive == 'tutorials' ? 'active' : ''" to="/tutorial">
           <img class="main-icon" src="@/assets/icons/convert-icon/Tutotials.svg" alt="" />
           <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Tutorials Active.svg" alt="" />
           <span class="nav-text"> Tutorials </span>
         </router-link>
-      </li>
+      </li> -->
     </nav>
     <nav class="nav flex-column nav-wrap mt-auto">
       <li class="nav-item">

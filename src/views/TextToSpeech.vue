@@ -3,7 +3,7 @@
     <loader-modal :loading-state="this.$store.state.loading" class="fullscreen-loader"></loader-modal>
     <div class="flex-main-wrap">
       <sidebar :user-name="this.$store.state.user.first_name" logo-class="permanent-logo"
-        dismiss-class="permanent-dismiss" current-active="new-copy" class="always-hidden"></sidebar>
+        dismiss-class="permanent-dismiss" current-active="ai-speech" class="always-hidden"></sidebar>
       <div class="content-section">
         <navbar script-type-name="Text to Speech" logo-link-class="hide-logo" toggle-class="permanent-toggler"></navbar>
         <div class="scroll-content script-content-fs">
