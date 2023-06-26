@@ -80,7 +80,7 @@
             </div>
 
             <div class="content-wrap word-usage-stat">
-              <div class="label">Plagiarism Checker Credit: <b>0</b></div>
+              <div class="label">Plagiarism Checker Credit: <b>{{ plagiarismPlans.active_plan[0].words }}</b></div>
 
               <div class="value ml-auto">
                 <button class="btn btn-one px-3" v-b-modal.modal-new-credit>

@@ -84,7 +84,7 @@
                           role: result.role,
                           email: result.email,
                         })
-                      " @delete-proceed="deleteUser(result.id)" delete-what="User">
+                        " @delete-proceed="deleteUser(result.id)" delete-what="User">
                       </dropdown-tool>
                     </td>
                   </tr>
@@ -123,7 +123,7 @@
                           email: user.email,
 
                         })
-                      " @delete-proceed="deleteUser(user.id)" delete-what="User">
+                        " @delete-proceed="deleteUser(user.id)" delete-what="User">
                         <!-- <template v-slot:secondary>
                         <b-dropdown-item
                           v-b-modal.modal-campaign
@@ -143,7 +143,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center mb-5">
               <b-pagination v-model="currentPage" :total-rows="userLength" :per-page="perPage" aria-controls="my-table"
                 size="sm" :hide-goto-end-buttons="true" prev-text="<" next-text=">" @change="handlePageChange">
               </b-pagination>
@@ -175,13 +175,17 @@
       </div>
 
       <b-form-group label="Email">
-        <b-form-input id="email" v-model="userData.email" type="text" class="input-table">
+        <b-form-input autocomplete="off" id="email" v-model="userData.email" type="text" class="input-table">
         </b-form-input>
       </b-form-group>
 
       <b-form-group label="Password">
-        <b-form-input id="password" v-model="userData.password" type="password" class="input-table">
+        <b-form-input autocomplete="off" id="password" v-model="userData.password" type="password" class="input-table">
         </b-form-input>
+      </b-form-group>
+
+      <b-form-group label="Plagiarism Credit">
+        <b-form-select v-model="userData.plagiarism_id" :options="optionsPlagiarism"></b-form-select>
       </b-form-group>
 
       <b-form-group label="Role">
@@ -279,10 +283,14 @@ export default {
         role: null,
         email: "",
         password: "",
+        plagiarism_id: null,
       },
       error: "",
       triggerEdit: false,
       editId: null,
+      optionsPlagiarism: [
+        { value: null, text: "Select" }
+      ],
       optionsRole: [
         { value: null, text: "Select a Role" },
         { value: "recurring", text: "RECURRING" },
@@ -383,6 +391,31 @@ export default {
           console.log(error);
           //this.loading = false;
           this.$store.commit("updateLoadState", false);
+        });
+    },
+    getPlagiarism() {
+
+      this.$store
+        .dispatch("getAllPlagiarismCredits", this.tempRole)
+        .then((res) => {
+          res.data.response.data.forEach((credit) => {
+            this.optionsPlagiarism.push({
+              text: credit.words,
+              value: credit.id,
+            });
+          });
+
+
+
+
+        })
+        .catch((error) => {
+          // // console.log(error);
+          // this.error = error.response.data.errors.root;
+          // // this.error = error;
+          console.log(error);
+          //this.loading = false;
+
         });
     },
     getPlanType(plan) {
@@ -490,6 +523,7 @@ export default {
             role: null,
             email: "",
             password: "",
+            plagiarism_id: null
           };
           this.makeToast("success", "User added successfully");
           this.$store.commit("updateLoadState", false);
@@ -525,6 +559,7 @@ export default {
             role: null,
             email: "",
             password: "",
+            plagiarism_id: null,
           };
           this.makeToast("success", "User edited successfully");
           this.$store.commit("updateLoadState", false);
@@ -562,6 +597,8 @@ export default {
       this.editId = id;
       this.userData.last_name = data.last_name;
       this.userData.first_name = data.first_name;
+      this.userData.plagiarism_id = data.plagiarism_id;
+
       // this.userData.role = data.role;
       // this.userData.plan = data.plan;
       console.log(data);
@@ -586,6 +623,7 @@ export default {
         role: null,
         email: "",
         password: "",
+        plagiarism_id: null,
       };
       this.selectedPlans = [];
       this.selectedPlansStringify = [];
@@ -616,6 +654,7 @@ export default {
 
   mounted() {
     this.getAllUsers();
+    this.getPlagiarism();
     // this.getSharedPlans();
   },
   computed: {},
