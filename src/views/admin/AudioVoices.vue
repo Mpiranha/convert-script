@@ -355,7 +355,7 @@ export default {
     },
     getAllLanguages() {
       this.$store
-        .dispatch("getAllVoiceLanguages")
+        .dispatch("getAllVoiceLanguages", {number: 1, perPage: 56})
         .then((res) => {
           var data = res.data.response.data.sort(function (a, b) {
             if (a.name < b.name) {
