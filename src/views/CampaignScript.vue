@@ -256,6 +256,7 @@ export default {
   },
   data() {
     return {
+      workspace_id: this.$store.state.user.default_workspace_id,
       isEdit: false,
       loading: false,
       nextLoading: false,
@@ -314,7 +315,7 @@ export default {
     getCampaign() {
       // this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getCampaigns")
+        .dispatch("getCampaigns", this.workspace_id)
         .then((res) => {
           let data = res.data.data;
           for (let index = 0; index < data.length; index++) {
@@ -406,7 +407,9 @@ export default {
           id: id, page: {
             number: this.currentPage,
             perPage: this.perPage,
-          }
+
+          },
+          workspace_id: this.workspace_id
         })
         .then((res) => {
           if (next) {
@@ -429,7 +432,7 @@ export default {
     deleteScript(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deleteScript", id)
+        .dispatch("deleteScript", { id: id, workspace_id: this.workspace_id })
         .then((res) => {
           this.error = null;
           this.getCampaignData(this.$route.params.id);

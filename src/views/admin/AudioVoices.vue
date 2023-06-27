@@ -205,7 +205,7 @@ export default {
       voiceLength: 0,
       language_option: [{ text: "Select Language", value: null }],
       // engineOption: [{ text: "Select Engine", value: null }, { text: "Standard", value: "standard" }, { text: "Neural", value: "neural" }],
-      genderOption: [{ text: "Select Gender", value: null }, { text: "Male", value: "Male" }, { text: "Female", value: "Female" }],
+      genderOption: [{ text: "Select Gender", value: null }, { text: "MALE", value: "MALE" }, { text: "FEMALE", value: "FEMALE" }],
       voices: [],
       voiceData: {
         name: "",
@@ -330,9 +330,15 @@ export default {
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.response);
-          this.error = error.response.data.message;
-          this.makeToast("danger", this.error);
+          this.error = error.response.data.error;
+          for (const key in this.error) {
+            if (Object.hasOwnProperty.call(this.error, key)) {
+              console.log(this.error[key]);
+              console.log(key);
+              this.makeToast("danger", this.error[key]);
+            }
+          }
+        
           this.$store.commit("updateLoadState", false);
         });
     },
@@ -355,7 +361,7 @@ export default {
     },
     getAllLanguages() {
       this.$store
-        .dispatch("getAllVoiceLanguages", {number: 1, perPage: 56})
+        .dispatch("getAllVoiceLanguages", { number: 1, perPage: 56 })
         .then((res) => {
           var data = res.data.response.data.sort(function (a, b) {
             if (a.name < b.name) {
