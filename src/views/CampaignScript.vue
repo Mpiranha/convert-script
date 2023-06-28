@@ -393,7 +393,12 @@ export default {
 
         })
         .catch((error) => {
-          console.log(error);
+          this.error = error.response.data.error;
+          for (const key in this.error) {
+            if (Object.hasOwnProperty.call(this.error, key)) {
+              this.makeToast("danger", this.error[key]);
+            }
+          }
 
         });
     },
@@ -414,18 +419,22 @@ export default {
         .then((res) => {
           if (next) {
             this.nextLoading = false;
-            this.campaign.scripts = this.campaign.scripts.concat(res.data.data.scripts)
+            this.campaign.scripts = this.campaign.scripts.concat(res.data.data[0].scripts)
           } else {
-            this.campaign = res.data.data;
-            this.maxPage = Math.ceil(res.data.data.scripts_count / this.perPage);
+            this.campaign = res.data.data[0];
+            this.maxPage = Math.ceil(res.data.data[0].scripts_count / this.perPage);
 
           }
 
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error);
-          //this.loading = false;
+          this.error = error.response.data.error;
+          for (const key in this.error) {
+            if (Object.hasOwnProperty.call(this.error, key)) {
+              this.makeToast("danger", this.error[key]);
+            }
+          }
           this.$store.commit("updateLoadState", false);
         });
     },
@@ -441,9 +450,12 @@ export default {
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error);
-          this.error = error;
-          this.makeToast("danger", this.error);
+          this.error = error.response.data.error;
+          for (const key in this.error) {
+            if (Object.hasOwnProperty.call(this.error, key)) {
+              this.makeToast("danger", this.error[key]);
+            }
+          }
           this.$store.commit("updateLoadState", false);
           // this.error = error;
         });
@@ -474,7 +486,7 @@ export default {
           this.loading = false;
         })
         .catch((error) => {
-          console.log(error);
+         
           this.error = error.response.data.data.error;
           this.loading = false;
           this.makeToast("danger", this.error);

@@ -50,8 +50,15 @@
                           <label for="">Voice</label>
                           <div class="component-container">
                             <div class="component__select" @click="showOptions = !showOptions">
-                              <span class="component__select--name">{{ voiceValue ? voiceValue : 'Select Voice'
-                              }}</span>
+                              <div class="selected_group">
+                                <img v-if="voiceValue.avatar" class="voice_icon" :src="voiceValue.avatar"
+                                  alt="voice icon">
+                                <span class="component__select--name">
+                                  {{ voiceValue.name ? voiceValue.name : 'Select Voice'
+                                  }}</span><br>
+                                <span class="component__select--desc">{{ voiceValue.desc ? voiceValue.desc : ''
+                                }}</span>
+                              </div>
 
                               <img src="@/assets/icons/down.png" class="c-arrow-down" v-if="!showOptions">
                               <img src="@/assets/icons/up.png" class="c-arrow-up" v-if="showOptions">
@@ -67,7 +74,7 @@
                                   <div class="voice_details">
                                     <div class="voice_name">{{ option.detail.name }} ({{ option.detail.gender.charAt(0)
                                     }})</div>
-                                    <!-- <div class="voice_desc">English (US) - Middle-Aged - Cheerful, Conversational</div> -->
+                                    <div class="voice_desc">{{ option.detail.description }}</div>
                                   </div>
                                   <button class="btn no-shadow btn_play_voice">
                                     <img src="@/assets/icons/play.svg" alt="play icon">
@@ -86,7 +93,7 @@
                                   <div class="voice_details">
                                     <div class="voice_name">{{ option.detail.name }} ({{ option.detail.gender.charAt(0)
                                     }})</div>
-                                    <!-- <div class="voice_desc">English (US) - Middle-Aged - Cheerful, Conversational</div> -->
+                                    <div class="voice_desc">{{ option.detail.description }}</div>
                                   </div>
                                   <button class="btn no-shadow btn_play_voice">
                                     <img src="@/assets/icons/play.svg" alt="play icon">
@@ -274,7 +281,7 @@ export default {
       sectionsAudio: [],
       sectionAudioIsPlaying: [],
       audioIsPlaying: false,
-      voiceValue: null,
+      voiceValue: { avatar: null, name: null, desc: null },
       generatedAudio: [{}],
       genAudioWordCount: 0,
       genAudioDur: 0.0,
@@ -464,7 +471,9 @@ export default {
     },
     selectOption(option) {
       this.speechData.voice_id = option.value;
-      this.voiceValue = option.text + " (" + option.detail.gender.charAt(0) + ")";
+      this.voiceValue.name = option.text + " (" + option.detail.gender.charAt(0) + ")";
+      this.voiceValue.desc = option.detail.description;
+      this.voiceValue.avatar = option.detail.avatar_url;
       this.showOptions = false;
     },
     openEditModal(id, data) {
@@ -751,6 +760,7 @@ export default {
   height: 350px;
   overflow-y: auto;
   z-index: 9;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.08);
 }
 
 .select--option {

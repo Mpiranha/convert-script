@@ -305,6 +305,7 @@ export default {
     editVoice(id) {
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-voice");
+
       this.$store
         .dispatch("editVoice", {
           id: id,
@@ -312,7 +313,7 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          this.getAllvoices();
+          this.getAllVoices();
           this.voiceData = {
             name: "",
             // engine: null,
@@ -326,19 +327,17 @@ export default {
             sample_voice_url: "",
             avatar_url: ""
           };
-          this.makeToast("success", "voice edited successfully");
+          this.makeToast("success", res.data.message);
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           this.error = error.response.data.error;
           for (const key in this.error) {
             if (Object.hasOwnProperty.call(this.error, key)) {
-              console.log(this.error[key]);
-              console.log(key);
               this.makeToast("danger", this.error[key]);
             }
           }
-        
+
           this.$store.commit("updateLoadState", false);
         });
     },

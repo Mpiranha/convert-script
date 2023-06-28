@@ -79,7 +79,7 @@
 
                       <div class="d-flex justify-content-between mt-auto mb-3 px-4">
 
-                        <button class="btn close-modal px-4 py-3" @click="goBacktoSubSection">Go Back</button>
+                        <button class="btn close-modal px-4 py-3" @click="goBackToOutline">Go Back</button>
 
 
 
@@ -179,7 +179,7 @@
 
                         </div>
 
-                        <div v-if="!isEmpty(generatedSubsection)" class="d-flex justify-content-end mt-auto mb-3">
+                        <!-- <div v-if="!isEmpty(generatedSubsection)" class="d-flex justify-content-end mt-auto mb-3">
 
                           <button class="btn close-modal px-4 py-3" @click="goBackToOutline">Go Back</button>
 
@@ -189,13 +189,13 @@
                             Write Blog Post
                           </button>
 
-                        </div>
-                        <div v-else-if="generatedOutlines.length > 0"
+                        </div> -->
+                        <div v-if="generatedOutlines.length > 0"
                           class="d-flex justify-content-end mt-auto mb-3 blog-loader">
-                          <loader-modal :loading-state="generatingSubsection"></loader-modal>
-                          <button :disabled="generatingSubsection ? 'disabled' : false" class="btn btn-one px-4 py-3"
-                            @click="fromOutlineGenerateSubsection">
-                            Expand Outlines
+                          <!-- <loader-modal :loading-state="ge"></loader-modal> -->
+                          <button class="btn btn-one px-4 py-3"
+                            @click="fromOutlineGenPost">
+                            Write Blog Post
                           </button>
                         </div>
 
@@ -230,13 +230,13 @@
                         class="mb-3 script-editor blog_post_editor" v-model="generatedPost" :options="editorOption">
 
                       </quill-editor>
-                      <div v-else-if="!isEmpty(generatedSubsection)" class="outline_subsection_list_wrap">
+                      <!-- <div v-else-if="!isEmpty(generatedSubsection)" class="outline_subsection_list_wrap">
                         <blog-post-outline-subsection v-for="(subsection, index) in generatedSubsection" :key="index"
                           :outline-title="index" :sub-section="subsection"
                           @delete-clicked="deleteSubsection($event, index)" @add-point="addSubsection(index)"
                           @gen-point="newSubsection(index)"
                           @input="updateSubsection($event, index)"></blog-post-outline-subsection>
-                      </div>
+                      </div> -->
                       <div v-else class="outline_list_wrap">
                         <div class="outline_wraps">
                           <blog-post-outline @delete-clicked="deleteOutline($event, outline)"
@@ -297,7 +297,7 @@ import Navbar from "@/components/TheNav.vue";
 import { required, minLength } from "vuelidate/lib/validators";
 import alertMixin from "@/mixins/alertMixin";
 import BlogPostOutline from '@/components/BlogPostOutline';
-import BlogPostOutlineSubsection from '@/components/BlogPostOutlineSubsection';
+// import BlogPostOutlineSubsection from '@/components/BlogPostOutlineSubsection';
 import { quillEditor } from "vue-quill-editor";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
@@ -310,7 +310,7 @@ export default {
     Sidebar,
     Navbar,
     BlogPostOutline,
-    BlogPostOutlineSubsection,
+    // BlogPostOutlineSubsection,
     quillEditor
   },
   mixins: [alertMixin],
@@ -378,7 +378,12 @@ export default {
   },
   methods: {
     goBackToOutline() {
-      this.generatedSubsection = {};
+      // this.generatedSubsection = {};
+      this.generatingBlogPost = false;
+      this.generatedPost = "";
+      this.postLoading = false;
+      this.generatedPostRaw = "";
+      this.headingCount = 0;
     },
     goBacktoSubSection() {
       this.generatingBlogPost = false;
@@ -831,15 +836,15 @@ export default {
   computed: {
     arrayOfSubsections() {
       var arr = [];
-      for (const key in this.generatedSubsection) {
-        if (Object.hasOwnProperty.call(this.generatedSubsection, key)) {
-          // arr.push({ title: this.generatedSubsection[key] });
-          for (var i = 0; i < this.generatedSubsection[key].length; i++) {
-            arr.push({ title: this.generatedSubsection[key][i] })
+      // for (const key in this.generatedOutlines) {
+      //   if (Object.hasOwnProperty.call(this.generatedOutlines, key)) {
+        //  arr.push({ title: this.generatedSubsection[key] });
+          for (var i = 0; i < this.generatedOutlines.length; i++) {
+            arr.push({ title: this.generatedOutlines[i] })
           }
 
-        }
-      }
+       // }
+     // }
 
       return arr;
     },

@@ -292,7 +292,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error = error;
+          this.error = error.response.data.errors.name;
           this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error.response.data.errors.root;
@@ -326,7 +326,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error = error;
+          this.error = error.response.data.errors.name;
           this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error;
@@ -345,7 +345,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error = error;
+          this.error = error.response.data.errors;
           this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
           // this.error = error;
