@@ -516,8 +516,8 @@ export default {
           this.loading.splice(index, 1, false);
         })
         .catch((error) => {
-          console.log(error.response);
-          this.error = error.response.data.error;
+        
+          this.error = error.response.data.message;
           this.makeToast("danger", this.error);
           this.loading.splice(index, 1, false);
         });

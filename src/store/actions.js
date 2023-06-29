@@ -1882,7 +1882,7 @@ export default {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
-        .put(`${baseUrl}/api/v1/admin/voice/${id}`, data)
+        .post(`${baseUrl}/api/v1/admin/voice/${id}`, data)
         .then((resp) => {
           resolve(resp);
         })

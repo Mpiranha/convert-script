@@ -94,7 +94,7 @@ export default {
             console.log(error);
             _this.$store.commit("updateLoadState", false);
           });
-      }, 2000);
+      }, 3000);
 
     },
   },

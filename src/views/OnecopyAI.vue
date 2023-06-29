@@ -616,8 +616,7 @@ export default {
 
         })
         .catch((error) => {
-          console.log(error);
-          this.error = error;
+          this.error = error.response.data.message;
           this.makeToast("danger", this.error);
           // this.error = error.response.data.errors.root;
           // this.error = error;
@@ -830,6 +829,11 @@ export default {
     }
   },
   mounted() {
+    this.$refs.chatDiv.addEventListener("paste", function (e) {
+      e.preventDefault();
+      var text = e.clipboardData.getData('text/plain');
+      document.execCommand('insertText', false, text);
+    });
     // this.getCampaign();
     // this.getScriptType(this.$route.params.id);
     // this.getScriptData(this.$route.params.id);
@@ -840,6 +844,7 @@ export default {
 
     //this.isRecording = true;
     this.animateRecordState();
+
 
 
 

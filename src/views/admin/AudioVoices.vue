@@ -162,14 +162,26 @@
         </b-form-file>
       </b-form-group> -->
 
-      <b-form-group label="Upload Voice Sample">
+      <!-- <b-form-group label="Upload Voice Sample">
         <b-form-input id="voice-id" v-model="voiceData.sample_voice_url" type="text" class="input-table">
         </b-form-input>
+      </b-form-group> -->
+
+      <b-form-group label="Upload Voice Sample">
+        <b-form-file v-model="voiceData.sample_voice_url" :state="Boolean(voiceData.sample_voice_url)"
+          placeholder="Choose a file or drop it here..." drop-placeholder="Drop file here...">
+        </b-form-file>
       </b-form-group>
 
-      <b-form-group label="Voice Avatar Photo">
+      <!-- <b-form-group label="Voice Avatar Photo">
         <b-form-input id="voice-id" v-model="voiceData.avatar_url" type="text" class="input-table">
         </b-form-input>
+      </b-form-group> -->
+
+      <b-form-group label="Voice Avatar Photo">
+        <b-form-file v-model="voiceData.avatar_url" :state="Boolean(voiceData.avatar_url)"
+          placeholder="Choose a file or drop it here..." drop-placeholder="Drop file here...">
+        </b-form-file>
       </b-form-group>
 
       <div class="d-flex justify-content-end">
@@ -217,8 +229,8 @@ export default {
         speaking_rate: "",
         // language_code: "",
         voice_code: "",
-        sample_voice_url: "",
-        avatar_url: ""
+        sample_voice_url: null,
+        avatar_url: null
       },
       error: "",
       triggerEdit: false,
@@ -260,9 +272,6 @@ export default {
         .then((res) => {
           this.voices = res.data.response.data;
           this.voiceLength = res.data.response.meta.total;
-          console.log(res.data);
-          console.log("Current Page: " + this.currentPage);
-          console.log("Per Page: " + this.perPage);
 
           this.$store.commit("updateLoadState", false);
         })
@@ -272,10 +281,25 @@ export default {
         });
     },
     addVoice() {
+      const formData = new FormData();
+
+      //formData.append("file", e.target.files[0]);
+      formData.append("name", this.voiceData.name);
+      formData.append("gender", this.voiceData.gender);
+      formData.append("language_id", this.voiceData.language_id);
+      formData.append("description", this.voiceData.description);
+      formData.append("pitch", this.voiceData.pitch);
+      formData.append("speaking_rate", this.voiceData.speaking_rate);
+      formData.append("voice_code", this.voiceData.voice_code);
+      formData.append("sample_voice_url", this.voiceData.sample_voice_url);
+      formData.append("avatar_url", this.voiceData.avatar_url);
+
+
+
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-voice");
       this.$store
-        .dispatch("addVoice", this.voiceData)
+        .dispatch("addVoice", formData)
         .then(() => {
 
           this.getAllVoices();
@@ -289,8 +313,8 @@ export default {
             speaking_rate: "",
             // language_code: "",
             voice_code: "",
-            sample_voice_url: "",
-            avatar_url: ""
+            sample_voice_url: null,
+            avatar_url: null
           };
           this.makeToast("success", "voice added successfully");
           this.$store.commit("updateLoadState", false);
@@ -303,13 +327,25 @@ export default {
         });
     },
     editVoice(id) {
+      const formData = new FormData();
+
+      //formData.append("file", e.target.files[0]);
+      formData.append("name", this.voiceData.name);
+      formData.append("gender", this.voiceData.gender);
+      formData.append("language_id", this.voiceData.language_id);
+      formData.append("description", this.voiceData.description);
+      formData.append("pitch", this.voiceData.pitch);
+      formData.append("speaking_rate", this.voiceData.speaking_rate);
+      formData.append("voice_code", this.voiceData.voice_code);
+      formData.append("sample_voice_url", this.voiceData.sample_voice_url);
+      formData.append("avatar_url", this.voiceData.avatar_url);
       this.$store.commit("updateLoadState", true);
       this.$bvModal.hide("modal-new-voice");
 
       this.$store
         .dispatch("editVoice", {
           id: id,
-          data: this.voiceData,
+          data: formData,
         })
         .then((res) => {
           console.log(res);
@@ -324,8 +360,8 @@ export default {
             speaking_rate: "",
             // language_code: "",
             voice_code: "",
-            sample_voice_url: "",
-            avatar_url: ""
+            sample_voice_url: null,
+            avatar_url: null
           };
           this.makeToast("success", res.data.message);
           this.$store.commit("updateLoadState", false);
@@ -402,8 +438,8 @@ export default {
         speaking_rate: data.speaking_rate,
         // language_code: data.language_code,
         voice_code: data.voice_code,
-        sample_voice_url: data.sample_voice_url,
-        avatar_url: data.avatar_url
+        sample_voice_url: null,
+        avatar_url: null
       }
     },
     clearField() {
@@ -417,8 +453,8 @@ export default {
         speaking_rate: "",
         // language_code: "",
         voice_code: "",
-        sample_voice_url: "",
-        avatar_url: ""
+        sample_voice_url: null,
+        avatar_url: null
       };
       this.triggerEdit = false;
     },

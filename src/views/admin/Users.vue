@@ -185,7 +185,8 @@
       </b-form-group>
 
       <b-form-group label="Plagiarism Credit">
-        <b-form-select v-model="userData.plagiarism_id" :options="optionsPlagiarism"></b-form-select>
+        <b-form-input id="plagiarism_credit" v-model="userData.plagiarism_credit" type="text" class="input-table">
+        </b-form-input>
       </b-form-group>
 
       <b-form-group label="Role">
@@ -283,7 +284,7 @@ export default {
         role: null,
         email: "",
         password: "",
-        plagiarism_id: null,
+        plagiarism_credit: null,
       },
       error: "",
       triggerEdit: false,
@@ -523,7 +524,7 @@ export default {
             role: null,
             email: "",
             password: "",
-            plagiarism_id: null
+            plagiarism_credit: null
           };
           this.makeToast("success", "User added successfully");
           this.$store.commit("updateLoadState", false);
@@ -559,7 +560,7 @@ export default {
             role: null,
             email: "",
             password: "",
-            plagiarism_id: null,
+            plagiarism_credit: null,
           };
           this.makeToast("success", "User edited successfully");
           this.$store.commit("updateLoadState", false);
@@ -597,7 +598,7 @@ export default {
       this.editId = id;
       this.userData.last_name = data.last_name;
       this.userData.first_name = data.first_name;
-      this.userData.plagiarism_id = data.plagiarism_id;
+      this.userData.plagiarism_credit = data.plagiarism_credit;
 
       // this.userData.role = data.role;
       // this.userData.plan = data.plan;
@@ -623,7 +624,7 @@ export default {
         role: null,
         email: "",
         password: "",
-        plagiarism_id: null,
+        plagiarism_credit: null,
       };
       this.selectedPlans = [];
       this.selectedPlansStringify = [];
