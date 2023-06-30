@@ -71,7 +71,7 @@
                             <ul class="component__select-options" v-if="showOptions">
                               <div v-if="gender">
                                 <li class="select--option" v-for="(option, index) in filteredVoiceGender" :key="index"
-                                  @click="selectOption(option)">
+                                 >
                                   <img v-if="option.detail.avatar_url" class="voice_icon" :src="option.detail.avatar_url"
                                     alt="voice icon">
                                   <img v-else class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
@@ -85,6 +85,8 @@
                                     @click="playTestAudio('testAudio' + index)">
                                     <img src="@/assets/icons/play.svg" alt="play icon">
                                   </button>
+
+                                  <button class="btn btn_select__item"  @click="selectOption(option)">Select</button>
                                   <audio :ref="'testAudio' + index" hidden :src="option.detail.sample_voice_url"></audio>
                                   <!-- <label> <input type="checkbox" :value="option" /> {{ option.text }}</label> -->
                                 </li>
@@ -105,6 +107,7 @@
                                     @click="playTestAudio('testAudio' + index)">
                                     <img src="@/assets/icons/play.svg" alt="play icon">
                                   </button>
+                                  <button class="btn btn-one btn_select__item"  @click="selectOption(option)">Select</button>
                                   <audio :ref="'testAudio' + index" hidden :src="option.detail.sample_voice_url"></audio>
                                   <!-- <label> <input type="checkbox" :value="option" /> {{ option.text }}</label> -->
                                 </li>
@@ -490,7 +493,7 @@ export default {
       this.voiceValue.name = option.text + " (" + option.detail.gender.charAt(0) + ")";
       this.voiceValue.desc = option.detail.description;
       this.voiceValue.avatar = option.detail.avatar_url;
-      //this.showOptions = false;
+      this.showOptions = false;
     },
     openEditModal(id, data) {
       this.$bvModal.show("modal-edit-script");
@@ -805,6 +808,7 @@ export default {
 .btn_play_voice {
   margin-left: auto;
   padding: 0 !important;
+  margin-right: 1rem;
 }
 
 .btn_play_voice img {
@@ -988,6 +992,10 @@ export default {
   display: flex;
   align-items: center;
 }
+
+.btn_select__item {
+  color: #fff;
+} 
 
 
 @media screen and (max-width: 768px) {
