@@ -51,13 +51,18 @@
                           <div class="component-container">
                             <div class="component__select" @click="showOptions = !showOptions">
                               <div class="selected_group">
-                                <img v-if="voiceValue.avatar" class="voice_icon" :src="voiceValue.avatar"
-                                  alt="voice icon">
-                                <span class="component__select--name">
-                                  {{ voiceValue.name ? voiceValue.name : 'Select Voice'
-                                  }}</span><br>
-                                <span class="component__select--desc">{{ voiceValue.desc ? voiceValue.desc : ''
-                                }}</span>
+                                <div class="selected_group_inner">
+                                  <img v-if="voiceValue.avatar" class="voice_icon" :src="voiceValue.avatar"
+                                    alt="voice icon">
+                                  <div>
+                                    <span class="component__select--name">
+                                      {{ voiceValue.name ? voiceValue.name : 'Select Voice'
+                                      }}</span>
+                                    <br>
+                                    <span class="component__select--desc">{{ voiceValue.desc ? voiceValue.desc : ''
+                                    }}</span>
+                                  </div>
+                                </div>
                               </div>
 
                               <img src="@/assets/icons/down.png" class="c-arrow-down" v-if="!showOptions">
@@ -67,8 +72,8 @@
                               <div v-if="gender">
                                 <li class="select--option" v-for="(option, index) in filteredVoiceGender" :key="index"
                                   @click="selectOption(option)">
-                                  <img v-if="option.detail.avatar_url" class="voice_icon"
-                                    src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png" alt="voice icon">
+                                  <img v-if="option.detail.avatar_url" class="voice_icon" :src="option.detail.avatar_url"
+                                    alt="voice icon">
                                   <img v-else class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
                                     alt="voice icon">
                                   <div class="voice_details">
@@ -76,18 +81,19 @@
                                     }})</div>
                                     <div class="voice_desc">{{ option.detail.description }}</div>
                                   </div>
-                                  <button class="btn no-shadow btn_play_voice">
+                                  <button class="btn no-shadow btn_play_voice"
+                                    @click="playTestAudio('testAudio' + index)">
                                     <img src="@/assets/icons/play.svg" alt="play icon">
                                   </button>
-                                  <audio hidden src=""></audio>
+                                  <audio :ref="'testAudio' + index" hidden :src="option.detail.sample_voice_url"></audio>
                                   <!-- <label> <input type="checkbox" :value="option" /> {{ option.text }}</label> -->
                                 </li>
                               </div>
                               <div v-else>
                                 <li class="select--option" v-for="(option, index) in filteredVoiceLanguage" :key="index"
                                   @click="selectOption(option)">
-                                  <img v-if="option.detail.avatar_url" class="voice_icon"
-                                    src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png" alt="voice icon">
+                                  <img v-if="option.detail.avatar_url" class="voice_icon" :src="option.detail.avatar_url"
+                                    alt="voice icon">
                                   <img v-else class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
                                     alt="voice icon">
                                   <div class="voice_details">
@@ -95,10 +101,11 @@
                                     }})</div>
                                     <div class="voice_desc">{{ option.detail.description }}</div>
                                   </div>
-                                  <button class="btn no-shadow btn_play_voice">
+                                  <button class="btn no-shadow btn_play_voice"
+                                    @click="playTestAudio('testAudio' + index)">
                                     <img src="@/assets/icons/play.svg" alt="play icon">
                                   </button>
-                                  <audio hidden src=""></audio>
+                                  <audio :ref="'testAudio' + index" hidden :src="option.detail.sample_voice_url"></audio>
                                   <!-- <label> <input type="checkbox" :value="option" /> {{ option.text }}</label> -->
                                 </li>
                               </div>
@@ -310,6 +317,15 @@ export default {
     },
   },
   methods: {
+    playTestAudio(ref) {
+      var allAudios = document.querySelectorAll('audio');
+      allAudios.forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+        
+      });
+      this.$refs[ref][0].play();
+    },
     moveUp(index) {
       if (index === 0) {
         return;
@@ -474,7 +490,7 @@ export default {
       this.voiceValue.name = option.text + " (" + option.detail.gender.charAt(0) + ")";
       this.voiceValue.desc = option.detail.description;
       this.voiceValue.avatar = option.detail.avatar_url;
-      this.showOptions = false;
+      //this.showOptions = false;
     },
     openEditModal(id, data) {
       this.$bvModal.show("modal-edit-script");
@@ -516,7 +532,7 @@ export default {
           this.loading.splice(index, 1, false);
         })
         .catch((error) => {
-        
+
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
           this.loading.splice(index, 1, false);
@@ -728,7 +744,7 @@ export default {
   color: #495057;
   padding: 0.35rem 0.75rem !important;
   border-radius: 0.25rem;
-  height: calc(2em + 0.75rem + 2px);
+  height: calc(2em + 0.75rem + 17px);
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
@@ -966,6 +982,11 @@ export default {
   background-color: #fff !important;
   padding: 0.5rem 0.75rem !important;
   margin-top: 1rem;
+}
+
+.selected_group_inner {
+  display: flex;
+  align-items: center;
 }
 
 
