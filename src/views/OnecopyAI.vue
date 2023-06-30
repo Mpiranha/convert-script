@@ -909,7 +909,7 @@ export default {
 .chat_history_main_wrap {
   height: calc(100% - 71px);
   padding: 2rem 0.9rem;
-
+  overflow-y: auto;
 }
 
 .history_title {
