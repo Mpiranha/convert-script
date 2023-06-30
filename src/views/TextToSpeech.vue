@@ -751,6 +751,7 @@ export default {
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
+  background-color: #fff;
 }
 
 .c-arrow-down {
