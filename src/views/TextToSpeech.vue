@@ -93,7 +93,7 @@
                               </div>
                               <div v-else>
                                 <li class="select--option" v-for="(option, index) in filteredVoiceLanguage" :key="index"
-                                  @click="selectOption(option)">
+                                  >
                                   <img v-if="option.detail.avatar_url" class="voice_icon" :src="option.detail.avatar_url"
                                     alt="voice icon">
                                   <img v-else class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
