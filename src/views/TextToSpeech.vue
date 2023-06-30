@@ -86,7 +86,7 @@
                                     <img src="@/assets/icons/play.svg" alt="play icon">
                                   </button>
 
-                                  <button class="btn btn_select__item"  @click="selectOption(option)">Select</button>
+                                  <button class="btn btn-one btn_select__item"  @click="selectOption(option)">Select</button>
                                   <audio :ref="'testAudio' + index" hidden :src="option.detail.sample_voice_url"></audio>
                                   <!-- <label> <input type="checkbox" :value="option" /> {{ option.text }}</label> -->
                                 </li>
