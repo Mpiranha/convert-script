@@ -776,7 +776,7 @@ export default {
   position: absolute;
   width: 100%;
   top: 115%;
-  height: 350px;
+  max-height: 350px;
   overflow-y: auto;
   z-index: 9;
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.08);
