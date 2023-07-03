@@ -49,7 +49,8 @@
                         <div class="form-group">
                           <label for="">Voice</label>
                           <div class="component-container">
-                            <div class="component__select" @click="showOptions = !showOptions">
+                            <div class="component__select" :disabled="speechData.language_id ? false : 'disabled'"
+                              @click="speechData.language_id ? showOptions = !showOptions : showOptions = false">
                               <div class="selected_group">
                                 <div class="selected_group_inner">
                                   <img v-if="voiceValue.avatar" class="voice_icon" :src="voiceValue.avatar"
@@ -70,8 +71,7 @@
                             </div>
                             <ul class="component__select-options" v-if="showOptions">
                               <div v-if="gender">
-                                <li class="select--option" v-for="(option, index) in filteredVoiceGender" :key="index"
-                                 >
+                                <li class="select--option" v-for="(option, index) in filteredVoiceGender" :key="index">
                                   <img v-if="option.detail.avatar_url" class="voice_icon" :src="option.detail.avatar_url"
                                     alt="voice icon">
                                   <img v-else class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
@@ -86,35 +86,14 @@
                                     <img src="@/assets/icons/play.svg" alt="play icon">
                                   </button>
 
-                                  <button class="btn btn-one btn_select__item"  @click="selectOption(option)">Select</button>
-                                  <audio :ref="'testAudio' + index" hidden :src="option.detail.sample_voice_url"></audio>
-                                  <!-- <label> <input type="checkbox" :value="option" /> {{ option.text }}</label> -->
-                                </li>
-                              </div>
-                              <div v-else-if="filteredVoiceLanguage.length > 0">
-                                <li class="select--option" v-for="(option, index) in filteredVoiceLanguage" :key="index"
-                                  >
-                                  <img v-if="option.detail.avatar_url" class="voice_icon" :src="option.detail.avatar_url"
-                                    alt="voice icon">
-                                  <img v-else class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
-                                    alt="voice icon">
-                                  <div class="voice_details">
-                                    <div class="voice_name">{{ option.detail.name }} ({{ option.detail.gender.charAt(0)
-                                    }})</div>
-                                    <div class="voice_desc">{{ option.detail.description }}</div>
-                                  </div>
-                                  <button class="btn no-shadow btn_play_voice"
-                                    @click="playTestAudio('testAudio' + index)">
-                                    <img src="@/assets/icons/play.svg" alt="play icon">
-                                  </button>
-                                  <button class="btn btn-one btn_select__item"  @click="selectOption(option)">Select</button>
+                                  <button class="btn btn-one btn_select__item"
+                                    @click="selectOption(option)">Select</button>
                                   <audio :ref="'testAudio' + index" hidden :src="option.detail.sample_voice_url"></audio>
                                   <!-- <label> <input type="checkbox" :value="option" /> {{ option.text }}</label> -->
                                 </li>
                               </div>
                               <div v-else>
-                                <li class="select--option" v-for="(option, index) in voiceOptions" :key="index"
-                                  >
+                                <li class="select--option" v-for="(option, index) in filteredVoiceLanguage" :key="index">
                                   <img v-if="option.detail.avatar_url" class="voice_icon" :src="option.detail.avatar_url"
                                     alt="voice icon">
                                   <img v-else class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
@@ -128,11 +107,13 @@
                                     @click="playTestAudio('testAudio' + index)">
                                     <img src="@/assets/icons/play.svg" alt="play icon">
                                   </button>
-                                  <button class="btn btn-one btn_select__item"  @click="selectOption(option)">Select</button>
+                                  <button class="btn btn-one btn_select__item"
+                                    @click="selectOption(option)">Select</button>
                                   <audio :ref="'testAudio' + index" hidden :src="option.detail.sample_voice_url"></audio>
                                   <!-- <label> <input type="checkbox" :value="option" /> {{ option.text }}</label> -->
                                 </li>
                               </div>
+
                             </ul>
                           </div>
                           <div class="invalid-feedback" v-if="!$v.speechData.voice_id.required && isSubmitted
@@ -346,7 +327,7 @@ export default {
       allAudios.forEach(audio => {
         audio.pause();
         audio.currentTime = 0;
-        
+
       });
       this.$refs[ref][0].play();
     },
@@ -585,7 +566,7 @@ export default {
           a.style = "display: none";
           var url = res.data.data;
 
-          a.href = `http://dev.onecopy.ai/download?link=${url}` ;
+          a.href = `http://dev.onecopy.ai/download?link=${url}`;
           a.download = url.split("/")[url.split("/").length - 1];
           console.log(a.download);
           // a.target = "_blank";
@@ -773,6 +754,12 @@ export default {
   align-items: center;
   margin-bottom: 0.5rem;
   background-color: #fff;
+}
+
+.component__select[disabled='disabled'] {
+  cursor:not-allowed;
+  color: #6c757d;
+  background-color: #e9ecef;
 }
 
 .c-arrow-down {
@@ -1017,7 +1004,7 @@ export default {
 
 .btn_select__item {
   color: #fff;
-} 
+}
 
 
 @media screen and (max-width: 768px) {
