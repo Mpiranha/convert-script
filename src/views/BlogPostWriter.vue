@@ -190,7 +190,7 @@
                           </button>
 
                         </div> -->
-                        <div v-if="generatedOutlines.length > 0"
+                        <div v-if="isOutlineGenerated"
                           class="d-flex justify-content-end mt-auto mb-3 blog-loader">
                           <!-- <loader-modal :loading-state="ge"></loader-modal> -->
                           <button class="btn btn-one px-4 py-3"
@@ -335,6 +335,7 @@ export default {
       postLoading: false,
       checkingPlagiarism: false,
       generatedOutlines: [],
+      isOutlineGenerated: false,
       sections: [],
       generatedSubsection: {},
       generatedPost: "",
@@ -620,33 +621,11 @@ export default {
       this.generatingOutline = true;
       this.$store
         .dispatch("generateOutline", {
-          data: data, config: {
-            onUploadProgress: (progressEvent) => {
-              // const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
-              // console.log("onUploadProgress", totalLength);
-              // if (totalLength !== null) {
-              //   console.log(Math.round((progressEvent.loaded * 100) / totalLength));
-              // }
-              // if (progressEvent.lengthComputable) {
-              //   console.log(progressEvent.loaded + ' ' + progressEvent.total);
-              //   console.log(progressEvent);
-              //   // this.updateProgressBarValue(progressEvent);
-              // }
-              console.log(progressEvent);
-            },
-            onDownloadProgress: () => {
-              // console.log(progressEvent);
-
-              // const total = parseFloat(progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length'))
-              // const current = progressEvent.currentTarget.response.length
-
-              // let percentCompleted = Math.floor(current / total * 100)
-              // console.log('completed: ', percentCompleted)
-            }
-          }
+          data: data
         })
         .then((res) => {
           this.generatedOutlines = res.data.data.outlines;
+          this.isOutlineGenerated = true;
           this.makeToast("success", res.data.message);
           this.generatingOutline = false;
         })
@@ -951,7 +930,7 @@ export default {
   align-items: center;
   float: left;
   display: flex;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   background-color: #8338EC;
   border-radius: 1rem !important;
   color: #fff;

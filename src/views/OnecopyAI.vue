@@ -245,7 +245,8 @@ export default {
       selectedPrompt: null,
       isCancel: false,
       recordState: "Listening",
-      wavesurfer: ""
+      wavesurfer: "",
+      messageScript: "",
     };
   },
   methods: {
@@ -846,8 +847,22 @@ export default {
     this.animateRecordState();
 
 
+    this.messageScript = [...document.querySelectorAll("script")].filter(script => script.src == 'https://cdn.headwayapp.co/widget.js')
+
+    //console.log(this.messageScript);
+
+    document.head.removeChild(this.messageScript[0]);
 
 
+
+
+
+  },
+  unmounted() {
+    console.log([...document.querySelectorAll("script")].filter(script => script.src == 'https://cdn.headwayapp.co/widget.js').length)
+    if ([...document.querySelectorAll("script")].filter(script => script.src == 'https://cdn.headwayapp.co/widget.js').length == 0) {
+      document.head.appendChild(this.messageScript[0]);
+    }
   },
   computed: {
     filteredCategory() {

@@ -47,9 +47,9 @@ export default {
       supportChat.setAttribute("async", "true");
 
 
-      if (this.$route.name != "OnecopyAI") {
+      // if (this.$route.name != "OnecopyAI") {
         document.head.appendChild(supportChat);
-      }
+      //}
     }
 
     if (this.$store.getters.isAuthenticated) {

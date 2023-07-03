@@ -91,8 +91,29 @@
                                   <!-- <label> <input type="checkbox" :value="option" /> {{ option.text }}</label> -->
                                 </li>
                               </div>
-                              <div v-else>
+                              <div v-else-if="filteredVoiceLanguage.length > 0">
                                 <li class="select--option" v-for="(option, index) in filteredVoiceLanguage" :key="index"
+                                  >
+                                  <img v-if="option.detail.avatar_url" class="voice_icon" :src="option.detail.avatar_url"
+                                    alt="voice icon">
+                                  <img v-else class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
+                                    alt="voice icon">
+                                  <div class="voice_details">
+                                    <div class="voice_name">{{ option.detail.name }} ({{ option.detail.gender.charAt(0)
+                                    }})</div>
+                                    <div class="voice_desc">{{ option.detail.description }}</div>
+                                  </div>
+                                  <button class="btn no-shadow btn_play_voice"
+                                    @click="playTestAudio('testAudio' + index)">
+                                    <img src="@/assets/icons/play.svg" alt="play icon">
+                                  </button>
+                                  <button class="btn btn-one btn_select__item"  @click="selectOption(option)">Select</button>
+                                  <audio :ref="'testAudio' + index" hidden :src="option.detail.sample_voice_url"></audio>
+                                  <!-- <label> <input type="checkbox" :value="option" /> {{ option.text }}</label> -->
+                                </li>
+                              </div>
+                              <div v-else>
+                                <li class="select--option" v-for="(option, index) in voiceOptions" :key="index"
                                   >
                                   <img v-if="option.detail.avatar_url" class="voice_icon" :src="option.detail.avatar_url"
                                     alt="voice icon">
@@ -220,7 +241,7 @@
 
                           <loader-modal :loading-state="loading[index]"></loader-modal>
 
-                          <button class="btn btn-one btn-create-workspace px-4 py-3" @click="onSubmit(index, text.text)">
+                          <button class="btn btn-one px-4 py-3" @click="onSubmit(index, text.text)">
                             Generate
                             Audio
                           </button>
@@ -564,10 +585,10 @@ export default {
           a.style = "display: none";
           var url = res.data.data;
 
-          a.href = url;
+          a.href = `http://dev.onecopy.ai/download?link=${url}` ;
           a.download = url.split("/")[url.split("/").length - 1];
           console.log(a.download);
-          a.target = "_blank";
+          // a.target = "_blank";
           a.click();
           window.URL.revokeObjectURL(url);
           document.body.removeChild(a);
