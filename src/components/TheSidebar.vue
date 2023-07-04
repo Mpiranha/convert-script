@@ -111,12 +111,12 @@
           </li>
           <li class="nav-item">
             <router-link class="nav-link pl-0" :class="currentActive == 'ai-speech' ? 'active' : ''" to="/text-to-speech">
-              <span class="nav-text"> AI Text to Speech </span>
+              <span class="nav-text"> AI Text to Speech <span class="beta_text beta_text_sm">BETA</span> </span>
             </router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link pl-0" :class="currentActive == 'ai-chat' ? 'active' : ''" to="/chat-ai">
-              <span class="nav-text"> Onechat AI </span>
+              <span class="nav-text"> Onechat AI <span class="beta_text beta_text_sm">BETA</span> </span>
             </router-link>
           </li>
         </ul>

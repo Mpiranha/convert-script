@@ -5,7 +5,9 @@
       <sidebar :user-name="this.$store.state.user.first_name" logo-class="permanent-logo"
         dismiss-class="permanent-dismiss" current-active="ai-speech" class="always-hidden"></sidebar>
       <div class="content-section">
-        <navbar script-type-name="Text to Speech" logo-link-class="hide-logo" toggle-class="permanent-toggler"></navbar>
+        <navbar script-type-name="Text to Speech" logo-link-class="hide-logo" toggle-class="permanent-toggler">
+          <div class="beta_text beta_text_top">BETA</div>
+        </navbar>
         <div class="scroll-content script-content-fs">
           <div class="container-fluid pt-3">
 
@@ -72,10 +74,10 @@
                             <ul class="component__select-options close-click-outside" v-if="showOptions">
                               <div v-if="gender">
                                 <li class="select--option" v-for="(option, index) in filteredVoiceGender" :key="index">
-                                  <img v-if="option.detail.avatar_url" class="voice_icon" :src="option.detail.avatar_url"
+                                  <img rel="preload" class="voice_icon" :src="option.detail.avatar_url"
                                     alt="voice icon">
-                                  <img v-else class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
-                                    alt="voice icon">
+                                  <!-- <img v-else class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
+                                    alt="voice icon"> -->
                                   <div class="voice_details">
                                     <div class="voice_name">{{ option.detail.name }} ({{ option.detail.gender.charAt(0)
                                     }})</div>
@@ -94,10 +96,10 @@
                               </div>
                               <div v-else>
                                 <li class="select--option" v-for="(option, index) in filteredVoiceLanguage" :key="index">
-                                  <img v-if="option.detail.avatar_url" class="voice_icon" :src="option.detail.avatar_url"
+                                  <img rel="preload" class="voice_icon" :src="option.detail.avatar_url"
                                     alt="voice icon">
-                                  <img v-else class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
-                                    alt="voice icon">
+                                  <!-- <img v-else class="voice_icon" src="@/assets/icons/Screenshot 2023-05-01 at 5.07 1.png"
+                                    alt="voice icon"> -->
                                   <div class="voice_details">
                                     <div class="voice_name">{{ option.detail.name }} ({{ option.detail.gender.charAt(0)
                                     }})</div>
@@ -690,9 +692,9 @@ export default {
 
       for (var i = 0; i < this.speechData.text.length; i++) {
 
-        if (this.speechData.text[i].text.split(" ").length <= 1) {
-          count = 0;
+        if (this.speechData.text[i].text.length <= 1) {
           break;
+         
         }
 
         count += this.speechData.text[i].text.split(" ").length;

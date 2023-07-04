@@ -17,7 +17,7 @@
               <h6 class="title">{{ workspaceDetail.workspace[0].name }}</h6>
 
               <div class="d-flex flex-wrap align-items-center ml-md-auto">
-                <button @click="clearField" class="btn btn-add-member" v-b-modal.modal-new-member>
+                <button v-show="String(workspaceDetail.workspace[0].owner).toLowerCase() == 'me'" @click="clearField" class="btn btn-add-member" v-b-modal.modal-new-member>
                   Add member
                 </button>
               </div>
@@ -45,7 +45,7 @@
                       <th>Date Created</th>
                       <th class="text-left">Role</th>
                       <th class="text-center">Status</th>
-                      <th class="text-right">Action</th>
+                      <th v-show="String(workspaceDetail.workspace[0].owner).toLowerCase() == 'me'" class="text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody v-if="searchResult.length > 0">
@@ -58,7 +58,7 @@
                       <td>
 
                       </td>
-                      <td>
+                      <td v-show="String(workspaceDetail.workspace[0].owner).toLowerCase() == 'me'">
                         <dropdown-tool delete-what="user" @edit-clicked="openEditModal(result.id, result)
                           " @delete-proceed="deleteTeamMember(result.id)">
                           <template v-slot:secondary>
@@ -91,7 +91,7 @@
                           team.status }}</span>
                         <span v-else>{{ team.status }}</span>
                       </td>
-                      <td>
+                      <td v-show="String(workspaceDetail.workspace[0].owner).toLowerCase() == 'me'">
                         <dropdown-tool delete-what="workspace" @edit-clicked="openEditModal(team.id, team)
                           " @delete-proceed="deleteTeamMember(team.id)">
                           <template v-slot:secondary>
@@ -255,7 +255,7 @@ export default {
     searchKeyWord() {
       this.$store
         .dispatch("search", {
-          endpoint: "/api/v1/workspaces",
+          endpoint: "/api/v1/workspaces/" + this.$route.params.id,
           keyword: this.searchKey,
         })
         .then((res) => {

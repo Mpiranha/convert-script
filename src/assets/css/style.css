@@ -1530,7 +1530,7 @@ input:checked+.slider:before {
     margin-left: 0.5rem;
     padding: 0.1rem 0.5rem;
     border-radius: 0.8rem;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
 }
 
 .beta_text_sm {

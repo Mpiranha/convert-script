@@ -5,7 +5,9 @@
       <sidebar :user-name="this.$store.state.user.first_name" logo-class="permanent-logo"
         dismiss-class="permanent-dismiss" current-active="ai-chat" class="always-hidden"></sidebar>
       <div class="content-section">
-        <navbar script-type-name="Onechat AI" logo-link-class="hide-logo" toggle-class="permanent-toggler"></navbar>
+        <navbar script-type-name="Onechat AI" logo-link-class="hide-logo" toggle-class="permanent-toggler">
+          <div class="beta_text beta_text_top">BETA</div>
+        </navbar>
         <div class="scroll-content script-content-fs">
           <div class="container-fluid pt-3">
 
@@ -1138,6 +1140,8 @@ export default {
 .prompt_list {
   display: flex;
   flex-direction: column;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .prompt_list_item {
