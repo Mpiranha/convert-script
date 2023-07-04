@@ -69,7 +69,7 @@
                               <img src="@/assets/icons/down.png" class="c-arrow-down" v-if="!showOptions">
                               <img src="@/assets/icons/up.png" class="c-arrow-up" v-if="showOptions">
                             </div>
-                            <ul class="component__select-options" v-if="showOptions">
+                            <ul class="component__select-options close-click-outside" v-if="showOptions">
                               <div v-if="gender">
                                 <li class="select--option" v-for="(option, index) in filteredVoiceGender" :key="index">
                                   <img v-if="option.detail.avatar_url" class="voice_icon" :src="option.detail.avatar_url"
@@ -269,7 +269,7 @@ import alertMixin from "@/mixins/alertMixin";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
-// import $ from 'jquery'
+import $ from 'jquery'
 
 export default {
   name: "TextToSpeech",
@@ -645,6 +645,25 @@ export default {
     }
   },
   mounted() {
+    let $vm = this;
+    document.addEventListener('mouseup', function (e) {
+
+      var container = $(".close-click-outside");
+
+
+      if ($vm.showOptions) {
+
+        if ($('.component__select').has(e.target).length > 0 || $('.component__select').is(e.target)) {
+          return;
+        }
+
+        // if the target of the click isn't the container nor a descendant of the container
+        if (!container.is(e.target) && container.has(e.target).length === 0) {
+          //container.removeClass('show-visible');
+          $vm.showOptions = false;
+        }
+      }
+    });
     // this.getCampaign();
     // this.getScriptType(this.$route.params.id);
     // this.getScriptData(this.$route.params.id);
