@@ -47,7 +47,7 @@
                   <thead>
                     <tr>
                       <th>Workspace</th>
-                      <th>Date Created</th>
+                      <th>Owner</th>
                       <th class="text-left">Members</th>
                       <th>Status</th>
                       <th class="text-right">Action</th>
@@ -58,7 +58,7 @@
                       <td class="workspace_link" scope="row" @click="setDefaultWorkspace(result.id)">
                         {{ result.name }}
                       </td>
-                      <td class="text-left">{{ formatDate(result.created_at) }}</td>
+                      <td class="text-left">{{ result.owner }}</td>
                       <td class="text-left">{{ result.member_count }}</td>
                       <td>
                         <span v-if="workspace.id == $store.state.user.default_workspace_id"
@@ -66,7 +66,7 @@
                       </td>
                       <td>
                         <dropdown-tool delete-what="workspace" @edit-clicked="openEditModal(result.id, result)
-                          " @delete-proceed="deleteWorkspace(result.id)">
+                          " :hide-edit="workspace.owner.toLowerCase() != 'me'" :hide-delete="workspace.id == $store.state.user.default_workspace_id" @delete-proceed="deleteWorkspace(result.id)">
                           <template v-slot:secondary>
                             <router-link link-class="drop-link" :to="/workspace/ + workspace.id">
                               <img class="drop-img-icon" src="@/assets/icons/account 1.png" alt="add to client icon" />
@@ -88,7 +88,7 @@
                         {{ workspace.name }}
                       </td>
                       <td class="text-left">
-                        {{ formatDate(workspace.created_at) }}
+                        {{ workspace.owner }}
                       </td>
                       <td class="text-left">{{ workspace.member_count }}</td>
                       <td>
@@ -97,7 +97,7 @@
                       </td>
                       <td>
                         <dropdown-tool delete-what="workspace" @edit-clicked="openEditModal(workspace.id, workspace)
-                          " @delete-proceed="deleteWorkspace(workspace.id)">
+                          " :hide-edit="workspace.owner.toLowerCase() != 'me'" :hide-delete="workspace.id == $store.state.user.default_workspace_id" @delete-proceed="deleteWorkspace(workspace.id)">
                           <template v-slot:secondary>
                             <b-dropdown-item link-class="drop-link">
                               <router-link class="drop-link" :to="/workspace/ + workspace.id">

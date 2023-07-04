@@ -190,11 +190,9 @@
                           </button>
 
                         </div> -->
-                        <div v-if="isOutlineGenerated"
-                          class="d-flex justify-content-end mt-auto mb-3 blog-loader">
+                        <div v-if="isOutlineGenerated" class="d-flex justify-content-end mt-auto mb-3 blog-loader">
                           <!-- <loader-modal :loading-state="ge"></loader-modal> -->
-                          <button class="btn btn-one px-4 py-3"
-                            @click="fromOutlineGenPost">
+                          <button class="btn btn-one px-4 py-3" @click="fromOutlineGenPost">
                             Write Blog Post
                           </button>
                         </div>
@@ -220,7 +218,7 @@
                     <div class="section-head bordered-bottom">
                       <div class="section-head-right mb-0 py-1">
 
-                        <button v-if="generatingBlogPost" class="btn btn-export-all mb-0">
+                        <button @click="exportLongForm" v-if="generatingBlogPost" class="btn btn-export-all mb-0">
                           Export
                         </button>
                       </div>
@@ -378,6 +376,36 @@ export default {
     }
   },
   methods: {
+    exportLongForm() {
+      this.$store
+        .dispatch("exportLongForm", {
+          text: this.generatedPostRaw,
+          title: this.genOutlineData.title
+        }).then((res) => {
+          var url = URL.createObjectURL(
+            new Blob([res.data], { type: "text/plain" })
+          );
+
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          a.style = "display: none";
+
+
+          a.href = url;
+          a.download = true;
+          a.target = "_blank";
+          console.log(a.download);
+          
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     goBackToOutline() {
       // this.generatedSubsection = {};
       this.generatingBlogPost = false;
@@ -817,13 +845,13 @@ export default {
       var arr = [];
       // for (const key in this.generatedOutlines) {
       //   if (Object.hasOwnProperty.call(this.generatedOutlines, key)) {
-        //  arr.push({ title: this.generatedSubsection[key] });
-          for (var i = 0; i < this.generatedOutlines.length; i++) {
-            arr.push({ title: this.generatedOutlines[i] })
-          }
+      //  arr.push({ title: this.generatedSubsection[key] });
+      for (var i = 0; i < this.generatedOutlines.length; i++) {
+        arr.push({ title: this.generatedOutlines[i] })
+      }
 
-       // }
-     // }
+      // }
+      // }
 
       return arr;
     },

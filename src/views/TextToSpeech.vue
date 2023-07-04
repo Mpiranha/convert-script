@@ -566,7 +566,7 @@ export default {
           a.style = "display: none";
           var url = res.data.data;
 
-          a.href = `http://dev.onecopy.ai/download?link=${url}`;
+          a.href = `https://dev.onecopy.ai/download?link=${url}`;
           a.download = url.split("/")[url.split("/").length - 1];
           console.log(a.download);
           // a.target = "_blank";
@@ -668,9 +668,17 @@ export default {
       let count = 0;
 
 
+
       for (var i = 0; i < this.speechData.text.length; i++) {
+
+        if (this.speechData.text[i].text.split(" ").length <= 1) {
+          count = 0;
+          break;
+        }
+
         count += this.speechData.text[i].text.split(" ").length;
       }
+
       return count;
     },
   }
@@ -757,7 +765,7 @@ export default {
 }
 
 .component__select[disabled='disabled'] {
-  cursor:not-allowed;
+  cursor: not-allowed;
   color: #6c757d;
   background-color: #e9ecef;
 }

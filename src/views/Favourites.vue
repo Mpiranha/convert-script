@@ -426,8 +426,7 @@ export default {
         .dispatch("exportOneScript", id)
         .then((res) => {
           // this.users = res.data.data;
-          console.log(res);
-
+       
           var a = document.createElement("a");
           document.body.appendChild(a);
           //a.style = "display: none";
