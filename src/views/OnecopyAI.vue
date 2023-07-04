@@ -67,8 +67,8 @@
                       <div v-if="activeChat.length == 0" class="no-chat">
                         <div class="title">Welcome to OneChat AI</div>
                         <div class="desc">
-                          To begin, write down a task and let Chat handle the rest. If you're unsure of where to begin,
-                          browse through the Prompt Library for some inspiration.
+                          To begin, type a question and let AI Chat handle the rest. If you're unsure of where to begin,
+                          browse through the prompt Library for some ideas.
                         </div>
                       </div>
                       <chatbox v-else v-for="(chat, index) in activeChat" :key="index" :author="chat.role"
@@ -1047,7 +1047,7 @@ export default {
 }
 
 .no-chat .desc {
-  font-size: 21px;
+  font-size: 18px;
 
   text-align: center;
 
