@@ -81,7 +81,7 @@
 
                       <div class="d-flex justify-content-between mt-auto mb-3 px-4">
 
-                        <button class="btn close-modal px-4 py-3" @click="goBackToOutline">Go Back</button>
+                        <button class="btn close-modal px-4 py-3 btn-back" @click="goBackToOutline">Go Back</button>
 
 
 
@@ -192,7 +192,7 @@
                           </button>
 
                         </div> -->
-                        <div v-if="isOutlineGenerated" class="d-flex justify-content-end mt-auto mb-3 blog-loader">
+                        <div v-if="isOutlineGenerated" class="d-flex justify-content-end mt-auto mb-3">
                           <!-- <loader-modal :loading-state="ge"></loader-modal> -->
                           <button class="btn btn-one px-4 py-3" @click="fromOutlineGenPost">
                             Write Blog Post
@@ -355,6 +355,7 @@ export default {
         modules: {
           toolbar: {
             container: [
+              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
               ["bold", "italic", "underline"], // toggled buttons
               [{ list: "ordered" }, { list: "bullet" }],
               [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
@@ -397,7 +398,7 @@ export default {
           a.download = true;
           a.target = "_blank";
           console.log(a.download);
-          
+
           a.click();
           window.URL.revokeObjectURL(url);
           document.body.removeChild(a);
@@ -773,6 +774,7 @@ export default {
       this.$store
         .dispatch("checkPlagiarism", {
           text: this.generatedPost,
+          workspace_id: this.$store.state.user.default_workspace_id
         })
         .then((res) => {
 
@@ -868,7 +870,7 @@ export default {
       if (!this.generatedPost) {
         return 0;
       } else {
-        return this.generatedPost.match(/<br>/g).length;
+        return this.generatedPost.match(/<br><br>/g).length - this.headingCount;
       }
     }
   }
@@ -996,6 +998,10 @@ export default {
   color: #393F46 !important;
   border-radius: 0.4rem !important;
   background-color: #fff !important;
+}
+
+.btn-back {
+  font-size: 0.9rem;
 }
 
 .btn_gen_outline img {
