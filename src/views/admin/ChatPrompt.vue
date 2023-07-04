@@ -69,7 +69,7 @@
                   </tbody>
                 </table>
               </div>
-              <div class="d-flex justify-content-center">
+              <div class="d-flex justify-content-center mb-5">
                 <b-pagination v-model="currentPage" :total-rows="promptLength" :per-page="perPage"
                   aria-controls="my-table" size="sm" :hide-goto-end-buttons="true" prev-text="<" next-text=">"
                   @change="handlePageChange"></b-pagination>
@@ -183,13 +183,13 @@ export default {
     getAllChatPrompts() {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("getChatPrompts")
+        .dispatch("getChatPrompts", {
+          number: this.currentPage,
+          perPage: this.perPage,
+        })
         .then((res) => {
           this.chatPrompts = res.data.response.data;
-          // this.rolesLength = res.data.meta.total;
-          console.log(res.data);
-          console.log("Current Page: " + this.currentPage);
-          console.log("Per Page: " + this.perPage);
+          this.promptLength = res.data.response.meta.total;
 
           this.$store.commit("updateLoadState", false);
         })
