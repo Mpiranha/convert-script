@@ -279,9 +279,60 @@
           <div class="wait_desc">Please wait, this can take a few minutes.</div>
         </div>
         <div class="content" v-else>
-          <img class="loader-img mb-0" src="@/assets/icons/check-plagiarism.svg" alt="" />
-          <div class="loader_text">Awesome!</div>
-          <div class="wait_desc mb-4">{{ plagiarismResult ? plagiarismResult : error }}</div>
+          <div v-if="plagiarismResult">
+            <div class="main-content" v-if="plagiarismResult.percentPlagiarism == 0">
+              <img class="loader-img mb-0" src="@/assets/icons/Flawless.png" alt="" />
+              <div class="loader_text">Flawless!</div>
+              <div class="wait_desc mb-4">
+                This content has a plagiarism rate of {{ plagiarismResult.percentPlagiarism }}% -
+                {{ plagiarismResult.sources.length }} result(s) were found for
+                {{ postWordCount }} words.
+              </div>
+            </div>
+            <div class="main-content"
+              v-else-if="plagiarismResult.percentPlagiarism >= 1 && plagiarismResult.percentPlagiarism <= 5">
+              <img class="loader-img mb-0" src="@/assets/icons/Flawless.png" alt="" />
+              <div class="loader_text">Excellent!</div>
+              <div class="wait_desc mb-4">
+                This content has a plagiarism rate of {{ plagiarismResult.percentPlagiarism }}% -
+                {{ plagiarismResult.sources.length }} result(s) were found for
+                {{ postWordCount }} words.
+              </div>
+            </div>
+            <div class="main-content"
+              v-else-if="plagiarismResult.percentPlagiarism >= 6 && plagiarismResult.percentPlagiarism <= 10">
+              <img class="loader-img mb-0" src="@/assets/icons/Good.png" alt="" />
+              <div class="loader_text">Good!</div>
+              <div class="wait_desc mb-4">
+                This content has a plagiarism rate of {{ plagiarismResult.percentPlagiarism }}% -
+                {{ plagiarismResult.sources.length }} result(s) were found for
+                {{ postWordCount }} words.
+              </div>
+            </div>
+            <div class="main-content"
+              v-else-if="plagiarismResult.percentPlagiarism >= 11 && plagiarismResult.percentPlagiarism <= 15">
+              <img class="loader-img mb-0" src="@/assets/icons/Not Good.png" alt="" />
+              <div class="loader_text">Not Good!</div>
+              <div class="wait_desc mb-4">
+                This content has a plagiarism rate of {{ plagiarismResult.percentPlagiarism }}% -
+                {{ plagiarismResult.sources.length }} result(s) were found for
+                {{ postWordCount }} words.
+              </div>
+            </div>
+            <div class="main-content" v-else>
+              <img class="loader-img mb-0" src="@/assets/icons/Poor.png" alt="" />
+              <div class="loader_text">Poor!</div>
+              <div class="wait_desc mb-4">
+                This content has a plagiarism rate of {{ plagiarismResult.percentPlagiarism }}% -
+                {{ plagiarismResult.sources.length }} result(s) were found for
+                {{ postWordCount }} words.
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            {{ error }}
+          </div>
+
 
           <button class="btn btn-one px-4" @click="resetPlagiarism">Done</button>
         </div>
@@ -770,6 +821,8 @@ export default {
 
 
       // this.$store.commit("updateLoadState", true);
+      this.error = null;
+      this.plagiarismResult = null;
       this.checkingPlagiarism = true;
       this.$store
         .dispatch("checkPlagiarism", {
@@ -777,7 +830,7 @@ export default {
           workspace_id: this.$store.state.user.default_workspace_id
         })
         .then((res) => {
-
+          this.error = null;
           this.plagiarismResult = res.data.data;
           this.makeToast("success", res.data.message);
         })
@@ -1200,6 +1253,12 @@ export default {
   align-items: center;
 }
 
+.loader_content .content div.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .loader_text {
   font-weight: 700;
   font-size: 1.3rem;
@@ -1208,6 +1267,7 @@ export default {
 
 .wait_desc {
   font-size: 0.9rem;
+  text-align: center;
 }
 
 .loader_counter_text {
