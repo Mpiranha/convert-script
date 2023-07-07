@@ -48,12 +48,12 @@
                   </thead>
                   <tbody v-if="searchResult.length > 0">
                     <tr v-for="result in searchResult" :key="result.id">
-                      <td scope="row">{{  result.name  }}</td>
-                      <td>{{  result.price  }}</td>
-                      <td>{{  result.set_as_user_plan  }}</td>
-                      <td>{{  result.words_allowed  }}</td>
-                      <td>{{  result.success_url ? result.success_url : "NIL"  }}</td>
-                      <td>{{  result.cancel_url ? result.cancel_url : "NIL"  }}</td>
+                      <td scope="row">{{ result.name }}</td>
+                      <td>{{ result.price }}</td>
+                      <td>{{ result.set_as_user_plan }}</td>
+                      <td>{{ result.words_allowed }}</td>
+                      <td>{{ result.success_url ? result.success_url : "NIL" }}</td>
+                      <td>{{ result.cancel_url ? result.cancel_url : "NIL" }}</td>
                       <td>
                         <dropdown-tool @edit-clicked="
                           openEditModal(result.id, {
@@ -61,11 +61,13 @@
                             price: role.price,
                             cycle_id: role.cycle_id,
                             words_allowed: role.words_allowed,
+                            max_member_per_workspaces_allowed: role.max_member_per_workspaces_allowed,
+                            workspaces_allowed: role.workspaces_allowed,
                             success_url: role.success_url,
                             cancel_url: role.cancel_url,
                             set_as_user_plan: role.set_as_user_plan
                           })
-                        " @delete-proceed="deleteRole(result.id)" delete-what="Role">
+                          " @delete-proceed="deleteRole(result.id)" delete-what="Role">
                           <template v-slot:secondary>
                             <b-dropdown-item link-class="drop-link" href="#">
                               <router-link class="drop-link" :to="{
@@ -92,12 +94,12 @@
                   </tbody>
                   <tbody v-else-if="roles && searchKey.length < 1">
                     <tr v-for="role in roles" :key="role.id">
-                      <td scope="row">{{  role.name  }}</td>
-                      <td>{{  role.price  }}</td>
-                      <td>{{  role.set_as_user_plan  }}</td>
-                      <td>{{  role.words_allowed  }}</td>
-                      <td>{{  role.success_url ? role.success_url : "NIL"  }}</td>
-                      <td>{{  role.cancel_url ? role.cancel_url : "NIL"  }}</td>
+                      <td scope="row">{{ role.name }}</td>
+                      <td>{{ role.price }}</td>
+                      <td>{{ role.set_as_user_plan }}</td>
+                      <td>{{ role.words_allowed }}</td>
+                      <td>{{ role.success_url ? role.success_url : "NIL" }}</td>
+                      <td>{{ role.cancel_url ? role.cancel_url : "NIL" }}</td>
                       <td>
                         <dropdown-tool @edit-clicked="
                           openEditModal(role.id, {
@@ -105,11 +107,13 @@
                             price: role.price,
                             cycle_id: role.cycle_id,
                             words_allowed: role.words_allowed,
+                            max_member_per_workspaces_allowed: role.max_member_per_workspaces_allowed,
+                            workspaces_allowed: role.workspaces_allowed,
                             success_url: role.success_url,
                             cancel_url: role.cancel_url,
                             set_as_user_plan: role.set_as_user_plan
                           })
-                        " @delete-proceed="deleteRole(role.id)" delete-what="Role">
+                          " @delete-proceed="deleteRole(role.id)" delete-what="Role">
                           <template v-slot:secondary>
                             <b-dropdown-item link-class="drop-link" href="#">
                               <router-link class="drop-link" :to="{
@@ -137,8 +141,8 @@
                 </table>
               </div>
               <div class="d-flex justify-content-center">
-                <b-pagination v-model="currentPage" :total-rows="rolesLength" :per-page="perPage"
-                  aria-controls="my-table" size="sm" :hide-goto-end-buttons="true" prev-text="<" next-text=">"
+                <b-pagination v-model="currentPage" :total-rows="rolesLength" :per-page="perPage" aria-controls="my-table"
+                  size="sm" :hide-goto-end-buttons="true" prev-text="<" next-text=">"
                   @change="handlePageChange"></b-pagination>
               </div>
             </div>
@@ -186,6 +190,28 @@
         </div>
       </b-form-group>
 
+      <b-form-group label="No. of workspaces">
+        <b-form-input :class="{ 'is-invalid': submitted && $v.rolesData.workspaces_allowed.$error }" id="word"
+          v-model="rolesData.workspaces_allowed" type="number" class="input-table">
+        </b-form-input>
+        <div v-if="submitted && $v.rolesData.workspaces_allowed.$error" class="invalid-feedback">
+          <span v-if="!$v.rolesData.workspaces_allowed.required">* No. of workspaces is required</span>
+          <span v-if="!$v.rolesData.workspaces_allowed.numeric">* No. of workspaces must be a Number</span>
+        </div>
+      </b-form-group>
+
+      <b-form-group label="Max member per workspace">
+        <b-form-input :class="{ 'is-invalid': submitted && $v.rolesData.max_member_per_workspaces_allowed.$error }"
+          id="word" v-model="rolesData.max_member_per_workspaces_allowed" type="number" class="input-table">
+        </b-form-input>
+        <div v-if="submitted && $v.rolesData.max_member_per_workspaces_allowed.$error" class="invalid-feedback">
+          <span v-if="!$v.rolesData.max_member_per_workspaces_allowed.required">* Max member per workspace is
+            required</span>
+          <span v-if="!$v.rolesData.max_member_per_workspaces_allowed.numeric">* Max member per workspace must be a
+            Number</span>
+        </div>
+      </b-form-group>
+
       <b-form-group label="Success Link">
         <b-form-input :class="{ 'is-invalid': submitted && $v.rolesData.success_url.$error }" id="link"
           v-model="rolesData.success_url" type="url" class="input-table">
@@ -221,15 +247,15 @@
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-role')" class="close-modal">Close</b-button>
-        <b-button @click="triggerEdit ? editRole(editId, rolesData) : addRole($event)" class="save-modal">{{  triggerEdit
-        ?
-        "Edit" : "Save"
+        <b-button @click="triggerEdit ? editRole(editId, rolesData) : addRole($event)" class="save-modal">{{ triggerEdit
+          ?
+          "Edit" : "Save"
 
 
 
 
 
-          }}</b-button>
+        }}</b-button>
       </div>
     </b-modal>
   </div>
@@ -268,6 +294,14 @@ export default {
         required,
         numeric
       },
+      workspaces_allowed: {
+        required,
+        numeric
+      },
+      max_member_per_workspaces_allowed: {
+        required,
+        numeric
+      },
       success_url: {
         required,
         url,
@@ -291,6 +325,8 @@ export default {
         price: "",
         cycle: null,
         wordLimit: "",
+        workspaces_allowed: "",
+        max_member_per_workspaces_allowed: "",
         success_url: "",
         cancel_url: "",
         set_as_user_plan: false,
@@ -409,6 +445,8 @@ export default {
           price: this.rolesData.price,
           cycle_id: this.rolesData.cycle,
           words_allowed: this.rolesData.wordLimit,
+          workspaces_allowed: this.rolesData.workspaces_allowed,
+          max_member_per_workspaces_allowed: this.rolesData.max_member_per_workspaces_allowed,
           success_url: this.rolesData.success_url,
           cancel_url: this.rolesData.cancel_url,
           set_as_user_plan: this.rolesData.set_as_user_plan,
@@ -422,6 +460,8 @@ export default {
             price: "",
             cycle: null,
             wordLimit: "",
+            workspaces_allowed: "",
+            max_member_per_workspaces_allowed: "",
             success_url: "",
             cancel_url: "",
             set_as_user_plan: false,
@@ -448,6 +488,8 @@ export default {
             price: this.rolesData.price,
             cycle_id: this.rolesData.cycle,
             words_allowed: this.rolesData.wordLimit,
+            workspaces_allowed: this.rolesData.words_allowed,
+            max_member_per_workspaces_allowed: this.rolesData.max_member_per_workspaces_allowed,
             success_url: this.rolesData.success_url,
             cancel_url: this.rolesData.cancel_url,
             set_as_user_plan: this.rolesData.set_as_user_plan,
@@ -463,6 +505,8 @@ export default {
             price: "",
             cycle: null,
             wordLimit: "",
+            workspaces_allowed: "",
+            max_member_per_workspaces_allowed: "",
             success_url: "",
             cancel_url: "",
             set_as_user_plan: false,
@@ -505,6 +549,8 @@ export default {
         price: data.price,
         cycle: data.cycle_id,
         wordLimit: data.words_allowed,
+        workspaces_allowed: data.workspaces_allowed,
+        max_member_per_workspaces_allowed: data.max_member_per_workspaces_allowed,
         success_url: data.success_url,
         cancel_url: data.cancel_url,
         set_as_user_plan: data.set_as_user_plan,
@@ -517,6 +563,8 @@ export default {
         price: "",
         cycle: null,
         wordLimit: "",
+        workspaces_allowed: "",
+        max_member_per_workspaces_allowed: "",
         success_url: "",
         cancel_url: "",
         set_as_user_plan: false,

@@ -348,7 +348,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error = error;
+          this.error = error.response.data.message;
           this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error.response.data.errors.root;
@@ -466,12 +466,10 @@ export default {
     },
 
     clearField() {
-      this.workspaceName = "";
+    
       this.triggerEdit = false;
       this.submitted = false;
       this.userData = {
-        // firstname: "",
-        // lastname: "",
         role_id: null,
         email: "",
         workspace_id: this.$route.params.id

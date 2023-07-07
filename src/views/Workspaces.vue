@@ -17,7 +17,7 @@
               <h6 class="title">Workspaces ({{ workspaces.length }})</h6>
 
               <div class="d-flex flex-wrap align-items-center ml-md-auto">
-                <button class="btn btn-add-member" v-b-modal.modal-new-member>
+                <button @click="clearField" class="btn btn-add-member" v-b-modal.modal-new-member>
                   Add member
                 </button>
 
@@ -370,7 +370,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error = error;
+          this.error = error.response.data.message;
           this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error.response.data.errors.root;
@@ -467,7 +467,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error = error;
+          this.error = error.response.data.message;
           this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
           // this.error = error.response.data.errors.root;
@@ -537,7 +537,15 @@ export default {
       }
     },
     clearField() {
-      this.workspaceName = "";
+      this.workspaceData = {
+        name: "",
+        slug: ""
+      },
+      this.userData = {
+        role_id: null,
+        email: "",
+        workspace_id: null
+      },
       this.triggerEdit = false;
       this.submitted = false;
     },
