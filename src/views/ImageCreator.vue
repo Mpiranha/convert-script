@@ -9,6 +9,7 @@
           <div class="beta_text beta_text_top">BETA</div>
         </navbar>
         <div class="scroll-content script-content-fs">
+          <upgrade-alert v-if="isRestricted" title="Image Creator" :fullscreen="true"></upgrade-alert>
           <div class="container-fluid pt-3">
             <!-- <div class="
                 dashboard-top
@@ -46,10 +47,9 @@
                               class="form-control"></textarea>
 
                             <div class="invalid-feedback">
-                              <div v-if="
-                                !$v.answerQuery.desc
+                              <div v-if="!$v.answerQuery.desc
                                   .required && isSubmitted
-                              ">
+                                ">
                                 Answer is required
                               </div>
                             </div>
@@ -152,13 +152,15 @@ import { required, minLength } from "vuelidate/lib/validators";
 import alertMixin from "@/mixins/alertMixin";
 import $ from 'jquery'
 import { saveAs } from 'file-saver';
+import UpgradeAlert from "../components/UpgradeAlert.vue";
 
 export default {
   name: "ScriptGenerate",
   components: {
     Sidebar,
     Navbar,
-    ImageDisplay
+    ImageDisplay,
+    UpgradeAlert
   },
   mixins: [alertMixin],
   data() {
@@ -179,6 +181,7 @@ export default {
       generatedImage: [],
       isSubmitted: false,
       editId: "",
+      isRestricted: false
     };
   },
   validations: {
@@ -253,7 +256,12 @@ export default {
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
+          if (error.response.data.message == "Access to Image Creator is restricted") {
+            this.isRestricted = true;
+            this.$store.commit("updateLoadState", false);
+            return;
+          }
           this.$store.commit("updateLoadState", false);
         });
     },

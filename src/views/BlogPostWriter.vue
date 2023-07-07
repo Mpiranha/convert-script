@@ -9,6 +9,7 @@
           <div class="beta_text beta_text_top">BETA</div>
         </navbar>
         <div class="scroll-content script-content-fs">
+          <upgrade-alert v-if="isRestricted" title="LongForm" :fullscreen="true"></upgrade-alert>
           <div class="container-fluid pt-3">
 
 
@@ -353,6 +354,7 @@ import { quillEditor } from "vue-quill-editor";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
+import UpgradeAlert from "../components/UpgradeAlert.vue";
 // import $ from 'jquery'
 
 export default {
@@ -362,11 +364,13 @@ export default {
     Navbar,
     BlogPostOutline,
     // BlogPostOutlineSubsection,
-    quillEditor
+    quillEditor,
+    UpgradeAlert
   },
   mixins: [alertMixin],
   data() {
     return {
+      isRestricted: false,
       toneOptions: [{ value: null, text: "Select Tone" }],
       languageOptions: [{ value: null, text: "Select Language" }],
       loading: false,
@@ -713,7 +717,13 @@ export default {
         })
         .catch((error) => {
           this.loading = false;
-          console.log("error: " + error);
+          // console.log("error: " + error);
+          
+          if (error.response.data.message == "Access to LongForm is restricted") {
+              this.isRestricted = true;
+              this.generatingOutline  = false;
+              return;
+            }
           this.error = error.response.data.errors;
 
           // this.makeToast("danger", this.error);

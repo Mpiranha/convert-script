@@ -9,6 +9,7 @@
           <div class="beta_text beta_text_top">BETA</div>
         </navbar>
         <div class="scroll-content script-content-fs">
+          <upgrade-alert v-if="isRestricted" title="Text-to-Speech" :fullscreen="true"></upgrade-alert>
           <div class="container-fluid pt-3">
 
 
@@ -271,13 +272,15 @@ import alertMixin from "@/mixins/alertMixin";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
-import $ from 'jquery'
+import $ from 'jquery';
+import UpgradeAlert from "../components/UpgradeAlert.vue";
 
 export default {
   name: "TextToSpeech",
   components: {
     Sidebar,
     Navbar,
+    UpgradeAlert
   },
   mixins: [alertMixin],
   data() {
@@ -306,6 +309,7 @@ export default {
       editId: "",
       rafVid: null,
       allAudioLength: 0.0,
+      isRestricted: false,
     };
   },
   validations: {
@@ -581,6 +585,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+         
           this.$store.commit("updateLoadState", false);
         });
     },
@@ -630,7 +635,12 @@ export default {
 
         })
         .catch((error) => {
-          console.log(error);
+          //console.log(error);
+          if (error.response.data.message == "Access to Text to Speech is restricted") {
+              this.isRestricted = true;
+              this.$store.commit("updateLoadState", false);
+              return;
+            }
 
         });
     },

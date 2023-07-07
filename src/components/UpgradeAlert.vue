@@ -1,5 +1,5 @@
 <template>
-    <div class="alert-wrap-fixed">
+    <div class="alert-wrap-fixed" :class="fullscreen ? 'fs-alert-fixed':''">
         <div class="alert-main">
             <h1>Your access to {{ title }} is restricted.</h1>
             <div class="desc">
@@ -22,6 +22,9 @@ export default {
             type: String,
             required: true,
         },
+        fullscreen: {
+            type: Boolean
+        }
 
     },
 };
@@ -40,6 +43,11 @@ export default {
     justify-content: center;
     align-items: center;
     padding: 0 0.5rem;
+}
+
+.fs-alert-fixed {
+    left: 0 !important;
+    width: 100%!important;
 }
 
 .alert-main {

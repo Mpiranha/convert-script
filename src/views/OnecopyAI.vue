@@ -9,6 +9,7 @@
           <div class="beta_text beta_text_top">BETA</div>
         </navbar>
         <div class="scroll-content script-content-fs">
+          <upgrade-alert v-if="isRestricted" title="OnechatAI" :fullscreen="true"></upgrade-alert>
           <div class="container-fluid pt-3">
 
 
@@ -213,6 +214,7 @@ import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import alertMixin from "@/mixins/alertMixin";
 import Chatbox from '@/components/Chatbox';
+import UpgradeAlert from "../components/UpgradeAlert.vue";
 
 // import Recorder from 'recorder-js';
 // import $ from 'jquery'
@@ -222,7 +224,8 @@ export default {
   components: {
     Sidebar,
     Navbar,
-    Chatbox
+    Chatbox,
+    UpgradeAlert
   },
   mixins: [alertMixin],
   data() {
@@ -249,6 +252,7 @@ export default {
       recordState: "Listening",
       wavesurfer: "",
       messageScript: "",
+      isRestricted: false
     };
   },
   methods: {
@@ -737,11 +741,22 @@ export default {
       this.$store
         .dispatch("getChatHistory", this.workspace_id)
         .then((res) => {
+          console.log(res.data);
+          
+           
+          
           this.chatHistories = res.data.data.reverse();
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error);
+         // console.log(error.response.data.message);
+          
+          if (error.response.data.message == "Access to OneChat is restricted") {
+              this.isRestricted = true;
+              this.$store.commit("updateLoadState", false);
+              return;
+            }
+
           this.$store.commit("updateLoadState", false);
         });
     },
