@@ -221,7 +221,7 @@
                       <div class="section-head-right mb-0 py-1">
 
                         <button @click="exportLongForm" v-if="generatingBlogPost" class="btn btn-export-all mb-0">
-                          Export
+                          Export html
                         </button>
                       </div>
                     </div>
@@ -433,7 +433,7 @@ export default {
     exportLongForm() {
       this.$store
         .dispatch("exportLongForm", {
-          text: this.generatedPostRaw,
+          text: this.generatedPost,
           title: this.genOutlineData.title
         }).then((res) => {
           var url = URL.createObjectURL(
@@ -578,7 +578,7 @@ export default {
         event.preventDefault();
       }
 
-      this.generatedOutlines.push("Type in here to add outline manualy");
+      this.generatedOutlines.push("Type in here to add outline manually");
     },
     deleteOutline(event, value) {
       if (event) {

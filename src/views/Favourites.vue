@@ -326,6 +326,7 @@ export default {
         modules: {
           toolbar: {
             container: [
+              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
               ["bold", "italic", "underline"], // toggled buttons
               [{ list: "ordered" }, { list: "bullet" }],
               [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],

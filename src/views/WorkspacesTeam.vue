@@ -121,7 +121,7 @@
         <h3 class="title">Give your workspace a name</h3>
         <p class="desc">Only you can see this</p>
       </div> -->
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-6">
           <b-form-group label="First Name">
             <b-form-input :class="{ 'is-invalid': submitted && $v.userData.firstname.$error }" id="firstname"
@@ -144,7 +144,7 @@
             </div>
           </b-form-group>
         </div>
-      </div>
+      </div> -->
 
       <b-form-group label="Email">
         <b-form-input :class="{ 'is-invalid': submitted && $v.userData.email.$error }" id="email" v-model="userData.email"
@@ -196,7 +196,7 @@ import Sidebar from "@/components/TheSidebar.vue";
 import Navbar from "@/components/TheNav.vue";
 import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
-import { required, minLength, email } from "vuelidate/lib/validators";
+import { required, email } from "vuelidate/lib/validators";
 
 export default {
   name: "workspace",
@@ -208,14 +208,14 @@ export default {
   },
   validations: {
     userData: {
-      firstname: {
-        required,
-        minLength: minLength(3),
-      },
-      lastname: {
-        required,
-        minLength: minLength(3),
-      },
+      // firstname: {
+      //   required,
+      //   minLength: minLength(3),
+      // },
+      // lastname: {
+      //   required,
+      //   minLength: minLength(3),
+      // },
       role_id: {
         required
       },
@@ -243,8 +243,8 @@ export default {
       roleOptions: [{ value: null, text: "Select a Role" }],
       submitted: false,
       userData: {
-        firstname: "",
-        lastname: "",
+        // firstname: "",
+        // lastname: "",
         role_id: null,
         email: "",
         workspace_id: this.$route.params.id
@@ -336,8 +336,8 @@ export default {
           this.getWorkspaceData(this.$route.params.id);
           this.submitted = false;
           this.userData = {
-            firstname: "",
-            lastname: "",
+            // firstname: "",
+            // lastname: "",
             role_id: null,
             email: "",
             workspace_id: this.$route.params.id
@@ -383,8 +383,8 @@ export default {
           this.getWorkspaceData(this.$route.params.id);
           this.submitted = false;
           this.userData = {
-            firstname: "",
-            lastname: "",
+            // firstname: "",
+            // lastname: "",
             role_id: null,
             email: "",
             workspace_id: this.$route.params.id
@@ -457,8 +457,8 @@ export default {
       this.triggerEdit = true;
       this.editId = id;
       this.userData = {
-        firstname: data.firstname,
-        lastname: data.lastname,
+        // firstname: data.firstname,
+        // lastname: data.lastname,
         role_id: data.team_role_id,
         email: data.email,
         workspace_id: this.$route.params.id
@@ -470,8 +470,8 @@ export default {
       this.triggerEdit = false;
       this.submitted = false;
       this.userData = {
-        firstname: "",
-        lastname: "",
+        // firstname: "",
+        // lastname: "",
         role_id: null,
         email: "",
         workspace_id: this.$route.params.id

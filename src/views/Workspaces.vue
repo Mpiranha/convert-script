@@ -161,7 +161,7 @@
         <h3 class="title">Give your workspace a name</h3>
         <p class="desc">Only you can see this</p>
       </div> -->
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-6">
           <b-form-group label="First Name">
             <b-form-input :class="{ 'is-invalid': submitted && $v.userData.firstname.$error }" id="firstname"
@@ -184,14 +184,14 @@
             </div>
           </b-form-group>
         </div>
-      </div>
+      </div> -->
 
       <b-form-group label="Email">
         <b-form-input :class="{ 'is-invalid': submitted && $v.userData.email.$error }" id="email" v-model="userData.email"
           type="text" class="input-table">
         </b-form-input>
         <div v-if="submitted && $v.userData.email.$error" class="invalid-feedback">
-          <span v-if="!$v.userData.email.required">* Name is required <br /></span>
+          <span v-if="!$v.userData.email.required">* Email is required <br /></span>
           <span v-if="!$v.userData.email.email">* Please enter a valid email</span>
         </div>
       </b-form-group>
@@ -257,14 +257,14 @@ export default {
       }
     },
     userData: {
-      firstname: {
-        required,
-        minLength: minLength(3),
-      },
-      lastname: {
-        required,
-        minLength: minLength(3),
-      },
+      // firstname: {
+      //   required,
+      //   minLength: minLength(3),
+      // },
+      // lastname: {
+      //   required,
+      //   minLength: minLength(3),
+      // },
       role_id: {
         required
       },
@@ -294,8 +294,8 @@ export default {
       workspaceOptions: [{ value: null, text: "Select a Workspace" }],
       submitted: false,
       userData: {
-        firstname: "",
-        lastname: "",
+        // firstname: "",
+        // lastname: "",
         role_id: null,
         email: "",
         workspace_id: null
@@ -455,8 +455,8 @@ export default {
           this.getWorkspaces();
           this.submitted = false;
           this.userData = {
-            firstname: "",
-            lastname: "",
+            // firstname: "",
+            // lastname: "",
             role_id: null,
             email: "",
             workspace_id: null
