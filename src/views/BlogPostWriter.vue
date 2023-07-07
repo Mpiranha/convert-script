@@ -578,7 +578,7 @@ export default {
         event.preventDefault();
       }
 
-      this.generatedOutlines.push("Type in here to add outline manually");
+      this.generatedOutlines.push("");
     },
     deleteOutline(event, value) {
       if (event) {
@@ -1091,6 +1091,11 @@ export default {
   color: #393F46;
   border: none;
   margin-right: 1rem;
+}
+
+.text:empty:before {
+  content: attr(data-placeholder);
+  color: rgb(187 187 187);
 }
 
 .outline_item .text:focus {

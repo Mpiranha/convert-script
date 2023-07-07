@@ -2,12 +2,11 @@
     <div class="outline_item" @click="onParentFocusInput">
         <img class="outline_icon" src="@/assets/icons/outline.png" alt="outline icon">
 
-        <span @blur="onBlur" ref="textInput" @input="updateModel($event)" :contenteditable="isEdit" class="text">
-            {{ text }}
-        </span>
+        <input @blur="onBlur" ref="textInput" @input="updateModel($event)" :disabled="disabled" class="form-control text"
+            placeholder="Type in here to add outline manually" :value="text">
 
         <div class="outline_actions">
-            <button v-if="!isEdit" @click="toggleEdit" class="btn no-shadow btn_outline_edit">
+            <button v-if="disabled" @click="toggleEdit" class="btn no-shadow btn_outline_edit">
                 <img src="@/assets/icons/edit.svg" alt="edit icon">
             </button>
 
@@ -24,7 +23,7 @@
 export default {
     data() {
         return {
-            isEdit: false,
+            disabled: true,
         }
     },
     props: ["text", "value"],
@@ -50,7 +49,7 @@ export default {
         },
         toggleEdit() {
             let textField = this.$refs.textInput;
-            this.isEdit = true;
+            this.disabled = false;
             if (textField) { textField.focus(); }
             this.SelectText(textField);
         },
@@ -58,7 +57,7 @@ export default {
             this.$emit("delete-clicked");
         },
         onBlur() {
-            this.isEdit = false;
+            this.disabled = true;
             document.getSelection().removeAllRanges();
         },
         onParentFocusInput() {
