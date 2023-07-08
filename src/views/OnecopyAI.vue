@@ -128,7 +128,7 @@
                             placeholder="Type in your answers here"></textarea> -->
 
                         <div @keyup="doKeydownEvent($event)" @keydown="doKeydownEvent($event)" @input="updateData($event)"
-                          ref="chatDiv" contenteditable="showPromptBox" class="chat-input"
+                          ref="chatDiv" contenteditable="showPromptBox" disabled class="chat-input"
                           data-placeholder="Send a Message">
 
                         </div>

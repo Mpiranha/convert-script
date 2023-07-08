@@ -38,7 +38,7 @@
                   <thead>
                     <tr>
                       <th>Name</th>
-                      <th class="text-center">Prompt</th>
+                      <th class="text-left">Prompt</th>
                       <th class="text-right">Action</th>
                     </tr>
                   </thead>
@@ -59,7 +59,7 @@
                   <tbody v-else-if="chatPrompts && searchKey.length < 1">
                     <tr v-for="prompt in chatPrompts" :key="prompt.id">
                       <td scope="row">{{ prompt.name }}</td>
-                      <td class="text-center">{{ prompt.prompt }}</td>
+                      <td class="text-left">{{ prompt.prompt }}</td>
                       <td>
                         <dropdown-tool @edit-clicked="openEditModal(prompt.id, prompt)
                           " @delete-proceed="deletePrompt(prompt.id)" delete-what="prompt">

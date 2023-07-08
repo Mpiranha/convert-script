@@ -17,7 +17,8 @@
               <h6 class="title">{{ workspaceDetail.workspace[0].name }}</h6>
 
               <div class="d-flex flex-wrap align-items-center ml-md-auto">
-                <button v-show="String(workspaceDetail.workspace[0].owner).toLowerCase() == 'me'" @click="clearField" class="btn btn-add-member" v-b-modal.modal-new-member>
+                <button v-show="String(workspaceDetail.workspace[0].owner).toLowerCase() == 'me'" @click="clearField"
+                  class="btn btn-add-member" v-b-modal.modal-new-member>
                   Add member
                 </button>
               </div>
@@ -45,32 +46,30 @@
                       <th>Date Created</th>
                       <th class="text-left">Role</th>
                       <th class="text-center">Status</th>
-                      <th v-show="String(workspaceDetail.workspace[0].owner).toLowerCase() == 'me'" class="text-right">Action</th>
+                      <th v-show="String(workspaceDetail.workspace[0].owner).toLowerCase() == 'me'" class="text-right">
+                        Action</th>
                     </tr>
                   </thead>
                   <tbody v-if="searchResult.length > 0">
                     <tr v-for="result in searchResult" :key="result.id">
                       <td scope="row">
-                        {{ result.name }}
+                        {{ result.firstname + " " + result.lastname }}
                       </td>
                       <td class="text-left">{{ formatDate(result.created_at) }}</td>
-                      <td class="text-left">{{ result.member_count }}</td>
-                      <td>
-
+                      <td class="text-left">{{ result.team_role }}</td>
+                      <td class="text-center">
+                        <span v-if="result.status.toLowerCase() == 'active'" class="bg-success default_workspace">{{
+                          result.status }}</span>
+                        <span v-else>{{ result.status }}</span>
                       </td>
                       <td v-show="String(workspaceDetail.workspace[0].owner).toLowerCase() == 'me'">
                         <dropdown-tool delete-what="user" @edit-clicked="openEditModal(result.id, result)
                           " @delete-proceed="deleteTeamMember(result.id)">
                           <template v-slot:secondary>
-                            <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#">
-                              <img class="drop-img-icon" src="@/assets/icons/account 1.png" alt="add to client icon" />
-                              Members
-                            </b-dropdown-item>
-                            <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#"
-                              @click="setDefaultWorkspace(result.id)">
-                              <img class="drop-img-icon" src="@/assets/icons/Default_workspace.png"
-                                alt="add to client icon" />
-                              Set as Default
+                            <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link"
+                              @click="resendInviteLink(result.id)">
+                              <img class="drop-img-icon" src="@/assets/icons/Group.png" alt="resend invite icon" />
+                              Resend Invite
                             </b-dropdown-item>
                           </template>
                         </dropdown-tool>
@@ -96,9 +95,9 @@
                           " @delete-proceed="deleteTeamMember(team.id)">
                           <template v-slot:secondary>
 
-                            <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#"
+                            <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link"
                               @click="resendInviteLink(team.id)">
-                              <img class="drop-img-icon" src="@/assets/icons/Group.png" alt="add to client icon" />
+                              <img class="drop-img-icon" src="@/assets/icons/Group.png" alt="resend invite icon" />
                               Resend Invite
                             </b-dropdown-item>
                           </template>
@@ -183,7 +182,7 @@
         <b-button @click="$bvModal.hide('modal-new-member')" class="close-modal">Close</b-button>
         <b-button @click="triggerEdit ? editTeamToWorkspace(editId, $event) : addTeamToWorkspace($event)"
           class="save-modal">
-          {{ triggerEdit ? "EDIT" : "ADD USER" }}
+          {{ triggerEdit ? "Edit" : "Add user" }}
         </b-button>
       </div>
     </b-modal>
@@ -438,7 +437,7 @@ export default {
           for (let index = 0; index < data.length; index++) {
             this.roleOptions.push({
               value: data[index].id,
-              text: data[index].name,
+              text: String(data[index].name).replace(/^.|\s\S/g, function (a) { return a.toUpperCase(); }),
             });
           }
 
@@ -466,7 +465,7 @@ export default {
     },
 
     clearField() {
-    
+
       this.triggerEdit = false;
       this.submitted = false;
       this.userData = {
@@ -518,5 +517,4 @@ export default {
   padding: 0.35rem 1.2rem 0.3rem 1.2rem;
   border-radius: 1rem;
   font-size: 0.8rem;
-}
-</style>
+}</style>

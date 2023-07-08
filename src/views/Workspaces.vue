@@ -142,7 +142,7 @@
         </div>
       </b-form-group>
 
-      <b-form-group>
+      <!-- <b-form-group>
         <label for="workspace-name">Workspace Slug</label>
         <b-form-input :class="{ 'is-invalid': submitted && $v.workspaceData.slug.$error }" id="workspace-slug"
           v-model="workspaceData.slug" type="text" class="input-table">
@@ -151,7 +151,7 @@
           <span v-if="!$v.workspaceData.slug.required">* Slug is required <br /></span>
           <span v-if="!$v.workspaceData.slug.minLength">* Minimum of 3 Characters</span>
         </div>
-      </b-form-group>
+      </b-form-group> -->
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-workspace')" class="close-modal">Close</b-button>
@@ -226,7 +226,7 @@
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-member')" class="close-modal">Close</b-button>
         <b-button @click="addTeamToWorkspace($event)" class="save-modal">
-          {{ triggerEdit ? "EDIT" : "Add user" }}
+          {{ triggerEdit ? "Edit" : "Add user" }}
         </b-button>
       </div>
     </b-modal>
@@ -255,10 +255,10 @@ export default {
         required,
         minLength: minLength(1),
       },
-      slug: {
-        required,
-        minLength: minLength(1),
-      }
+      // slug: {
+      //   required,
+      //   minLength: minLength(1),
+      // }
     },
     userData: {
       // firstname: {
@@ -288,7 +288,7 @@ export default {
       workspaces: [],
       workspaceData: {
         name: "",
-        slug: ""
+        // slug: ""
       },
       error: "",
       loading: true,
@@ -537,13 +537,13 @@ export default {
       this.editId = id;
       this.workspaceData = {
         name: data.name,
-        slug: data.slug
+        // slug: data.slug
       }
     },
     clearField() {
       this.workspaceData = {
         name: "",
-        slug: ""
+        // slug: ""
       },
         this.userData = {
           role_id: null,
