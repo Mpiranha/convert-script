@@ -83,8 +83,8 @@
                       </div>
 
                     </div>
-                    <div class="chat_footer">
-                      <button class="btn no-shadow btn_chat_prompt mr-3" v-b-modal.modal-prompt>
+                    <div class="chat_footer" :disabled="isProcessing ? 'disabled' : false">
+                      <button :disabled="isProcessing" class="btn no-shadow btn_chat_prompt mr-3" v-b-modal.modal-prompt>
                         <img src="@/assets/icons/templates.svg" alt="prompt icon">
                       </button>
 
@@ -100,7 +100,7 @@
                       <!-- <button class="btn no-shadow btn_chat_prompt mr-3">  </button> -->
 
 
-                      <div class="chat-input-div">
+                      <div class="chat-input-div" :disabled="isProcessing ? 'disabled' : false">
                         <div class="speech_text_processing" v-if="isRecording">
                           <!-- <img src="@/assets/icons/Message-1s-267px.gif" alt="ai typing icon"> -->
 
@@ -128,8 +128,7 @@
                             placeholder="Type in your answers here"></textarea> -->
 
                         <div @keyup="doKeydownEvent($event)" @keydown="doKeydownEvent($event)" @input="updateData($event)"
-                          ref="chatDiv" contenteditable="showPromptBox" disabled class="chat-input"
-                          data-placeholder="Send a Message">
+                          ref="chatDiv" :contenteditable="true" class="chat-input" data-placeholder="Send a Message">
 
                         </div>
                         <button class="btn btn-send" @click="sendMessage(message)">
@@ -330,10 +329,8 @@ export default {
         });
     },
     async startRecording() {
+      if (this.isProcessing) return;
       this.recordState = "Listening";
-
-
-
       // Old code
       let stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
       // Old code
@@ -566,6 +563,7 @@ export default {
 
       //console.log(this);
       let e = event; // to deal with IE
+      if (this.isProcessing) e.preventDefault();
       this.map[e.keyCode] = e.type == 'keydown';
       /* insert conditional here */
       // eslint-disable-next-line no-empty
@@ -661,6 +659,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          this.isProcessing = false;
           this.error = error;
           this.makeToast("danger", this.error);
           // this.error = error.response.data.errors.root;
@@ -687,7 +686,8 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.error = error;
+          this.isProcessing = false;
+          this.error = error.response.data;
           this.makeToast("danger", this.error);
           // this.error = error.response.data.errors.root;
           // this.error = error;
@@ -999,6 +999,7 @@ export default {
   margin-top: auto;
 }
 
+
 .chat-input-div {
   display: flex;
   border: 1px solid #E5E5E5;
@@ -1009,6 +1010,12 @@ export default {
   padding: 0.8rem 1rem;
   border-radius: 0.5rem;
   position: relative;
+}
+
+.chat-input-div[disabled='disabled'] {
+  cursor: not-allowed;
+  color: #6c757d;
+  background-color: #e9ecef;
 }
 
 .btn_edit_chat_title {

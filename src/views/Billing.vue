@@ -121,7 +121,7 @@
       <b-form-group>
         <label for="promo_code">Number of words</label>
 
-        <b-form-select class="form-control" v-model="selectedPlagiarismPlan"
+        <b-form-select class="form-control" @input="getStripeLink" v-model="selectedPlagiarismPlan"
           :options="plagiarismPlanOption"></b-form-select>
 
         <!-- <div v-if="submitted && $v.promoCode.$error" class="invalid-feedback">
@@ -131,7 +131,7 @@
 
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-credit')" class="close-modal">Close</b-button>
-        <a v-if="selectedPlagiarismPlan" class="save-modal" :href="selectedPlagiarismPlan" target="_blank">Purchase</a>
+        <a v-if="stripeLink" class="save-modal" :href="stripeLink">Purchase</a>
       </div>
     </b-modal>
   </div>
@@ -176,9 +176,24 @@ export default {
       isYearly: false,
       submitted: false,
       promoCode: "",
+      stripeLink: null,
     };
   },
   methods: {
+    getStripeLink() {
+      this.$store
+        .dispatch("upgradePlagiarismPlan", this.selectedPlagiarismPlan)
+        .then((res) => {
+          this.stripeLink = res.data.data.upgrade_url;
+          this.makeToast("success", res.data.message);
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+          
+          this.makeToast("danger", error.response.data.message);
+          this.$store.commit("updateLoadState", false);
+        });
+    },
     formatDate(date) {
       if (!date) {
         return "NULL";
@@ -196,7 +211,7 @@ export default {
           this.plagiarismPlans = res.data.data;
 
           for (var i = 0; i < res.data.data.all_plans.length; i++) {
-            this.plagiarismPlanOption.push({ value: res.data.data.all_plans[i].upgrade_link, text: res.data.data.all_plans[i].words + ' ($' + res.data.data.all_plans[i].price + ')' })
+            this.plagiarismPlanOption.push({ value: res.data.data.all_plans[i].id, text: res.data.data.all_plans[i].words + ' ($' + res.data.data.all_plans[i].price + ')' })
           }
           this.$store.commit("updateLoadState", false);
         })
