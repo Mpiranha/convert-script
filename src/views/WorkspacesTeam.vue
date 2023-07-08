@@ -506,7 +506,7 @@ export default {
 .btn-create-workspace span {
   font-size: 1.4rem;
   left: 11px;
-  top: 0px;
+  top: 7px;
 }
 
 .btn-create-workspace {

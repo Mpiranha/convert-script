@@ -226,7 +226,7 @@
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-member')" class="close-modal">Close</b-button>
         <b-button @click="addTeamToWorkspace($event)" class="save-modal">
-          {{ triggerEdit ? "EDIT" : "ADD USER" }}
+          {{ triggerEdit ? "EDIT" : "Add user" }}
         </b-button>
       </div>
     </b-modal>
@@ -517,7 +517,7 @@ export default {
           for (let index = 0; index < data.length; index++) {
             this.roleOptions.push({
               value: data[index].id,
-              text: data[index].name,
+              text: String(data[index].name).replace(/^.|\s\S/g, function(a) { return a.toUpperCase(); }),
             });
           }
 

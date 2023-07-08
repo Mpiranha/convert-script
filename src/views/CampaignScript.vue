@@ -7,7 +7,7 @@
       <div class="content-section">
         <navbar :script-type-name="campaign.name" logo-link-class="hide-logo" toggle-class="permanent-toggler">
           <template v-slot:create-btn>
-            <router-link class="btn btn-create" :to="{
+            <router-link class="btn btn-create btn-new-copy" :to="{
               name: 'CampaignScriptSelect',
               params: { id: campaign.id },
             }">
@@ -52,7 +52,7 @@
 
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
-                                {{ script.script_type_name }}
+                                {{ script.name }}
                               </div>
                               <div class="script-content">
                                 {{ removeTags(abbrScript(script.text)) }}
@@ -71,7 +71,7 @@
 
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
-                                {{ script.script_type_name }}
+                                {{ script.name }}
                               </div>
                               <div class="script-content">
                                 {{ removeTags(abbrScript(script.text)) }}

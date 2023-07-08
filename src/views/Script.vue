@@ -7,7 +7,7 @@
       <div class="content-section">
         <navbar script-type-name="All Copy" logo-link-class="hide-logo" toggle-class="permanent-toggler">
           <template v-slot:create-btn>
-            <router-link class="btn btn-create mx-2" to="/script/select">
+            <router-link class="btn btn-create btn-new-copy mx-2" to="/script/select">
               <span>+</span>
               New Copy
             </router-link>
@@ -549,7 +549,7 @@ export default {
         .then((res) => {
           console.log(res.data.data.message);
 
-          this.getScripts();
+          this.getScripts(true);
           this.makeToast("success", res.data.data.message);
         })
         .catch((error) => {

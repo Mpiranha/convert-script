@@ -95,6 +95,14 @@ body {
     border-radius: 0.5rem !important;
 }
 
+.btn-new-copy {
+    padding: 0.5rem 1rem 0.5rem 2.5rem !important;
+}
+
+.btn-new-copy span {
+    top: -2px !important;
+}
+
 .btn-one {
     color: #fff !important;
     background-color: #8338ec !important;

@@ -120,6 +120,39 @@ export default {
       signedURL: null,
     };
   },
+  beforeRouteEnter(to, from, next) {
+    // ...
+    console.log(to);
+    if (to.query.invite_data) {
+
+      next(vm => {
+        vm.$store
+          .dispatch("verifyGoogleToken", to.query.code)
+          .then(() => {
+            vm.error = null;
+            // vm.$router.push(this.$route.query.from || "/").catch(() => {
+            // });
+            next("/");
+          })
+          .catch((errors) => {
+            
+
+            // for (const key in errors) {
+            //   if (Object.hasOwnProperty.call(errors, key)) {
+            //     console.log(key);
+            //     console.log(errors[key]);
+
+            //   }
+            // }
+            vm.error = errors.response.data.message;
+            // this.error = error;
+          });
+      })
+
+    } else {
+      next();
+    }
+  },
   mounted: function () {
     if (this.$store.getters.isAuthenticated) {
       this.$router.push("/");

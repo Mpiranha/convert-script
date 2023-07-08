@@ -6,7 +6,7 @@
       <div class="content-section">
         <navbar script-type-name="My Favourites" logo-link-class="hide-logo" toggle-class="permanent-toggler">
           <template v-slot:create-btn>
-            <router-link class="btn btn-create mr-2" to="/script/select">
+            <router-link class="btn btn-create btn-new-copy mr-2" to="/script/select">
               <span>+</span>
               New Copy
             </router-link>
