@@ -16,7 +16,7 @@
               ">
               <h6 class="title">MarketPlace</h6>
 
-              <router-link @click="clearField" class="btn btn-create py-2" to="/projects">
+              <router-link @click="clearField" class="btn btn-one" to="/projects">
                 Saved Projects
               </router-link>
             </div>

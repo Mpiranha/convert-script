@@ -510,8 +510,8 @@ export default {
         .dispatch("editScript", {
           id: id,
           data: campaignId
-            ? { campaign_id: campaignId, text: txt }
-            : { text: this.content },
+            ? { campaign_id: campaignId, text: txt, workspace_id: this.workspace_id }
+            : { text: this.content, workspace_id: this.workspace_id },
         })
         .then(() => {
           this.error = null;
@@ -645,8 +645,8 @@ export default {
       let heightOfWindow = event.target.scrollHeight - event.target.offsetHeight;
       let bottomOfWindow = Math.round(event.target.scrollTop) >= heightOfWindow;
 
-      // console.log("height of window", heightOfWindow);
-      // console.log("bottom of window", bottomOfWindow);
+      console.log("height of window", heightOfWindow);
+      console.log("bottom of window", bottomOfWindow);
 
       if (bottomOfWindow && this.currentPage < this.maxPage) {
         // ...

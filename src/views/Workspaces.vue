@@ -62,11 +62,13 @@
                       <td class="text-left">{{ result.member_count }}</td>
                       <td>
                         <span v-if="workspace.id == $store.state.user.default_workspace_id"
-                          class="bg-success default_workspace">Default</span>
+                          class="bg-success default_workspace">Active</span>
                       </td>
                       <td>
                         <dropdown-tool delete-what="workspace" @edit-clicked="openEditModal(result.id, result)
-                          " :hide-edit="workspace.owner.toLowerCase() != 'me'" :hide-delete="workspace.id == $store.state.user.default_workspace_id" @delete-proceed="deleteWorkspace(result.id)">
+                          " :hide-edit="workspace.owner.toLowerCase() != 'me'"
+                          :hide-delete="workspace.id == $store.state.user.default_workspace_id"
+                          @delete-proceed="deleteWorkspace(result.id)">
                           <template v-slot:secondary>
                             <router-link link-class="drop-link" :to="/workspace/ + workspace.id">
                               <img class="drop-img-icon" src="@/assets/icons/account 1.png" alt="add to client icon" />
@@ -75,7 +77,7 @@
                             <b-dropdown-item link-class="drop-link" @click="setDefaultWorkspace(result.id)">
                               <img class="drop-img-icon" src="@/assets/icons/Default_workspace.png"
                                 alt="add to client icon" />
-                              Set as Default
+                              Set as Active
                             </b-dropdown-item>
                           </template>
                         </dropdown-tool>
@@ -93,11 +95,13 @@
                       <td class="text-left">{{ workspace.member_count }}</td>
                       <td>
                         <span v-if="workspace.id == $store.state.user.default_workspace_id"
-                          class="bg-success default_workspace">Default</span>
+                          class="bg-success default_workspace">Active</span>
                       </td>
                       <td>
                         <dropdown-tool delete-what="workspace" @edit-clicked="openEditModal(workspace.id, workspace)
-                          " :hide-edit="workspace.owner.toLowerCase() != 'me'" :hide-delete="workspace.id == $store.state.user.default_workspace_id" @delete-proceed="deleteWorkspace(workspace.id)">
+                          " :hide-edit="workspace.owner.toLowerCase() != 'me'"
+                          :hide-delete="workspace.id == $store.state.user.default_workspace_id"
+                          @delete-proceed="deleteWorkspace(workspace.id)">
                           <template v-slot:secondary>
                             <b-dropdown-item link-class="drop-link">
                               <router-link class="drop-link" :to="/workspace/ + workspace.id">
@@ -108,7 +112,7 @@
                             <b-dropdown-item link-class="drop-link" @click="setDefaultWorkspace(workspace.id)">
                               <img class="drop-img-icon" src="@/assets/icons/Default_workspace.png"
                                 alt="add to client icon" />
-                              Set as Default
+                              Set as Active
                             </b-dropdown-item>
                           </template>
                         </dropdown-tool>
@@ -541,12 +545,12 @@ export default {
         name: "",
         slug: ""
       },
-      this.userData = {
-        role_id: null,
-        email: "",
-        workspace_id: null
-      },
-      this.triggerEdit = false;
+        this.userData = {
+          role_id: null,
+          email: "",
+          workspace_id: null
+        },
+        this.triggerEdit = false;
       this.submitted = false;
     },
     formatDate(date) {
@@ -573,13 +577,14 @@ export default {
   border: 1px solid rgb(154 157 161) !important;
   margin-right: 1rem;
   font-size: 0.9rem !important;
+  padding: 1rem 1.5rem !important;
 }
 
 
 .btn-create-workspace span {
   font-size: 1.4rem;
   left: 11px;
-  top: 0px;
+  top: 7px;
 }
 
 .btn-create-workspace {
@@ -594,5 +599,4 @@ export default {
 
 .workspace_link {
   cursor: pointer;
-}
-</style>
+}</style>

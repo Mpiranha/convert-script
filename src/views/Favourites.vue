@@ -43,26 +43,26 @@
                     <div v-else class="responsive-table">
                       <table class="table table-section script-table">
                         <tbody v-if="searchResult.length > 0">
-                          <tr v-for="script in searchResult" :key="script.response.id"
-                            :class="activeScript ? script.response.id == activeScript.response.id ? 'active' : '' : ''">
+                          <tr v-for="script in searchResult" :key="script.id"
+                            :class="activeScript ? script.id == activeScript.id ? 'active' : '' : ''">
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
                                 {{
-                                  script.response.script_type_name
-                                  ? script.response.script_type_name
+                                  script.script_type_name
+                                  ? script.script_type_name
                                   : "NIL"
                                 }}
                               </div>
                               <div class="script-content">
-                                {{ removeTags(abbrScript(script.response.text)) }}
+                                {{ removeTags(abbrScript(script.text)) }}
                               </div>
                             </td>
 
                             <td class="text-right">
                               <dropdown-tool :no-edit="true" :no-delete="true" delete-what="Script"
-                                @delete-proceed="deleteScript(script.response.id)">
+                                @delete-proceed="deleteScript(script.id)">
                                 <template v-slot:secondary>
-                                  <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#" @click="addRemoveScriptFavorite(script.response.id)
+                                  <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#" @click="addRemoveScriptFavorite(script.id)
                                     ">
                                     <img class="drop-img-icon" src="@/assets/icons/convert-icon/my Favourites.svg"
                                       alt="remove from favorite icon" />
@@ -74,27 +74,27 @@
                           </tr>
                         </tbody>
                         <tbody v-else-if="scripts && searchKey.length < 1">
-                          <tr v-for="script in scripts" :key="script.response.id"
-                            :class="activeScript ? script.response.id == activeScript.response.id ? 'active' : '' : ''">
+                          <tr v-for="script in scripts" :key="script.id"
+                            :class="activeScript ? script.id == activeScript.id ? 'active' : '' : ''">
                             <td @click="setActiveScript(script)">
                               <div class="script-type">
                                 {{
-                                  script.response.script_type_name
-                                  ? script.response.script_type_name
+                                  script.script_type_name
+                                  ? script.script_type_name
                                   : "NIL"
                                 }}
                               </div>
                               <div class="script-content">
-                                {{ removeTags(abbrScript(script.response.text)) }}
+                                {{ removeTags(abbrScript(script.text)) }}
                               </div>
                             </td>
 
                             <td class="text-right">
                               <dropdown-tool :no-edit="true" :no-delete="true" delete-what="Script"
-                                @delete-proceed="deleteScript(script.response.id)">
+                                @delete-proceed="deleteScript(script.id)">
                                 <template v-slot:secondary>
                                   <b-dropdown-item v-b-modal.add-client link-class="drop-link" href="#"
-                                    @click="addRemoveScriptFavorite(script.response.id)">
+                                    @click="addRemoveScriptFavorite(script.id)">
                                     <img class="drop-img-icon" src="@/assets/icons/convert-icon/my Favourites.svg"
                                       alt="remove from favorite icon" />
                                     Remove from favorite
@@ -141,20 +141,19 @@
                           <img v-else class="fav-icon" src="@/assets/icons/convert-icon/my Favourites.svg" alt="" />
                         </div>
 
-                        <button @click="exportScript(activeScript.response.id)" class="btn btn-export-all">
+                        <button @click="exportScript(activeScript.id)" class="btn btn-export-all">
                           Export
                         </button>
                       </div>
                     </div>
                     <div class="content-display" v-if="activeScript">
-                      <div v-html="formatScript(activeScript.response.text)"></div>
+                      <div v-html="formatScript(activeScript.text)"></div>
                     </div>
                     <div v-else class="no-select">
                       Select a Script to Preview
                     </div>
                     <div class="section-footer">
-                      <button v-if="activeScript"
-                        @click="toggleEdit(activeScript.response.id, formatScript(activeScript.response.text))"
+                      <button v-if="activeScript" @click="toggleEdit(activeScript.id, formatScript(activeScript.text))"
                         class="btn no-shadow btn-share">
                         <img class="foot-icons" src="@/assets/icons/convert-icon/draw.svg" alt="edit icon" />
                         Edit
@@ -163,8 +162,7 @@
                         <img class="foot-icons" src="@/assets/icons/convert-icon/copy.svg" alt="" />
                         Copy to clipboard
                       </button>
-                      <textarea type="hidden" id="text--copy"
-                        :value="activeScript ? activeScript.response.text : ''"></textarea>
+                      <textarea type="hidden" id="text--copy" :value="activeScript ? activeScript.text : ''"></textarea>
                     </div>
                   </div>
                 </div>
@@ -236,20 +234,20 @@
             <option value=""></option>
             <option value=""></option>
           </select> -->
-                <button @click="exportScript(activeScript.response.id)" target="_blank" class="btn btn-export-all">
+                <button @click="exportScript(activeScript.id)" target="_blank" class="btn btn-export-all">
                   Export
                 </button>
               </div>
             </div>
             <div class="content-display" v-if="activeScript">
-              <div v-html="formatScript(activeScript.response.text)"></div>
+              <div v-html="formatScript(activeScript.text)"></div>
             </div>
             <div v-else class="no-select">
               Select a Script to Preview
             </div>
             <div class="section-footer">
 
-              <button v-if="activeScript" @click="toggleEdit(activeScript.response.id, formatScript(activeScript.response.text))"
+              <button v-if="activeScript" @click="toggleEdit(activeScript.id, formatScript(activeScript.text))"
                 class="btn no-shadow btn-share">
                 <img class="foot-icons" src="@/assets/icons/convert-icon/draw.svg" alt="edit icon" />
                 Edit
@@ -259,7 +257,7 @@
                 Copy to clipboard
               </button>
               <b-button @click="$bvModal.hide('modal-view-script')" class="close-modal ml-auto">Close</b-button>
-              <textarea type="hidden" id="text--copy" :value="activeScript ? activeScript.response.text : ''"></textarea>
+              <textarea type="hidden" id="text--copy" :value="activeScript ? activeScript.text : ''"></textarea>
             </div>
           </div>
         </div>
@@ -368,6 +366,7 @@ export default {
         .dispatch("getCampaigns", this.workspace_id)
         .then((res) => {
           let data = res.data.data;
+          console.log(data);
           for (let index = 0; index < data.length; index++) {
             this.campaignOptions.push({
               value: data[index].id,
@@ -427,7 +426,7 @@ export default {
         .dispatch("exportOneScript", id)
         .then((res) => {
           // this.users = res.data.data;
-       
+
           var a = document.createElement("a");
           document.body.appendChild(a);
           //a.style = "display: none";
@@ -487,12 +486,14 @@ export default {
         .then((res) => {
           if (next) {
             this.nextLoading = false;
-            this.scripts = this.scripts.concat(res.data.data);
+            this.scripts = this.scripts.concat(res.data.data.data);
           } else {
-            console.log(res.data);
-            this.scripts = res.data.data;
-            this.scriptLength = res.data.meta.total;
-            this.maxPage = res.data.meta.last_page;
+           // console.log(res.data);
+            this.scripts = res.data.data.data;
+            this.scriptLength = res.data.data.meta.total;
+            this.maxPage = res.data.data.meta.last_page;
+
+           // console.log(this.scriptLength, this.maxPage)
           }
 
           this.$store.commit("updateLoadState", false);
@@ -535,7 +536,7 @@ export default {
     deleteScript(id) {
       this.$store.commit("updateLoadState", true);
       this.$store
-        .dispatch("deleteScript", {id, workspace_id: this.workspace_id})
+        .dispatch("deleteScript", { id, workspace_id: this.workspace_id })
         .then((res) => {
           this.error = null;
           this.getFavorites();
@@ -667,6 +668,7 @@ export default {
 
 
       // console.log("is bottom of window " + bottomOfWindow);
+      console.log(bottomOfWindow);
       if (bottomOfWindow && this.currentPage < this.maxPage) {
         // ...
         this.currentPage++;

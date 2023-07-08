@@ -104,13 +104,13 @@ export default {
           .catch((errors) => {
             
 
-            for (const key in errors) {
-              if (Object.hasOwnProperty.call(errors, key)) {
-                console.log(key);
-                console.log(errors[key]);
+            // for (const key in errors) {
+            //   if (Object.hasOwnProperty.call(errors, key)) {
+            //     console.log(key);
+            //     console.log(errors[key]);
 
-              }
-            }
+            //   }
+            // }
             vm.error = errors.response.data.message;
             // this.error = error;
           });

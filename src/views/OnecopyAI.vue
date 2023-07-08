@@ -198,7 +198,7 @@
               {{ selectedPrompt.prompt }}
             </div>
             <div class="d-flex justify-content-end mt-auto">
-              <b-button :disabled="selectedPrompt ? false : 'disabled'" class="save-modal" @click="setPromptToFIeld">Use
+              <b-button :disabled="selectedPrompt ? false : 'disabled'" class="btn-one" @click="setPromptToFIeld">Use
                 Prompt</b-button>
             </div>
           </div>
@@ -482,6 +482,7 @@ export default {
         var aud = new FormData();
 
         aud.append("audio", blob);
+        aud.append("workspace_id", this.workspace_id);
 
         this.convertingToText = true;
         this.recordState = "Processing";
@@ -742,20 +743,20 @@ export default {
         .dispatch("getChatHistory", this.workspace_id)
         .then((res) => {
           console.log(res.data);
-          
-           
-          
+
+
+
           this.chatHistories = res.data.data.reverse();
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-         // console.log(error.response.data.message);
-          
+          // console.log(error.response.data.message);
+
           if (error.response.data.message == "Access to OneChat is restricted") {
-              this.isRestricted = true;
-              this.$store.commit("updateLoadState", false);
-              return;
-            }
+            this.isRestricted = true;
+            this.$store.commit("updateLoadState", false);
+            return;
+          }
 
           this.$store.commit("updateLoadState", false);
         });
