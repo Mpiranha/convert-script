@@ -30,7 +30,7 @@
                   <i class="flaticon-loupe icons"></i>
                 </button>
                 <input @input="searchKeyWord" v-model="searchKey" class="form-control no-shadow search-input" type="text"
-                  placeholder="Search" />
+                  placeholder="email" />
               </div>
 
               <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
