@@ -384,6 +384,7 @@ export default {
         input_language_id: null,
         workspace_id: ""
       },
+      scriptType: [],
       generatingBlogPost: false,
       generatingOutline: false,
       generatingSubsection: false,
@@ -718,12 +719,8 @@ export default {
         .catch((error) => {
           this.loading = false;
           // console.log("error: " + error);
-          
-          if (error.response.data.message == "Access to LongForm is restricted") {
-              this.isRestricted = true;
-              this.generatingOutline  = false;
-              return;
-            }
+
+         
           this.error = error.response.data.errors;
 
           // this.makeToast("danger", this.error);
@@ -895,7 +892,35 @@ export default {
     },
     formatPost(text) {
       return text.replace(/\n/g, "<br>");
-    }
+    },
+    getScriptType(id) {
+      this.$store.commit("updateLoadState", true);
+      this.$store
+        .dispatch("getOneScriptType", id)
+        .then((res) => {
+          this.scriptType = res.data.data;
+
+          if (this.$store.state.user.default_input_language_id) {
+            this.genOutlineData.input_language_id = this.$store.state.user.default_input_language_id.id
+
+          }
+
+          if (this.$store.state.user.default_output_language_id) {
+            this.genOutlineData.output_language_id = this.$store.state.user.default_output_language_id.id
+          }
+
+          this.$store.commit("updateLoadState", false);
+        })
+        .catch((error) => {
+         // console.log(error);
+          //this.loading = false;
+          if (error.response.data.message == "Access to LongForm is restricted") {
+            this.isRestricted = true;
+            return;
+          }
+          this.$store.commit("updateLoadState", false);
+        });
+    },
   },
   mounted() {
     // this.getAllLanguages();
@@ -903,6 +928,7 @@ export default {
     // this.addSection();
     this.getAllTones();
     this.getAllLanguages();
+    this.getScriptType(this.$route.params.id);
 
     // this.generatedSubsection = this.convertToObject("Introduction: \n• Overview of the process of building a house \n• Benefits of building a house \n\nMaterials Needed: \n• Building materials \n• Tools \n• Protective gear \n\nFoundation: \n• Preparing the land \n• Laying the foundation \n• Setting up the footings \n• Securing the foundation \n\nFraming: \n• Assembling the frame \n• Setting up the walls \n• Installing the roof \n\nInterior Finishing: \n• Installing the drywall \n• Painting the walls \n• Installing the flooring \n• Installing the fixtures \n\nExterior Finishing: \n• Applying siding \n• Installing windows and doors \n• Adding exterior trim \n• Adding a porch or deck \n\nConclusion: \n• Summary of the process \n• Benefits of building a house \n• Tips for success ");
     // 

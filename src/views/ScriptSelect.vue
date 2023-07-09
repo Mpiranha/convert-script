@@ -64,7 +64,8 @@
 
             <div v-else-if="category && category == 'long-form'" class="row mb-5">
               <script-select-type-box :img-url="require(`@/assets/icons/blog 1.svg`)"
-                :link-url="{ name: 'BlogPostWriter' }" type-title="Blog Post Writer"
+                :link-url="{ name: 'BlogPostWriter', params: { id: longForms.id } }"
+                type-title="Blog Post Writer"
                 desc="Write SEO blog post that hook and educate your reader with a few input."></script-select-type-box>
 
               <script-select-type-box :img-url="require(`@/assets/icons/book 1.svg`)" type-title="Book Writer"
@@ -93,7 +94,8 @@
             </div>
             <div v-else-if="scriptTypes && searchKey.length < 1" class="row mb-5">
               <script-select-type-box :img-url="require(`@/assets/icons/blog 1.svg`)"
-                :link-url="{ name: 'BlogPostWriter' }" type-title="Blog Post Writer"
+                :link-url="{ name: 'BlogPostWriter', params: { id: longForms.id } }"
+                type-title="Blog Post Writer"
                 desc="Write SEO blog post that hook and educate your reader with a few input."></script-select-type-box>
 
               <script-select-type-box :img-url="require(`@/assets/icons/book 1.svg`)" type-title="Book Writer"
@@ -146,6 +148,7 @@ export default {
       categories: [],
       category: null,
       totalScripts: 0,
+      longForms: [],
     };
   },
   methods: {
@@ -169,6 +172,22 @@ export default {
           console.log(error);
           //this.loading = false;
           this.$store.commit("updateLoadState", false);
+        });
+    },
+    getLongForm() {
+
+      this.$store
+        .dispatch("getLongForms")
+        .then((res) => {
+
+          this.longForms = res.data.data[0];
+
+          // console.log(res.data);
+
+        })
+        .catch((error) => {
+          console.log(error);
+
         });
     },
     getScriptType() {
@@ -248,6 +267,7 @@ export default {
   mounted() {
     this.getScriptType();
     this.getCategories();
+    this.getLongForm();
   },
 };
 </script>

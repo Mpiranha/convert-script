@@ -43,6 +43,7 @@
                   <thead>
                     <tr>
                       <th>Member</th>
+                      <th>Email</th>
                       <th>Date Created</th>
                       <th class="text-left">Role</th>
                       <th class="text-center">Status</th>
@@ -54,6 +55,9 @@
                     <tr v-for="result in searchResult" :key="result.id">
                       <td scope="row">
                         {{ result.firstname + " " + result.lastname }}
+                      </td>
+                      <td class="text-left">
+                        {{ result.email }}
                       </td>
                       <td class="text-left">{{ formatDate(result.created_at) }}</td>
                       <td class="text-left">{{ result.team_role }}</td>
@@ -82,6 +86,9 @@
                         {{ team.firstname + " " + team.lastname }}
                       </td>
                       <td class="text-left">
+                        {{ team.email }}
+                      </td>
+                      <td class="text-left">
                         {{ formatDate(team.created_at) }}
                       </td>
                       <td class="text-left">{{ team.team_role }}</td>
@@ -93,7 +100,7 @@
                       <td v-show="String(workspaceDetail.workspace[0].owner).toLowerCase() == 'me'">
                         <dropdown-tool delete-what="workspace" @edit-clicked="openEditModal(team.id, team)
                           " @delete-proceed="deleteTeamMember(team.id)">
-                          <template v-slot:secondary>
+                          <template v-if="!(team.status.toLowerCase() == 'active')" v-slot:secondary>
 
                             <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link"
                               @click="resendInviteLink(team.id)">

@@ -29,14 +29,14 @@
       <div class="workspace_ps_relative" :class="removeContent ? 'hide-content' : ''">
         <div class="workspace-input_custom" @click="isOpen = !isOpen">
           <span class="selected_workspace">{{ this.$store.state.user.default_workspace ?
-            this.$store.state.user.default_workspace.name : 'Loading...' }} </span>
+            this.$store.state.user.default_workspace.name : 'Choose Workspace' }} </span>
           <img class="collapse-icon_workspace" src="@/assets/icons/down.png" alt="up icon">
         </div>
 
 
         <div v-if="isOpen" class="workspace_items_wrap close-click-outside">
           <ul class="nav">
-            <li class="cur_active"> {{ this.$store.state.user.default_workspace.name }}
+            <li v-if="this.$store.state.user.default_workspace" class="cur_active"> {{ this.$store.state.user.default_workspace.name }}
               <img src="@/assets/icons/check-mark 1.svg" alt="check mark">
             </li>
             <li v-for="workspace in firstTwoWorkspaces" :key="workspace.id" @click="setDefaultWorkspace(workspace.id)">

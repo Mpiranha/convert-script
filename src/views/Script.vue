@@ -365,7 +365,7 @@ export default {
     searchKeyWord() {
       this.$store
         .dispatch("search", {
-          endpoint: "/api/v1/scripts",
+          endpoint: `/api/v1/scripts/${this.workspace_id}`,
           keyword: this.searchKey,
         })
         .then((res) => {

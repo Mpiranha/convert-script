@@ -2425,6 +2425,8 @@ export default {
 
   // Long Form
 
+
+
   exportLongForm({ state }, data) {
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
@@ -2514,6 +2516,20 @@ export default {
       axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
       axios
         .get(`${baseUrl}/api/v1/plagiarism_plans`)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  getLongForms({ state }) {
+    return new Promise((resolve, reject) => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + state.token;
+      axios
+        .get(`${baseUrl}/api/v1/longform/script-types`)
         .then((resp) => {
           resolve(resp);
         })

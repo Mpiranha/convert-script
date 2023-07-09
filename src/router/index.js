@@ -363,7 +363,7 @@ const routes = [
     },
   },
   {
-    path: "/long-form/blog-post-writer",
+    path: "/long-form/:id",
     name: "BlogPostWriter",
     component: BlogPostWriter,
     meta: {
@@ -721,6 +721,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+ 
   const loginpath = window.location.hash.split("#")[1];
   const nearestWithTitle = to.matched
     .slice()
@@ -732,6 +733,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.length > 0) {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       if (store.getters.isAuthenticated) {
+        store.dispatch("getUser");
         let user = store.state.user;
         let role = user.role || JSON.parse(localStorage.getItem("user"));
         if (to.matched.some((record) => record.meta.adminAuth)) {
@@ -757,7 +759,13 @@ router.beforeEach(async (to, from, next) => {
           ) {
             next("/settings");
           }
+
+          // if (!(user.default_workspace) && to.name != "Workspace") {
+          //   next("/workspace")
+          // }
         }
+
+        
         next();
         return;
       } else {

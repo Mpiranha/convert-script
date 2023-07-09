@@ -122,7 +122,7 @@
         <label for="promo_code">Number of words</label>
 
         <b-form-select class="form-control" @input="getStripeLink" v-model="selectedPlagiarismPlan"
-          :options="plagiarismPlanOption"></b-form-select>
+          :options="plagiarismPlanOption" :disabled="fetchingLink"></b-form-select>
 
         <!-- <div v-if="submitted && $v.promoCode.$error" class="invalid-feedback">
           <span v-if="!$v.promoCode.required">* Plan is required <br /></span>
@@ -159,6 +159,7 @@ export default {
   },
   data() {
     return {
+      fetchingLink: false,
       plagiarismPlans: [],
       plagiarismPlanOption: [{ value: null, text: "Select a plan" }],
       selectedPlagiarismPlan: null,
@@ -181,15 +182,17 @@ export default {
   },
   methods: {
     getStripeLink() {
+      this.fetchingLink = true;
       this.$store
         .dispatch("upgradePlagiarismPlan", this.selectedPlagiarismPlan)
         .then((res) => {
+          this.fetchingLink = false;
           this.stripeLink = res.data.data.upgrade_url;
           this.makeToast("success", res.data.message);
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          
+          this.fetchingLink = false;
           this.makeToast("danger", error.response.data.message);
           this.$store.commit("updateLoadState", false);
         });

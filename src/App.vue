@@ -52,9 +52,9 @@ export default {
     //   //}
     // }
 
-    if (this.$store.getters.isAuthenticated) {
-      this.$store.dispatch("getUser");
-    }
+    // if (this.$store.getters.isAuthenticated) {
+    //   this.$store.dispatch("getUser");
+    // }
 
 
 
