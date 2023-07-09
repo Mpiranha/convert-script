@@ -89,7 +89,7 @@
                       </button>
 
                       <button class="btn no-shadow btn_chat_prompt btn_mic mr-3"
-                        :disabled="this.convertingToText ? 'disabled' : false" :class="{
+                        :disabled="convertingToText || isProcessing ? 'disabled' : false" :class="{
                           'active': isRecording
                         }" @click="isRecording ? stopRecording() : startRecording()">
                         <img v-if="isRecording" src="@/assets/icons/mic_white.svg" alt="prompt icon">
@@ -131,7 +131,7 @@
                           ref="chatDiv" :contenteditable="true" class="chat-input" data-placeholder="Send a Message">
 
                         </div>
-                        <button class="btn btn-send" @click="sendMessage(message)">
+                        <button :disabled="isProcessing" class="btn btn-send" @click="sendMessage(message)">
                           <img src="@/assets/icons/send-chat.svg" class="send-icon" name="send">
                         </button>
                       </div>

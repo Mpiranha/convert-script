@@ -5,7 +5,7 @@ export default {
                 // title: 'Message',
                 variant: variant,
                 solid: true,
-                autoHideDelay: 500,
+                autoHideDelay: 3500,
                 appendToast: true
             })
         }
