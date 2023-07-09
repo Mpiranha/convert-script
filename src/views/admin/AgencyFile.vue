@@ -172,7 +172,7 @@ import DropdownTool from "@/components/DropdownTool";
 import alertMixin from "@/mixins/alertMixin";
 
 export default {
-  name: "Users",
+  name: "AgencyFiles",
   mixins: [alertMixin],
   components: {
     Sidebar,

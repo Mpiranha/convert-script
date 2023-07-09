@@ -720,7 +720,7 @@ export default {
           this.loading = false;
           // console.log("error: " + error);
 
-         
+
           this.error = error.response.data.errors;
 
           // this.makeToast("danger", this.error);
@@ -912,7 +912,7 @@ export default {
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-         // console.log(error);
+          // console.log(error);
           //this.loading = false;
           if (error.response.data.message == "Access to LongForm is restricted") {
             this.isRestricted = true;
@@ -959,7 +959,7 @@ export default {
       if (!this.generatedPost) {
         return 0;
       } else {
-        return this.generatedPost.match(/<br><br>/g).length - this.headingCount;
+        return Math.round(this.generatedPost.match(/<br>/g).length / 2) - this.headingCount;
       }
     }
   }

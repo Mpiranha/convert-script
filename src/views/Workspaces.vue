@@ -226,7 +226,7 @@
       <div class="d-flex justify-content-end">
         <b-button @click="$bvModal.hide('modal-new-member')" class="close-modal">Close</b-button>
         <b-button @click="addTeamToWorkspace($event)" class="save-modal">
-          {{ triggerEdit ? "Edit" : "Add user" }}
+          Add user
         </b-button>
       </div>
     </b-modal>
@@ -386,12 +386,13 @@ export default {
       // this.$vm.$forceUpdate();
     },
     editWorkspace(id, event) {
+      console.log("yes")
       event.preventDefault();
 
       this.submitted = true;
 
       this.$v.$touch();
-      if (this.$v.$invalid) {
+      if (this.$v.workspaceData.$invalid) {
         return;
       }
 

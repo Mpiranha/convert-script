@@ -448,8 +448,8 @@ export default {
         .dispatch("editScript", {
           id: id,
           data: campaignId
-            ? { campaign_id: 1, text: txt }
-            : { text: this.content },
+            ? { campaign_id: 1, text: txt, workspace_id: this.workspace_id }
+            : { text: this.content, workspace_id: this.workspace_id },
         })
         .then(() => {
           this.error = null;

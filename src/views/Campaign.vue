@@ -228,7 +228,7 @@ export default {
     searchKeyWord() {
       this.$store
         .dispatch("search", {
-          endpoint: "/api/v1/campaigns",
+          endpoint: `/api/v1/campaigns/${this.workspace_id}`,
           keyword: this.searchKey,
         })
         .then((res) => {

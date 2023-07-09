@@ -339,7 +339,7 @@ export default {
     searchKeyWord() {
       this.$store
         .dispatch("search", {
-          endpoint: "/api/v1/scripts",
+          endpoint: `/api/v1/scripts/${this.workspace_id}`,
           keyword: this.searchKey,
         })
         .then((res) => {
@@ -470,8 +470,8 @@ export default {
         .dispatch("editScript", {
           id: id,
           data: campaignId
-            ? { campaign_id: campaignId, text: txt }
-            : { text: this.content },
+            ? { campaign_id: campaignId, text: txt, workspace_id: this.workspace_id }
+            : { text: this.content, workspace_id: this.workspace_id },
         })
         .then(() => {
           this.error = null;

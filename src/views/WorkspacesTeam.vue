@@ -51,8 +51,8 @@
                         Action</th>
                     </tr>
                   </thead>
-                  <tbody v-if="searchResult.length > 0">
-                    <tr v-for="result in searchResult" :key="result.id">
+                  <tbody v-if="!isEmpty(searchResult)">
+                    <tr v-for="result in searchResult.teams" :key="result.id">
                       <td scope="row">
                         {{ result.firstname + " " + result.lastname }}
                       </td>
@@ -258,10 +258,19 @@ export default {
     };
   },
   methods: {
+    isEmpty(obj) {
+      for (var prop in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+          return false;
+        }
+      }
+
+      return true
+    },
     searchKeyWord() {
       this.$store
         .dispatch("search", {
-          endpoint: "/api/v1/workspaces/" + this.$route.params.id,
+          endpoint: "/api/v1/workspace/" + this.$route.params.id,
           keyword: this.searchKey,
         })
         .then((res) => {
