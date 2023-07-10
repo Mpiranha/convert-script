@@ -362,7 +362,7 @@ export default {
           id: id,
           data: { agency_id: this.client, campaign_id: id },
         })
-        .then((res) => {
+        .then(() => {
          // console.log(res);
           this.error = null;
           this.client = null;
