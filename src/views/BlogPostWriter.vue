@@ -1260,6 +1260,8 @@ export default {
 .blog_post_generated_wrap {
   display: flex;
   flex-direction: column;
+  height: calc(90vh - 16px) !important;
+  overflow-y: auto;
 }
 
 .blog_post_loader,
