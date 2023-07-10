@@ -271,7 +271,7 @@ export default {
       this.$store
         .dispatch("downloadImage", encodeURIComponent(fileName))
         .then((res) => {
-          console.log(res);
+         // console.log(res);
           return res.data
           // var a = document.createElement("a");
           // document.body.appendChild(a);

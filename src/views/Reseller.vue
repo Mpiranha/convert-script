@@ -28,8 +28,8 @@
                 <button class="btn search-btn">
                   <i class="flaticon-loupe icons"></i>
                 </button>
-                <input @input="searchKeyWord" v-model="searchKey" class="form-control no-shadow search-input"
-                  type="text" placeholder="Search" />
+                <input @input="searchKeyWord" v-model="searchKey" class="form-control no-shadow search-input" type="text"
+                  placeholder="Search" />
               </div>
 
               <!-- <div class="sort-wrap">
@@ -298,9 +298,9 @@ export default {
           email: this.form.email,
           password: this.form.password,
         })
-        .then((res) => {
+        .then(() => {
           this.error = null;
-          console.log(res.data);
+          //  console.log(res.data);
           this.makeToast("success", "Reseller created successfully");
           // this.getCampaign();
           this.form = {
@@ -314,7 +314,7 @@ export default {
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
+          //  console.log(error.message);
           this.error = error.response.data.errors;
           for (const key in this.error) {
             if (Object.hasOwnProperty.call(this.error, key)) {
@@ -346,9 +346,9 @@ export default {
             email: this.form.email,
           },
         })
-        .then((res) => {
+        .then(() => {
           this.error = null;
-          console.log(res.data);
+          // console.log(res.data);
           this.form = {
             first_name: "",
             last_name: "",
@@ -358,10 +358,12 @@ export default {
 
           };
           this.getReseller();
+          this.makeToast("success", "Reseller edited successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error.message);
+         // console.log(error.message);
+          this.error = error.response.data.message;
           this.$store.commit("updateLoadState", false);
           // this.error = error.response.data.errors.root;
           // this.error = error;
@@ -371,10 +373,11 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteReseller", id)
-        .then((res) => {
+        .then(() => {
           this.error = null;
           this.getReseller();
-          console.log(res.data);
+         // console.log(res.data);
+          this.makeToast("success", "Reseller deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {

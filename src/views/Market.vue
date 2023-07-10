@@ -534,7 +534,7 @@ export default {
           this.makeToast("success", "Project saved successfully");
         })
         .catch((error) => {
-          console.log(error.response);
+         // console.log(error.response);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
         });

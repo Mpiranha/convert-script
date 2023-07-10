@@ -366,7 +366,7 @@ export default {
         .dispatch("getCampaigns", this.workspace_id)
         .then((res) => {
           let data = res.data.data;
-          console.log(data);
+        //  console.log(data);
           for (let index = 0; index < data.length; index++) {
             this.campaignOptions.push({
               value: data[index].id,
@@ -451,7 +451,7 @@ export default {
         .dispatch("exportAllFavorites", id)
         .then((res) => {
           // this.users = res.data.data;
-          console.log(res);
+        //  console.log(res);
 
           var a = document.createElement("a");
           document.body.appendChild(a);
@@ -537,10 +537,11 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteScript", { id, workspace_id: this.workspace_id })
-        .then((res) => {
+        .then(() => {
           this.error = null;
           this.getFavorites();
-          (this.activeScript = null), console.log(res.data);
+          this.activeScript = null;
+          // console.log(res.data);
           this.makeToast("success", "Script deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
@@ -585,17 +586,19 @@ export default {
           // this.error = error;
         });
     },
-    onEditorBlur(quill) {
-      console.log("editor blur!", quill);
-    },
-    onEditorFocus(quill) {
-      console.log("editor focus!", quill);
-    },
-    onEditorReady(quill) {
-      console.log("editor ready!", quill);
-    },
+    // onEditorBlur(quill) {
+    //   console.log("editor blur!", quill);
+    // },
+    // onEditorFocus(quill) {
+    //   console.log("editor focus!", quill);
+    // },
+    // onEditorReady(quill) {
+    //   console.log("editor ready!", quill);
+    // },
+    // eslint-disable-next-line no-unused-vars
     onEditorChange({ quill, html, text }) {
-      console.log("editor change!", quill, html, text);
+    //  console.log("editor change!", quill, html, text);
+    
       this.content = html;
     },
     openEditModal(id, data) {

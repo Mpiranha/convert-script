@@ -311,7 +311,7 @@ export default {
     },
 
     resendInviteLink(team_id) {
-      console.log(team_id)
+     // console.log(team_id)
       this.$store
         .dispatch("resendInviteLink", team_id)
         .then((res) => {
@@ -447,7 +447,7 @@ export default {
       this.$store
         .dispatch("getTeamRoles")
         .then((res) => {
-          console.log(res);
+        //  console.log(res);
           var data = res.data;
 
           for (let index = 0; index < data.length; index++) {

@@ -87,7 +87,7 @@
                         /> -->
                           <loader-modal :loading-state="loading"></loader-modal>
 
-                          <button class="btn btn-create py-3 px-4 btn-script">
+                          <button class="btn btn-one py-3 px-4 btn-script">
                             Create Copy
                           </button>
                         </div>
@@ -595,7 +595,7 @@ export default {
             }
             return 0;
           });
-          console.log(this.languages);
+       //   console.log(this.languages);
 
           for (let i = 0; i < res.data.data.length; i++) {
             this.languageOptions.push({

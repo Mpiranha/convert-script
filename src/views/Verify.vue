@@ -63,10 +63,10 @@ export default {
           //     // console.log(error);
           //   });
 
-          console.log(res.data);
+         // console.log(res.data);
         })
         .catch((error) => {
-          console.log(error.error);
+         // console.log(error.error);
           this.error = error.error;
           // this.error = error;
         });

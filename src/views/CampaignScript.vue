@@ -378,7 +378,7 @@ export default {
         .dispatch("exportAllCampaignScripts", id)
         .then((res) => {
           // this.users = res.data.data;
-          console.log(res);
+        //  console.log(res);
 
           var a = document.createElement("a");
           document.body.appendChild(a);
@@ -443,10 +443,10 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteScript", { id: id, workspace_id: this.workspace_id })
-        .then((res) => {
+        .then(() => {
           this.error = null;
           this.getCampaignData(this.$route.params.id);
-          console.log(res.data);
+        //  console.log(res.data);
           this.makeToast("success", "Script deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
@@ -500,7 +500,7 @@ export default {
         .dispatch("exportOneScript", id)
         .then((res) => {
           // this.users = res.data.data;
-          console.log(res);
+         // console.log(res);
 
           var a = document.createElement("a");
           document.body.appendChild(a);

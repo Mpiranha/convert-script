@@ -1,8 +1,8 @@
 // import Vue from 'vue'
 import axios from "axios";
-//const baseUrl = "https://api.onecopy.ai";
+const baseUrl = "https://api.onecopy.ai";
 
-const baseUrl = "https://dev.onecopy.ai";
+//const baseUrl = "https://dev.onecopy.ai";
 
 // import {
 //     resolve

@@ -126,12 +126,12 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     // ...
-    console.log(to);
+   // console.log(to);
     if (to.query.invite_data) {
 
       var invite_data = atob(to.query.invite_data);
       invite_data = JSON.parse(invite_data);
-      console.log(invite_data);
+   //   console.log(invite_data);
 
       next(vm => {
 
@@ -233,13 +233,14 @@ export default {
       // console.log(user);
       this.$store
         .dispatch("register", user)
-        .then((res) => {
+        .then(() => {
           this.error = null;
           this.$store.dispatch("getUser");
           this.$router.push("/");
-          console.log(res.data.data);
+         // console.log(res.data.data);
         })
-        .catch((error) => { console.log(error.response.data.message);
+        .catch((error) => { 
+          //console.log(error.response.data.message);
           var object = error.response.data.errors;
           for (const key in object) {
             if (Object.hasOwnProperty.call(object, key)) {
@@ -268,7 +269,7 @@ export default {
           this.error = errors.response.data.errors.root;
           this.$store.commit("updateLoadState", false);
 
-          console.log();
+        
           // this.error = error;
         });
 

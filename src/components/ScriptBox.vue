@@ -149,15 +149,15 @@ export default {
           this.loading = false;
         })
         .catch((error) => {
-          console.log(error);
-          this.error = error;
+      //    console.log(error);
+          this.error = error.response.data.message;
           this.loading = false;
           this.makeToast("danger", this.error);
           // this.error = error;
         });
     },
     copyText() {
-      console.log(this.$refs.input.value);
+      //console.log(this.$refs.input.value);
       let testingCodeToCopy = this.$refs.input;
       testingCodeToCopy.setAttribute("type", "text"); // 不是 hidden 才能複製
       testingCodeToCopy.select();

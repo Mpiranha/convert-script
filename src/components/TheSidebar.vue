@@ -148,7 +148,7 @@
       <li class="nav-item">
         <router-link class="nav-link" :class="currentActive == 'workspace' ? 'active' : ''" to="/workspace">
           <img class="main-icon" src="@/assets/icons/workspace.svg" alt="" />
-          <img class="active-icon" src="@/assets/icons/convert-icon/active-icons/Agent.svg" alt="" />
+          <img class="active-icon" src="@/assets/icons/workspace-active.svg" alt="" />
           <span class="nav-text"> Workspace </span>
         </router-link>
       </li>

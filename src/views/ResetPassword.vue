@@ -84,7 +84,7 @@ export default {
       this.$store
         .dispatch("verifyToken", this.$route.params.token)
         .then((res) => {
-          console.log(res.data.message);
+         // console.log(res.data.message);
           if (res.data.message.toLowerCase() !== 'valid') {
             this.$router.push('/login');
           } else {
@@ -96,7 +96,7 @@ export default {
 
           this.error = errors.response.data.errors.root;
 
-          console.log(this.error);
+       //   console.log(this.error);
 
         });
     }

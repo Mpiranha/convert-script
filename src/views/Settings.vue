@@ -292,12 +292,12 @@ export default {
         default_output_language_id: this.defaultLanguageOutput ? this.defaultLanguageOutput : null
       };
 
-      console.log(data);
+     // console.log(data);
 
       this.$store
         .dispatch("updateUserDetails", data)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+         // console.log(res);
 
 
           this.makeToast("success", "Profile Updated successfully");

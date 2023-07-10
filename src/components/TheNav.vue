@@ -196,8 +196,8 @@ export default {
           // this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error);
-          this.error = error;
+         // console.log(error);
+          this.error = error.response.data.message;
           this.$store.commit("updateLoadState", false);
           this.makeToast("danger", this.error);
 
@@ -230,7 +230,7 @@ export default {
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log(error);
+         // console.log(error);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
@@ -488,7 +488,7 @@ export default {
   display: flex;
   align-items: center;
   border: 1px solid rgb(158 161 164);
-  padding: 0.2rem 0.6rem;
+  padding: 0.3rem 0.6rem;
   border-radius: 0.3rem;
   cursor: pointer;
   min-width: 182px;

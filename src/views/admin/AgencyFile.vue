@@ -281,7 +281,7 @@ export default {
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-          console.log("error: " + error.response.data.message);
+        //  console.log("error: " + error.response.data.message);
           this.error = error.response.data.message;
           this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);

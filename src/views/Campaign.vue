@@ -256,7 +256,7 @@ export default {
         .dispatch("getCampaigns", this.workspace_id)
         .then((res) => {
           this.campaigns = res.data.data.reverse();
-          console.log(res.data + "called now");
+         // console.log(res.data + "called now");
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -284,10 +284,10 @@ export default {
         .dispatch("addCampaign", { name: this.campaignName, workspace_id: this.workspace_id })
         .then((res) => {
           this.error = null;
-          console.log(res.data);
+         // console.log(res.data);
           // this.getCampaign();
           this.getCampaign();
-          this.makeToast("success", "Campaign added successfully");
+          this.makeToast("success", res.data.message);
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
@@ -317,9 +317,9 @@ export default {
       this.$bvModal.hide("modal-new-campaign");
       this.$store
         .dispatch("editCampaign", { id: id, data: { name: this.campaignName }, workspace_id: this.workspace_id })
-        .then((res) => {
+        .then(() => {
           this.error = null;
-          console.log(res.data);
+        //  console.log(res.data);
           this.getCampaign();
           this.makeToast("success", "Campaign editted successfully");
           this.$store.commit("updateLoadState", false);
@@ -336,10 +336,10 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteCampaign", { id: id, workspace_id: this.workspace_id })
-        .then((res) => {
+        .then(() => {
           this.error = null;
           this.getCampaign();
-          console.log(res.data);
+        //  console.log(res.data);
           this.makeToast("success", "Campaign deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
@@ -363,7 +363,7 @@ export default {
           data: { agency_id: this.client, campaign_id: id },
         })
         .then((res) => {
-          console.log(res);
+         // console.log(res);
           this.error = null;
           this.client = null;
           this.makeToast("success", "Campaign Added successfully");

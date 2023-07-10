@@ -289,7 +289,7 @@ export default {
         .then((res) => {
           this.isProcessing = false;
           this.error = null;
-          console.log(res.data);
+        //  console.log(res.data);
           // this.getCampaign();
           this.activeChat = res.data.data.messages;
 
@@ -315,12 +315,13 @@ export default {
         .then(() => {
           this.error = null;
           this.$bvModal.hide('modal-delete');
-          this.isFirstTime = true,
-            this.activeChatID = null;
-          this.activeChat = [];
-          this.activeChatTitle = "";
+          //this.isFirstTime = true,
+          // this.activeChatID = null;
+          // this.activeChat = res.data.data;
+          // this.activeChatTitle = "";
+          this.getOneChatHistory(this.activeChatID);
           this.getChatHistory(true);
-          this.makeToast("success", "Chat cleared deleted successfully");
+          this.makeToast("success", "Chat cleared successfully");
         })
         .catch((error) => {
           this.error = error;
@@ -359,7 +360,7 @@ export default {
       // Old code
       this.Recorder = new MediaRecorder(stream);
       this.Recorder.start();
-      console.log(this.Recorder.state);
+     // console.log(this.Recorder.state);
       if (this.Recorder.state === "recording") {
         this.isRecording = true;
 
@@ -376,7 +377,7 @@ export default {
           analyser.fftSize = 2048;
           const bufferLength = analyser.frequencyBinCount;
           const dataArray = new Uint8Array(bufferLength);
-          console.log(bufferLength);
+       //   console.log(bufferLength);
 
           // We can use Float32Array instead of Uint8Array if we want higher precision
           // const dataArray = new Float32Array(bufferLength);
@@ -386,7 +387,7 @@ export default {
 
           const draw = function () {
 
-            console.log(bufferLength);
+        //    console.log(bufferLength);
             drawVisual = window.requestAnimationFrame(draw);
 
             analyser.getByteTimeDomainData(dataArray);
@@ -427,7 +428,7 @@ export default {
           canvasCtx = canvas.getContext("2d");
           intendedWidth = this.$refs.waveform.clientWidth - 32;
           intendedHeight = this.$refs.waveform.clientHeight;
-          console.log("intended width", intendedWidth);
+        //  console.log("intended width", intendedWidth);
           canvas.setAttribute("width", intendedWidth);
           canvas.setAttribute("height", intendedHeight);
 
@@ -525,11 +526,11 @@ export default {
     },
     onResult(blob) {
 
-      console.log('Downloadable audio', window.URL.createObjectURL(blob));
+      //console.log('Downloadable audio', window.URL.createObjectURL(blob));
 
       blob = blob.slice(0, blob.size, "audio/webm");
 
-      console.log(blob);
+    //  console.log(blob);
       var aud = new FormData();
 
       aud.append("audio", blob);
@@ -614,7 +615,7 @@ export default {
           this.isProcessing = false;
           this.isFirstTime = false;
           this.error = null;
-          console.log(res.data);
+        //  console.log(res.data);
           // this.getCampaign();
           this.activeChat = res.data.data;
           this.activeChatID = chat_id;
@@ -650,7 +651,7 @@ export default {
           this.isProcessing = false;
           this.isFirstTime = false;
           this.error = null;
-          console.log(res.data);
+         // console.log(res.data);
           // this.getCampaign();
           this.activeChat = res.data.data.messages;
           this.activeChatID = res.data.data.chat_id;
@@ -678,7 +679,7 @@ export default {
         .then((res) => {
           this.isProcessing = false;
           this.error = null;
-          console.log(res.data);
+        //  console.log(res.data);
           // this.getCampaign();
           this.activeChat = res.data.data.messages;
           this.activeChatID = res.data.data.chat_id;
@@ -742,7 +743,7 @@ export default {
       this.$store
         .dispatch("getChatHistory", this.workspace_id)
         .then((res) => {
-          console.log(res.data);
+         // console.log(res.data);
 
 
 
@@ -877,7 +878,7 @@ export default {
 
   },
   unmounted() {
-    console.log([...document.querySelectorAll("script")].filter(script => script.src == 'https://cdn.headwayapp.co/widget.js').length)
+   // console.log([...document.querySelectorAll("script")].filter(script => script.src == 'https://cdn.headwayapp.co/widget.js').length)
     if ([...document.querySelectorAll("script")].filter(script => script.src == 'https://cdn.headwayapp.co/widget.js').length == 0) {
       document.head.appendChild(this.messageScript[0]);
     }

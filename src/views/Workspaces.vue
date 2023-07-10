@@ -105,7 +105,7 @@
                           <template v-slot:secondary>
                             <b-dropdown-item link-class="drop-link">
                               <router-link class="drop-link" :to="/workspace/ + workspace.id">
-                                <img class="drop-img-icon" src="@/assets/icons/account 1.png" alt="add to client icon" />
+                                <img class="drop-img-icon" src="@/assets/icons/members.svg" alt="add to client icon" />
                                 Members
                               </router-link>
                             </b-dropdown-item>
@@ -364,9 +364,9 @@ export default {
       this.$bvModal.hide("modal-new-workspace");
       this.$store
         .dispatch("addWorkspace", this.workspaceData)
-        .then((res) => {
+        .then(() => {
           this.error = null;
-          console.log(res.data);
+        //  console.log(res.data);
 
           this.getWorkspaces();
           this.makeToast("success", "Workspace added successfully");
@@ -386,7 +386,6 @@ export default {
       // this.$vm.$forceUpdate();
     },
     editWorkspace(id, event) {
-      console.log("yes")
       event.preventDefault();
 
       this.submitted = true;
@@ -419,10 +418,10 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteWorkspace", id)
-        .then((res) => {
+        .then(() => {
           this.error = null;
           this.getWorkspaces();
-          console.log(res.data);
+         // console.log(res.data);
           this.makeToast("success", "workspace deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
@@ -512,7 +511,7 @@ export default {
       this.$store
         .dispatch("getTeamRoles")
         .then((res) => {
-          console.log(res);
+         // console.log(res);
           var data = res.data;
 
           for (let index = 0; index < data.length; index++) {

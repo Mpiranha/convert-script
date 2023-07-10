@@ -565,7 +565,7 @@ export default {
           audios: data
         })
         .then((res) => {
-          console.log(res);
+        //  console.log(res);
 
           var a = document.createElement("a");
           document.body.appendChild(a);
@@ -574,7 +574,7 @@ export default {
 
           a.href = `https://dev.onecopy.ai/download?link=${url}`;
           a.download = url.split("/")[url.split("/").length - 1];
-          console.log(a.download);
+         // console.log(a.download);
           // a.target = "_blank";
           a.click();
           window.URL.revokeObjectURL(url);

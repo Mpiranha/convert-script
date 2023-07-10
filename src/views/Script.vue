@@ -404,7 +404,7 @@ export default {
         .dispatch("exportOneScript", id)
         .then((res) => {
           // this.users = res.data.data;
-          console.log(res);
+         // console.log(res);
 
           var a = document.createElement("a");
           document.body.appendChild(a);
@@ -430,7 +430,7 @@ export default {
       this.$store
         .dispatch("exportAllScript", id)
         .then((res) => {
-          console.log(res);
+        //  console.log(res);
 
           var a = document.createElement("a");
           document.body.appendChild(a);
@@ -468,7 +468,7 @@ export default {
             this.scripts = this.scripts.concat(res.data.data);
           } else {
             this.scripts = res.data.data;
-            console.log(res.data);
+          //  console.log(res.data);
             this.scriptLength = res.data.meta.total;
             this.maxPage = res.data.meta.last_page;
           }
@@ -486,10 +486,10 @@ export default {
       this.$store.commit("updateLoadState", true);
       this.$store
         .dispatch("deleteScript", { id: id, workspace_id: this.workspace_id })
-        .then((res) => {
+        .then(() => {
           this.error = null;
           this.getScripts();
-          console.log(res.data);
+        //  console.log(res.data);
           this.makeToast("success", "Script deleted successfully");
           this.$store.commit("updateLoadState", false);
         })
@@ -547,7 +547,7 @@ export default {
           workspace_id: this.workspace_id
         })
         .then((res) => {
-          console.log(res.data.data.message);
+         // console.log(res.data.data.message);
 
           this.getScripts(true);
           this.makeToast("success", res.data.data.message);
@@ -558,15 +558,15 @@ export default {
           this.makeToast("danger", this.error);
         });
     },
-    onEditorBlur(quill) {
-      console.log("editor blur!", quill);
-    },
-    onEditorFocus(quill) {
-      console.log("editor focus!", quill);
-    },
-    onEditorReady(quill) {
-      console.log("editor ready!", quill);
-    },
+    // onEditorBlur(quill) {
+    //   console.log("editor blur!", quill);
+    // },
+    // onEditorFocus(quill) {
+    //   console.log("editor focus!", quill);
+    // },
+    // onEditorReady(quill) {
+    //   console.log("editor ready!", quill);
+    // },
     onEditorChange({ quill, html, text }) {
       console.log("editor change!", quill, html, text);
       this.content = html;
@@ -645,8 +645,8 @@ export default {
       let heightOfWindow = event.target.scrollHeight - event.target.offsetHeight;
       let bottomOfWindow = Math.round(event.target.scrollTop) >= heightOfWindow;
 
-      console.log("height of window", heightOfWindow);
-      console.log("bottom of window", bottomOfWindow);
+      // console.log("height of window", heightOfWindow);
+      // console.log("bottom of window", bottomOfWindow);
 
       if (bottomOfWindow && this.currentPage < this.maxPage) {
         // ...
@@ -665,8 +665,6 @@ export default {
   mounted() {
     this.getCampaign();
     this.getScripts();
-
-
   },
 };
 </script>
