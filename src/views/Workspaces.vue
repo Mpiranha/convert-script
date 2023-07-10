@@ -71,11 +71,11 @@
                           @delete-proceed="deleteWorkspace(result.id)">
                           <template v-slot:secondary>
                             <router-link link-class="drop-link" :to="/workspace/ + workspace.id">
-                              <img class="drop-img-icon" src="@/assets/icons/account 1.png" alt="add to client icon" />
+                              <img class="drop-img-icon" src="@/assets/icons/members.svg" alt="add to client icon" />
                               Members
                             </router-link>
                             <b-dropdown-item link-class="drop-link" @click="setDefaultWorkspace(result.id)">
-                              <img class="drop-img-icon" src="@/assets/icons/Default_workspace.png"
+                              <img class="drop-img-icon" src="@/assets/icons/workspace.svg"
                                 alt="add to client icon" />
                               Set as Active
                             </b-dropdown-item>
@@ -110,7 +110,7 @@
                               </router-link>
                             </b-dropdown-item>
                             <b-dropdown-item link-class="drop-link" @click="setDefaultWorkspace(workspace.id)">
-                              <img class="drop-img-icon" src="@/assets/icons/Default_workspace.png"
+                              <img class="drop-img-icon" src="@/assets/icons/workspace.svg"
                                 alt="add to client icon" />
                               Set as Active
                             </b-dropdown-item>
