@@ -17,7 +17,9 @@
     </div>
 </template>
 
-<style></style>
+<style>
+
+</style>
 
 <script>
 export default {
@@ -29,7 +31,7 @@ export default {
     props: ["text", "value"],
     methods: {
         updateModel(event) {
-            this.$emit('input', event.target.innerText);
+            this.$emit('input', event.target.value);
         },
         SelectText(element) {
             var doc = document

@@ -12,11 +12,11 @@
 
             <div class="row justify-content-between">
               <dashboard-box text="Total Word Count" box-type="leads" image-url="Campaigns boxes.svg"
-                :box-value="stat.script_words_generated ? stat.script_words_generated : 0"></dashboard-box>
+                :box-value="stat.script_words_generated ? nFormatter(stat.script_words_generated) : 0"></dashboard-box>
               <dashboard-box text="Copy Created" box-type="links" image-url="script boxes.svg"
-                :box-value="stat.scripts ? stat.scripts : 0"></dashboard-box>
-              <dashboard-box text="Clients" box-type="campaign" image-url="Published boxes.svg"
-                :box-value="stat.agencies ? stat.agencies : 0"></dashboard-box>
+                :box-value="stat.scripts ? nFormatter(stat.scripts) : 0"></dashboard-box>
+              <dashboard-box text="Workspace" box-type="campaign" image-url="Published boxes.svg"
+                :box-value="stat.workspaces ? stat.workspaces : 0"></dashboard-box>
             </div>
             <loader-modal :loading-state="this.$store.state.loading"></loader-modal>
             <div class="dashboard-top">
@@ -97,6 +97,22 @@ export default {
       }, 3000);
 
     },
+    nFormatter(num, digits) {
+      const lookup = [
+        { value: 1, symbol: "" },
+        { value: 1e3, symbol: "K" },
+        { value: 1e6, symbol: "M" },
+        { value: 1e9, symbol: "G" },
+        { value: 1e12, symbol: "T" },
+        { value: 1e15, symbol: "P" },
+        { value: 1e18, symbol: "E" }
+      ];
+      const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+      var item = lookup.slice().reverse().find(function (item) {
+        return num >= item.value;
+      });
+      return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
+    }
   },
   mounted() {
     this.getStatInfo();

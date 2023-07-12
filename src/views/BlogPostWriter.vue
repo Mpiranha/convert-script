@@ -453,7 +453,7 @@ export default {
           a.href = url;
           a.download = true;
           a.target = "_blank";
-       //   console.log(a.download);
+          //   console.log(a.download);
 
           a.click();
           window.URL.revokeObjectURL(url);
@@ -496,20 +496,20 @@ export default {
       this.$store
         .dispatch("fromOutlineGenSubsection", data)
         .then((res) => {
-        //  console.log(this.grabSubsection(res.data.data));
+          //  console.log(this.grabSubsection(res.data.data));
           this.generatedSubsection[prop].concat.apply([], this.grabSubsection(res.data.data));
           this.makeToast("success", res.data.message);
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
           this.loading = false;
-       //   console.log("error: " + error);
+          //   console.log("error: " + error);
           this.error = error.response.data.errors;
 
           // this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
         });
-     // console.log(data);
+      // console.log(data);
     },
 
     grabSubsection(text) {
@@ -621,13 +621,13 @@ export default {
       this.$store
         .dispatch("initiateTextToSpeech", this.speechData)
         .then((res) => {
-         // console.log(res);
+          // console.log(res);
           this.generatedAudio = res.data.data;
           this.makeToast("success", res.data.message);
           this.$store.commit("updateLoadState", false);
         })
         .catch((error) => {
-        //  console.log(error.response);
+          //  console.log(error.response);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
           this.$store.commit("updateLoadState", false);
@@ -648,7 +648,7 @@ export default {
           this.savingPost = false;
         })
         .catch((error) => {
-        //  console.log(error.response);
+          //  console.log(error.response);
           this.error = error.response.data.error;
           this.makeToast("danger", this.error);
           this.savingPost = false;
@@ -702,7 +702,7 @@ export default {
         workspace_id: this.$store.state.user.default_workspace_id
       };
 
-     // console.log(data);
+      // console.log(data);
 
       // this.$store.commit("updateLoadState", true);
       this.generatingOutline = true;
@@ -749,7 +749,7 @@ export default {
         })
         .catch((error) => {
           this.loading = false;
-       //   console.log("error: " + error);
+          //   console.log("error: " + error);
           this.error = error.response.data.errors;
 
           // this.makeToast("danger", this.error);
@@ -780,16 +780,16 @@ export default {
         .dispatch("fromOutlineGenPost", {
           data: data, config: {
             onDownloadProgress: (progressEvent) => {
-           //   console.log(progressEvent);
+              //   console.log(progressEvent);
               let lastOne = progressEvent.currentTarget.response.split("data: ").length - 1;
               let data;
               try {
                 data = JSON.parse(progressEvent.currentTarget.response.split("data: ")[lastOne]);
                 this.percentCompleted = data ? Math.floor((data.data.sections_generated / data.data.total_sections) * 100) : this.percentCompleted;
               } catch (err) {
-               // console.log(progressEvent.currentTarget.response.split("data: "))
+                // console.log(progressEvent.currentTarget.response.split("data: "))
               }
-            //  console.log(data);
+              //  console.log(data);
 
 
 
@@ -815,7 +815,7 @@ export default {
         })
         .catch((error) => {
           this.loading = false;
-         // console.log("error: " + error);
+          // console.log("error: " + error);
           this.error = error.response.data.errors;
 
           // this.makeToast("danger", this.error);
@@ -866,7 +866,7 @@ export default {
 
       text.split("\n").forEach(function (item) {
         // console.log("item " + item);
-       // console.log(item.charAt(0))
+        // console.log(item.charAt(0))
         if (!(["*", "-", "•", ".", "."].includes(item.charAt(0)))) {
           if (item.length > 0) {
             key = item;

@@ -81,6 +81,7 @@
                         openEditModal(result.id, {
                           first_name: result.first_name,
                           last_name: result.last_name,
+                          plagiarism_credit: result.plagiarism_credit,
                           role: result.role,
                           email: result.email,
                         })
@@ -119,6 +120,7 @@
                         openEditModal(user.id, {
                           first_name: user.first_name,
                           last_name: user.last_name,
+                          plagiarism_credit: user.plagiarism_credit,
                           role: user.role,
                           email: user.email,
 
@@ -597,6 +599,7 @@ export default {
       this.triggerEdit = true;
       this.editId = id;
       this.userData.last_name = data.last_name;
+      this.plagiarism_credit = data.plagiarism_credit;
       this.userData.first_name = data.first_name;
       this.userData.plagiarism_credit = data.plagiarism_credit;
 
