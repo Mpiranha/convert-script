@@ -11,17 +11,17 @@
           <h1 class="title">Login</h1>
           <div class="error">{{ error }}</div>
 
-          <!-- <a :href="signedURL" target="_blank" class="btn btn_sign_in_google">
+          <a :href="signedURL" target="_blank" class="btn btn_sign_in_google">
             <img src="@/assets/icons/google-icon.svg" alt="google icon">
             <span class="btn_text">Login with Google</span>
 
-          </a> -->
+          </a>
 
-          <!-- <div class="line_wrap">
+          <div class="line_wrap">
             <div class="line"></div>
             <div class="or_text">OR</div>
             <div class="line"></div>
-          </div> -->
+          </div>
 
           <form action="#" method="post">
             <div class="form-group">
