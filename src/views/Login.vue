@@ -11,7 +11,7 @@
           <h1 class="title">Login</h1>
           <div class="error">{{ error }}</div>
 
-          <a :href="signedURL" target="_blank" class="btn btn_sign_in_google">
+          <a :href="signedURL" class="btn btn_sign_in_google">
             <img src="@/assets/icons/google-icon.svg" alt="google icon">
             <span class="btn_text">Login with Google</span>
 
