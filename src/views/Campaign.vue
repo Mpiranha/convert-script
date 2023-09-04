@@ -124,14 +124,14 @@
                       <td>
                         <dropdown-tool delete-what="Campaign" @edit-clicked="openEditModal(campaign.id, campaign.name)
                           " @delete-proceed="deleteCampaign(campaign.id)">
-                          <template v-slot:secondary>
+                          <!-- <template v-slot:secondary>
                             <b-dropdown-item v-b-modal.modal-add-client link-class="drop-link" href="#"
                               @click="getCampaignId(campaign.id)">
                               <img class="drop-img-icon" src="@/assets/icons/convert-icon/Add to client icon.svg"
                                 alt="add to client icon" />
                               Add to Client
                             </b-dropdown-item>
-                          </template>
+                          </template> -->
                         </dropdown-tool>
                       </td>
                     </tr>
